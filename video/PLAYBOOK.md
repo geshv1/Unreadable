@@ -9,7 +9,7 @@ To start a new video, paste one of the prompts at the bottom into Claude Code, i
 
 - **Format:** 1440×1080 (4:3) at 30 fps, exported as a 9:16 TikTok version with bars above and below. 30–45 s long.
 - **Structure:** a hook in the first second, then problem, then a reframe, then the product, what's inside, proof, a choice, and a call to action. That's 10–12 scenes, one idea per scene.
-- **Captions:** word by word, synced to the voice. Anton, uppercase, 2–4 words on screen. The key word is in the accent color, slightly bigger, with an underline that draws itself.
+- **Captions:** word by word, synced to the voice. Alice (Google Fonts serif), uppercase, 2–4 words on screen. The key word is in the accent color, slightly bigger, with an underline that draws itself.
 - **Layout:** captions on the left half and animation on the right. The hook, title and call to action use the full width.
 - **Every line gets its own geometric metaphor** (a ball and slope = effort, dots snapping to a grid = structure, a split path = results or excuses).
 - **A stickman acts out the line** (pushing, collapsing, boxing, climbing, pull-ups, running, pointing at the link).

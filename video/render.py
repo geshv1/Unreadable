@@ -29,7 +29,8 @@ def hexc(h):
 
 
 BG, BONE, RED, GREY = hexc("#0B0B0A"), hexc("#ECE8E0"), hexc("#C4161C"), hexc("#8F897F")
-ANTON, LORA = "Anton", "Lora"
+ANTON, LORA, ALICE = "Anton", "Lora", "Alice"
+CAP = {ANTON: 0.86, LORA: 0.70, ALICE: 0.631}   # cap height / font size
 RX, RY = 1050, 540     # centre of the right half (animation side)
 TX = 120               # caption left edge (>= 90 px even at the 1.04 push-in)
 
@@ -189,6 +190,8 @@ _mctx = cairo.Context(cairo.ImageSurface(cairo.FORMAT_ARGB32, 8, 8))
 def set_font(ctx, font, size):
     if font == LORA:
         ctx.select_font_face(LORA, cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
+    elif font == ALICE:
+        ctx.select_font_face(ALICE, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
     else:
         ctx.select_font_face(ANTON, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
     ctx.set_font_size(size)
@@ -206,7 +209,7 @@ def ink_w(text, font, size):
 
 
 class Wd:
-    def __init__(self, text, t, key=False, font=ANTON, size=None, color=None, underline=None):
+    def __init__(self, text, t, key=False, font=ALICE, size=None, color=None, underline=None):
         self.text, self.t, self.key, self.font = text, t, key, font
         self.size, self.color = size, color
         self.underline = key if underline is None else underline
@@ -216,22 +219,33 @@ class Group:
     """2-4 words on screen at a time. Words pop in on their voice time,
     the whole group leaves at t_out."""
 
-    def __init__(self, lines, t_out, B=92, align="left", x=TX, cy=RY, y0=None, lh=None, keyscale=1.13):
+    def __init__(self, lines, t_out, B=92, align="left", x=TX, cy=RY, y0=None, lh=None, keyscale=1.13, maxw=None):
         self.lines, self.t_out, self.align, self.x = lines, t_out, align, x
+        font = lines[0][0].font
+        if font == ALICE:      # Alice is a lighter, smaller-capped serif: start bigger, then fit
+            B *= 1.12
+        maxw = maxw or (580 if align == "left" else 1200)
+        fit = 1.0
+        for _ in range(2):
+            self.items = []
+            for li, line in enumerate(lines):
+                xs, cx = [], 0.0
+                space = B * fit * (0.24 if line[0].font == ANTON else 0.28)
+                for w in line:
+                    fs = (w.size or (B * keyscale if w.key else B)) * fit
+                    adv = text_w(w.text, w.font, fs)
+                    xs.append((w, cx, fs, adv))
+                    cx += adv + space
+                self.items.append((xs, cx - space))
+            widest = max(lw for _, lw in self.items)
+            if widest <= maxw:
+                break
+            fit *= maxw / widest
+        B *= fit
         self.B = B
-        self.lh = lh or B * 1.2
-        self.items = []
-        for li, line in enumerate(lines):
-            xs, cx = [], 0.0
-            space = B * 0.24 if line[0].font == ANTON else B * 0.28
-            for w in line:
-                fs = w.size or (B * keyscale if w.key else B)
-                adv = text_w(w.text, w.font, fs)
-                xs.append((w, cx, fs, adv))
-                cx += adv + space
-            self.items.append((xs, cx - space))
+        self.lh = lh or B * (1.2 if font == ANTON else 1.12)
         n = len(lines)
-        cap = 0.86 * B * (keyscale if any(w.key for w in lines[0]) else 1)
+        cap = CAP[font] * B * (keyscale if any(w.key for w in lines[0]) else 1)
         self.y0 = y0 if y0 is not None else cy + cap / 2 - (n - 1) * self.lh / 2
         self.t_in = min(w.t for line in lines for w in line)
 
@@ -523,7 +537,7 @@ S5_R = 390
 S5_OCT = oct_pts(W / 2, H / 2, S5_R)
 S5_PERIM = perimeter_points([S5_OCT[5], S5_OCT[6], S5_OCT[7], S5_OCT[0], S5_OCT[1], S5_OCT[2], S5_OCT[3], S5_OCT[4]], 30)
 S5_CAP = Group([[Wd("THE", 17.31), Wd("COMPLETE", 17.48)], [Wd("FIGHTER.", 17.95, True)]],
-               t_out=18.68, B=112, align="center", x=W / 2, cy=505)
+               t_out=18.68, B=112, align="center", x=W / 2, cy=505, maxw=640)
 S5_MORPH = (18.62, 19.0)
 S6_R = 170
 
@@ -868,14 +882,14 @@ def scene11(ctx, t):
 
 # Scene 12 · 0:44-0:48 · call to action ------------------------------------
 S12_TITLE = Group([[Wd("THE", 44.15), Wd("COMPLETE", 44.32)], [Wd("FIGHTER", 44.79)]],
-                  t_out=45.40, B=112, align="center", x=W / 2, cy=520)
+                  t_out=45.40, B=112, align="center", x=W / 2, cy=520, maxw=640)
 S12_PRICE_T = 45.40
 S12_PRICE_Y = 585
 S12_LINE_Y = 735
-S12_WEEK = Group([[Wd("THIS", 46.30), Wd("WEEK", 46.48)]], t_out=47.28, B=88, align="center", x=W / 2, y0=S12_LINE_Y)
+S12_WEEK = Group([[Wd("THIS", 46.30), Wd("WEEK", 46.48)]], t_out=47.28, B=88, align="center", x=W / 2, y0=S12_LINE_Y, maxw=520)
 S12_ARROW_W = 60
 S12_BIO = Group([[Wd("LINK", 47.28), Wd("IN", 47.71), Wd("BIO", 47.85, True)]], t_out=None, B=88,
-                align="center", x=W / 2 - S12_ARROW_W / 2, y0=S12_LINE_Y)
+                align="center", x=W / 2 - S12_ARROW_W / 2, y0=S12_LINE_Y, maxw=520)
 
 
 def scene12(ctx, t):
@@ -1530,7 +1544,7 @@ def ensure_fonts():
     dst = os.path.expanduser("~/.fonts")
     os.makedirs(dst, exist_ok=True)
     changed = False
-    for f in ("Anton-Regular.ttf", "Lora-Italic.ttf"):
+    for f in ("Anton-Regular.ttf", "Lora-Italic.ttf", "Alice-Regular.ttf"):
         if not os.path.exists(os.path.join(dst, f)):
             shutil.copy(os.path.join(HERE, "fonts", f), dst)
             changed = True
