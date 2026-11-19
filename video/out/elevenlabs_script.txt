@@ -1,23 +1,17 @@
-You're not lazy. <break time="1.5s" />
+You're not lazy. Your mind is untrained.
 
-Your mind is... untrained. <break time="1.5s" />
+Every day you lose the same fight. Five more minutes. One more video. I'll start Monday.
 
-Every day you lose the same fight. <break time="0.6s" /> Five more minutes. <break time="0.4s" /> One more video. <break time="0.4s" /> I'll start Monday. <break time="1.0s" />
+Discipline isn't a feeling. It's a structure.
 
-Discipline isn't a feeling. <break time="0.5s" /> It's a structure. <break time="1.0s" />
+That's why this was built. The Complete Fighter.
 
-That's why this was built. <break time="0.4s" /> The Complete Fighter. <break time="1.0s" />
+Six weeks to train your mind. Twenty rounds to handle fear, ego, and pressure. Twelve weeks to build real strength, with nothing but your bodyweight.
 
-Six weeks to train your mind. <break time="1.2s" />
+Every page is interactive. Tick it. Write in it. Track it.
 
-Twenty rounds to handle fear, <break time="0.5s" /> ego, <break time="0.5s" /> and pressure. <break time="1.0s" />
+Written by a fighter who started with one messy pull-up.
 
-Twelve weeks to build real strength, <break time="0.3s" /> with nothing but your bodyweight. <break time="1.0s" />
+Twelve weeks from now, you'll have results or excuses.
 
-Every page is interactive. <break time="0.3s" /> Tick it. <break time="0.3s" /> Write in it. <break time="0.3s" /> Track it. <break time="0.8s" />
-
-Written by a fighter who started with one messy pull-up. <break time="0.8s" />
-
-Twelve weeks from now, you'll have results... or excuses. <break time="1.0s" />
-
-The Complete Fighter. <break time="0.4s" /> Twelve euros, this week only. <break time="0.4s" /> Link in bio.
+The Complete Fighter. Twelve euros, this week only. Link in bio.
