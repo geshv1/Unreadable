@@ -20,7 +20,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "out")
 
 W, H, FPS = 1440, 1080, 30
-FREEZE = 47.8          # last moving frame; the final frame is held after this
+FREEZE = 48.7          # last moving frame; the final frame is held after this
 END = FREEZE + 1.0     # 1 s hold on the last frame
 
 
@@ -273,7 +273,7 @@ def bg_octagon(ctx, t):
 
 # Scene 1 · 0:00-0:03 · hook -------------------------------------------------
 S1_Y, S1_X0, S1_PIV, S1_L, S1_ANG, S1_R = 470, 300, 620, 500, math.radians(24), 34
-S1_CAP = Group([[Wd("YOU'RE", 0.30), Wd("NOT", 0.60), Wd("LAZY.", 0.95, True)]],
+S1_CAP = Group([[Wd("YOU'RE", 0.49), Wd("NOT", 0.72), Wd("LAZY.", 0.95, True)]],
                t_out=2.72, B=112, align="center", x=W / 2, cy=725)
 S1_END_S = 1.04
 
@@ -350,7 +350,7 @@ def scene1(ctx, t):
 
 
 # Scene 2 · 0:03-0:06 ------------------------------------------------------
-S2_CAP = Group([[Wd("YOUR", 3.22), Wd("MIND", 3.47), Wd("IS", 3.72)],
+S2_CAP = Group([[Wd("YOUR", 3.21), Wd("MIND", 3.47), Wd("IS", 3.87)],
                 [Wd("UNTRAINED.", 4.30, True)]], t_out=5.75)
 _rnd = random.Random(7)
 S2_FRAG = [(_rnd.uniform(26, 95), _rnd.uniform(-0.7, 0.7), _rnd.uniform(-25, 25)) for _ in range(8)]
@@ -405,15 +405,15 @@ def scene2(ctx, t):
 
 # Scene 3 · 0:06-0:12 ------------------------------------------------------
 S3_CAPS = [
-    Group([[Wd("EVERY", 6.20), Wd("DAY", 6.42)], [Wd("YOU", 6.65), Wd("LOSE", 6.90)]], t_out=7.35),
-    Group([[Wd("THE", 7.35, True), Wd("SAME", 7.58, True)], [Wd("FIGHT.", 7.88, True)]], t_out=8.75),
-    Group([[Wd("FIVE", 8.75), Wd("MORE", 8.98)], [Wd("MINUTES.", 9.28, True)]], t_out=9.90),
-    Group([[Wd("ONE", 9.90), Wd("MORE", 10.12)], [Wd("VIDEO.", 10.40, True)]], t_out=10.85),
-    Group([[Wd("I'LL", 10.85), Wd("START", 11.05)], [Wd("MONDAY.", 11.30, True)]], t_out=11.82),
+    Group([[Wd("EVERY", 6.35), Wd("DAY", 6.72)], [Wd("YOU", 6.95), Wd("LOSE", 7.08)]], t_out=7.35),
+    Group([[Wd("THE", 7.35, True), Wd("SAME", 7.47, True)], [Wd("FIGHT.", 7.80, True)]], t_out=8.65),
+    Group([[Wd("FIVE", 8.65), Wd("MORE", 9.09)], [Wd("MINUTES.", 9.28, True)]], t_out=9.88),
+    Group([[Wd("ONE", 9.88), Wd("MORE", 10.21)], [Wd("VIDEO.", 10.40, True)]], t_out=10.83),
+    Group([[Wd("I'LL", 10.83), Wd("START", 11.09)], [Wd("MONDAY.", 11.36, True)]], t_out=11.82),
 ]
 S3_SQ, S3_GROUND = 120, 790
 S3_DROP = [6.25, 6.85, 7.45]
-S3_KNOCK = {2: (9.28, 1), 1: (10.40, -1), 0: (11.30, 1)}
+S3_KNOCK = {2: (9.28, 1), 1: (10.40, -1), 0: (11.36, 1)}
 
 
 def scene3(ctx, t):
@@ -447,7 +447,7 @@ def scene3(ctx, t):
             draw_poly(ctx, sq, e, col, alpha, 3, closed=True)
             ctx.restore()
         # the loop: red circular arrow on "Monday"
-        u = eo3(prog(t, 11.30, 11.72))
+        u = eo3(prog(t, 11.36, 11.76))
         if u > 0:
             R, c0 = 255, (RX, 600)
             a0 = math.radians(-60)
@@ -472,8 +472,8 @@ def scene3(ctx, t):
 
 # Scene 4 · 0:12-0:16 ------------------------------------------------------
 S4_CAPS = [
-    Group([[Wd("DISCIPLINE", 12.20)], [Wd("ISN'T", 12.60), Wd("A", 12.82), Wd("FEELING.", 13.00)]], t_out=13.98),
-    Group([[Wd("IT'S", 13.98), Wd("A", 14.18)], [Wd("STRUCTURE.", 14.45, True)]], t_out=15.75),
+    Group([[Wd("DISCIPLINE", 12.20)], [Wd("ISN'T", 12.92), Wd("A", 13.15), Wd("FEELING.", 13.26)]], t_out=14.11),
+    Group([[Wd("IT'S", 14.11), Wd("A", 14.36)], [Wd("STRUCTURE.", 14.45, True)]], t_out=15.75),
 ]
 _rnd = random.Random(11)
 S4_GRID = [(RX - 210 + 84 * (i % 6), RY - 168 + 84 * (i // 6)) for i in range(30)]
@@ -522,7 +522,7 @@ def scene4(ctx, t):
 S5_R = 390
 S5_OCT = oct_pts(W / 2, H / 2, S5_R)
 S5_PERIM = perimeter_points([S5_OCT[5], S5_OCT[6], S5_OCT[7], S5_OCT[0], S5_OCT[1], S5_OCT[2], S5_OCT[3], S5_OCT[4]], 30)
-S5_CAP = Group([[Wd("THE", 17.30), Wd("COMPLETE", 17.55)], [Wd("FIGHTER.", 17.95, True)]],
+S5_CAP = Group([[Wd("THE", 17.31), Wd("COMPLETE", 17.48)], [Wd("FIGHTER.", 17.95, True)]],
                t_out=18.68, B=112, align="center", x=W / 2, cy=505)
 S5_MORPH = (18.62, 19.0)
 S6_R = 170
@@ -579,7 +579,7 @@ def scene5(ctx, t):
 
 
 # Scene 6 · 0:19-0:23 ------------------------------------------------------
-S6_CAP = Group([[Wd("6", 19.30), Wd("WEEKS", 19.55), Wd("·", 19.55)], [Wd("MIND", 20.70, True)]], t_out=22.65)
+S6_CAP = Group([[Wd("6", 19.46), Wd("WEEKS", 19.92), Wd("·", 19.92)], [Wd("MIND", 20.70, True)]], t_out=22.65)
 S6_TICKS = [19.75 + 0.45 * k for k in range(6)]
 
 
@@ -624,7 +624,7 @@ def scene6(ctx, t):
 
 
 # Scene 7 · 0:23-0:28 ------------------------------------------------------
-S7_HEAD = Group([[Wd("20", 23.20), Wd("ROUNDS", 23.50), Wd("·", 23.50)]], t_out=27.65, y0=490)
+S7_HEAD = Group([[Wd("20", 23.18), Wd("ROUNDS", 23.62), Wd("·", 23.62)]], t_out=27.65, y0=490)
 S7_KEYS = [Group([[Wd("FEAR", 24.60, True)]], t_out=25.50, y0=610),
            Group([[Wd("EGO", 25.50, True)]], t_out=26.55, y0=610),
            Group([[Wd("PRESSURE", 26.55, True)]], t_out=27.65, y0=610)]
@@ -686,7 +686,7 @@ def scene7(ctx, t):
 
 
 # Scene 8 · 0:28-0:33 ------------------------------------------------------
-S8_CAP = Group([[Wd("12", 28.20), Wd("WEEKS", 28.50), Wd("·", 28.50)], [Wd("BODY", 31.40, True)]], t_out=32.65)
+S8_CAP = Group([[Wd("12", 28.20), Wd("WEEKS", 28.63), Wd("·", 28.63)], [Wd("BODY", 31.40, True)]], t_out=32.65)
 S8_X0, S8_Y0, S8_W, S8_H = 830, 860, 40, 40
 S8_STAIRS = [(S8_X0 - 60, S8_Y0), (S8_X0, S8_Y0)]
 for _i in range(12):
@@ -739,9 +739,9 @@ def scene8(ctx, t):
 
 
 # Scene 9 · 0:33-0:37 ------------------------------------------------------
-S9_CAPS = [Group([[Wd("TICK", 34.60), Wd("IT.", 34.82)]], t_out=35.30),
-           Group([[Wd("WRITE", 35.30), Wd("IN", 35.50), Wd("IT.", 35.65)]], t_out=36.10),
-           Group([[Wd("TRACK", 36.10, True), Wd("IT.", 36.30, True)]], t_out=36.75)]
+S9_CAPS = [Group([[Wd("TICK", 34.60), Wd("IT.", 34.98)]], t_out=35.30),
+           Group([[Wd("WRITE", 35.30), Wd("IN", 35.65), Wd("IT.", 35.80)]], t_out=36.10),
+           Group([[Wd("TRACK", 36.10, True), Wd("IT.", 36.55, True)]], t_out=36.75)]
 S9_PAGE = [(820, 250), (1290, 250), (1290, 830), (820, 830)]
 S9_BOX = (880, 318, 84)
 S9_WRITE = []
@@ -842,7 +842,7 @@ def scene10(ctx, t):
 
 
 # Scene 11 · 0:41-0:44 ------------------------------------------------------
-S11_CAP = Group([[Wd("RESULTS", 42.35, True)], [Wd("OR", 42.85), Wd("EXCUSES.", 43.00)]], t_out=43.7)
+S11_CAP = Group([[Wd("RESULTS", 42.35, True)], [Wd("OR", 42.90), Wd("EXCUSES.", 43.15)]], t_out=43.7)
 S11_NODE = (975, 610)
 S11_UP = bezier(S11_NODE, (1080, 610), (1160, 330), (1300, 300))
 S11_DN = bezier(S11_NODE, (1080, 610), (1160, 780), (1300, 790))
@@ -857,7 +857,7 @@ def scene11(ctx, t):
             src(ctx, BONE, eo3(prog(t, 41.4, 41.6)))
             ctx.fill()
         # excuses: grey, fades out
-        da = 1 - eio(prog(t, 43.0, 43.6))
+        da = 1 - eio(prog(t, 43.15, 43.6))
         draw_poly(ctx, S11_DN, eo3(prog(t, 42.25, 42.85)), GREY, da, 3)
         # results: red, glowing, goes up
         u = eo3(prog(t, 42.25, 42.85))
@@ -880,14 +880,14 @@ def scene11(ctx, t):
 
 
 # Scene 12 · 0:44-0:48 · call to action ------------------------------------
-S12_TITLE = Group([[Wd("THE", 44.15), Wd("COMPLETE", 44.40)], [Wd("FIGHTER", 44.75)]],
-                  t_out=45.42, B=112, align="center", x=W / 2, cy=520)
-S12_PRICE_T = 45.45
+S12_TITLE = Group([[Wd("THE", 44.15), Wd("COMPLETE", 44.32)], [Wd("FIGHTER", 44.79)]],
+                  t_out=45.40, B=112, align="center", x=W / 2, cy=520)
+S12_PRICE_T = 45.40
 S12_PRICE_Y = 585
 S12_LINE_Y = 735
-S12_WEEK = Group([[Wd("THIS", 46.00), Wd("WEEK", 46.20)]], t_out=46.62, B=88, align="center", x=W / 2, y0=S12_LINE_Y)
+S12_WEEK = Group([[Wd("THIS", 46.30), Wd("WEEK", 46.48)]], t_out=47.28, B=88, align="center", x=W / 2, y0=S12_LINE_Y)
 S12_ARROW_W = 60
-S12_BIO = Group([[Wd("LINK", 46.62), Wd("IN", 46.80), Wd("BIO", 46.95, True)]], t_out=None, B=88,
+S12_BIO = Group([[Wd("LINK", 47.28), Wd("IN", 47.71), Wd("BIO", 47.85, True)]], t_out=None, B=88,
                 align="center", x=W / 2 - S12_ARROW_W / 2, y0=S12_LINE_Y)
 
 
@@ -925,7 +925,7 @@ def scene12(ctx, t):
     S12_WEEK.draw(ctx, t)
     S12_BIO.draw(ctx, t)
     # arrow: draws upward from under the price, then pulses twice
-    au = eo3(prog(t, 47.0, 47.32))
+    au = eo3(prog(t, 47.90, 48.22))
     if au > 0:
         xs, lw = S12_BIO.items[0]
         set_font(ctx, ANTON, 230)
@@ -934,7 +934,7 @@ def scene12(ctx, t):
         y_bot, y_top = S12_LINE_Y + 4, 420
         lift = 0
         glow = 0
-        for p0 in (47.32, 47.56):
+        for p0 in (48.22, 48.46):
             p = prog(t, p0, p0 + 0.24)
             if 0 < p < 1:
                 lift = 14 * math.sin(math.pi * p)

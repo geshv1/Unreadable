@@ -1,58 +1,30 @@
-THE COMPLETE FIGHTER: VOICEOVER (for CapCut text-to-speech)
-Voice: female, calm, low, confident. Slow and deliberate. "/" = short pause.
-Captions in launch_no_audio.mp4 are timed to the start times below (mm:ss.s).
-In CapCut, add each line as its own text-to-speech clip and drag its left
-edge to the start time shown. Each later word in a line has its own time in
-[brackets], so you can nudge the clip if the voice runs fast or slow.
+THE COMPLETE FIGHTER: VOICEOVER
+The voice is already in launch_with_voice.mp4. This list shows when each line is spoken (seconds).
 
-00:00.3  You're not lazy.
-         [you're 0.3 · not 0.6 · lazy 0.95]
-
-00:03.2  Your mind is / untrained.
-         [your 3.22 · mind 3.47 · is 3.72 · untrained 4.30]
-
-00:06.2  Every day you lose the same fight.
-         [every 6.20 · day 6.42 · you 6.65 · lose 6.90 · the 7.35 · same 7.58 · fight 7.88]
-00:08.8  Five more minutes.
-         [five 8.75 · more 8.98 · minutes 9.28]
-00:09.9  One more video.
-         [one 9.90 · more 10.12 · video 10.40]
-00:10.9  I'll start Monday.
-         [I'll 10.85 · start 11.05 · Monday 11.30]
-
-00:12.2  Discipline isn't a feeling.
-         [discipline 12.20 · isn't 12.60 · a 12.82 · feeling 13.00]
-00:14.0  It's a structure.
-         [it's 13.98 · a 14.18 · structure 14.45]
-
-00:16.1  That's why this was built.          (no caption; the octagon draws)
-00:17.3  The Complete Fighter.
-         [the 17.30 · complete 17.55 · fighter 17.95]
-
-00:19.3  Six weeks to train your mind.
-         [six 19.30 · weeks 19.55 · mind 20.70]
-
-00:23.2  Twenty rounds to handle fear, / ego, / and pressure.
-         [twenty 23.20 · rounds 23.50 · fear 24.60 · ego 25.50 · pressure 26.55]
-
-00:28.2  Twelve weeks to build real strength, / with nothing but your bodyweight.
-         [twelve 28.20 · weeks 28.50 · bodyweight 31.40]
-
-00:33.1  Every page is interactive.          (no caption; the page draws)
-00:34.6  Tick it. / Write in it. / Track it.
-         [tick 34.60 · it 34.82 · write 35.30 · in 35.50 · it 35.65 · track 36.10 · it 36.30]
-
-00:37.2  Written by a fighter who started with one messy pull-up.
-         (quote card on screen 37.25 to 40.7; no word sync needed)
-
-00:41.0  Twelve weeks from now, you'll have results / or excuses.
-         [results 42.35 · or 42.85 · excuses 43.00]
-
-00:44.1  The Complete Fighter.
-         [the 44.15 · complete 44.40 · fighter 44.75]
-00:45.4  Twelve euros, this week only.
-         [twelve euros 45.45 · this 46.00 · week 46.20]
-00:46.6  Link in bio.
-         [link 46.62 · in 46.80 · bio 46.95]
-
-00:47.8  End. The last frame holds until 00:48.8.
+  0.49s  You're not lazy.
+  3.21s  Your mind is
+  4.30s  untrained.
+  6.35s  Every day you lose the same fight.
+  8.65s  Five more minutes.
+  9.88s  One more video.
+ 10.83s  I'll start Monday.
+ 12.20s  Discipline isn't a feeling.
+ 14.12s  It's a structure.
+ 15.92s  That's why this was built.
+ 17.31s  The Complete Fighter.
+ 19.46s  Six weeks to train your mind.
+ 23.18s  Twenty rounds to handle fear,
+ 25.50s  ego,
+ 26.28s  and pressure.
+ 28.20s  Twelve weeks to build real strength,
+ 30.36s  with nothing but your bodyweight.
+ 33.00s  Every page is interactive.
+ 34.60s  Tick it.
+ 35.30s  Write in it.
+ 36.10s  Track it.
+ 37.20s  Written by a fighter who started with one messy pull-up.
+ 40.86s  Twelve weeks from now, you'll have results
+ 42.90s  or excuses.
+ 44.15s  The Complete Fighter.
+ 45.40s  Twelve euros, this week only.
+ 47.28s  Link in bio.
