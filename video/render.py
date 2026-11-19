@@ -413,7 +413,7 @@ S3_CAPS = [
 ]
 S3_SQ, S3_GROUND = 120, 790
 S3_DROP = [6.25, 6.85, 7.45]
-S3_KNOCK = {2: (9.28, 1), 1: (10.40, -1), 0: (11.36, 1)}
+S3_KNOCK = {2: (9.28, 1), 1: (10.40, 1), 0: (11.36, 1)}
 
 
 def scene3(ctx, t):
@@ -725,16 +725,7 @@ def scene8(ctx, t):
             x0, x1, y = S8_BAR
             draw_poly(ctx, [((x0 + x1) / 2, y), (lerp((x0 + x1) / 2, x0, bu), y)], 1, BONE, 1, 3)
             draw_poly(ctx, [((x0 + x1) / 2, y), (lerp((x0 + x1) / 2, x1, bu), y)], 1, BONE, 1, 3)
-        p = s8_dot(t)
-        au = eo3(prog(t, 31.82, 32.05))
-        if au > 0:
-            for gx in (S8_HANG[0] - 30, S8_HANG[0] + 30):
-                draw_poly(ctx, [(gx, S8_BAR[2]), (p[0] + (gx - S8_HANG[0]) * 0.25, p[1] - 9)], au, BONE, 1, 2)
-        da = eo3(prog(t, 29.0, 29.25))
-        if da > 0:
-            ctx.arc(p[0], p[1], 10, 0, 2 * math.pi)
-            src(ctx, RED, da)
-            ctx.fill()
+        stick_s8(ctx, t)
     S8_CAP.draw(ctx, t)
 
 
@@ -793,7 +784,7 @@ S10_QUOTE = Group([[Wd("“I’m", 37.25, font=LORA), Wd("far", 37.42, font=LORA
                     Wd("where", 37.75, font=LORA)],
                    [Wd("I", 37.95, font=LORA), Wd("started.”", 38.10, font=LORA)]],
                   t_out=40.72, B=_q, lh=82, cy=505)
-S10_SIG = Group([[Wd("— GESHV1", 39.00, size=42, color=RED, underline=False)]], t_out=40.72, B=42,
+S10_SIG = Group([[Wd("— GESHV1", 39.00, True, size=42, underline=False)]], t_out=40.72, B=42,
                 y0=S10_QUOTE.y0 + 82 + 78)
 S10_BAR = (955, 1145, 330)
 S10_HANG, S10_TOP = 600, 362
@@ -832,11 +823,7 @@ def scene10(ctx, t):
             shake = 3.2 * prog(t, 37.6, 38.6) * math.sin(t * 63)
         cx = mid + shake
         da = eo3(prog(t, 37.1, 37.4))
-        for gx in (mid - 40, mid + 40):
-            draw_poly(ctx, [(gx, by), (cx + (gx - mid) * 0.35, y - 12)], 1, BONE, da, 2)
-        ctx.arc(cx, y, 16, 0, 2 * math.pi)
-        src(ctx, BONE, da)
-        ctx.fill()
+        stick_s10(ctx, t, cx, y, da)
     S10_QUOTE.draw(ctx, t)
     S10_SIG.draw(ctx, t)
 
@@ -953,12 +940,524 @@ def scene12(ctx, t):
         ctx.stroke()
 
 
-# ----------------------------------------------------------------- timeline
-SCENES = [
-    (0.0, 3.0, scene1), (3.0, 6.0, scene2), (6.0, 12.0, scene3), (12.0, 16.0, scene4),
-    (16.0, 19.0, scene5), (19.0, 23.0, scene6), (23.0, 28.0, scene7), (28.0, 33.0, scene8),
-    (33.0, 37.0, scene9), (37.0, 41.0, scene10), (41.0, 44.0, scene11), (44.0, END, scene12),
+# ----------------------------------------------------------------- stickman
+# Angles are absolute, in degrees: 0 points down, 90 right, 180 up, -90 left.
+STICK = dict(torso=70, neck=8, head=20, uarm=40, farm=38, thigh=48, shin=46)
+POSES = {
+    "stand":   dict(torso=180, uaL=-14, faL=-6, uaR=14, faR=6, thL=-7, shL=-3, thR=7, shR=3),
+    "push":    dict(torso=128, uaL=100, faL=88, uaR=94, faR=84, thL=-42, shL=-30, thR=28, shR=-4),
+    "strain":  dict(torso=150, uaL=108, faL=96, uaR=102, faR=92, thL=-22, shL=-12, thR=38, shR=18),
+    "lift":    dict(torso=176, uaL=150, faL=168, uaR=140, faR=160, thL=-9, shL=-4, thR=9, shR=4),
+    "shrug":   dict(torso=180, uaL=-60, faL=-140, uaR=60, faR=140, thL=-7, shL=-3, thR=7, shR=3),
+    "slump":   dict(torso=158, uaL=6, faL=4, uaR=14, faR=10, thL=-4, shL=-2, thR=10, shR=6),
+    "sit":     dict(torso=168, uaL=30, faL=60, uaR=40, faR=70, thL=88, shL=40, thR=96, shR=50),
+    "lie":     dict(torso=-90, uaL=80, faL=90, uaR=95, faR=92, thL=88, shL=92, thR=94, shR=86),
+    "head":    dict(torso=176, uaL=-140, faL=150, uaR=140, faR=-150, thL=-8, shL=-3, thR=8, shR=3),
+    "guard":   dict(torso=170, uaL=38, faL=150, uaR=18, faR=170, thL=-24, shL=-10, thR=22, shR=4),
+    "punch":   dict(torso=160, uaL=40, faL=150, uaR=92, faR=90, thL=-30, shL=-14, thR=24, shR=6),
+    "cower":   dict(torso=165, uaL=60, faL=170, uaR=50, faR=175, thL=-14, shL=8, thR=14, shR=-8),
+    "puff":    dict(torso=186, uaL=-48, faL=48, uaR=48, faR=-48, thL=-18, shL=-12, thR=18, shR=12),
+    "brace":   dict(torso=174, uaL=36, faL=160, uaR=30, faR=165, thL=-38, shL=-6, thR=38, shR=6),
+    "meditate": dict(torso=180, uaL=-28, faL=-72, uaR=28, faR=72, thL=-78, shL=72, thR=78, shR=-72),
+    "victory": dict(torso=180, uaL=-150, faL=-162, uaR=150, faR=162, thL=-9, shL=-4, thR=9, shR=4),
+    "point":   dict(torso=180, uaL=-14, faL=-6, uaR=146, faR=158, thL=-8, shL=-3, thR=8, shR=3),
+    "run1":    dict(torso=160, uaL=55, faL=140, uaR=-40, faR=20, thL=62, shL=-6, thR=-28, shR=-70),
+    "run2":    dict(torso=160, uaL=-40, faL=20, uaR=55, faR=140, thL=-28, shL=-70, thR=62, shR=-6),
+    "step1":   dict(torso=168, uaL=30, faL=60, uaR=-25, faR=-10, thL=70, shL=0, thR=-12, shR=-8),
+    "step2":   dict(torso=168, uaL=-25, faL=-10, uaR=30, faR=60, thL=-12, shL=-8, thR=70, shR=0),
+    "hang":    dict(torso=180, uaL=-150, faL=-160, uaR=150, faR=160, thL=-5, shL=6, thR=5, shR=-6),
+}
+
+
+def dirv(a):
+    r = math.radians(a)
+    return (math.sin(r), math.cos(r))
+
+
+def lerp_pose(p, q, u):
+    return {k: p[k] + (q[k] - p[k]) * u for k in p}
+
+
+def pose_at(t, keys):
+    """keys: [(time, pose_name_or_dict), ...]; eased blend between keys."""
+    def P(x):
+        return POSES[x] if isinstance(x, str) else x
+    if t <= keys[0][0]:
+        return P(keys[0][1])
+    for (t0, a), (t1, b) in zip(keys, keys[1:]):
+        if t < t1:
+            return lerp_pose(P(a), P(b), eio(prog(t, t0, t1)))
+    return P(keys[-1][1])
+
+
+def two_bone(S, T, l1, l2, bend):
+    dx, dy = T[0] - S[0], T[1] - S[1]
+    d = max(1e-3, min(math.hypot(dx, dy), l1 + l2 - 1e-3))
+    a = math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1))
+    base = math.atan2(dy, dx)
+    e = (S[0] + l1 * math.cos(base + bend * a), S[1] + l1 * math.sin(base + bend * a))
+    ux, uy = (T[0] - S[0]), (T[1] - S[1])
+    n = math.hypot(ux, uy) or 1
+    h = (S[0] + ux / n * min(n, l1 + l2), S[1] + uy / n * min(n, l1 + l2))
+    return e, h
+
+
+def stick_joints(pose, hip, s, hands=None):
+    L = {k: v * s for k, v in STICK.items()}
+    td = dirv(pose["torso"])
+    neck = (hip[0] + td[0] * L["torso"], hip[1] + td[1] * L["torso"])
+    head = (neck[0] + td[0] * (L["neck"] + L["head"]), neck[1] + td[1] * (L["neck"] + L["head"]))
+    J = {"hip": hip, "neck": neck, "head": head}
+    for side in "LR":
+        if hands and side in hands:
+            e, h = two_bone(neck, hands[side], L["uarm"], L["farm"], -1 if side == "L" else 1)
+        else:
+            d1, d2 = dirv(pose["ua" + side]), dirv(pose["fa" + side])
+            e = (neck[0] + d1[0] * L["uarm"], neck[1] + d1[1] * L["uarm"])
+            h = (e[0] + d2[0] * L["farm"], e[1] + d2[1] * L["farm"])
+        J["elbow" + side], J["hand" + side] = e, h
+        d1, d2 = dirv(pose["th" + side]), dirv(pose["sh" + side])
+        k = (hip[0] + d1[0] * L["thigh"], hip[1] + d1[1] * L["thigh"])
+        f = (k[0] + d2[0] * L["shin"], k[1] + d2[1] * L["shin"])
+        J["knee" + side], J["foot" + side] = k, f
+    return J
+
+
+def ground_hip(pose, x, ground_y, s):
+    """Hip position so the lowest point of the body rests on ground_y."""
+    J = stick_joints(pose, (x, 0.0), s)
+    low = max(p[1] for k, p in J.items() if k != "head")
+    low = max(low, J["head"][1] + STICK["head"] * s)
+    return (x, ground_y - low - 2.5)
+
+
+def draw_stick(ctx, pose, hip, s=1.0, col=None, a=1.0, lw=5, hands=None):
+    if a <= 0:
+        return
+    col = col or BONE
+    J = stick_joints(pose, hip, s, hands)
+    ctx.set_line_width(lw)
+    ctx.set_line_cap(cairo.LINE_CAP_ROUND)
+    ctx.set_line_join(cairo.LINE_JOIN_ROUND)
+    for chain in (("hip", "neck"), ("neck", "elbowL", "handL"), ("neck", "elbowR", "handR"),
+                  ("hip", "kneeL", "footL"), ("hip", "kneeR", "footR")):
+        ctx.move_to(*J[chain[0]])
+        for c in chain[1:]:
+            ctx.line_to(*J[c])
+    src(ctx, col, a)
+    ctx.stroke()
+    ctx.new_sub_path()
+    ctx.arc(J["head"][0], J["head"][1], STICK["head"] * s, 0, 2 * math.pi)
+    ctx.fill()
+    ctx.set_line_cap(cairo.LINE_CAP_BUTT)
+    ctx.set_line_join(cairo.LINE_JOIN_MITER)
+
+
+def run_pose(t, rate=7.0):
+    u = 0.5 + 0.5 * math.sin(t * rate * math.pi)
+    return lerp_pose(POSES["run1"], POSES["run2"], u)
+
+
+# Scene 1: pushes the ball up the slope ---------------------------------------
+def s1_ground(x, ang):
+    return S1_Y if x <= S1_PIV else S1_Y - (x - S1_PIV) * math.tan(ang)
+
+
+def stick_s1(ctx, t):
+    a = eo3(prog(t, 0.0, 0.3)) * (1 - eo3(prog(t, 2.5, 2.85)))
+    if a <= 0:
+        return
+    ang = s1_slope_angle(t)
+    c = s1_center(min(s1_dist(t), s1_dist(0.95)) if t < 0.95 else s1_dist(0.95), ang)
+    if t < 0.95:
+        x = c[0] - S1_R - 46
+    else:
+        x = s1_center(s1_dist(0.95), ang)[0] - S1_R - 46
+    pose = pose_at(t, [(0.05, "push"), (0.55, "push"), (0.7, "strain"), (0.95, "strain"),
+                       (1.2, "stand"), (1.55, "stand"), (1.85, "victory"), (2.3, "victory")])
+    lean = math.degrees(ang) if t < 0.95 else 0
+    pose = dict(pose, torso=pose["torso"] - lean * 0.6)
+    hip = ground_hip(pose, x, s1_ground(x, ang), 0.85)
+    draw_stick(ctx, pose, hip, 0.85, BONE, a, 5)
+
+
+# Scene 2: hands on his head under the cracking mind ---------------------------
+def stick_s2(ctx, t):
+    out = prog(t, 5.62, 6.0)
+    a = eo3(prog(t, 3.0, 3.3))
+    with Fade(ctx, out, RX, RY):
+        pose = pose_at(t, [(3.0, "stand"), (3.9, "slump"), (4.3, "head"), (5.3, "head")])
+        jit = 0
+        if t > 4.3:
+            jit = 2.0 * math.sin(t * 70) * (1 - prog(t, 4.3, 5.4))
+        hip = ground_hip(pose, RX + jit, 905, 0.72)
+        draw_stick(ctx, pose, hip, 0.72, BONE, a, 5)
+
+
+# Scene 3: builds the tower, then gives up -------------------------------------
+def stick_s3(ctx, t):
+    out = prog(t, 11.78, 12.0)
+    a = eo3(prog(t, 6.0, 6.3))
+    with Fade(ctx, out, RX, 600):
+        keys = [(6.0, "stand"), (6.25, "lift"), (6.55, "stand"), (6.85, "lift"), (7.15, "stand"),
+                (7.45, "lift"), (7.8, "stand"), (9.28, "stand"), (9.5, "shrug"), (10.2, "shrug"),
+                (10.4, "slump"), (10.75, "sit"), (11.36, "sit"), (11.6, "lie")]
+        pose = pose_at(t, keys)
+        x = 865 if t < 11.36 else lerp(865, 880, prog(t, 11.36, 11.6))
+        hip = ground_hip(pose, x, S3_GROUND, 0.78)
+        draw_stick(ctx, pose, hip, 0.78, BONE, a, 5)
+
+
+# Scene 6: meditates under the clock ------------------------------------------
+def stick_s6(ctx, t):
+    out = prog(t, 22.6, 23.0)
+    a = eo3(prog(t, 19.1, 19.45))
+    with Fade(ctx, out, RX, RY):
+        breath = 1 + 0.03 * math.sin(t * 2.6)
+        pose = dict(POSES["meditate"])
+        hip = ground_hip(pose, RX, 905, 0.8)
+        s = 0.8
+        draw_stick(ctx, dict(pose, torso=180), (hip[0], hip[1]), s, BONE, a, 5)
+        # calm aura on "mind"
+        g = prog(t, 20.7, 21.6)
+        if 0 < g < 1:
+            J = stick_joints(pose, hip, s)
+            ctx.new_sub_path()
+            ctx.arc(J["head"][0], J["head"][1], 22 + 60 * eo3(g), 0, 2 * math.pi)
+            src(ctx, RED, 0.6 * (1 - g))
+            ctx.set_line_width(3)
+            ctx.stroke()
+
+
+# Scene 7: boxer through fear, ego and pressure --------------------------------
+def stick_s7(ctx, t):
+    out = prog(t, 27.6, 28.0)
+    a = eo3(prog(t, 23.0, 23.3))
+    with Fade(ctx, out, RX, 560):
+        if t < 24.6:
+            k = int(max(0, t - 23.2) / 0.22)
+            ph = prog(t, 23.2 + 0.22 * k, 23.2 + 0.22 * k + 0.22)
+            punch = 23.2 <= t < 24.3 and k % 2 == 0
+            pose = lerp_pose(POSES["guard"], POSES["punch"], math.sin(math.pi * ph)) if punch else POSES["guard"]
+            bob = 4 * math.sin(t * 11)
+        else:
+            pose = pose_at(t, [(24.6, "guard"), (24.75, "cower"), (25.5, "cower"), (25.75, "puff"),
+                               (26.55, "puff"), (26.75, "brace")])
+            bob = 0
+        jx = 0
+        if 24.6 <= t < 25.5:
+            jx = 4.5 * math.sin(t * 95) * (1 - 0.6 * prog(t, 24.6, 25.5))
+        hip = ground_hip(pose, RX + jx, 935, 0.74)
+        draw_stick(ctx, pose, (hip[0], hip[1] + bob), 0.74, BONE, a, 5)
+
+
+# Scene 8: climbs the 12 steps, then hangs from the bar -------------------------
+def stick_s8(ctx, t):
+    da = eo3(prog(t, 29.0, 29.25))
+    if da <= 0:
+        return
+    s = 0.46
+    p = s8_dot(t)
+    if t < 31.55:
+        i = sum(1 for k in range(12) if t >= S8_HOP0 + k * S8_HOPDT)
+        pose = POSES["step1"] if i % 2 else POSES["step2"]
+        if i == 0 or t > S8_HOP0 + 11 * S8_HOPDT + 0.14:
+            pose = POSES["stand"]
+        hip = ground_hip(pose, p[0], p[1] + 11.5, s)
+        draw_stick(ctx, pose, hip, s, RED, da, 4)
+    else:
+        u = eio(prog(t, 31.55, 31.9))
+        x0, x1, by = S8_BAR
+        L = STICK
+        hang_hip = (S8_HANG[0], by + (L["uarm"] + L["farm"]) * s * 0.92 + L["torso"] * s)
+        top = s8_dot(31.549)
+        start_hip = ground_hip(POSES["victory"], top[0], top[1] + 11.5, s)
+        hip = (lerp(start_hip[0], hang_hip[0], u), lerp(start_hip[1], hang_hip[1], u) - 30 * math.sin(math.pi * u))
+        pose = lerp_pose(POSES["victory"], POSES["hang"], u)
+        hands = None
+        if u >= 1:
+            sw = 2.5 * math.sin((t - 31.9) * 5) * (1 - prog(t, 31.9, 32.6))
+            hip = (hip[0] + sw, hip[1])
+            hands = {"L": (S8_HANG[0] - 16, by), "R": (S8_HANG[0] + 16, by)}
+        draw_stick(ctx, pose, hip, s, RED, da, 4, hands)
+
+
+# Scene 10: the pull-ups -------------------------------------------------------
+def stick_s10(ctx, t, cx, dot_y, a):
+    s = 1.15
+    x0, x1, by = S10_BAR
+    mid = (x0 + x1) / 2
+    hip_y = 488 + (dot_y - S10_HANG) * (76 / (S10_HANG - S10_TOP))
+    lift = prog(S10_HANG - dot_y, 0, S10_HANG - S10_TOP)
+    pose = lerp_pose(POSES["hang"], dict(POSES["hang"], thL=-18, shL=14, thR=18, shR=-14), lift)
+    draw_stick(ctx, pose, (cx, hip_y), s, BONE, a, 5, hands={"L": (mid - 46, by), "R": (mid + 46, by)})
+
+
+# Scene 11: runs, takes the red path up -----------------------------------------
+def path_point(pts, u):
+    n = len(pts) - 1
+    f = clamp(u) * n
+    i = min(int(f), n - 1)
+    r = f - i
+    return (lerp(pts[i][0], pts[i + 1][0], r), lerp(pts[i][1], pts[i + 1][1], r))
+
+
+def stick_s11(ctx, t):
+    out = prog(t, 43.66, 44.0)
+    a = eo3(prog(t, 41.05, 41.3))
+    with Fade(ctx, out, RX, RY):
+        s = 0.42
+        if t < 42.3:
+            u = eo3(prog(t, 41.1, 42.25))
+            p = (lerp(800, S11_NODE[0], u), S11_NODE[1])
+            pose = run_pose(t) if u < 0.98 else POSES["stand"]
+        else:
+            u = eo3(prog(t, 42.3, 42.85))
+            p = path_point(S11_UP, u)
+            pose = run_pose(t, 9) if u < 0.99 else POSES["victory"]
+        hip = ground_hip(pose, p[0], p[1] - 2, s)
+        draw_stick(ctx, pose, hip, s, BONE, a, 4)
+        # the ghost who took the other road
+        ga = eo3(prog(t, 42.9, 43.15)) * (1 - eio(prog(t, 43.25, 43.65)))
+        if ga > 0:
+            q = S11_DN[-1]
+            pose = POSES["sit"]
+            hip = ground_hip(pose, q[0] - 30, q[1], s)
+            draw_stick(ctx, pose, hip, s, GREY, ga, 4)
+
+
+# Scene 12: points at the link -------------------------------------------------
+def stick_s12(ctx, t):
+    a = eo3(prog(t, 44.2, 44.5))
+    keys = [(44.2, "guard"), (45.4, "guard"), (45.6, "victory"), (46.4, "victory"), (46.7, "stand"),
+            (47.28, "stand"), (47.5, "point")]
+    pose = pose_at(t, keys)
+    bob = 3 * math.sin(t * 9) if t < 45.4 else 0
+    hip = ground_hip(pose, 1225, 870, 0.85)
+    draw_stick(ctx, pose, (hip[0], hip[1] + bob), 0.85, BONE, a, 5)
+
+
+# Scene 4: constellation lines between the floating dots ---------------------------
+def s4_links(ctx, t):
+    k = 1 - prog(t, S4_SNAP, S4_SNAP + 0.25)
+    if k <= 0 or t < 12.2:
+        return
+    pts = [s4_dot(i, t) for i in range(30)]
+    ctx.set_line_width(1.5)
+    for i in range(30):
+        for j in range(i + 1, 30):
+            d = math.dist(pts[i], pts[j])
+            if d < 120:
+                ctx.move_to(*pts[i])
+                ctx.line_to(*pts[j])
+                src(ctx, GREY, 0.55 * (1 - d / 120) * k * prog(t, 12.2, 12.6))
+                ctx.stroke()
+
+
+# Scene 5: a rotating dial of ticks around the cage ---------------------------------
+def s5_dial(ctx, t):
+    a = eo3(prog(t, 16.6, 17.1)) * (1 - prog(t, 18.55, 18.75))
+    if a <= 0:
+        return
+    rot = t * 0.35
+    ctx.set_line_width(2)
+    for k in range(72):
+        ang = rot + 2 * math.pi * k / 72
+        r0 = 398 if k % 6 else 392
+        ctx.move_to(W / 2 + r0 * math.cos(ang), H / 2 + r0 * math.sin(ang))
+        ctx.line_to(W / 2 + 410 * math.cos(ang), H / 2 + 410 * math.sin(ang))
+    src(ctx, GREY, 0.55 * a)
+    ctx.stroke()
+
+
+def with_extra(fn, *extras):
+    def f(ctx, t):
+        fn(ctx, t)
+        for e in extras:
+            e(ctx, t)
+    f.__name__ = fn.__name__
+    return f
+
+
+# ----------------------------------------------------------------- themes & backgrounds
+THEMES = {
+    "dark": (hexc("#0B0B0A"), hexc("#ECE8E0"), hexc("#C4161C"), hexc("#8F897F")),
+    "bone": (hexc("#ECE8E0"), hexc("#0B0B0A"), hexc("#C4161C"), hexc("#8F897F")),
+    "red":  (hexc("#C4161C"), hexc("#F4F0E8"), hexc("#0B0B0A"), hexc("#F0A8AA")),
+}
+WIPE = 0.32
+# (design time the wipe starts, theme, background pattern, wipe shape, wipe centre)
+SCHEDULE = [
+    (-9.0, "dark", "rays", None, None),
+    (2.88, "bone", "grid", "circle", (RX, RY)),
+    (5.85, "dark", "stripes", "slash", None),
+    (9.10, "red", "rings", "circle", (RX, 600)),
+    (11.85, "bone", "grid", "octagon", (RX, 560)),
+    (14.30, "dark", "rays", "circle", (RX, RY)),
+    (18.75, "bone", "rings", "circle", (RX, RY)),
+    (22.75, "red", "stripes", "slash", None),
+    (26.40, "dark", "rings", "circle", (RX, 560)),
+    (27.80, "bone", "grid", "slash", None),
+    (31.25, "dark", "rays", "circle", (1230, 215)),
+    (32.85, "red", "grid", "octagon", (1055, RY)),
+    (36.85, "dark", "stripes", "slash", None),
+    (40.85, "bone", "rings", "circle", (800, 610)),
+    (43.85, "dark", "rays", "octagon", (W / 2, H / 2)),
+    (45.25, "red", "rings", "circle", (W / 2, 500)),
 ]
+
+
+def set_theme(name):
+    global BG, BONE, RED, GREY
+    BG, BONE, RED, GREY = THEMES[name]
+
+
+def bg_pattern(ctx, t, kind):
+    ctx.save()
+    if kind == "grid":
+        sp, ox, oy = 54, (t * 14) % 54, (t * 9) % 54
+        src(ctx, BONE, 0.11)
+        for y in range(-1, H // sp + 2):
+            for x in range(-1, W // sp + 2):
+                ctx.new_sub_path()
+                ctx.arc(x * sp + ox, y * sp + oy, 2.2, 0, 2 * math.pi)
+        ctx.fill()
+    elif kind == "rays":
+        ctx.set_line_width(2)
+        rot = math.radians(3 * t)
+        for k in range(40):
+            a = rot + 2 * math.pi * k / 40
+            ctx.move_to(W / 2 + 140 * math.cos(a), H / 2 + 140 * math.sin(a))
+            ctx.line_to(W / 2 + 1000 * math.cos(a), H / 2 + 1000 * math.sin(a))
+        src(ctx, BONE, 0.06)
+        ctx.stroke()
+    elif kind == "rings":
+        ctx.set_line_width(2)
+        for k in range(12):
+            r = (k * 85 + t * 38) % 1020
+            ctx.new_sub_path()
+            ctx.arc(W / 2, H / 2, r, 0, 2 * math.pi)
+            src(ctx, BONE, 0.10 * (1 - r / 1020))
+            ctx.stroke()
+    elif kind == "stripes":
+        ctx.set_line_width(2)
+        sp, off = 46, (t * 30) % 46
+        for k in range(-30, 60):
+            x = k * sp + off
+            ctx.move_to(x, 0)
+            ctx.line_to(x - H, H)
+        src(ctx, BONE, 0.055)
+        ctx.stroke()
+    ctx.restore()
+    bg_octagon(ctx, t)
+
+
+def vignette(ctx, strength):
+    g = cairo.RadialGradient(W / 2, H / 2, 300, W / 2, H / 2, 900)
+    g.add_color_stop_rgba(0, 0, 0, 0, 0)
+    g.add_color_stop_rgba(1, 0, 0, 0, strength)
+    ctx.set_source(g)
+    ctx.paint()
+
+
+def scene_index(t):
+    for i, (t0, t1, fn) in enumerate(SCENES):
+        if t0 <= t < t1 or (i == len(SCENES) - 1 and t >= t0):
+            return i
+    return len(SCENES) - 1
+
+
+def hud(ctx, t):
+    i = scene_index(t)
+    set_font(ctx, ANTON, 30)
+    src(ctx, GREY, 0.9)
+    ctx.move_to(120, 150)
+    ctx.show_text(f"{i + 1:02d}")
+    src(ctx, GREY, 0.5)
+    ctx.show_text(f"  /  {len(SCENES):02d}")
+    # progress bar
+    x0, x1, y = 260, 1320, 140
+    ctx.rectangle(x0, y - 1.5, x1 - x0, 3)
+    src(ctx, GREY, 0.25)
+    ctx.fill()
+    ctx.rectangle(x0, y - 1.5, (x1 - x0) * clamp(t / FREEZE), 3)
+    src(ctx, RED, 0.95)
+    ctx.fill()
+
+
+KEY_TIMES = []
+
+
+def collect_key_times():
+    for name, g in list(globals().items()):
+        for gg in (g if isinstance(g, list) else [g]):
+            if isinstance(gg, Group) and gg is not S10_SIG:
+                for line in gg.lines:
+                    for w in line:
+                        if w.key:
+                            KEY_TIMES.append(w.t)
+    KEY_TIMES.sort()
+
+
+FULL_WIDTH = {0, 4, 11}
+
+
+def punch_and_burst(ctx, t, i):
+    p, burst = 0.0, None
+    for k in KEY_TIMES:
+        d = t - k
+        if 0 <= d < 0.6:
+            p += 0.035 * math.exp(-d / 0.11) * min(1, d / 0.03)
+            burst = d
+    return p, burst
+
+
+def draw_layer(ctx, t, theme, pattern):
+    set_theme(theme)
+    src(ctx, BG)
+    ctx.paint()
+    bg_pattern(ctx, t, pattern)
+    i = scene_index(t)
+    t0, t1, fn = SCENES[i]
+    p, burst = punch_and_burst(ctx, t, i)
+    s = (1 + 0.04 * prog(t, t0, min(t1, FREEZE))) * (1 + p)
+    ctx.save()
+    ctx.translate(W / 2, H / 2)
+    ctx.scale(s, s)
+    ctx.translate(-W / 2, -H / 2)
+    if burst is not None:
+        c = (W / 2, H / 2) if i in FULL_WIDTH else (RX, RY)
+        u = eo3(clamp(burst / 0.55))
+        ctx.new_sub_path()
+        ctx.arc(c[0], c[1], 80 + 420 * u, 0, 2 * math.pi)
+        ctx.set_line_width(3)
+        src(ctx, RED, 0.45 * (1 - u))
+        ctx.stroke()
+    fn(ctx, t)
+    ctx.restore()
+    hud(ctx, t)
+    if theme != "bone":
+        vignette(ctx, 0.35 if theme == "dark" else 0.22)
+
+
+def wipe_path(ctx, kind, c, u):
+    if kind == "circle":
+        r = 1900 * eio(u)
+        ctx.new_sub_path()
+        ctx.arc(c[0], c[1], max(r, 0.1), 0, 2 * math.pi)
+    elif kind == "octagon":
+        pts = oct_pts(c[0], c[1], 1900 * eio(u) + 0.1)
+        ctx.move_to(*pts[0])
+        for q in pts[1:]:
+            ctx.line_to(*q)
+        ctx.close_path()
+    else:   # diagonal slash from the left
+        x = -H + (W + 2 * H) * eio(u)
+        ctx.move_to(-H, 0)
+        ctx.line_to(x, 0)
+        ctx.line_to(x - H * 0.6, H)
+        ctx.line_to(-H, H)
+        ctx.close_path()
 
 
 def render(t):
@@ -971,20 +1470,40 @@ def render(t):
     fo.set_hint_style(cairo.HINT_STYLE_NONE)
     fo.set_hint_metrics(cairo.HINT_METRICS_OFF)
     ctx.set_font_options(fo)
-    src(ctx, BG)
-    ctx.paint()
-    bg_octagon(ctx, t)
-    for t0, t1, fn in SCENES:
-        if t0 <= t < t1 or (fn is scene12 and t >= t0):
-            s = 1 + 0.04 * prog(t, t0, min(t1, FREEZE))
-            ctx.save()
-            ctx.translate(W / 2, H / 2)
-            ctx.scale(s, s)
-            ctx.translate(-W / 2, -H / 2)
-            fn(ctx, t)
-            ctx.restore()
-            break
+    k = max(i for i, e in enumerate(SCHEDULE) if e[0] <= t)
+    t0, theme, pattern, kind, c = SCHEDULE[k]
+    u = prog(t, t0, t0 + WIPE)
+    if u >= 1 or k == 0:
+        draw_layer(ctx, t, theme, pattern)
+    else:
+        _, ptheme, ppattern, _, _ = SCHEDULE[k - 1]
+        draw_layer(ctx, t, ptheme, ppattern)
+        ctx.save()
+        wipe_path(ctx, kind, c, u)
+        ctx.clip()
+        draw_layer(ctx, t, theme, pattern)
+        ctx.restore()
+        # thin accent edge on the wipe
+        ctx.save()
+        wipe_path(ctx, kind, c, u)
+        ctx.set_line_width(6)
+        src(ctx, THEMES[theme][2] if theme != "red" else THEMES["red"][1], 0.9)
+        ctx.stroke()
+        ctx.restore()
+    set_theme("dark")
     return surf
+
+
+# ----------------------------------------------------------------- timeline
+SCENES = [
+    (0.0, 3.0, with_extra(scene1, stick_s1)), (3.0, 6.0, with_extra(scene2, stick_s2)),
+    (6.0, 12.0, with_extra(scene3, stick_s3)), (12.0, 16.0, with_extra(scene4, s4_links)),
+    (16.0, 19.0, with_extra(scene5, s5_dial)), (19.0, 23.0, with_extra(scene6, stick_s6)),
+    (23.0, 28.0, with_extra(scene7, stick_s7)), (28.0, 33.0, scene8),
+    (33.0, 37.0, scene9), (37.0, 41.0, scene10), (41.0, 44.0, with_extra(scene11, stick_s11)),
+    (44.0, END, with_extra(scene12, stick_s12)),
+]
+collect_key_times()
 
 
 _WARP = None   # new time -> design time, when fitting to a recorded voice (see warp.py)

@@ -17,3 +17,7 @@ Re-render: `pip install pycairo && python3 video/render.py` (needs ffmpeg).
 Single stills for checking: `python3 video/render.py --frames 1.4 17.2 47.9`.
 Every timing lives at the top of each scene in `render.py`. To re-sync to a real voice track,
 change the word times in the `Wd(...)` captions and the matching animation times.
+
+Look: backgrounds switch between black, bone and red every 2-4 s with geometric wipes and moving
+patterns; a stickman acts out most scenes; key words get a zoom punch and ring burst; a scene
+counter and progress bar run along the top. Theme schedule: `SCHEDULE` in render.py.
