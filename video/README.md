@@ -1,14 +1,17 @@
 # Launch video: The Complete Fighter
 
 - `out/launch_tiktok_vertical.mp4`: ready to upload to TikTok (9:16, voice included)
-- `out/launch_with_voice.mp4`: 1440×1080 with the voice, 49.7 s (the last frame holds for 1 s)
+- `out/launch_with_voice.mp4`: 1440×1080 with the voice, 38.5 s (the last frame holds for 1 s)
 - `out/launch_no_audio.mp4`: the same video without sound
 - `out/voiceover.wav`: the voice on its own
 - `out/cover.png`: TikTok cover (scene 1 with the hook)
 - `out/voiceover.txt` / `out/voice_timings.json`: when each line and word is spoken
 
-Voice: Kokoro-82M (open model, Apache-2.0), voice `af_heart`, made by `voice.py`.
-Captions are synced to the measured word times.
+Voice: ElevenLabs recording in `voice_src/elevenlabs.mp3`, 38.5 s video.
+`align.py` finds when each word is spoken (silences + Whisper + matching against a Kokoro
+reference), `warp.py` builds a smooth time map so every caption word lands on the voice,
+then `WARP=out/warp.json python3 render.py` renders the fitted video.
+(`voice.py` made the earlier Kokoro voice and is still used as the timing reference.)
 
 Re-render: `pip install pycairo && python3 video/render.py` (needs ffmpeg).
 Single stills for checking: `python3 video/render.py --frames 1.4 17.2 47.9`.

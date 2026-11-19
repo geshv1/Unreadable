@@ -987,8 +987,24 @@ def render(t):
     return surf
 
 
+_WARP = None   # new time -> design time, when fitting to a recorded voice (see warp.py)
+
+
+def load_warp(path):
+    global _WARP
+    from scipy.interpolate import PchipInterpolator
+    import json
+    w = json.load(open(path))
+    xs, ys = zip(*w["anchors"])
+    _WARP = (PchipInterpolator(xs, ys), w["end"])
+
+
+def design_time(t):
+    return float(_WARP[0](min(t, _WARP[1]))) if _WARP else t
+
+
 def frame_bytes(i):
-    return bytes(render(i / FPS).get_data())
+    return bytes(render(design_time(i / FPS)).get_data())
 
 
 def ensure_fonts():
@@ -1010,7 +1026,10 @@ def main():
             render(float(a)).write_to_png(os.path.join(OUT, f"check_{float(a):05.2f}.png"))
         return
     render(1.4).write_to_png(os.path.join(OUT, "cover.png"))
-    n = int(round(END * FPS))
+    warp = os.environ.get("WARP")
+    if warp:
+        load_warp(warp)
+    n = int(round((_WARP[1] if _WARP else END) * FPS))
     out = os.path.join(OUT, "launch_no_audio.mp4")
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "bgra", "-s", f"{W}x{H}",
            "-r", str(FPS), "-i", "-", "-vf", "scale=out_color_matrix=bt709:out_range=tv",
