@@ -6,6 +6,9 @@ import {setCtx,setCover} from './engine/lib.js';
 export const VIEW_OFFSET_Y=245;
 // TikTok safe area: shrink the whole picture and keep it clear of the right-side buttons and bottom caption.
 export const SAFE={scale:.86,x:28,y:46};
+// 9:16 (1080×1920): picture block sits inside TikTok's safe zone — clear of the top tabs,
+// the right-side like/comment/share column and the bottom caption area.
+export const SAFE_916={scale:.806,x:50,y:235};
 let assetsPromise:Promise<void>|null=null;
 function loadAssets(){
   if(assetsPromise)return assetsPromise;
@@ -30,7 +33,7 @@ export const CanvasScene:React.FC<{draw:(t:number,frame:number)=>void}>=({draw})
   useLayoutEffect(()=>{
     if(!ready||!ref.current)return;const c=ref.current.getContext('2d')!;setCtx(c);
     c.setTransform(1,0,0,1,0,0);c.globalAlpha=1;c.globalCompositeOperation='source-over';c.filter='none';c.fillStyle='#000';c.fillRect(0,0,width,height);
-    c.save();c.translate(SAFE.x,SAFE.y);c.beginPath();c.rect(0,0,width*SAFE.scale,height*SAFE.scale);c.clip();c.scale(SAFE.scale,SAFE.scale);c.translate(0,-VIEW_OFFSET_Y);draw(frame/fps,frame);c.restore();
+    const sf=height>=1900?SAFE_916:SAFE;c.save();c.translate(sf.x,sf.y);c.beginPath();c.rect(0,0,1080*sf.scale,1440*sf.scale);c.clip();c.scale(sf.scale,sf.scale);c.translate(0,-VIEW_OFFSET_Y);draw(frame/fps,frame);c.restore();
   },[frame,ready,draw,fps,width,height]);
   return <canvas ref={ref} width={width} height={height} style={{width:'100%',height:'100%'}}/>;
 };
