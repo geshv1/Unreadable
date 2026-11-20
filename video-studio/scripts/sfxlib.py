@@ -129,3 +129,8 @@ def whisper(d):
     x=bp(noise(d),1800,7000);t=np.arange(len(x))/SR;m=np.clip(np.sin(2*np.pi*5.5*t+np.sin(2*np.pi*1.3*t)*2),0,1)**1.5;return x*m*np.hanning(len(x))
 def carpass(d=1.6):
     n=int(d*SR);t=np.linspace(0,1,n);x=noise(d);return (lpf(x,900)*1.2+bp(x,1000,3000)*.25+bp(noise(d),2000,6000)*.25)*np.exp(-((t-.5)/.22)**2)
+def birds(d):
+    y=np.zeros(int(d*SR))
+    for _ in range(int(d*1.5)):
+        i=rng.integers(0,len(y)-SR//4);n=int(.12*SR);t=np.arange(n)/SR;f=3200+1400*np.sin(2*np.pi*14*t);y[i:i+n]+=np.sin(2*np.pi*np.cumsum(f)/SR)*np.hanning(n)*.4
+    return y
