@@ -125,3 +125,7 @@ def heartbeat():
 def tap(): n=int(.035*SR);return bp(noise(.035),1500,6000)*env(n,.0005,.006)*1.4+lpf(noise(.035),400)*env(n,.0005,.01)*.6
 def scribble(d):
     x=bp(noise(d),2500,7000);t=np.arange(len(x))/SR;m=np.clip(np.sin(2*np.pi*9*t)*.5+.5+.3*np.sin(2*np.pi*3.1*t),0,1)**2;return x*m
+def whisper(d):
+    x=bp(noise(d),1800,7000);t=np.arange(len(x))/SR;m=np.clip(np.sin(2*np.pi*5.5*t+np.sin(2*np.pi*1.3*t)*2),0,1)**1.5;return x*m*np.hanning(len(x))
+def carpass(d=1.6):
+    n=int(d*SR);t=np.linspace(0,1,n);x=noise(d);return (lpf(x,900)*1.2+bp(x,1000,3000)*.25+bp(noise(d),2000,6000)*.25)*np.exp(-((t-.5)/.22)**2)
