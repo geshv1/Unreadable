@@ -89,7 +89,7 @@ function dreamIcon(type,x,y,k){const c=C();S(()=>{c.globalAlpha*=k*.85;c.transla
 export function s08(u){envLounge(u,{door:.15});const c=C();
  const sx=lerp(120,860,eio(seg(u,.2,3.6)));
  // giant shadows on the wall
- const g=eio(seg(u,1.0,3.0));[[360,0],[500,1],[640,2]].forEach(([x,i])=>S(()=>{c.globalAlpha=.55*g;c.translate(x+(x-540)*.3*g,1350);c.scale(1+g*.9,1+g*.9);c.translate(-x,-1350);person({...FRIENDS[i],skin:'#050406',top:'#050406',bot:'#050406',shoe:'#050406',hairCol:'#050406',x,y:sitY(1.1)-40,s:1.1,f:1,pose:POSES.sit,noShadow:true})}));
+ const g=eio(seg(u,1.0,3.0));[[360,0],[500,1],[640,2]].forEach(([x,i])=>S(()=>{c.globalAlpha=.42*g;c.filter='blur(6px)';c.translate(x+(x-540)*.3*g,1350);c.scale(1+g*.9,1+g*.9);c.translate(-x,-1350);person({...FRIENDS[i],skin:'#050406',top:'#050406',bot:'#050406',shoe:'#050406',hairCol:'#050406',x,y:sitY(1.1)-40,s:1.1,f:1,pose:POSES.sit,noShadow:true})}));
  [[360,0],[500,1],[640,2]].forEach(([x,i])=>{const look=Math.sign(sx-x)||1;drawFriend(i,{x,y:sitY(1.1),s:1.1,f:look,noShadow:true,pose:{...POSES.sit,hd:-.1}});dreamIcon(dreams[i],x,980,eo(seg(u,4.3+i*.12,4.9+i*.12)))});
  if(sx<880)drawSecond({x:sx,y:FL+30,s:1.15,f:1,pose:walkP(u*7),backProp:J=>gymBag(J)});
  topShade()}

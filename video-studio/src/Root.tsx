@@ -1,5 +1,5 @@
 import React from 'react';
-import {Composition} from 'remotion';
+import {Composition,Audio,staticFile,AbsoluteFill} from 'remotion';
 import {CanvasScene} from './CanvasScene';
 import {characterSheet,envPreview,ENVS} from './previews.js';
 import {drawFrame,TOTAL} from './timeline.js';
@@ -8,7 +8,7 @@ const W=1080,H=1440,FPS=30;
 const Sheet:React.FC=()=><CanvasScene draw={(t)=>characterSheet(t)}/>;
 const Env:React.FC<{i:number}>=({i})=><CanvasScene draw={(t)=>envPreview(i,t)}/>;
 
-const Main:React.FC=()=><CanvasScene draw={(t)=>drawFrame(t)}/>;
+const Main:React.FC=()=>(<AbsoluteFill><CanvasScene draw={(t)=>drawFrame(t)}/><Audio src={staticFile('audio/narration.wav')}/></AbsoluteFill>);
 export const Root:React.FC=()=>(<>
   <Composition id="TwoVersions" component={Main} width={W} height={H} fps={FPS} durationInFrames={Math.ceil(TOTAL*FPS)}/>
   <Composition id="CharacterSheet" component={Sheet} width={W} height={H} fps={FPS} durationInFrames={90}/>
