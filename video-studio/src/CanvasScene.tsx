@@ -15,8 +15,9 @@ function loadAssets(){
   const fonts:[string,string,FontFaceDescriptors][]=[
     ['Disp','fonts/InterDisplay-Bold.otf',{weight:'700 800'}],
     ['Black','fonts/InterDisplay-Black.otf',{weight:'900'}],
-    ['Lab','fonts/tenor.woff2',{weight:'100 900'}],
-    ['Ser','fonts/corm.woff2',{style:'italic',weight:'100 900'}],
+    // Captions: bold, high-legibility Inter Display (replaces the thin serif/Tenor caption fonts).
+    ['Lab','fonts/InterDisplay-Bold.otf',{weight:'100 900'}],
+    ['Ser','fonts/InterDisplay-Black.otf',{style:'italic',weight:'100 900'}],
   ];
   assetsPromise=Promise.all([
     ...fonts.map(([n,f,d])=>new FontFace(n,`url(${staticFile(f)})`,d).load().then(ff=>{(document.fonts as any).add(ff)})),
