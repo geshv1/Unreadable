@@ -18,13 +18,28 @@ def hpf(x,f,o=2): return sosfilt(butter(o,f,btype='high',fs=SR,output='sos'),x)
 def noise(d): return rng.standard_normal(int(d*SR))
 def env(n,a=.005,r=.1):
     t=np.arange(n)/SR; return np.minimum(1,t/max(a,1e-4))*np.exp(-t/r)
+MAP=None; SPARSE=False; GAP=0.9
+def make_map(segs):
+    def f(t):
+        for o0,o1,n0,sp in segs:
+            if o0<=t<o1: return n0+(t-o0)/sp
+        return None
+    return f
 class Track:
-    def __init__(s): s.N=N; s.L=np.zeros(N); s.R=np.zeros(N)
-    def put(s,t,x,g,pan=0.):
+    def __init__(s): s.N=N; s.L=np.zeros(N); s.R=np.zeros(N); s.last={}
+    def put(s,t,x,g,pan=0.,imp=False):
+        if MAP:
+            t=MAP(t)
+            if t is None: return
+        if SPARSE and not imp:
+            key=len(x)//400
+            if key in s.last and t-s.last[key]<GAP: return
+            s.last[key]=t
         i=int(t*SR); n=min(len(x),s.N-i)
         if n<=0 or i<0: return
         s.L[i:i+n]+=x[:n]*g*np.sqrt((1-pan)/2); s.R[i:i+n]+=x[:n]*g*np.sqrt((1+pan)/2)
     def bed(s,t0,t1,x,g,pan=0,fade=.25):
+        if SPARSE: return
         n=int((t1-t0)*SR); x=np.resize(x,n); e=np.ones(n); f=min(int(fade*SR),n//2)
         e[:f]=np.linspace(0,1,f); e[-f:]=np.linspace(1,0,f); s.put(t0,x*e,g,pan)
 # ---------------- sound library ----------------

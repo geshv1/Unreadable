@@ -10,12 +10,12 @@ const heartIcon=(x,y,s,col)=>{const c=C();S(()=>{c.translate(x,y);c.scale(s,s);c
 function dumbbell(J,a=0){const c=C();S(()=>{const [x,y]=J.handF;c.translate(x,y);c.rotate(a);c.fillStyle='#0a0a0c';c.fillRect(-26,-4,52,8);rr(-34,-14,14,28,4);c.fill();rr(20,-14,14,28,4);c.fill();c.fillStyle='#3a3b42';rr(-31,-11,8,22,3);c.fill();rr(23,-11,8,22,3);c.fill()})}
 
 // B1 HOOK
-function b1(u){const l=Math.min(1,seg(u,.05,.12)),r2=Math.min(1,seg(u,.25,.32));stage(u,[[330,l,'#ff8a9c'],[750,r2,'#ffffff']]);const c=C();
+function b1(u){const l=1,r2=1;stage(u,[[330,l,'#ff8a9c'],[750,r2,'#ffffff']]);const c=C();
  const talk=Math.sin(u*14);R({x:330,y:FL,s:1.25,f:1,pose:Pz({lean:-.05,hd:-.1+talk*.05,aF:[2.0+talk*.25,.4],aB:[-.4,.6]}),mood:'smile',t:u});
  for(let i=0;i<3;i++){const k=((u*1.2+i/3)%1);S(()=>{c.globalAlpha=(1-k)*.8;c.strokeStyle=CRL;c.lineWidth=3;c.shadowColor=CR;c.shadowBlur=10;c.beginPath();c.arc(400,FL-330,30+k*90,-.6,.6);c.stroke()})}
  const sh=eo(seg(u,.6,1.0));St({x:750,y:FL,s:1.25,f:-1,pose:lpz(TALL,Pz({hd:.02,aF:[2.45,1.55],aB:[-.1,.2]}),sh),mood:'calm',t:u,glow:r2});
  tag(330,FL+70,'REACTIVE',CRL,eo(seg(u,.3,.6)));tag(750,FL+70,'STEADY','#fff',eo(seg(u,.4,.7)));
- title2(u,.1,'TELL NO ONE.',null,520);title2(u,.85,'Let them ','wonder.',632)}
+ title2(u,-1,'HE TOLD EVERYONE HIS GOALS.',null,520);title2(u,.25,"That's exactly why he ",'failed.',632)}
 
 // B2 THE ANNOUNCEMENT
 function postUI(u,x0,y0,w,h){const c=C();phoneFrame(x0,y0,w,h,()=>{c.fillStyle='#16181e';c.fillRect(x0,y0,w,h);
@@ -55,13 +55,13 @@ function b4(u){const c=C();c.fillStyle='#000';c.fillRect(0,0,W,H);
   R({x:470,y:sitY(1.1),s:1.1,f:1,noShadow:true,pose:Pz({...SIT,lean:-.3,hd:.5,aF:[.65,1.5],aB:[.2,.9]}),mood:'neutral',t:u,frontProp:J=>phone(J,.9)});c.translate(170,0);
   S(()=>{c.fillStyle='#0a0a0c';rr(40,1390,120,60,16);c.fill();c.fillStyle='#2b2c33';rr(44,1394,112,52,14);c.fill();c.fillStyle='rgba(200,190,170,.25)';for(let i=0;i<20;i++)c.fillRect(48+((i*37)%104),1396+((i*13)%10),3,2);c.fillStyle=CR;c.fillRect(44,1410,112,4)});
   for(let i=0;i<4;i++){const k=((u*.4+i/4)%1);S(()=>{c.globalAlpha=(1-k)*.4;c.fillStyle='#bdb4a2';c.beginPath();c.arc(70+i*25+Math.sin(k*6)*6,1380-k*60,2,0,7);c.fill()})}
-  tag(100,1475,'GYM BAG',CRL,.8)});
+  tag(130,1475,'GYM BAG',CRL,.8)});
  S(()=>{c.beginPath();c.rect(542,690,538,1000);c.clip();kitchen(542,u);
   const chop=Math.abs(Math.sin(u*9));St({x:700,y:FL,s:1.12,f:1,pose:Pz({lean:.12,hd:.3,aF:[1.0+chop*.25,.6-chop*.3],aB:[.9,.75]}),mood:'calm',t:u});
   S(()=>{c.fillStyle='#0a0a0c';rr(780,1196,150,26,4);c.fill();c.fillStyle='#b98a5a';rr(784,1199,142,18,3);c.fill();[[820,'#4f7a3a'],[850,'#c8402c'],[880,'#e8d39a']].forEach(([x,col])=>{c.fillStyle=col;c.beginPath();c.arc(x,1194,9,0,7);c.fill()})});
   for(let i=0;i<4;i++){const k=eo(seg(u,.5+i*.6,.8+i*.6));if(k>0)S(()=>{c.globalAlpha=k;c.fillStyle='#0a0a0c';rr(560+i*0+i*0,1190-i*30,0,0,0);c.fill();c.fillStyle='#0a0a0c';rr(560,1200-i*32,110,30,6);c.fill();c.fillStyle='rgba(235,240,245,.85)';rr(564,1203-i*32,102,24,5);c.fill();c.fillStyle='#4f7a3a';c.fillRect(574,1208-i*32,30,12);c.fillStyle='#e8d39a';c.fillRect(610,1208-i*32,44,12)})}});
  divider();
- const n=Math.round(31*eio(seg(u,.3,3.4)));scoreboard(u,'FEBRUARY','0 WORKOUTS',`${n} WORKOUTS`,{size:66})}
+ const n=Math.round(31*eio(seg(u,.3,3.4)));scoreboard(u,'FEBRUARY','0 WORKOUTS',`${n} WORKOUT${n==1?'':'S'}`,{size:66})}
 
 // B5 THE CHANGE SHOWS
 function b5(u){envLounge(u,{door:1});const c=C();
@@ -70,7 +70,7 @@ function b5(u){envLounge(u,{door:1});const c=C();
  const Jr=R({x:600,y:FL+20,s:1.05,f:1,pose:Pz({lean:-.04,hd:.05,aF:[1.2,2.2],aB:[1.0,2.3]}),mood:'angry',t:u});
  S(()=>{c.globalCompositeOperation='screen';c.globalAlpha=.25*eo(seg(u,1.5,2.5));c.fillStyle=rg(400,1200,0,380,[[0,'rgba(212,34,63,.7)'],[1,'rgba(212,34,63,0)']]);c.fillRect(0,800,900,700)});
  const wx=lerp(1010,850,eio(seg(u,0,1.3)));St({x:wx,y:FL+30,s:1.2,f:-1,pose:u<1.3?walkP(u*7):TALL,mood:'calm',t:u,glow:1.5});
- say(u,1.5,220,1010,'HE CHANGED.',{col:CRL,tx:-10},1.3);say(u,2.3,400,960,'WHO DOES HE THINK HE IS?',{col:CRL,tx:-20},1.4);say(u,3.1,300,1040,'PROBABLY STEROIDS.',{col:CRL,tx:10},1.6);
+ say(u,1.4,220,1010,'HE CHANGED.',{col:CRL,tx:-10},.85);say(u,2.3,380,980,'WHO DOES HE THINK HE IS?',{col:CRL,tx:-20},.85);say(u,3.2,300,1010,'PROBABLY STEROIDS.',{col:CRL,tx:10},1.8);
  tag(600,FL+90,'REACTIVE',CRL,eo(seg(u,.3,.6)));tag(850,FL+90,'STEADY','#fff',eo(seg(u,.8,1.1)));
  scoreboard(u,'MONTH SIX','JEALOUS','UNBOTHERED',{size:70})}
 
@@ -110,7 +110,7 @@ function b9(u){stage(u,[[330,.4,'#ff8a9c'],[750,1,'#ffffff']]);
  title2(u,.1,'MOVE IN SILENCE.',null,520);title2(u,.8,'Let your results make the ','noise.',632)}
 
 export const VIDEO_B=makeTimeline([
- {fn:b1,dur:3.0,cam:camPush(1,1.06)},
+ {fn:b1,dur:2.0,speed:1,cam:camPush(1.04,1.1)},
  {fn:b2,dur:5.5,cam:camPush(1.0,1.04),fadeIn:.12},
  {fn:b3,dur:3.2,cam:camPush(1,1.08)},
  {fn:b4,dur:4.0,cam:camPush(1.03,1.0)},
@@ -119,5 +119,5 @@ export const VIDEO_B=makeTimeline([
  {fn:b7,dur:4.5,cam:camPush(1.02,1.07)},
  {fn:b8,dur:4.4,cam:camPush(1,1.04)},
  {fn:b9,dur:4.0,cam:camPush(1,1.05),fadeIn:.2},
- {fn:endCard,dur:3.6,cam:()=>[1,0,0],fadeIn:.2},
-]);
+ {fn:endCard,dur:3.6,speed:1.25,cam:()=>[1,0,0],fadeIn:.15},
+],{speed:1.28});

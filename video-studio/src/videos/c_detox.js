@@ -19,7 +19,7 @@ function c1(u){const c=C();stage(u,[[330,1,'#ff8a9c'],[750,1,'#ffffff']]);
   ['♥','▶','✉','★'].forEach((s,i)=>{const k=((u*.6+i/4)%1);c.globalAlpha=1-k;txt(s,460+i*55,1180-k*380,'800 34px Disp','#fff',{glow:14})})});
  R({x:300,y:FL,s:1.15,f:1,pose:Pz({lean:.12,hd:-.1,aF:[1.3,.3],aB:[-.2,.4]}),mood:'smile',t:u});St({x:780,y:FL,s:1.15,f:-1,pose:TALL,mood:'calm',t:u});
  tag(300,FL+70,'REACTIVE',CRL);tag(780,FL+70,'STEADY','#fff');
- title2(u,.1,'30 DAYS. NO CHEAP DOPAMINE.',null,520);title2(u,.85,'Only one ','made it.',632)}
+ title2(u,-1,'30 DAYS. NO CHEAP DOPAMINE.',null,520);title2(u,.25,'Day 4 is where ','most quit.',632)}
 // C2 DAY 1
 function c2(u){const c=C();c.fillStyle='#000';c.fillRect(0,0,W,H);
  [[0,R,'neutral'],[1,St,'calm']].forEach(([sd,ch,mood])=>half(sd,()=>{c.translate(sd?420:-120,0);envBedroom(u,'7:00');c.translate(sd?-420:120,0);const bx=sd?840:300;
@@ -38,7 +38,7 @@ function c3(u){const c=C();c.fillStyle='#000';c.fillRect(0,0,W,H);
   const x=lerp(710,1000,eio(seg(u,2.6,4.4)));St({x,y:FL,s:1.08,f:1,pose:u<1.4?Pz({lean:.18,hd:.3,aF:[1.1,.4],aB:[-.2,.4]}):(u<2.6?Pz({lean:-.08,hd:-.15,aF:[.1,.2],aB:[-.1,.2]}):walkP(u*7)),mood:u<1.4?'shock':'calm',t:u});
   meter(810,820,360,'CRAVING',eio(seg(u,.2,1.4))*.88*(1-seg(u,2.6,4.2)*.4),'#ffffff')});
  divider();tag(270,FL+80,'REACHES',CRL,eo(seg(u,1,1.3)));tag(810,FL+80,'WALKS IT OFF','#fff',eo(seg(u,2.8,3.1)));
- scoreboard(u,'DAY 3 · 2:13 AM','CRAVING','CRAVING')}
+ scoreboard(u,'DAY 3 · CRAVING',`${Math.round(94*eio(seg(u,.2,2.5)))}%`,`${Math.round(88*eio(seg(u,.2,1.4))*(1-seg(u,2.6,4.2)*.4))}%`)}
 // C4 DAY 4 RELAPSE
 function c4(u){const c=C();c.fillStyle='#000';c.fillRect(0,0,W,H);
  half(0,()=>{c.translate(-170,0);envLounge(u,{door:0});c.translate(170,0);
@@ -94,7 +94,7 @@ function c9(u){stage(u,[[540,1,'#ffffff']]);St({x:540,y:FL,s:1.25,f:1,pose:Pz({h
  title2(u,.1,'YOUR ATTENTION IS THE PRODUCT.',null,520);title2(u,.8,'Take it ','back.',632)}
 
 export const VIDEO_C=makeTimeline([
- {fn:c1,dur:3.0,cam:camPush(1,1.06)},
+ {fn:c1,dur:2.0,speed:1,cam:camPush(1.04,1.1)},
  {fn:c2,dur:4.0,cam:camPush(1.0,1.04),fadeIn:.12},
  {fn:c3,dur:4.5,cam:camPush(1,1.05)},
  {fn:c4,dur:4.0,cam:camPush(1.03,1.0)},
@@ -103,5 +103,5 @@ export const VIDEO_C=makeTimeline([
  {fn:c7,dur:4.0,cam:camPush(1.04,1.0)},
  {fn:c8,dur:5.5,cam:camPush(1,1.07),fadeIn:.15},
  {fn:c9,dur:3.5,cam:camPush(1,1.05),fadeIn:.15},
- {fn:endCard,dur:3.6,cam:()=>[1,0,0],fadeIn:.2},
-]);
+ {fn:endCard,dur:3.6,speed:1.25,cam:()=>[1,0,0],fadeIn:.15},
+],{speed:1.28});

@@ -10,6 +10,14 @@ const sitY=s=>1262+132*s;
 function slab(x,y,w,h,glow=1){const c=C();S(()=>{c.fillStyle='#0a0a0c';rr(x-w/2-6,y-h/2-6,w+12,h+12,10);c.fill();c.fillStyle=lg(0,y-h/2,0,y+h/2,[[0,'#2a1015'],[1,'#12070a']]);rr(x-w/2,y-h/2,w,h,8);c.fill();
  c.strokeStyle=CRL;c.lineWidth=3;c.shadowColor=CR;c.shadowBlur=30*glow;rr(x-w/2,y-h/2,w,h,8);c.stroke();c.shadowBlur=0;txt('PRESSURE',x,y,`500 ${Math.round(h*.28)}px Lab`,'rgba(255,90,110,.9)',{ls:10})})}
 
+// ---------- A0 HOOK (first frame = the payoff image) ----------
+function a0(u){stage(u,[[330,1,'#ff8a9c'],[750,1,'#ffffff']]);const c=C();const k=eio(seg(u,0,.55));
+ const crush=eo(seg(u,.45,.8));slab(330,lerp(820,1050,k)+crush*90,280,80,1);
+ R({x:330,y:FL,s:1.2,f:1,pose:lpz(Pz({aF:[-2.5,0],aB:[2.5,0]}),Pz({lean:.5,hd:.6,aF:[-1.5,.8],aB:[1.6,.8],lF:[1.0,-1.8],lB:[.2,.1]}),crush),mood:crush>.3?'sad':'shock',t:u});
+ if(crush>0)S(()=>{c.strokeStyle=CRL;c.shadowColor=CR;c.shadowBlur=14;c.lineWidth=3;c.globalAlpha=crush;[[0,0,-30,40,-10,70],[0,0,40,30,60,80]].forEach(p=>{c.beginPath();c.moveTo(330+p[0],FL+4);c.lineTo(330+p[2],FL+4+p[3]*.4);c.lineTo(330+p[4],FL+4+p[5]*.5);c.stroke()})});
+ slab(750,lerp(820,1050,k),280,80,1);St({x:750,y:FL,s:1.2,f:-1,pose:Pz({lean:-.03,hd:-.25,aF:[-2.75,-.15],aB:[2.75,.15]}),mood:'calm',t:u,glow:1.4});
+ tag(330,FL+70,'REACTIVE',CRL);tag(750,FL+70,'STEADY','#fff');
+ title2(u,-1,'SAME PRESSURE.',null,520);title2(u,.25,'Only one ','holds it.',632)}
 // ---------- A1 HOOK ----------
 function a1(u){const l=Math.min(1,seg(u,.05,.12)),r2=Math.min(1,seg(u,.25,.32));stage(u,[[330,l,'#ff8a9c'],[750,r2,'#ffffff']]);
  const sy=lerp(560,930,eio(seg(u,.5,1.6)))+Math.sin(u*3)*4;slab(540,sy,640,110,eo(seg(u,.5,1)));
@@ -75,7 +83,7 @@ function a3(u){const c=C();c.fillStyle='#000';c.fillRect(0,0,W,H);
  txt('APPLICATIONS SENT',860,792,'500 16px Lab','rgba(255,255,255,.7)',{ls:4});txt(String(n),860,838,'900 50px Black','#fff',{glow:14});
  S(()=>{c.fillStyle='rgba(10,10,12,.9)';rr(60,760,320,120,16);c.fill();c.strokeStyle=rgba(CR,.7);c.lineWidth=2;rr(60,760,320,120,16);c.stroke()});
  txt('EPISODES WATCHED',220,792,'500 16px Lab','rgba(255,255,255,.7)',{ls:4});txt(String(Math.round(14*eio(seg(u,.3,3.0)))),220,838,'900 50px Black',CRL,{glow:14,gc:CR});
- scoreboard(u,'WEEK ONE',`${num(0,0,u,0,1)} APPS`,`${n} APPS`,{size:76})}
+ scoreboard(u,'WEEK ONE','0 APPS',`${n} APP${n==1?'':'S'}`,{size:76})}
 
 // ---------- A4 THE BREAKUP ----------
 function a4(u){const c=C();c.fillStyle='#000';c.fillRect(0,0,W,H);
@@ -83,7 +91,7 @@ function a4(u){const c=C();c.fillStyle='#000';c.fillRect(0,0,W,H);
   const tap=Math.sin(u*28)*.06;R({x:400,y:sitY(1.1),s:1.1,f:1,noShadow:true,pose:Pz({...SIT,lean:.3,hd:.5,aF:[.6+tap,1.6],aB:[.5-tap,1.6]}),mood:u<1.0?'shock':'sad',t:u,frontProp:J=>phone(J,1.2)})});
  S(()=>{c.beginPath();c.rect(0,690,538,1000);c.clip();phoneFrame(60,712,330,330,()=>{const x0=60,y0=712;c.fillStyle='#14161c';c.fillRect(x0,y0,330,60);txt('MAYA',x0+165,y0+40,'800 18px Disp','#fff',{ls:3});
    const sent=[[1.2,'why??'],[1.55,'can we talk'],[1.9,'ANSWER ME'],[2.25,'please'],[2.6,"i'll change"],[3.0,'hello??']];
-   const shift=Math.max(0,sent.filter(s=>u>s[0]).length-2)*56;S(()=>{c.translate(0,-shift);chat(u,[[.2,'I think we need space.',false,null],...sent.map(([t,s],i)=>[t,s,true,i==sent.length-1?'Delivered':null])],x0+165,y0+80,300)})})});
+   const shift=Math.max(0,sent.filter(s=>u>s[0]).length-2)*56;S(()=>{c.beginPath();c.rect(x0,y0+62,330,270);c.clip();c.translate(0,-shift);chat(u,[[.2,'I think we need space.',false,null],...sent.map(([t,s],i)=>[t,s,true,i==sent.length-1?'Delivered':null])],x0+165,y0+80,300)})})});
  S(()=>{c.beginPath();c.rect(542,690,538,1000);c.clip();
   if(u<2.4){c.translate(420,0);envBedroom(u,'11:48');c.translate(-420,0);const down=eo(seg(u,1.1,1.6));
    St({x:840,y:sitY(1.1),s:1.1,f:1,noShadow:true,pose:lpz(Pz({...SIT,lean:.2,hd:.45,aF:[.6,1.6],aB:[.5,1.6]}),Pz({...SIT,lean:-.05,hd:.05,aF:[.2,.3],aB:[-.1,.3]}),down),mood:u<1.0?'shock':'calm',t:u,frontProp:J=>{if(down<.5)phone(J,1)}});
@@ -161,13 +169,12 @@ function a8(u){stage(u,[[320,.45,'#ff8a9c'],[760,1,'#ffffff']]);const c=C();
  title2(u,.1,"YOU DON'T RISE TO THE OCCASION.",null,520);title2(u,.8,'You fall to your ','training.',632)}
 
 export const VIDEO_A=makeTimeline([
- {fn:a1,dur:3.0,cam:camPush(1,1.06)},
+ {fn:a0,dur:2.0,speed:1,cam:camPush(1.04,1.1)},
  {fn:a2,dur:6.0,cam:camPush(1.0,1.04),fadeIn:.12},
  {fn:a3,dur:3.4,cam:camPush(1.03,1.0)},
  {fn:a4,dur:5.0,cam:camPush(1,1.04)},
  {fn:a5,dur:4.5,cam:camPush(1.04,1.0)},
- {fn:a6,dur:3.2,cam:camPush(1,1.07),fadeIn:.15},
  {fn:a7,dur:8.6,cam:(k,u)=>{const sh=u>3.9&&u<4.9?Math.sin(u*80)*6*Math.exp(-(u-3.9)*2):0;return [lerp(1.0,1.09,k),sh,lerp(0,-20,k)]}},
  {fn:a8,dur:4.0,cam:camPush(1,1.05),fadeIn:.2},
- {fn:endCard,dur:3.6,cam:()=>[1,0,0],fadeIn:.2},
-]);
+ {fn:endCard,dur:3.6,speed:1.25,cam:()=>[1,0,0],fadeIn:.15},
+],{speed:1.28});

@@ -11,10 +11,10 @@ const COUCH=Pz({...SIT,lean:-.35,hd:.4,aF:[.65,1.5],aB:[.25,.8]});
 function takeout(x,y){const c=C();S(()=>{c.fillStyle='#0a0a0c';c.beginPath();c.moveTo(x-30,y);c.lineTo(x+30,y);c.lineTo(x+24,y-44);c.lineTo(x-24,y-44);c.closePath();c.fill();c.fillStyle='#d9d1c4';c.beginPath();c.moveTo(x-26,y-3);c.lineTo(x+26,y-3);c.lineTo(x+21,y-41);c.lineTo(x-21,y-41);c.closePath();c.fill();c.fillStyle=CR;c.fillRect(x-14,y-28,28,8)})}
 
 // D1 HOOK
-function d1(u){envLounge(u,{door:0,trap:.4+.4*eo(seg(u,.3,1.8))});const c=C();const sink=eio(seg(u,.4,2.4));
+function d1(u){envLounge(u,{door:0,trap:.5+.4*eo(seg(u,0,1.2))});const c=C();const sink=eio(seg(u,0,1.6));
  R({x:456,y:sitY(1.15)+sink*26,s:1.15,f:1,noShadow:true,pose:lpz(Pz({...SIT,lean:-.1,hd:.2}),Pz({...COUCH,lean:-.5,hd:.55}),sink),mood:'calm',t:u,blink:sink>.7?.6:0,frontProp:J=>phone(J,.9)});
  tag(456,FL+80,'REACTIVE',CRL,eo(seg(u,.3,.6)));
- title2(u,.1,"HE WASN'T TIRED.",null,520);title2(u,.9,'He was ','comfortable.',632)}
+ title2(u,-1,"HE WASN'T TIRED.",null,520);title2(u,.25,'He was ','comfortable.',632)}
 // D2 SAME WEEK
 const DAYS=['MON','TUE','WED','THU','FRI','SAT','SUN'];
 function d2(u){const c=C();c.fillStyle='#000';c.fillRect(0,0,W,H);const di=Math.min(6,Math.floor(u/.68)),v=u-di*.68;
@@ -31,7 +31,7 @@ function d2(u){const c=C();c.fillStyle='#000';c.fillRect(0,0,W,H);const di=Math.
 function d3(u){envLounge(u,{door:0});const c=C();const k=eio(seg(u,.2,4.0));
  S(()=>{c.fillStyle=`rgba(0,0,0,${.45*k})`;c.fillRect(0,0,W,H)});
  R({x:456,y:sitY(1.15)+k*12,s:1.15,f:1,noShadow:true,pose:lpz(COUCH,Pz({...COUCH,lean:-.55,hd:.7}),k),mood:k>.5?'sad':'neutral',t:u,frontProp:J=>phone(J,.8)});
- [[0,'ENERGY',.8],[1,'MONEY',.7],[2,'CONFIDENCE',.85],[3,'HEALTH',.75]].forEach(([i,l,d])=>{const v=lerp(.9,.9-d,k);const x=150+i*260,y=800;
+ [[0,'ENERGY',.8],[1,'MONEY',.7],[2,'CONFIDENCE',.85],[3,'HEALTH',.75]].forEach(([i,l,d])=>{const v=lerp(.9,.9-d,k);const x=90+i*240,y=800;
   txt(l,x+90,y-14,'500 15px Lab','rgba(255,255,255,.7)',{ls:4});S(()=>{c.strokeStyle='rgba(255,255,255,.35)';c.lineWidth=2;rr(x,y,180,20,10);c.stroke();c.fillStyle=v<.4?CRL:'#fff';c.shadowColor=v<.4?CR:'#fff';c.shadowBlur=10;rr(x+4,y+4,Math.max(10,172*v),12,6);c.fill()})});
  for(let i=0;i<5;i++){const t0=.4+i*.7;pop(u,t0,e=>S(()=>{const x=[130,270,620,760,410][i],y=1500-((i*37)%40);c.translate(x,y);c.scale(e,e);takeout(0,0)}))}
  S(()=>{const g=k;c.globalAlpha=g;c.strokeStyle=CRL;c.shadowColor=CR;c.shadowBlur=20;c.lineWidth=4;c.setLineDash([12,10]);c.lineDashOffset=u*30;c.beginPath();c.ellipse(456,1300,lerp(520,300,g),lerp(300,170,g),0,0,7);c.stroke()});
@@ -54,7 +54,7 @@ function d5(u){const c=C();c.fillStyle='#000';c.fillRect(0,0,W,H);S(()=>{c.trans
   if(ref>0){c2.globalCompositeOperation='screen';c2.globalAlpha=ref*.4;c2.fillStyle=rg(x0+150,my+180,0,200,[[0,'rgba(255,255,255,.6)'],[1,'rgba(255,255,255,0)']]);c2.fillRect(x0,my,300,330)}});
  txt(ref>.3?'2 YEARS AGO':'',540,my+30,'500 16px Lab','rgba(255,255,255,.7)',{ls:5});
  R({x:540,y:1440,s:1.05,f:1,pose:Pz({lean:.18,hd:-.05,aF:[.1,.3],aB:[-.05,.3]}),mood:u<1.2?'neutral':(u<3?'shock':'sad'),t:u});
- say(u,2.8,770,1160,'WHEN DID I STOP?',{thought:true,col:CRL,tx:30},1.8)}
+ say(u,2.8,770,1160,'WHEN DID I STOP?',{thought:true,col:CRL,tx:30},1.8);title2(u,.1,'2 YEARS AGO HE HAD PLANS.',null,520);title2(u,.6,'The mirror ',"doesn't lie.",632)}
 // D6 THE INVITE
 function d6(u){envLounge(u,{door:0});const c=C();
  R({x:456,y:sitY(1.1),s:1.1,f:1,noShadow:true,pose:Pz({...SIT,lean:.1,hd:.45,aF:[.6,1.6],aB:[.5,1.6]}),mood:u<2.2?'neutral':'calm',t:u,frontProp:J=>phone(J,1.2)});
@@ -79,7 +79,7 @@ function d7(u){const c=C();envDawn(u,u*260);const k=seg(u,.8,2.4);
 function d8(u){const c=C();const wk=[1,3,6,9,12];const i=Math.min(4,Math.floor(u/1.0)),v=u-i*1.0;const k=i/4;
  if(i%2==0){envDawn(u,u*500);R({x:420,y:FL,s:1.15,f:1,pose:runP(v*13),mood:'calm',t:u});St({x:640,y:FL,s:1.15,f:1,pose:runP(v*13+.6),mood:'smile',t:u})}
  else{envGym(u);const rep=(Math.sin(v*9)+1)/2;R({x:420,y:FL,s:1.15,f:1,pose:lpz(POSES.deadliftDown,POSES.deadliftUp,rep),mood:'angry',t:u});St({x:700,y:FL,s:1.1,f:-1,pose:Pz({lean:-.05,hd:.05,aF:[.6,1.9],aB:[-.3,.6]}),mood:'smile',t:u})}
- S(()=>{const f=1-seg(v,0,.12);if(f>0){c.fillStyle=`rgba(255,255,255,${f*.35})`;c.fillRect(0,0,W,H)}});
+ S(()=>{const f=1-seg(v,0,.12);if(f>0){c.fillStyle=`rgba(255,255,255,${f*.16})`;c.fillRect(0,0,W,H)}});
  const km=[0.8,2.5,5,7.5,10][i];
  scoreboard(u,`WEEK ${wk[i]}`,`${km} KM`,'10 KM',{size:76})}
 // D9 OUTRO
@@ -91,7 +91,7 @@ function d9(u){stage(u,[[400,1,'#ffffff'],[700,1,'#ffffff']]);const c=C();
  title2(u,.1,'COMFORT IS A SLOW EXIT.',null,520);title2(u,.8,'Discomfort is the ','way back.',632)}
 
 export const VIDEO_D=makeTimeline([
- {fn:d1,dur:3.0,cam:camPush(1,1.08)},
+ {fn:d1,dur:2.0,speed:1,cam:camPush(1.04,1.12)},
  {fn:d2,dur:5.0,cam:camPush(1.0,1.03),fadeIn:.12},
  {fn:d3,dur:4.5,cam:camPush(1,1.1,0,0,0,-20)},
  {fn:d4,dur:3.2,cam:camPush(1,1.06),fadeIn:.12},
@@ -100,5 +100,5 @@ export const VIDEO_D=makeTimeline([
  {fn:d7,dur:5.0,cam:camPush(1,1.05)},
  {fn:d8,dur:5.0,cam:camPush(1,1.04)},
  {fn:d9,dur:4.0,cam:camPush(1,1.05),fadeIn:.15},
- {fn:endCard,dur:3.6,cam:()=>[1,0,0],fadeIn:.2},
-]);
+ {fn:endCard,dur:3.6,speed:1.25,cam:()=>[1,0,0],fadeIn:.15},
+],{speed:1.28});

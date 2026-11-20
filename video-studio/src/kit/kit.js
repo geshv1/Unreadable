@@ -43,9 +43,9 @@ export function endCard(u){const c=C();c.fillStyle='#050506';c.fillRect(0,0,W,H)
 
 // ---------- generic timeline ----------
 // scenes: [{fn,dur,cam:(k)=>[z,dx,dy],fadeIn,fadeOut}]
-export function makeTimeline(scenes,opts={}){let a=0;const T=scenes.map(s=>{const r={...s,start:a,end:a+s.dur};a+=s.dur;return r});const TOTAL=a;
+export function makeTimeline(scenes,opts={}){let a=0;const T=scenes.map(s=>{const sp=s.speed??opts.speed??1;const d=s.dur/sp;const r={...s,sp,dur:d,start:a,end:a+d};a+=d;return r});const TOTAL=a;
  const draw=(t)=>{const c=C();let i=T.findIndex(s=>t>=s.start&&t<s.end);if(i<0)i=T.length-1;const s=T[i];const u=t-s.start,d=s.dur;
-  S(()=>{const [z,dx,dy]=(s.cam||(()=>[1,0,0]))(clamp(u/d),u);c.translate(540+dx,1060+dy);c.scale(z,z);c.translate(-540,-1060);s.fn(u,d)});
+  S(()=>{const [z,dx,dy]=(s.cam||(()=>[1,0,0]))(clamp(u/d),u*s.sp);c.translate(540+dx,1060+dy);c.scale(z,z);c.translate(-540,-1060);s.fn(u*s.sp,d*s.sp)});
   vignette(opts.vig??.72);grain(.055,Math.floor(t*12));
   const fin=s.fadeIn?seg(u,0,s.fadeIn):1,fout=s.fadeOut?1-seg(u,d-s.fadeOut,d):1;const dark=1-Math.min(fin,fout);if(dark>0){c.fillStyle=`rgba(0,0,0,${dark})`;c.fillRect(0,0,W,H)}
   if(s.flash){const fk=1-seg(u,0,s.flash);if(fk>0){c.fillStyle=`rgba(255,255,255,${fk*.5})`;c.fillRect(0,0,W,H)}}

@@ -22,10 +22,10 @@ function cardTap(J,u,t0){const c=C();const k=seg(u,t0-.2,t0+.6);if(k<=0||k>=1)re
 
 // E1 HOOK
 function e1(u){stage(u,[[330,1,'#ff8a9c'],[750,1,'#ffffff']]);const c=C();
- [[330,0],[750,1]].forEach(([x,sd])=>pop(u,.4+sd*.15,e=>S(()=>{c.translate(x,1000);c.scale(e,e);c.fillStyle='rgba(10,10,12,.9)';rr(-110,-36,220,72,16);c.fill();c.strokeStyle=sd?'rgba(255,255,255,.6)':rgba(CR,.8);c.lineWidth=2;rr(-110,-36,220,72,16);c.stroke();txt('$2,000',0,2,'900 40px Black',sd?'#fff':CRL,{glow:12,gc:sd?'#fff':CR})})));
+ [[330,0],[750,1]].forEach(([x,sd])=>pop(u,-.3,e=>S(()=>{c.translate(x,1000);c.scale(e,e);c.fillStyle='rgba(10,10,12,.9)';rr(-110,-36,220,72,16);c.fill();c.strokeStyle=sd?'rgba(255,255,255,.6)':rgba(CR,.8);c.lineWidth=2;rr(-110,-36,220,72,16);c.stroke();txt('$2,000',0,2,'900 40px Black',sd?'#fff':CRL,{glow:12,gc:sd?'#fff':CR})})));
  R({x:330,y:FL,s:1.2,f:1,pose:Pz({hd:-.1,aF:[.3,.6],aB:[-.2,.5]}),mood:'smile',t:u});St({x:750,y:FL,s:1.2,f:-1,pose:TALL,mood:'calm',t:u});
  tag(330,FL+70,'REACTIVE',CRL);tag(750,FL+70,'STEADY','#fff');
- title2(u,.1,'SAME SALARY.',null,520);title2(u,.8,'Different ','habits.',632)}
+ title2(u,-1,'SAME $2,000 PAYCHECK.',null,520);title2(u,.25,'One leaks ','$350 a month.',632)}
 // E2 COFFEE
 function e2(u){const c=C();c.fillStyle='#000';c.fillRect(0,0,W,H);
  half(0,()=>{cafe(0,u);const J=R({x:180,y:FL,s:1.1,f:1,pose:Pz({lean:.06,hd:-.05,aF:[u>1.0&&u<1.8?1.4:.4,.3],aB:[-.1,.3]}),mood:'smile',t:u});cardTap(J,u,1.3);
@@ -100,7 +100,7 @@ function e8(u){const c=C();c.fillStyle='#030304';c.fillRect(0,0,W,H);const x0=15
  S(()=>{c.strokeStyle='#fff';c.lineWidth=5;c.shadowColor='#fff';c.shadowBlur=14;c.beginPath();for(let i=0;i<=N*k;i++){const x=lerp(x0,x1,i/N),y=y0-(y0-y1)*fv(i)/fv(120)*.95;i?c.lineTo(x,y):c.moveTo(x,y)}c.stroke()});
  S(()=>{c.strokeStyle=CRL;c.lineWidth=5;c.shadowColor=CR;c.shadowBlur=14;c.beginPath();for(let i=0;i<=N*k;i++){const x=lerp(x0,x1,i/N),y=y0-2;i?c.lineTo(x,y):c.moveTo(x,y)}c.stroke()});
  const inv=Math.round(fv(120*k)),sp=Math.round(350*120*k);
- txt('+$'+inv.toLocaleString('en-US'),x1-120,y1-10,'900 50px Black','#fff',{glow:18});txt('INVESTED · STEADY',x1-120,y1+30,'500 16px Lab','rgba(255,255,255,.7)',{ls:4});
+ txt('+$'+inv.toLocaleString('en-US'),x1-230,y1+40,'900 50px Black','#fff',{glow:18});txt('INVESTED · STEADY',x1-230,y1+80,'500 16px Lab','rgba(255,255,255,.7)',{ls:4});
  txt('-$'+sp.toLocaleString('en-US'),x1-120,y0-60,'900 40px Black',CRL,{glow:14,gc:CR});txt('SPENT · REACTIVE',x1-120,y0-28,'500 16px Lab','rgba(255,255,255,.6)',{ls:4});
  txt('$350/MONTH · 8%/YR AVG',540,y0+80,'500 14px Lab','rgba(255,255,255,.45)',{ls:4});
  title2(u,.1,'SAME $350 A MONTH. 10 YEARS.',null,520);title2(u,1.0,'Small leaks sink ','big ships.',632)}
@@ -111,7 +111,7 @@ function e9(u){stage(u,[[330,.5,'#ff8a9c'],[750,1,'#ffffff']]);const c=C();
  title2(u,.1,"WEALTH ISN'T WHAT YOU EARN.",null,520);title2(u,.8,"It's what you ",'keep.',632)}
 
 export const VIDEO_E=makeTimeline([
- {fn:e1,dur:3.0,cam:camPush(1,1.06)},
+ {fn:e1,dur:2.0,speed:1,cam:camPush(1.04,1.1)},
  {fn:e2,dur:4.0,cam:camPush(1.0,1.04),fadeIn:.12},
  {fn:e3,dur:4.0,cam:camPush(1.03,1.0)},
  {fn:e4,dur:5.0,cam:camPush(1,1.04)},
@@ -120,5 +120,5 @@ export const VIDEO_E=makeTimeline([
  {fn:e7,dur:3.5,cam:camPush(1,1.04)},
  {fn:e8,dur:5.5,cam:camPush(1,1.05),fadeIn:.12},
  {fn:e9,dur:4.0,cam:camPush(1,1.05),fadeIn:.15},
- {fn:endCard,dur:3.6,cam:()=>[1,0,0],fadeIn:.2},
-]);
+ {fn:endCard,dur:3.6,speed:1.25,cam:()=>[1,0,0],fadeIn:.15},
+],{speed:1.28});
