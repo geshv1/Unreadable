@@ -134,3 +134,5 @@ def birds(d):
     for _ in range(int(d*1.5)):
         i=rng.integers(0,len(y)-SR//4);n=int(.12*SR);t=np.arange(n)/SR;f=3200+1400*np.sin(2*np.pi*14*t);y[i:i+n]+=np.sin(2*np.pi*np.cumsum(f)/SR)*np.hanning(n)*.4
     return y
+def register():
+    n=int(.9*SR);t=np.arange(n)/SR;b=sum(a*np.sin(2*np.pi*f*t)*np.exp(-t*d) for f,a,d in [(2093,1,5),(2637,.6,6),(3520,.4,8),(4699,.25,9)]);return b*.5+bp(noise(.9),1500,6000)*env(n,.001,.03)

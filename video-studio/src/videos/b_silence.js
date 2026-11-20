@@ -44,7 +44,7 @@ function b3(u){stage(u,[[540,1,'#ff8a9c']]);const c=C();
  title2(u,.1,'PREMATURE REWARD',null,520);title2(u,.7,'Praise feels like ','progress.',632)}
 
 // B4 FEBRUARY
-function kitchen(x0,u){const c=C();S(()=>{c.fillStyle=lg(0,690,0,FL,[[0,'#13110f'],[1,'#1d1915']]);c.fillRect(x0,690,538,FL-690);
+export function kitchen(x0,u){const c=C();S(()=>{c.fillStyle=lg(0,690,0,FL,[[0,'#13110f'],[1,'#1d1915']]);c.fillRect(x0,690,538,FL-690);
  c.fillStyle='#0a0a0c';c.fillRect(x0+40,780,200,150);c.fillStyle='#2a2520';c.fillRect(x0+46,786,188,138);c.fillStyle='rgba(255,220,170,.15)';c.fillRect(x0+46,786,188,20);
  c.fillStyle='#0a0a0c';c.fillRect(x0+380,760,140,FL-760);c.fillStyle='#cfd2d8';c.fillRect(x0+386,766,128,FL-772);c.fillStyle='#9aa0a8';c.fillRect(x0+386,1000,128,4);c.fillStyle='#0a0a0c';c.fillRect(x0+396,860,6,90);
  c.fillStyle='#0a0a0c';c.fillRect(x0+20,1220,360,22);c.fillStyle='#d9d1c4';c.fillRect(x0+22,1222,356,12);c.fillStyle='#2c2520';c.fillRect(x0+30,1242,340,FL-1242);
