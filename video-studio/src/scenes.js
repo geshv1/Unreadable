@@ -114,13 +114,13 @@ export function s10(u){const door=eo(seg(u,2.0,3.2));envLounge(u,{door:.15+.85*d
 // 11 — One percent a day doesn't look like much until one day it's the only thing anyone notices.
 export function s11(u){const c=C();
  if(u<3.4){c.fillStyle='#030304';c.fillRect(0,0,W,H);const x0=170,x1=910,y0=1380,y1=760;
-  S(()=>{c.strokeStyle='rgba(255,255,255,.18)';c.lineWidth=2;c.beginPath();c.moveTo(x0,y1-20);c.lineTo(x0,y0);c.lineTo(x1+20,y0);c.stroke();
+  S(()=>{c.strokeStyle='rgba(255,255,255,.32)';c.lineWidth=2.5;c.beginPath();c.moveTo(x0,y1-20);c.lineTo(x0,y0);c.lineTo(x1+20,y0);c.stroke();
    for(let i=0;i<=12;i++){c.beginPath();c.moveTo(x0+(x1-x0)*i/12,y0);c.lineTo(x0+(x1-x0)*i/12,y0+8);c.stroke()}});
-  const k=eio(seg(u,.2,2.6));const N=120;const pt=(f,i)=>{const d=i/N*365;const v=Math.pow(f,d);const ny=f>1?(v-1)/(37.8-1):v;return [x0+(x1-x0)*i/N,f>1?y0-(y0-y1)*ny*.95:y0-(y0-y1)*.35*ny-0]};
+  const k=eio(seg(u,0,2.3));const N=120;const pt=(f,i)=>{const d=i/N*365;const v=Math.pow(f,d);const ny=f>1?(v-1)/(37.8-1):v;return [x0+(x1-x0)*i/N,f>1?y0-(y0-y1)*ny*.95:y0-(y0-y1)*.35*ny-0]};
   [[1.01,'#ffffff'],[0.99,CRL]].forEach(([f,col])=>S(()=>{c.strokeStyle=col;c.lineWidth=5;c.shadowColor=col==CRL?CR:'#fff';c.shadowBlur=16;c.beginPath();for(let i=0;i<=N*k;i++){const [x,y]=pt(f,i);i?c.lineTo(x,y):c.moveTo(x,y)}c.stroke()}));
   const [hx,hy]=pt(1.01,Math.floor(N*k));drawSecond({x:hx-10,y:hy+2,s:.55,f:1,pose:walkP(u*8)});
   A(seg(u,2.4,2.8),()=>{txt('1.01³⁶⁵ = 37.8',x1-60,y1-40,'900 40px Black','#fff',{glow:16});txt('0.99³⁶⁵ = 0.03',x1-60,y0-60,'900 34px Black',CRL,{glow:14,gc:CR})});
-  label(540,y0+60,'365 DAYS','rgba(255,255,255,.6)',eo(seg(u,.2,.6)))}
+  label(540,y0+60,'365 DAYS','rgba(255,255,255,.75)',eo(seg(u,0,.3)));label(x0+20,y1-60,'1% BETTER','#fff',eo(seg(u,.1,.4)));label(x0+20,y0-(y0-y1)*.35-40,'1% WORSE',CRL,eo(seg(u,.2,.5)))}
  else{const v=u-3.4;envLounge(u,{door:1});
   const crowd=[[260,1],[420,0],[620,2],[760,1]];crowd.forEach(([x,i],j)=>{const J=drawFriend(i,{x,y:FL+20,s:1.0,f:x<880?1:-1,pose:{...POSES.stand,hd:-.05}});eye(x,J.head[1]-75,.7,1,eo(seg(v,.6+j*.1,.8+j*.1)))});
   const wx=lerp(1000,900,eio(seg(v,0,1)));drawSecond({x:wx,y:FL+30,s:1.2,f:-1,pose:v<1?walkP(u*7):POSES.stand,glow:1.6})}
@@ -144,7 +144,7 @@ export function s13(u){const dim=eo(seg(u,3.6,4.4));envVoid(u,[[330,1,'#ff8a9c']
 // 14 — end card (no narration)
 export function s14(u){const c=C();c.fillStyle='#050506';c.fillRect(0,0,W,H);
  for(let i=0;i<3;i++){const k=eio(seg(u,.1+i*.08,.7+i*.08));S(()=>{const y=1560+i*26;c.strokeStyle=CR;c.globalAlpha=.75;c.lineWidth=2.5;c.shadowColor=CR;c.shadowBlur=12;c.beginPath();c.moveTo(0,y-8);c.lineTo(W*k,y-8+16*k);c.stroke()})}
- bigText(u,.1,'TESTED UNDER PRESSURE.',null,520);bigText(u,.45,'Become stable as a ','rock.',630);
+ bigText(u,.0,'TESTED UNDER PRESSURE.',null,520);bigText(u,.3,'Become stable as a ','rock.',630);
  const ck=seg(u,.3,1.0),e=eo(ck);const img=getCover();if(ck>0&&img)S(()=>{const cw=330,ch=cw*img.height/img.width;c.globalAlpha=e;c.translate(540,1035+(1-e)*60+Math.sin(u*1.6)*4);c.scale(lerp(.88,1,e),lerp(.88,1,e));if(ck<1)c.filter=`blur(${(1-e)*14}px)`;
   c.shadowColor='rgba(212,34,63,.55)';c.shadowBlur=70;c.fillStyle='#111';c.fillRect(-cw/2,-ch/2,cw,ch);c.shadowBlur=0;c.drawImage(img,-cw/2,-ch/2,cw,ch);c.filter='none';c.strokeStyle='rgba(255,255,255,.85)';c.lineWidth=2;c.strokeRect(-cw/2,-ch/2,cw,ch)});
  const pk=seg(u,1.1,1.5);if(pk>0)S(()=>{const ee=eback(pk),pw=440,ph=88;c.translate(540,1410);c.scale(ee,ee);const pulse=.5+.5*Math.sin((u-1.5)*5);c.fillStyle='#fff';c.shadowColor='#fff';c.shadowBlur=18+pulse*16;rr(-pw/2,-ph/2,pw,ph,ph/2);c.fill();c.shadowBlur=0;

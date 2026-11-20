@@ -8,7 +8,7 @@ const W=1080,H=1440,FPS=30;
 const Sheet:React.FC=()=><CanvasScene draw={(t)=>characterSheet(t)}/>;
 const Env:React.FC<{i:number}>=({i})=><CanvasScene draw={(t)=>envPreview(i,t)}/>;
 
-const Main:React.FC=()=>(<AbsoluteFill><CanvasScene draw={(t)=>drawFrame(t)}/><Audio src={staticFile('audio/narration.wav')} volume={1}/><Audio src={staticFile('audio/score.wav')} volume={0.38}/><Audio src={staticFile('audio/sfx.wav')} volume={1.2}/></AbsoluteFill>);
+const Main:React.FC=()=>(<AbsoluteFill><CanvasScene draw={(t)=>drawFrame(t)}/><Audio src={staticFile('audio/narration.wav')} volume={1}/><Audio src={staticFile('audio/sfx.wav')} volume={1.2}/></AbsoluteFill>);
 export const Root:React.FC=()=>(<>
   <Composition id="TwoVersions" component={Main} width={W} height={H} fps={FPS} durationInFrames={Math.ceil(TOTAL*FPS)}/>
   <Composition id="CharacterSheet" component={Sheet} width={W} height={H} fps={FPS} durationInFrames={90}/>

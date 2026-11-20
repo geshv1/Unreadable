@@ -31,6 +31,6 @@ export function drawFrame(t){const c=getCtx();let i=SCENES.findIndex(s=>t>=s.sta
  S(()=>{const [z,dx,dy]=CAM[s.id](clamp(u/d));c.translate(540+dx,1060+dy);c.scale(z,z);c.translate(-540,-1060);s.fn(u)});
  if(s.id!=='s14')captions(t);
  vignette(.7);grain(.06,Math.floor(t*12));
- const fin=s.id==='s14'?seg(u,0,.4):(['s07','s11'].includes(s.id)?seg(u,0,.12):1);const fout=['s06','s10'].includes(s.id)?1-seg(u,d-.12,d):1;const dark=1-Math.min(fin,fout);
+ const fin=s.id==='s14'?seg(u,0,.2):(['s07','s11'].includes(s.id)?seg(u,0,.12):1);const fout=['s06','s10'].includes(s.id)?1-seg(u,d-.12,d):1;const dark=1-Math.min(fin,fout);
  if(dark>0){c.fillStyle=`rgba(0,0,0,${dark})`;c.fillRect(0,0,W,H)}
  if(t>TOTAL-.5){c.fillStyle=`rgba(0,0,0,${seg(t,TOTAL-.5,TOTAL)})`;c.fillRect(0,0,W,H)}}
