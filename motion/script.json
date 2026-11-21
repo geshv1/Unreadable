@@ -1,0 +1,22 @@
+{
+  "voice": "am_michael",
+  "speed": 1.08,
+  "preroll": 0.45,
+  "tail": 1.7,
+  "lines": [
+    { "id": "asch",      "gap": 0.0,  "say": "In 1951, Solomon Asch showed people three lines.", "show": "In *1951,* Solomon Asch showed people *three lines.*" },
+    { "id": "match",     "gap": 0.25, "say": "One obviously matched.",                         "show": "One *obviously* matched." },
+    { "id": "room",      "gap": 0.25, "say": "Then the room picked the wrong one.",             "show": "Then the room picked the *wrong* one." },
+    { "id": "75",        "gap": 0.3,  "say": "75% went along at least once.",                   "show": "*75%* went along at least once." },
+    { "id": "lines",     "gap": 0.45, "say": "They didn't misjudge the lines.",                 "show": "They didn't misjudge the *lines.*" },
+    { "id": "misjudged", "gap": 0.15, "say": "They misjudged the room.",                        "show": "They misjudged the *room.*" },
+    { "id": "half",      "gap": 0.45, "say": "We assume half the room is watching us.",         "show": "We assume *half* the room is watching us." },
+    { "id": "quarter",   "gap": 0.2,  "say": "In studies, it's closer to a quarter.",           "show": "In studies, it's closer to a *quarter.*" },
+    { "id": "stoics",    "gap": 0.45, "say": "The Stoics had a word for the moment you give in: assent.", "show": "The Stoics had a word for the moment you give in: *assent.*" },
+    { "id": "yours",     "gap": 0.3,  "say": "Pressure can arrive. Assent is still yours.",     "show": "Pressure can arrive. Assent is still *yours.*" },
+    { "id": "ally",      "gap": 0.45, "say": "Then Asch added one honest voice.",               "show": "Then Asch added *one* honest voice." },
+    { "id": "five",      "gap": 0.2,  "say": "Conformity fell to about 5%.",                    "show": "Conformity fell to about *5%.*" },
+    { "id": "permission","gap": 0.45, "say": "Your honesty is someone's permission.",           "show": "Your honesty is someone's *permission.*" },
+    { "id": "first",     "gap": 0.4,  "say": "Go first.",                                       "show": "Go *first.*" }
+  ]
+}

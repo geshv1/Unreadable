@@ -19,6 +19,11 @@ const out = args.out || `${comp}.mp4`;
   await page.goto('file://' + path.resolve(__dirname, 'index.html') + `?comp=${comp}&render=1`);
   await page.evaluate(() => window.ready);
   const duration = await page.evaluate(() => window.COMP.duration);
+  if (args.cues) {
+    fs.writeFileSync(args.cues, JSON.stringify(await page.evaluate(() => window.COMP.cues || [])));
+    console.log('cues', args.cues);
+    if (!args.out) { await browser.close(); return; }
+  }
   const grab = (t) => page.evaluate((tt) => { window.renderAt(tt); return window.canvas.toDataURL('image/png').slice(22); }, t);
 
   if (args.stills) {

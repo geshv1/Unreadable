@@ -19,10 +19,16 @@
       wd.w = ctx.measureText(wd.txt).width;
     }
     ctx.restore();
+    // balanced wrap: aim every line at total / n so no word is left alone
+    const total = words.reduce((a, b) => a + b.w, 0) + space * (words.length - 1);
+    const n = Math.ceil(total / maxW);
+    const target = total / n;
     const lines = [[]];
     let cur = 0;
     for (const wd of words) {
-      if (cur > 0 && cur + space + wd.w > maxW) { lines.push([]); cur = 0; }
+      const next = cur + (cur > 0 ? space : 0) + wd.w;
+      const overshoot = next - target;
+      if (cur > 0 && lines.length < n && (next > maxW || overshoot > (wd.w + space) / 2)) { lines.push([]); cur = 0; }
       cur += (cur > 0 ? space : 0) + wd.w;
       lines[lines.length - 1].push(wd);
     }
@@ -58,7 +64,7 @@
       const e = M.E.outExpo(p);
       let a = M.E.outCubic(p), dy = (1 - e) * size * 0.55, blur = (1 - e) * 9;
       if (o.t1 != null) {
-        const q = M.prog(t, o.t1 + i * 0.022, o.t1 + 0.28 + i * 0.022);
+        const q = M.prog(t, o.t1 + i * 0.012, o.t1 + 0.26 + i * 0.012);
         if (q >= 1) return;
         const qe = M.E.inCubic(q);
         a *= 1 - qe;

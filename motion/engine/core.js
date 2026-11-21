@@ -53,6 +53,13 @@
     return Math.min(i, o);
   };
 
+  /** mix two #rrggbb colours */
+  const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  M.mix = (a, b, t) => {
+    const A = hex(a), B = hex(b), k = clamp(t);
+    return `rgb(${A.map((v, i) => Math.round(lerp(v, B[i], k))).join(',')})`;
+  };
+
   M.rng = (seed) => {
     let a = seed >>> 0;
     return () => {
