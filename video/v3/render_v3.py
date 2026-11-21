@@ -985,6 +985,7 @@ V.KEY_TIMES = sorted(w.t for g in CAPS for line in g.lines for w in line if w.ke
 V.IMPACTS = [SC[0].w[3] + 0.03, SC[3].w[2], SC[4].w[3] + 0.3, SC[6].w[0], SC[10].w[1] + 0.04, SC[10].w[5]]
 V.SCENE_FNS = [n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13]
 V.draw_bg = draw_bg
+V.hud = lambda ctx, t, i: None   # no progress line / counter at the top
 
 
 def frame_bytes(n):
