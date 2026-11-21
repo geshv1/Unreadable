@@ -22,5 +22,9 @@ export const PAL = {
   reactive: { skin: '#a3a3ab', top: '#3e3e46', bot: '#2c2c33', shoe: '#d9d9de', outfit: 'hoodie', hair: 'cap', hairCol: '#a3182f' },
   steady: { skin: '#f7f7f9', top: '#dfe0e6', bot: '#3a3b42', shoe: '#ffffff', outfit: 'tee', hair: 'short', hairCol: '#24242a' },
   boss: { skin: '#8a8a93', top: '#1b1b20', bot: '#1b1b20', shoe: '#0f0f12', outfit: 'suit', hair: 'short', hairCol: '#060607' },
+  sales: { skin: '#8a8a93', top: '#2a2d36', bot: '#1b1b20', shoe: '#0f0f12', outfit: 'suit', hair: 'short', hairCol: '#060607' },
+  f1: { skin: '#84848d', top: '#4b3f45', bot: '#26262c', shoe: '#bdbdc4', outfit: 'tee', hair: 'short', hairCol: '#1d1d22' },
+  f2: { skin: '#8d8d95', top: '#334048', bot: '#2a2a30', shoe: '#c4c4cb', outfit: 'hoodie', hair: 'short', hairCol: '#5b2a33' },
+  f3: { skin: '#73737c', top: '#55505a', bot: '#222227', shoe: '#b5b5bc', outfit: 'tee', hair: 'short', hairCol: '#141418' },
   manip: { skin: '#5a5a62', top: '#0f0f12', bot: '#0f0f12', shoe: '#0b0b0d', outfit: 'suit', hair: 'short', hairCol: '#050506' },
 } as const;
