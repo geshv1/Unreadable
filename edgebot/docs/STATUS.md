@@ -38,6 +38,16 @@ What this means:
 
 Biggest unknown: Betano, efbet and Winbet are not in any free history. If they are slower than bet365 to move their prices, there could be more value. Only live paper trading can show this.
 
-## Next: Phase 3 — paper trading
+## Decisions so far
 
-Needs a live odds feed (paid; needs your OK) and a small server. Paper-trade top leagues across all your licensed bookmakers, measure CLV per bookmaker, and learn timing hour by hour.
+- Bookmaker: **Betano** only (set in `config.yaml`). Betano isn't in free past data, so backtests use bet365 as a clearly labelled stand-in.
+- Budget: **€0**. No paid odds feed, no server, no paid AI.
+- A €6/month server is not worth it now: expected profit is about €2 a season on current evidence, and the free data is the real limit, not the server.
+- Strategy A (market value) only; Strategy B is off because the model lost to the market.
+
+## Next: Phase 3 — paper trading (free version, waiting for your go)
+
+- Fair prices: football-data.co.uk upcoming-matches file (Betfair Exchange reference, about twice a week)
+- Betano prices: free OddsPapi account if it really has Betano; otherwise a "bet only if Betano shows X or more" line on each pick
+- Runs on GitHub's free scheduler; paper-bet records encrypted because the repo is public
+- Picks and results via a free Telegram bot
