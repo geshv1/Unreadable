@@ -1,0 +1,20 @@
+Past data replay.
+[PAPER] Picks for Fri 29 Sep 2023, 15:01 (Sofia time) — 30 matches checked
+2 bets today
+
+1. [PAPER] Preston v West Brom · Championship · Sat 30 Sep 17:00
+   Match result: Draw
+   Best odds: 3.50 at bet365 · Stake: €3 · Edge: +4.2% · Confidence: medium
+   Fair odds 3.36 · if your app shows less than 3.46, skip it
+   Place before: Sat 30 Sep 16:45 · Timing: no clear timing pattern in this league yet; this price has value now, so place it now
+   Why: bet365 pays 3.50 for Draw. The sharp market (Pinnacle) puts the fair price at 3.36 once its margin is removed, so this is 4.2% better than fair.
+
+2. [PAPER] Hull v Plymouth · Championship · Sat 30 Sep 17:00
+   Match result: Plymouth to win
+   Best odds: 4.20 at bet365 · Stake: €1 · Edge: +3.1% · Confidence: medium
+   Fair odds 4.07 · if your app shows less than 4.19, skip it
+   Place before: Sat 30 Sep 16:45 · Timing: no clear timing pattern in this league yet; this price has value now, so place it now
+   Why: bet365 pays 4.20 for Plymouth to win. The sharp market (Pinnacle) puts the fair price at 4.07 once its margin is removed, so this is 3.1% better than fair.
+
+[PAPER] Best parlay · stake €1
+   2-leg parlay at bet365: Preston–West Brom: Draw @ 3.50; Hull–Plymouth: Plymouth to win @ 4.20. Pays 14.70 (fair 13.68, so +7.4% expected). Bookmaker margin across legs: 9.7%. Chance all legs win: 7%.

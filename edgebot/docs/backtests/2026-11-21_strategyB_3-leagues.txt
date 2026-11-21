@@ -1,0 +1,72 @@
+EDGEBOT BACKTEST
+================
+Data: 8,666 matches in 3 leagues (02 Aug 2019 → 24 May 2026); 401,650 prices from 13 bookmakers
+Bets simulated: 04 Sep 2020 → 01 Aug 2025. Learning-only warm-up before that.
+Sealed for the one-time final test: everything from 01 Aug 2025.
+Strategy: B · own model + market · edge ≥ 3% · odds 1.25–8.00 · risk balanced (Kelly × 0.20, max 1.5% per bet)
+Bookmakers you could bet at in this data: bet365 (Betano, efbet, Winbet not in this data)
+Fair-price reference: Pinnacle, Betfair Exchange · margin removal: multiplicative (lowest log loss on warm-up closing prices)
+Pessimistic on purpose: 1%–2% worse odds than quoted, 10% of bets refused, stakes cut to €5 after 200 bets at a bookmaker.
+
+SINGLE BETS
+  581 bets · staked €1,358 · profit -€6 · ROI -0.5% (95% range -14.5% to +14.8%)
+  Beat the closing price (CLV, after margin): -2.7% (95% range -3.6% to -1.9%); 32.5% of bets beat it
+  Before removing the margin (gross CLV): +0.2% — shown only for comparison
+  Hit rate 33.0%
+  Account limits: 417 bets placed while limited; asked €1,422, accepted €1,358
+  Bankroll €1,000 → €958 · worst fall from a peak: -12.9%
+
+VERDICT: NO EDGE
+  The bets lost value against the closing price and/or lost money. Do not bet this setup.
+
+PARLAYS (every leg had value on its own)
+  122 parlays · avg 2.0 legs · staked €217 · profit -€36 · ROI -16.5% (95% range -57.2% to +27.6%)
+  Avg payout offered 8.68 vs fair 7.32; bookmaker margin built in across legs 9.0%
+  CLV -4.2% · hit rate 13.1% · verdict: NOT ENOUGH DATA
+  Parlays swing much more than singles: long losing runs are normal even with an edge.
+
+BY EDGE SIZE (does a bigger edge really mean more value?)
+  5–8%                                 219 bets   ROI  -15.9%   CLV   -3.5%  (not enough data)
+  8%+                                  219 bets   ROI   +3.4%   CLV   -2.3%  (not enough data)
+  3–5%                                 143 bets   ROI  +17.0%   CLV   -2.2%  (not enough data)
+BY LEAGUE AND MARKET
+  Championship · 1X2                   180 bets   ROI   -3.6%   CLV   -3.2%  (not enough data)
+  Premier League · 1X2                 111 bets   ROI  +14.8%   CLV   -3.3%  (not enough data)
+  Bundesliga · 1X2                      96 bets   ROI  -13.4%   CLV   -2.2%  (not enough data)
+  Premier League · OU2.5                70 bets   ROI   +4.6%   CLV   -1.7%  (not enough data)
+  Championship · OU2.5                  64 bets   ROI   -5.6%   CLV   -4.2%  (not enough data)
+  Bundesliga · OU2.5                    60 bets   ROI   +2.7%   CLV   -0.8%  (not enough data)
+BY WHEN THE BET WAS PLACED
+  1–3 days before                      433 bets   ROI   +0.6%   CLV   -2.5%
+  6–24 h before                        108 bets   ROI   -5.7%   CLV   -3.5%  (not enough data)
+  3+ days before                        34 bets   ROI   +1.1%   CLV   -2.8%  (not enough data)
+  1–6 h before                           6 bets   ROI  +11.1%   CLV   -7.5%  (not enough data)
+
+TIMING — when do the best prices at your bookmakers appear?
+  Note: this data has only 2 price snapshots per match (Tue/Fri afternoon + kick-off), so timing advice is coarse. Live odds in paper trading will measure it hour by hour.
+  Bundesliga · 1X2: no clear pattern — prices are about as good early as late
+  Bundesliga · OU2.5: no clear pattern — prices are about as good early as late
+  Premier League · 1X2: best prices usually appear 3+ days before (0.7% better than last hour) — bet early
+  Premier League · OU2.5: no clear pattern — prices are about as good early as late
+  Championship · 1X2: no clear pattern — prices are about as good early as late
+  Championship · OU2.5: no clear pattern — prices are about as good early as late
+  Average value of the available price vs the final fair price:
+    Bundesliga · 1X2: 3+ days before -4.6%, 1–3 days before -5.4%, 6–24 h before -5.4%, 1–6 h before -4.9%, last hour -5.7%
+    Bundesliga · OU2.5: 3+ days before -3.7%, 1–3 days before -4.6%, 6–24 h before -4.8%, 1–6 h before -4.8%, last hour -4.7%
+    Premier League · 1X2: 3+ days before -5.0%, 1–3 days before -5.4%, 6–24 h before -5.0%, 1–6 h before -5.5%, last hour -5.8%
+    Premier League · OU2.5: 3+ days before -4.8%, 1–3 days before -4.8%, 6–24 h before -4.7%, 1–6 h before -5.0%, last hour -4.7%
+    Championship · 1X2: 3+ days before -5.4%, 1–3 days before -5.3%, 6–24 h before -5.6%, 1–6 h before -5.6%, last hour -5.5%
+    Championship · OU2.5: 3+ days before -5.0%, 1–3 days before -5.1%, 6–24 h before -5.0%, 1–6 h before -4.9%, last hour -4.9%
+
+DOES OUR OWN MODEL ADD ANYTHING? (out-of-sample, same matches, lower log loss = better)
+  1X2 (6190 matches): market 0.9979 · model 1.0179 · blend 0.9998 · closing price 0.9953
+    → The model does not beat the market. Use Strategy A (market value) for this market.
+  OU2.5 (6148 matches): market 0.6720 · model 0.6851 · blend 0.6730 · closing price 0.6705
+    → The model does not beat the market. Use Strategy A (market value) for this market.
+
+HOW TO READ THIS
+  Variants tested so far on this data: 4. The more you try, the more likely the best one is luck.
+  CLV (beating the closing price) is the most reliable early sign of an edge; profit needs far more bets to prove.
+  A backtest is not proof. Real money stays off until paper trading passes every go-live gate.
+  Variant ID: e5c1c5abfdd0
+
