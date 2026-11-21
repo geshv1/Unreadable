@@ -60,8 +60,8 @@ export const S00Hook: React.FC = () => {
     <Scene dur={HOOK_DUR} set={hookSet} Layer={Layer}
       cam={(fr) => ({z: tween(fr, [0, 26, HIT, HIT + 4, HIT + 20], [1.22, 1.03, 1.0, 1.07, 1.02], Easing.inOut(Easing.cubic)), x: tween(fr, [0, 26], [-60, 0]) + shake, y: tween(fr, [0, 26], [120, 0]) + shake * 0.6})}
       world={<Zigzag x={rig({x: 360, y: FLOOR, s: 1.2, f: 1, pose: PULL}).head[0]} y={rig({x: 360, y: FLOOR, s: 1.2, f: 1, pose: PULL}).head[1]} on={f < REL ? 1 : 0} />}>
-      <Eyebrow text="THE PRINCIPLE OF LEAST INTEREST." y={300} at={-14} />
-      <Headline parts={[['Whoever cares less, '], ['wins.', true]]} at={-6} keyAt={HIT + 1} y={350} size={80} />
+      <Eyebrow text="THE PRINCIPLE OF LEAST INTEREST." y={468} at={-14} />
+      <Headline parts={[['Whoever cares less, '], ['wins.', true]]} at={-6} keyAt={HIT + 1} y={506} size={84} />
       <Sfx name="hook_strain.wav" at={0} volume={0.55} />
       <Sfx name="hook_release.wav" at={REL} volume={0.6} />
       <Sfx name="body_fall.wav" at={HIT - 5} volume={0.8} />

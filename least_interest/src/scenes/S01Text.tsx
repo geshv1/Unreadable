@@ -59,8 +59,8 @@ export const S01Text: React.FC = () => {
         <Tag x={270} y={1480} text="5 TEXTS · 0 REPLIES" red at={100} size={22} />
         <Tag x={770} y={1480} text="1 TEXT · 1 YES" at={104} size={22} />
       </>}>
-      <Eyebrow text="01 · THE TEXT" y={300} />
-      <PopText parts={[['Eagerness kills '], ['attraction.', true]]} at={106} y={370} size={64} />
+      <Eyebrow text="01 · THE TEXT" y={468} />
+      <PopText parts={[['Eagerness kills '], ['attraction.', true]]} at={106} y={506} size={68} />
       <Sfx name="clock_tension.wav" at={0} volume={0.5} />
       <Sfx name="gym_bed.wav" at={0} volume={0.35} />
       {SENDS.map((at, i) => <React.Fragment key={at}><Sfx name="typing.wav" at={at - 9} volume={0.35} /><Sfx name={`send${i + 1}.wav`} at={at} volume={0.55} /></React.Fragment>)}

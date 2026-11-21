@@ -69,8 +69,8 @@ export const S02Deal: React.FC = () => {
         <Bubble x={520} y={1000} text="WAIT! €16,500!" at={110} until={138} tail={-40} size={30} />
         <Tag x={770} y={880} text="−€1,500" at={128} />
       </>}>
-      <Eyebrow text="02 · THE DEAL" y={300} />
-      <PopText parts={[['Walking away is '], ['leverage.', true]]} at={112} y={370} size={64} />
+      <Eyebrow text="02 · THE DEAL" y={468} />
+      <PopText parts={[['Walking away is '], ['leverage.', true]]} at={112} y={506} size={68} />
       <Sfx name="lot_bed.wav" at={0} volume={0.5} />
       {[2, 8, 14].map((t) => <Sfx key={t} name="step_quick.wav" at={t} volume={0.45} />)}
       <Sfx name="key_jingle.wav" at={24} volume={0.5} /><Sfx name="key_jingle.wav" at={42} volume={0.4} />

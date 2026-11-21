@@ -60,8 +60,8 @@ export const S03Room: React.FC = () => (
       <Tag x={300} y={1480} text="CHASES ATTENTION" red at={72} size={22} />
       <Tag x={760} y={1480} text="ATTRACTS IT" at={98} size={22} />
     </>}>
-    <Eyebrow text="03 · THE ROOM" y={300} />
-    <PopText parts={[['Chasing pushes. Calm '], ['pulls.', true]]} at={104} y={370} size={64} />
+    <Eyebrow text="03 · THE ROOM" y={468} />
+    <PopText parts={[['Chasing pushes. Calm '], ['pulls.', true]]} at={104} y={506} size={68} />
     <Sfx name="room_bed.wav" at={0} volume={0.6} />
     {[26, 34, 42].map((t) => <Sfx key={t} name="cloth.wav" at={t} volume={0.4} />)}
     <Sfx name="glass_clink.wav" at={100} volume={0.5} />

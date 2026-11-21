@@ -57,8 +57,8 @@ export const S04Habit: React.FC = () => {
         <Tag x={330} y={1480} text={`−€${Math.round(yearly).toLocaleString('en-US')} / YEAR`} red at={68} size={22} />
         <Tag x={770} y={1480} text="NEEDS NOTHING" at={108} size={22} />
       </>}>
-      <Eyebrow text="04 · THE HABIT" y={300} />
-      <PopText parts={[['What you need '], ['owns', true], [' you.']]} at={110} y={370} size={64} />
+      <Eyebrow text="04 · THE HABIT" y={468} />
+      <PopText parts={[['What you need '], ['owns', true], [' you.']]} at={110} y={506} size={68} />
       <Sfx name="store_bed.wav" at={0} volume={0.55} />
       <Sfx name="craving_whine.wav" at={0} volume={0.45} />
       {[2, 9, 16, 23].map((t) => <Sfx key={t} name="step_soft.wav" at={t} volume={0.4} />)}

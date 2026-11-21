@@ -33,8 +33,8 @@ const Layer: React.FC = () => {
 };
 export const S05Thesis: React.FC = () => (
   <Scene dur={THESIS_DUR} set={set} Layer={Layer} cam={(f) => ({z: tween(f, [0, 84], [1.0, 1.07]), x: tween(f, [0, 84], [0, -50])})}>
-    <Eyebrow text="SAME WORLD. SAME PRESSURE." y={300} />
-    <Headline parts={[['Need less. Win '], ['more.', true]]} at={4} keyAt={30} y={350} size={80} />
+    <Eyebrow text="SAME WORLD. SAME PRESSURE." y={468} />
+    <Headline parts={[['Need less. Win '], ['more.', true]]} at={4} keyAt={30} y={506} size={84} />
     <Sfx name="thesis_drone.wav" at={0} volume={0.6} />
     <Sfx name="door_air.wav" at={2} volume={0.45} />
     {[10, 24, 38, 52].map((t) => <Sfx key={t} name="step_hall.wav" at={t} volume={0.4} />)}

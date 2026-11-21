@@ -8,7 +8,7 @@ export const VIEW_OFFSET_Y=245;
 export const SAFE={scale:.86,x:28,y:46};
 // 9:16 (1080×1920): picture block sits inside TikTok's safe zone — clear of the top tabs,
 // the right-side like/comment/share column and the bottom caption area.
-export const SAFE_916={scale:.806,x:50,y:235};
+export const SAFE_916={scale:.6806,x:110,y:320}; // measured TikTok clear area: x 110–845, y 245–1375
 let assetsPromise:Promise<void>|null=null;
 function loadAssets(){
   if(assetsPromise)return assetsPromise;

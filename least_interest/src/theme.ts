@@ -15,7 +15,11 @@ export const FONT = {
   bold: "'HeadBold', 'Inter Display', Arial, sans-serif",  // eyebrows, header bar, tags (700)
 };
 // TikTok safe zones (no key content below 80% height or right of 88% width).
-export const SAFE = { bottom: H * 0.8, right: W * 0.88, header: H * 0.08 };
+export const SAFE = { bottom: H * 0.8, right: W * 0.88, header: 432 };
+// TikTok delivery frame (measured from the app): the design area BOX (design px) is scaled down and centered inside
+// the region TikTok never covers — below the top search bar, left of the like/comment column, above the caption.
+export const BOX = { x0: 40, x1: 1040, y0: 360, y1: 1580 };
+export const FRAME = { s: 0.735, x: 110 - 40 * 0.735, y: 362 - 360 * 0.735 };
 export const FLOOR = 1420;
 // Palettes for the shared rig
 export const PAL = {
