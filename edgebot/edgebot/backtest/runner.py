@@ -1,6 +1,7 @@
 """One call that runs a full, honest backtest from the settings file."""
 from __future__ import annotations
 
+import copy
 import json
 import math
 from dataclasses import dataclass, field
@@ -61,6 +62,19 @@ def load_data(cfg: dict, source: str, data_dir: Path) -> Dataset:
     if source == "football_data":
         return football_data_uk.load(list(b["leagues"]), list(b["seasons"]), data_dir, int(b["result_delay_minutes"]))
     raise ValueError(f"unknown data source '{source}' (use sample or football_data)")
+
+
+def apply_stand_in(cfg: dict, ds: Dataset) -> tuple[dict, list[str]]:
+    """If none of your bookmakers exist in this data, test with a stand-in soft bookmaker instead (and say so)."""
+    present = set(ds.bookmakers)
+    if set(cfg["bookmakers"]["playable"]) & present:
+        return cfg, []
+    stand_in = [b for b in cfg["backtest"].get("stand_in_bookmakers", []) if b in present]
+    if not stand_in:
+        return cfg, []
+    out = copy.deepcopy(cfg)
+    out["bookmakers"]["playable"] = stand_in
+    return out, stand_in
 
 
 def compute_periods(ds: Dataset, cfg: dict, mode: str) -> Periods:
@@ -127,6 +141,8 @@ def run_backtest(
     if mode == "holdout":
         guard.assert_unused()
     ds = dataset or load_data(cfg, source, data_dir)
+    your_books = list(cfg["bookmakers"]["playable"])
+    cfg, stand_in = apply_stand_in(cfg, ds)
     periods = compute_periods(ds, cfg, mode)
     devig_info = choose_devig(ds, cfg, periods.warmup_end)
 
@@ -186,6 +202,8 @@ def run_backtest(
     n_variants = count_variants(vlog, source)
     run = BacktestRun(result, summary, bench, devig_info, timing, recs, periods, ds, "", None, n_variants)
     run.extra["snapshots_per_match"] = float(ds.odds.groupby("match_id")["captured_at"].nunique().median())
+    run.extra["stand_in"] = stand_in
+    run.extra["your_books"] = your_books
     run.report = render_report(run, cfg, source, fp)
     if mode == "holdout":
         guard.mark_used({"fingerprint": fp, "verdict": v_short, "bets": summary["singles"]["n"]})

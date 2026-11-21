@@ -5,7 +5,7 @@ from datetime import timedelta
 
 import pandas as pd
 
-from .backtest.runner import choose_devig, load_data
+from .backtest.runner import apply_stand_in, choose_devig, load_data
 from .config import data_dir
 from .data.prices import PriceIndex
 from .models.dixon_coles import DCParams, walk_forward_predictions
@@ -26,6 +26,7 @@ def default_moment(ds, cfg) -> pd.Timestamp:
 
 def run_picks(cfg: dict, source: str, at: str | None, horizon: float) -> str:
     ds = load_data(cfg, source, data_dir())
+    cfg, stand_in = apply_stand_in(cfg, ds)
     if at:
         ts = pd.Timestamp(at)
         ts = ts.tz_localize("UTC") if ts.tzinfo is None else ts.tz_convert("UTC")
@@ -57,4 +58,6 @@ def run_picks(cfg: dict, source: str, at: str | None, horizon: float) -> str:
         timing_recs=recs, timing_edges=edges, mode=cfg["mode"],
     )
     header = "SAMPLE (made-up) DATA — for a look at the format only.\n" if ds.synthetic else "Past data replay.\n"
+    if stand_in:
+        header += f"Your bookmaker isn't in this past data; showing {', '.join(stand_in)} as a stand-in.\n"
     return header + sheet.render()

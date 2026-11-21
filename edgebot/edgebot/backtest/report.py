@@ -82,8 +82,15 @@ def render_report(run: "BacktestRun", cfg: dict, source: str, fp: str) -> str:
     playable_here = [book_name(b) for b in cfg["bookmakers"]["playable"] if b in present]
     missing = [book_name(b) for b in cfg["bookmakers"]["playable"] if b not in present]
     refs = [book_name(b) for b in cfg["bookmakers"]["sharp"] if b in present]
-    lines.append(f"Bookmakers you could bet at in this data: {', '.join(playable_here) or 'none'}"
-                 + (f" ({', '.join(missing)} not in this data)" if missing else ""))
+    if run.extra.get("stand_in"):
+        yours = ", ".join(book_name(b) for b in run.extra.get("your_books", []))
+        lines.append(
+            f"Your bookmaker ({yours}) is not in this past data, so {', '.join(playable_here)} is used as a "
+            "stand-in soft bookmaker. Your bookmaker's real prices can only be tested in paper trading."
+        )
+    else:
+        lines.append(f"Bookmakers you could bet at in this data: {', '.join(playable_here) or 'none'}"
+                     + (f" ({', '.join(missing)} not in this data)" if missing else ""))
     lines.append(f"Fair-price reference: {', '.join(refs) or 'none'} · margin removal: {run.devig['method']} ({run.devig['chosen_by']})")
     b = cfg["backtest"]
     lim = b["account_limits"]

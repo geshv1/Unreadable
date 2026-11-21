@@ -149,3 +149,18 @@ def test_pick_sheet(small_sample):
         else:
             assert sheet.parlay_stake <= 5
     assert found_bets
+
+
+def test_stand_in_bookmaker_when_yours_is_not_in_the_data(small_sample, cfg, tmp_path):
+    from edgebot.backtest.runner import apply_stand_in
+
+    no_betano = small_sample.filter(books=set(small_sample.bookmakers) - {"betano"})
+    cfg["bookmakers"]["playable"] = ["betano"]
+    used, stand_in = apply_stand_in(cfg, no_betano)
+    assert stand_in == ["bet365"] and used["bookmakers"]["playable"] == ["bet365"]
+    assert cfg["bookmakers"]["playable"] == ["betano"]  # your settings are not changed
+    run = run_backtest(cfg, source="sample", dataset=no_betano, data_dir=tmp_path, save=False, benchmark=False)
+    assert "stand-in" in run.report
+    assert set(run.result.bets["bookmaker"]) <= {"bet365"}
+    # when your bookmaker IS in the data, nothing is swapped
+    assert apply_stand_in(cfg, small_sample)[1] == []

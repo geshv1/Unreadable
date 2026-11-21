@@ -10,7 +10,7 @@ football:
 
 bookmakers:
   # NRA-licensed operators you have YOUR OWN account with. Only these are ever recommended.
-  playable: [bet365, betano, efbet, winbet]
+  playable: [betano]
   # Price references only. Never recommended as places to bet.
   sharp: [pinnacle, betfair_exchange]
   sharp_weights: {pinnacle: 0.6, betfair_exchange: 0.4}
@@ -63,6 +63,7 @@ backtest:
   leagues: [E0, E1, D1]
   seasons: ["1920", "2021", "2122", "2223", "2324", "2425", "2526"]
   warmup_seasons: 1         # first season is only used to learn; no bets
+  stand_in_bookmakers: [bet365]  # used ONLY when none of your bookmakers are in the past data (Betano isn't)
   slippage: [0.01, 0.02]    # assume 1–2% worse odds than quoted
   rejection_rate: 0.10      # 10% of bets randomly refused
   decision_latency_seconds: 60

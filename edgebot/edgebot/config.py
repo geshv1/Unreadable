@@ -69,6 +69,7 @@ DEFAULTS: dict[str, Any] = {
         "leagues": ["E0", "E1", "D1"],
         "seasons": ["1920", "2021", "2122", "2223", "2324", "2425", "2526"],
         "warmup_seasons": 1,
+        "stand_in_bookmakers": ["bet365"],
         "slippage": [0.01, 0.02],
         "rejection_rate": 0.10,
         "decision_latency_seconds": 60,
