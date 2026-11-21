@@ -484,9 +484,9 @@
   }
 
   // ---------------- Act 9: go first ----------------
-  const A9 = [ls('first') - 0.08, TM.duration];
+  const A9 = win('first', 'cta');
   function act9(ctx, g) {
-    const a = env(g, A9[0], A9[1], 0.22, 0.7);
+    const a = actAlpha(g, A9);
     if (a <= 0) return;
     ctx.globalAlpha = a;
     const gy = 1000, h = 112, go = W('first', 0) - 0.08, v = 165;
@@ -514,6 +514,59 @@
     }
   }
 
+  // ---------------- Act 10: CTA — pass it on ----------------
+  const A10 = [ls('cta') - 0.08, TM.duration];
+  const SEND = new M.I.Path([{ x: 372, y: 905 }, { x: 450, y: 790 }, { x: 540, y: 755 }, { x: 630, y: 790 }, { x: 708, y: 905 }]);
+  /** geometric paper plane, nose pointing along angle a */
+  const plane = (ctx, x, y, a, s, alpha) => {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(a);
+    ctx.scale(s, s);
+    ctx.globalAlpha *= alpha;
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 2.4 / s;
+    ctx.strokeStyle = C.white;
+    ctx.fillStyle = C.white;
+    ctx.beginPath();
+    ctx.moveTo(24, 0); ctx.lineTo(-18, -15); ctx.lineTo(-7, 2); ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(24, 0); ctx.lineTo(-7, 2); ctx.lineTo(-12, 15); ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
+  };
+  function act10(ctx, g) {
+    const a = env(g, A10[0], A10[1], 0.22, 0.75);
+    if (a <= 0) return;
+    ctx.globalAlpha = a;
+    chapter(ctx, 'PASS IT ON', g, A10[0] + 0.15, 600);
+    const gy = 1000, h = 124;
+    const send = W('cta', 0) + 0.15, arrive = W('cta', 3) + 0.4;
+    const fa = tw(g, A10[0], A10[0] + 0.35, E.outCubic);
+    const fb = tw(g, A10[0] + 0.12, A10[0] + 0.47, E.outCubic);
+    const lit = tw(g, arrive - 0.05, arrive + 0.3);
+    const calm = tw(g, W('cta', 8) - 0.1, W('cta', 8) + 0.45, E.inOutCubic);
+    // sender raises an arm as the plane leaves
+    const throwK = env(g, send - 0.15, send + 0.55, 0.15, 0.3);
+    const sendPose = M.blendPose(FRONT, { ...FRONT, ra1: 2.0, ra2: 2.3 }, throwK);
+    fig(ctx, 330, gy + (1 - fa) * 16, h, sendPose, { alpha: fa });
+    fig(ctx, 750, gy + (1 - fb) * 16, h, M.blendPose(FRONT, M.Pose.frontCalm, calm), { alpha: fb, color: mix(C.g3, C.white, lit) });
+
+    // trail + plane
+    const u = tw(g, send, arrive, E.inOutCubic);
+    if (g > send - 0.02) {
+      SEND.draw(ctx, 0, u, { stroke: C.g2, lw: 2, dash: [2, 10], offset: -g * 20 });
+      if (g < arrive + 0.05) {
+        const p = SEND.at(u);
+        plane(ctx, p.x, p.y, p.a, lerp(1.0, 1.3, Math.sin(u * Math.PI)), tw(g, send - 0.02, send + 0.12));
+      }
+    }
+    M.I.node(ctx, 750, gy - h - 22, g - arrive, { r: 6 });
+    M.T.label(ctx, 'YOU', 330, gy + 36, g - (A10[0] + 0.3), { size: 15, color: C.g1, tracking: '4px' });
+    M.T.label(ctx, 'SOMEONE', 750, gy + 36, g - (arrive + 0.05), { size: 15, color: C.g1, tracking: '4px' });
+  }
+
   // ---------------- subtitles ----------------
   function words(ctx, g) {
     ctx.globalAlpha = 1 - tw(g, TM.duration - 0.7, TM.duration - 0.05, E.inCubic);
@@ -528,7 +581,7 @@
   }
 
   const tl = new M.Timeline(TM.duration);
-  [[A1, act1], [A2, act2], [A3, act3], [A4, act4], [A5, act5], [A6, act6], [A7, act7], [A8, act8], [A9, act9]].forEach(([w, fn]) =>
+  [[A1, act1], [A2, act2], [A3, act3], [A4, act4], [A5, act5], [A6, act6], [A7, act7], [A8, act8], [A9, act9], [A10, act10]].forEach(([w, fn]) =>
     tl.add(w[0], w[1] - w[0], (ctx, lt, D, g) => fn(ctx, g))
   );
   tl.add(0, TM.duration, (ctx, lt, D, g) => words(ctx, g));
@@ -558,6 +611,9 @@
   cue(W('permission', 1) + 0.3, 'pop', 0.7);
   cue(W('permission', 3) + 0.05, 'pop', 0.7);
   cue(W('first', 1), 'chime', 0.9);
+  cue(W('cta', 0) + 0.15, 'sweep', 0.5);
+  cue(W('cta', 3) + 0.4, 'pop', 0.9);
+  cue(W('cta', 8) + 0.1, 'chime', 0.6);
 
   M.comps.main = { duration: TM.duration, render: (ctx, t) => tl.render(ctx, t), cues };
 })();
