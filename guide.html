@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Lora:ital,wght@1,500&display=swap" rel="stylesheet">
 <style>
-/* Plan: one dark world, bone text, blood-red accent. Layout idea: a fight card read top to bottom,
-   sections numbered as rounds, an octagon of moving lines behind the hero. */
+/* Minimal: one dark world, bone text, one red accent. A fight card read top to bottom,
+   sections numbered as rounds. No moving decoration; the proof and the words do the work. */
 :root{
   --bg:#0b0b0a; --surface:#141412; --surface-2:#1b1a18; --ink:#ece8e0; --muted:#8f897f;
   --line:#2a2825; --red:#c4161c; --red-soft:#e0343a;
@@ -28,63 +28,40 @@ a{color:inherit}
 :focus-visible{outline:2px solid var(--red-soft);outline-offset:3px}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
 h1,h2,h3{font-family:var(--display);font-weight:400;letter-spacing:.005em;line-height:1.02;text-wrap:balance;text-transform:uppercase}
-.eyebrow{font-family:var(--display);font-size:13px;letter-spacing:.22em;color:var(--red-soft);text-transform:uppercase;display:flex;align-items:center;gap:12px}
-.eyebrow::before{content:"";width:28px;height:2px;background:var(--red)}
+.eyebrow{font-family:var(--display);font-size:13px;letter-spacing:.18em;color:var(--red-soft);text-transform:uppercase}
 .muted{color:var(--muted)}
 
 /* buttons */
-.btn{display:inline-flex;align-items:center;gap:12px;background:var(--red);color:#fff;text-decoration:none;font-family:var(--display);font-size:20px;letter-spacing:.06em;text-transform:uppercase;padding:16px 28px;border-radius:2px;position:relative;overflow:hidden;transition:transform .2s ease}
-.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);transform:translateX(-120%);animation:shine 3.6s ease-in-out 1.5s infinite}
-.btn:hover{transform:translateY(-2px)}
-.btn .arrow{transition:transform .2s ease}
-.btn:hover .arrow{transform:translateX(4px)}
+.btn{display:inline-flex;align-items:center;gap:12px;background:var(--red);color:#fff;text-decoration:none;font-family:var(--display);font-size:19px;letter-spacing:.06em;text-transform:uppercase;padding:16px 28px;border-radius:2px;transition:background .2s}
+.btn:hover{background:#a81217}
 .btn s{opacity:.6;font-size:.8em}
-@keyframes shine{0%,60%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
 .ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
-.ghost::after{display:none}
+.ghost:hover{background:transparent;border-color:#4a4640}
 
 /* top bar */
-.top{position:sticky;top:0;z-index:20;background:rgba(11,11,10,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
 .logo{font-family:var(--display);font-size:20px;letter-spacing:.08em;text-decoration:none}
 .logo b{color:var(--red-soft);font-weight:400}
 .top .btn{font-size:15px;padding:9px 16px}
 
 /* hero */
-.hero{position:relative;padding:72px 0 64px;overflow:hidden;border-bottom:1px solid var(--line)}
-#octagon{position:absolute;inset:0;width:100%;height:100%;opacity:.9;pointer-events:none}
+.hero{position:relative;padding:80px 0 80px;border-bottom:1px solid var(--line)}
 .hero .wrap{position:relative;display:grid;grid-template-columns:1.25fr .75fr;gap:48px;align-items:center}
 .hero h1{font-size:clamp(46px,7.4vw,96px);line-height:1.04;margin:18px 0 22px}
 .hero h1 .r{color:var(--red-soft)}
 .hero h1 .line{display:block}
-.hero h1 .line > span{display:inline-block;animation:rise .9s cubic-bezier(.2,.7,.1,1) both}
-.hero h1 .line:nth-child(2) span{animation-delay:.12s}
-.hero h1 .line:nth-child(3) span{animation-delay:.24s}
-@keyframes rise{from{transform:translateY(18px);opacity:.15;filter:blur(6px)}to{transform:none;opacity:1;filter:none}}
 .lede{font-size:19px;max-width:560px;color:#cfcac1}
 .cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:30px}
-.assure{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:18px;font-size:14px;color:var(--muted)}
-.assure span{display:flex;align-items:center;gap:7px}
-.assure span::before{content:"";width:6px;height:6px;background:var(--red);transform:rotate(45deg)}
+.assure{margin-top:18px;font-size:14px;color:var(--muted)}
 
 /* book mockup */
-.book{position:relative;justify-self:center;width:min(300px,78vw);aspect-ratio:420/680;transform:perspective(1200px) rotateY(-14deg) rotateX(4deg);animation:float 7s ease-in-out infinite;filter:drop-shadow(0 40px 50px rgba(0,0,0,.7))}
-.book img{width:100%;height:100%;object-fit:cover;border-radius:2px 6px 6px 2px}
-.book::before{content:"";position:absolute;left:0;top:0;bottom:0;width:10px;background:linear-gradient(90deg,rgba(255,255,255,.18),transparent);z-index:1}
-@keyframes float{0%,100%{transform:perspective(1200px) rotateY(-14deg) rotateX(4deg) translateY(0)}50%{transform:perspective(1200px) rotateY(-10deg) rotateX(2deg) translateY(-12px)}}
-.price-tag{position:absolute;right:-18px;top:28px;background:var(--ink);color:var(--bg);font-family:var(--display);padding:10px 14px;transform:rotate(6deg);text-align:center;line-height:1}
-.price-tag small{display:block;font-size:11px;letter-spacing:.14em}
-.price-tag strong{font-size:34px;font-weight:400}
-.price-tag s{font-size:14px;color:#7a746b}
+.book{justify-self:center;width:min(280px,70vw);aspect-ratio:420/680;box-shadow:0 30px 60px rgba(0,0,0,.6)}
+.book img{width:100%;height:100%;object-fit:cover;border-radius:2px}
 
-/* marquee */
-.marquee{border-bottom:1px solid var(--line);overflow:hidden;white-space:nowrap;padding:16px 0;background:var(--surface)}
-.marquee-track{display:inline-flex;gap:40px;animation:marq 32s linear infinite;font-family:var(--display);font-size:22px;letter-spacing:.12em;color:#4a4640}
-.marquee-track i{font-style:normal;color:var(--red)}
-@keyframes marq{to{transform:translateX(-50%)}}
 
 /* sections */
-section{padding:96px 0;border-bottom:1px solid var(--line);position:relative}
+section{padding:104px 0;border-bottom:1px solid var(--line);position:relative}
 .sec-head{display:grid;gap:14px;margin-bottom:48px;max-width:760px}
 .sec-head h2{font-size:clamp(36px,5.2vw,62px)}
 .sec-head p{color:#c8c2b8;max-width:620px}
@@ -93,31 +70,23 @@ section{padding:96px 0;border-bottom:1px solid var(--line);position:relative}
 .ba{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .clip{position:relative;background:#000;aspect-ratio:4/5;overflow:hidden;border:1px solid var(--line)}
 .clip video{width:100%;height:100%;object-fit:cover}
-.clip::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,transparent 28%,transparent 62%,rgba(0,0,0,.85) 100%);pointer-events:none}
+.clip::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.4) 0%,transparent 25%,transparent 65%,rgba(0,0,0,.8) 100%);pointer-events:none}
 .cap{position:absolute;left:0;right:0;bottom:0;padding:22px;z-index:2}
 .cap .year{font-family:var(--display);font-size:clamp(44px,6vw,76px);line-height:.9;letter-spacing:.02em}
 .cap .year.r{color:var(--red-soft)}
 .cap p{font-family:var(--serif);font-style:italic;font-size:17px;color:#e6e1d8;margin-top:8px;max-width:320px}
-.tag{position:absolute;top:16px;left:16px;z-index:2;font-family:var(--display);font-size:12px;letter-spacing:.2em;padding:6px 10px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18)}
-.rec{position:absolute;top:18px;right:16px;z-index:2;display:flex;align-items:center;gap:7px;font-size:12px;letter-spacing:.16em;color:#ddd}
-.rec::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--red-soft);animation:blink 1.4s steps(2) infinite}
-@keyframes blink{50%{opacity:.15}}
-.bar{position:absolute;left:22px;right:22px;bottom:14px;height:2px;background:rgba(255,255,255,.15);z-index:3}
-.bar span{display:block;height:100%;width:0;background:var(--red-soft)}
+.tag{position:absolute;top:16px;left:16px;z-index:2;font-family:var(--display);font-size:12px;letter-spacing:.2em;color:#ddd}
 .ba-note{margin-top:26px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:baseline}
 .ba-note q{font-family:var(--serif);font-style:italic;font-size:22px;quotes:none;max-width:640px}
 
 /* who */
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
-.card{background:var(--bg);padding:28px 24px 30px;position:relative;transition:background .25s}
-.card:hover{background:var(--surface)}
-.card .ico{width:42px;height:42px;margin-bottom:22px}
+.card{background:var(--bg);padding:28px 24px 30px;position:relative}
 .card h3{font-size:24px;margin-bottom:10px}
 .card p{font-size:15px;color:#bdb7ad}
 .card .fix{margin-top:14px;font-size:14px;color:var(--ink);border-top:1px solid var(--line);padding-top:12px}
 .card .fix b{color:var(--red-soft);font-weight:600}
-.ico svg{width:100%;height:100%;overflow:visible}
-.you-tag{display:none;position:absolute;top:18px;right:18px;font-family:var(--display);font-size:11px;letter-spacing:.18em;text-transform:uppercase;background:var(--red);color:#fff;padding:4px 8px}
+.you-tag{display:none;position:absolute;top:24px;right:20px;font-family:var(--display);font-size:11px;letter-spacing:.18em;text-transform:uppercase;background:var(--red);color:#fff;padding:4px 8px}
 .card.you{background:var(--surface);box-shadow:inset 0 0 0 1px var(--red)}
 .card.you .you-tag{display:inline-block}
 .quizlink{color:var(--red-soft);font-weight:600;text-decoration:none;justify-self:start}
@@ -127,22 +96,18 @@ section{padding:96px 0;border-bottom:1px solid var(--line);position:relative}
 .qbar{background:var(--surface);border-bottom:1px solid var(--line)}
 .qbar a{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 10px;padding:11px 22px;font-size:14px;line-height:1.4;text-decoration:none;color:#cfc9bf;text-align:center}
 .qbar a b{color:var(--ink);font-weight:600}
-.qbar .d{width:7px;height:7px;background:var(--red);transform:rotate(45deg);flex:none}
 .qbar .go{color:var(--red-soft);font-weight:600;white-space:nowrap}
-.spin{animation:spin 14s linear infinite;transform-origin:50% 50%;transform-box:fill-box}
-@keyframes spin{to{transform:rotate(360deg)}}
 
 /* parts */
 .parts{display:grid;gap:18px}
 .part{display:grid;grid-template-columns:150px 1fr 1.1fr;gap:32px;align-items:start;padding:34px 0;border-top:1px solid var(--line)}
 .part:last-child{border-bottom:1px solid var(--line)}
-.num{font-family:var(--display);font-size:110px;line-height:.8;color:transparent;-webkit-text-stroke:1.4px var(--red);transition:color .35s}
-.part:hover .num{color:var(--red)}
+.num{font-family:var(--display);font-size:72px;line-height:.85;color:#3a3733}
 .part h3{font-size:32px}
 .part .len{display:inline-block;margin-top:10px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .part ul{list-style:none;display:grid;gap:9px}
-.part li{padding-left:22px;position:relative;color:#cfc9bf;font-size:16px}
-.part li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;border:1.5px solid var(--red-soft);transform:rotate(45deg)}
+.part li{padding-left:20px;position:relative;color:#cfc9bf;font-size:16px}
+.part li::before{content:"";position:absolute;left:0;top:.72em;width:8px;height:1.5px;background:var(--red-soft)}
 
 /* stats */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:56px}
@@ -152,34 +117,27 @@ section{padding:96px 0;border-bottom:1px solid var(--line);position:relative}
 
 /* pages */
 .pages{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.page{background:var(--surface);border:1px solid var(--line);padding:10px;transition:transform .35s cubic-bezier(.2,.7,.1,1)}
-.page:hover{transform:translateY(-8px) rotate(-1deg)}
-.page img{width:100%;height:auto;aspect-ratio:420/680;object-fit:cover}
-.page figcaption{font-size:13px;color:var(--muted);padding:10px 2px 2px}
+.page{margin:0}
+.page img{width:100%;height:auto;aspect-ratio:420/680;object-fit:cover;border:1px solid var(--line)}
+.page figcaption{font-size:13px;color:var(--muted);padding:10px 0 0}
 
 /* story */
-.story{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:start}
-.badge{position:sticky;top:96px;aspect-ratio:1;max-width:340px;width:100%;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;position:relative;overflow:hidden}
-.badge canvas{position:absolute;inset:0;width:100%;height:100%}
-.badge .h{position:relative;font-family:var(--display);font-size:42px;letter-spacing:.06em}
-.badge .h small{display:block;font-size:13px;letter-spacing:.3em;color:var(--red-soft);text-align:center}
+.story-text{max-width:720px}
 .story-text p{margin-bottom:18px;color:#d6d0c6;font-size:18px}
 .story-text .pull{font-family:var(--serif);font-style:italic;font-size:26px;line-height:1.4;color:var(--ink);border-left:3px solid var(--red);padding-left:22px;margin:30px 0}
 .sign{font-family:var(--display);font-size:22px;letter-spacing:.08em;color:var(--red-soft)}
 
 /* shoutouts */
 .shouts{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.shout{background:var(--surface);border:1px solid var(--line);padding:28px 28px 24px;position:relative}
-.shout::before{content:"\201C";position:absolute;top:-6px;right:20px;font-family:var(--display);font-size:90px;color:var(--red);opacity:.35;line-height:1}
+.shout{border-top:1px solid var(--line);padding:24px 0 8px;margin:0}
 .shout blockquote{font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.4}
 .shout .who{margin-top:16px;display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
 .shout .who b{color:var(--ink);font-weight:600}
-.shout .who::before{content:"";width:22px;height:22px;border:1.5px solid var(--red-soft);transform:rotate(45deg) scale(.7)}
 
 /* offer */
 .offer{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line)}
 .offer-l{padding:44px;background:var(--surface)}
-.offer-r{padding:44px;display:grid;align-content:start;gap:20px;position:relative;overflow:hidden}
+.offer-r{padding:44px;display:grid;align-content:start;gap:20px}
 .offer h3{font-size:40px;margin-bottom:22px}
 .offer ul{list-style:none;display:grid;gap:12px}
 .offer li{display:grid;grid-template-columns:22px 1fr;gap:10px;color:#d3cdc3}
@@ -189,7 +147,7 @@ section{padding:96px 0;border-bottom:1px solid var(--line);position:relative}
 .big-price s{font-family:var(--display);font-size:34px;color:#5c5750}
 .launch{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--red-soft)}
 #countdown{font-family:var(--display);font-size:20px;letter-spacing:.06em;font-variant-numeric:tabular-nums}
-.guarantee{display:grid;grid-template-columns:56px 1fr;gap:16px;align-items:center;border-top:1px solid var(--line);padding-top:22px;margin-top:6px}
+.guarantee{border-top:1px solid var(--line);padding-top:22px;margin-top:6px}
 .guarantee p{font-size:15px;color:#c9c3b9}
 .guarantee b{color:var(--ink)}
 
@@ -206,35 +164,30 @@ details[open] .pm::after{transform:rotate(0)}
 details p{color:#c3bdb3;margin-top:12px;max-width:680px}
 
 /* final */
-.final{text-align:center;padding:120px 0;overflow:hidden}
+.final{text-align:center;padding:120px 0}
 .final h2{font-size:clamp(48px,8vw,110px)}
 .final h2 .r{color:var(--red-soft)}
 .final p{margin:20px auto 34px;max-width:520px;color:#c8c2b8}
-#ropes{position:absolute;left:0;right:0;bottom:0;height:180px;width:100%;pointer-events:none}
 footer{padding:34px 0 110px;color:var(--muted);font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
 
 /* sticky mobile buy bar */
-.mbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:rgba(11,11,10,.94);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+.mbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line)}
 .mbar .p{font-family:var(--display);font-size:22px;line-height:1}
 .mbar .p s{color:#5c5750;font-size:15px}
 .mbar .p small{display:block;font-family:var(--body);font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
 .mbar .btn{font-size:16px;padding:12px 18px}
 
-/* reveal: content is visible at rest; JS only adds a small lift when a block enters view */
-.js .rv{transition:transform .8s cubic-bezier(.2,.7,.1,1),opacity .8s}
-.js .rv.pre{transform:translateY(26px);opacity:.25}
 
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr}
-  .book{width:220px;order:-1}
+  .book{width:200px;order:-1}
   .cards{grid-template-columns:1fr 1fr}
   .part{grid-template-columns:90px 1fr;gap:20px}
   .part ul{grid-column:2}
-  .num{font-size:76px}
+  .num{font-size:56px}
   .pages{grid-template-columns:repeat(2,1fr)}
   .story{grid-template-columns:1fr}
-  .badge{position:relative;top:0;max-width:240px}
   .offer{grid-template-columns:1fr}
   .stats{grid-template-columns:1fr 1fr}
 }
@@ -252,11 +205,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
   .top .btn{display:none}
   .mbar{display:flex}
   .tag{top:10px;left:10px;font-size:10px}
-  .rec{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
-  .js .rv.pre{transform:none;opacity:1}
 }
 </style>
 </head>
@@ -270,14 +221,13 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 </header>
 
 <div class="qbar" id="qbar">
-  <a href="./"><span class="d" aria-hidden="true"></span><span class="txt">Not sure where to start? <b>Find out what kind of fighter you are.</b></span><span class="go">Free quiz →</span></a>
+  <a href="./"><span class="txt">Not sure where to start? <b>Find out what kind of fighter you are.</b></span><span class="go">Free quiz →</span></a>
 </div>
 
 <main id="top">
 
 <!-- HERO -->
 <div class="hero">
-  <canvas id="octagon" aria-hidden="true"></canvas>
   <div class="wrap">
     <div>
       <div class="eyebrow">The Complete Fighter · Mind. Fight. Body.</div>
@@ -291,19 +241,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
         <a class="btn buy" href="#offer">Get it for €12 <s>€19</s> <span class="arrow">→</span></a>
         <a class="btn ghost" href="#inside">See what's inside</a>
       </div>
-      <div class="assure"><span>Instant PDF download</span><span>Fill it in on your phone</span><span>14-day refund</span></div>
+      <div class="assure">Instant PDF download · Fill it in on your phone · 14-day refund</div>
     </div>
     <div class="book" aria-label="Book cover: The Complete Fighter">
       <img src="cover.jpg" alt="Cover of The Complete Fighter: Mind. Fight. Body." width="420" height="680">
-      <div class="price-tag"><small>LAUNCH</small><strong>€12</strong><br><s>€19</s></div>
     </div>
-  </div>
-</div>
-
-<div class="marquee" aria-hidden="true">
-  <div class="marquee-track">
-    <span>DISCIPLINE <i>◆</i> PRESSURE <i>◆</i> FEAR <i>◆</i> EGO <i>◆</i> PAIN <i>◆</i> PATIENCE <i>◆</i> STRENGTH <i>◆</i> CONTROL <i>◆</i></span>
-    <span>DISCIPLINE <i>◆</i> PRESSURE <i>◆</i> FEAR <i>◆</i> EGO <i>◆</i> PAIN <i>◆</i> PATIENCE <i>◆</i> STRENGTH <i>◆</i> CONTROL <i>◆</i></span>
   </div>
 </div>
 
@@ -317,16 +259,14 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
     </div>
     <div class="ba rv">
       <figure class="clip">
-        <span class="tag">BEFORE</span><span class="rec">REC</span>
+        <span class="tag">BEFORE</span>
         <video src="before.mp4" autoplay muted loop playsinline preload="metadata" aria-label="2022: struggling through one pull-up on a bar between two trees"></video>
         <figcaption class="cap"><div class="year">2022</div><p>One messy rep on a bar between two trees.</p></figcaption>
-        <div class="bar"><span></span></div>
       </figure>
       <figure class="clip">
-        <span class="tag">NOW</span><span class="rec">REC</span>
+        <span class="tag">NOW</span>
         <video src="now.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Now: clean, strict pull-ups from a full hang"></video>
         <figcaption class="cap"><div class="year r">Now</div><p>Clean, strict pull-ups from a full hang.</p></figcaption>
-        <div class="bar"><span></span></div>
       </figure>
     </div>
     <div class="ba-note rv">
@@ -348,28 +288,24 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
     <div class="cards rv">
       <article class="card" data-type="pf">
         <span class="you-tag">Your type</span>
-        <div class="ico"><svg viewBox="0 0 42 42"><polygon class="spin" points="21,4 39,36 3,36" fill="none" stroke="#e0343a" stroke-width="1.5"/></svg></div>
         <h3>Pressure Fighter</h3>
         <p>All gas, no pacing. You've started training five times and quit five times. You go all in, burn out and start over.</p>
         <p class="fix"><b>You get:</b> a 12-week plan, a level test and 36 workouts to tick off, at a pace you can actually keep.</p>
       </article>
       <article class="card" data-type="cp">
         <span class="you-tag">Your type</span>
-        <div class="ico"><svg viewBox="0 0 42 42"><polygon class="spin" points="21,3 38,13 38,29 21,39 4,29 4,13" fill="none" stroke="#e0343a" stroke-width="1.5"/></svg></div>
         <h3>Counterpuncher</h3>
         <p>Sees everything, throws nothing. You know what you should do, then talk yourself out of it. Overthinking feels like progress.</p>
         <p class="fix"><b>You get:</b> a 6-week mind program with a 4-step method to solve your own problems and one real challenge every week.</p>
       </article>
       <article class="card" data-type="br">
         <span class="you-tag">Your type</span>
-        <div class="ico"><svg viewBox="0 0 42 42"><rect class="spin" x="7" y="7" width="28" height="28" fill="none" stroke="#e0343a" stroke-width="1.5"/></svg></div>
         <h3>Brawler</h3>
         <p>All heart, no schedule. Unstoppable when you feel it, nothing when you don't. Every week falls apart by Wednesday.</p>
         <p class="fix"><b>You get:</b> a weekly structure you fill in and actually follow, so you show up without the feeling.</p>
       </article>
       <article class="card" data-type="te">
         <span class="you-tag">Your type</span>
-        <div class="ico"><svg viewBox="0 0 42 42"><polygon class="spin" points="12,4 30,4 38,12 38,30 30,38 12,38 4,30 4,12" fill="none" stroke="#e0343a" stroke-width="1.5"/></svg></div>
         <h3>Technician</h3>
         <p>Always preparing, never fighting. You want to start boxing, training, anything, but you're waiting until you're ready.</p>
         <p class="fix"><b>You get:</b> 20 rounds on fear, ego and failure, each with a daily drill, plus a level test that starts you where you are.</p>
@@ -447,7 +383,6 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 <!-- STORY -->
 <section id="story">
   <div class="wrap story">
-    <div class="badge rv"><canvas id="badge" aria-hidden="true"></canvas><div class="h"><small>WRITTEN BY</small>GESHV1</div></div>
     <div class="story-text rv">
       <div class="eyebrow">Round 05 · Who's behind this</div>
       <h2 style="font-size:clamp(36px,5vw,58px);margin:14px 0 28px">I wasn't born disciplined.</h2>
@@ -500,7 +435,6 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
         <a class="btn buy" href="#offer" style="justify-self:start">Get instant access <span class="arrow">→</span></a>
         <p class="muted" style="font-size:14px">One payment. Secure checkout. The PDF arrives in your email right after you pay.</p>
         <div class="guarantee">
-          <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><polygon class="spin" points="17,3 39,3 53,17 53,39 39,53 17,53 3,39 3,17" fill="none" stroke="#e0343a" stroke-width="1.5"/><text x="28" y="33" text-anchor="middle" font-family="Anton" font-size="15" fill="#ece8e0">14</text></svg>
           <p><b>14-day refund.</b> If the book doesn't help you, message me within 14 days and I'll give you your money back.</p>
         </div>
       </div>
@@ -528,7 +462,6 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 
 <!-- FINAL -->
 <section class="final">
-  <canvas id="ropes" aria-hidden="true"></canvas>
   <div class="wrap" style="position:relative">
     <h2 class="rv">Strong body.<br>Strong mind.<br><span class="r">Keep fighting.</span></h2>
     <p class="rv">Twelve weeks from now you'll either have the results or the excuses. Start today.</p>
@@ -557,8 +490,6 @@ const BUY_URL = "https://shop.beacons.ai/geshv1/cf9f8f01-9fad-461e-a346-1a0034c0
 const LAUNCH_END = "";         // optional, e.g. "2026-11-30T23:59:00+02:00" to show a countdown
 /* ============================================ */
 
-document.documentElement.classList.add('js');
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Buy buttons
 document.querySelectorAll('a.buy').forEach(a => {
@@ -598,129 +529,7 @@ document.querySelectorAll('a.buy').forEach(a => {
   tick();
 })();
 
-// Reveal on scroll: only blocks below the fold get the small lift
-(function(){
-  if (reduce || !('IntersectionObserver' in window)) return;
-  const els = [...document.querySelectorAll('.rv')];
-  const io = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.remove('pre'); io.unobserve(e.target); }
-  }), {threshold: .12});
-  els.forEach(el => {
-    if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('pre'); io.observe(el); }
-  });
-})();
 
-// Count up stats when they come into view
-(function(){
-  if (reduce || !('IntersectionObserver' in window)) return;
-  const nums = document.querySelectorAll('[data-count]');
-  const io = new IntersectionObserver(es => es.forEach(e => {
-    if (!e.isIntersecting) return;
-    const el = e.target, to = +el.dataset.count, t0 = performance.now();
-    io.unobserve(el);
-    (function step(t){
-      const p = Math.min(1, (t - t0)/1400), k = 1 - Math.pow(1-p, 3);
-      el.textContent = Math.round(to * k);
-      if (p < 1) requestAnimationFrame(step);
-    })(t0);
-  }), {threshold: .6});
-  nums.forEach(n => io.observe(n));
-})();
-
-// Video progress bars
-document.querySelectorAll('.clip').forEach(c => {
-  const v = c.querySelector('video'), b = c.querySelector('.bar span');
-  v.addEventListener('timeupdate', () => { if (v.duration) b.style.width = (v.currentTime / v.duration * 100) + '%'; });
-});
-
-// Canvas helpers
-function fit(cv){
-  const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2);
-  cv.width = r.width * d; cv.height = r.height * d;
-  const ctx = cv.getContext('2d'); ctx.setTransform(d,0,0,d,0,0); return [ctx, r.width, r.height];
-}
-function poly(ctx, cx, cy, r, n, rot){
-  ctx.beginPath();
-  for (let i = 0; i <= n; i++){ const a = rot + i * Math.PI * 2 / n + Math.PI / n; const x = cx + r*Math.cos(a), y = cy + r*Math.sin(a); i ? ctx.lineTo(x,y) : ctx.moveTo(x,y); }
-  ctx.stroke();
-}
-
-// HERO: rotating octagons (the cage), drifting rope lines and floating shapes
-(function(){
-  const cv = document.getElementById('octagon'); let ctx, W, H;
-  const shapes = Array.from({length: 14}, (_, i) => ({
-    x: Math.random(), y: Math.random(), r: 4 + Math.random()*10, n: [3,4,6,8][i%4],
-    vx: (Math.random()-.5)*.00025, vy: (Math.random()-.5)*.00025, rot: Math.random()*6, vr: (Math.random()-.5)*.01
-  }));
-  function size(){ [ctx, W, H] = fit(cv); }
-  size(); addEventListener('resize', size);
-  let mx = .5, my = .5;
-  addEventListener('pointermove', e => { mx = e.clientX / innerWidth; my = e.clientY / innerHeight; });
-  function draw(t){
-    ctx.clearRect(0,0,W,H);
-    const cx = W * (W > 900 ? .78 : .5) + (mx-.5)*24, cy = H * .5 + (my-.5)*18;
-    const R = Math.min(W, H) * (W > 900 ? .62 : .55);
-    for (let i = 0; i < 6; i++){
-      ctx.strokeStyle = i === 0 ? 'rgba(196,22,28,.55)' : `rgba(236,232,224,${.08 - i*.01})`;
-      ctx.lineWidth = i === 0 ? 1.4 : 1;
-      poly(ctx, cx, cy, R * (1 - i*.13), 8, t*.00008*(i%2 ? -1 : 1) + i*.12);
-    }
-    // ropes
-    for (let k = 0; k < 3; k++){
-      ctx.strokeStyle = `rgba(196,22,28,${.35 - k*.09})`; ctx.lineWidth = 2 - k*.5;
-      ctx.beginPath();
-      for (let x = 0; x <= W; x += 20){
-        const y = H*.82 + k*16 + Math.sin(x*.006 + t*.0012 + k) * 6;
-        x ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
-      }
-      ctx.stroke();
-    }
-    // floating shapes
-    shapes.forEach(s => {
-      s.x = (s.x + s.vx + 1) % 1; s.y = (s.y + s.vy + 1) % 1; s.rot += s.vr;
-      ctx.strokeStyle = 'rgba(224,52,58,.45)'; ctx.lineWidth = 1;
-      poly(ctx, s.x*W, s.y*H, s.r, s.n, s.rot);
-    });
-    if (!reduce) requestAnimationFrame(draw);
-  }
-  requestAnimationFrame(draw);
-})();
-
-// STORY badge: concentric squares turning against each other
-(function(){
-  const cv = document.getElementById('badge'); let ctx, W, H;
-  function size(){ [ctx, W, H] = fit(cv); } size(); addEventListener('resize', size);
-  function draw(t){
-    ctx.clearRect(0,0,W,H);
-    for (let i = 0; i < 9; i++){
-      ctx.strokeStyle = i % 3 === 0 ? 'rgba(196,22,28,.6)' : 'rgba(236,232,224,.09)';
-      ctx.lineWidth = 1;
-      poly(ctx, W/2, H/2, W*.18 + i*W*.045, 4, t*.00012*(i%2 ? 1 : -1) + i*.09);
-    }
-    if (!reduce) requestAnimationFrame(draw);
-  }
-  requestAnimationFrame(draw);
-})();
-
-// FINAL: waving ring ropes
-(function(){
-  const cv = document.getElementById('ropes'); let ctx, W, H;
-  function size(){ [ctx, W, H] = fit(cv); } size(); addEventListener('resize', size);
-  function draw(t){
-    ctx.clearRect(0,0,W,H);
-    for (let k = 0; k < 3; k++){
-      ctx.strokeStyle = `rgba(196,22,28,${.6 - k*.17})`; ctx.lineWidth = 2.4 - k*.6;
-      ctx.beginPath();
-      for (let x = 0; x <= W; x += 16){
-        const y = 40 + k*34 + Math.sin(x*.004 + t*.0016 + k*.8) * 10 + Math.sin(x*.011 - t*.001) * 3;
-        x ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
-      }
-      ctx.stroke();
-    }
-    if (!reduce) requestAnimationFrame(draw);
-  }
-  requestAnimationFrame(draw);
-})();
 </script>
 </body>
 </html>
