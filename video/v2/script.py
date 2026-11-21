@@ -17,6 +17,6 @@ LINES = [
     dict(voice="Control yourself. Control the room.", show=[["CONTROL", "YOURSELF.*"], ["CONTROL", "THE", "ROOM.*"]]),
     dict(voice="I built a system for this.", show=[["I", "BUILT", "A", "SYSTEM*"], ["FOR", "THIS."]]),
     dict(voice="The Complete Fighter. Mind. Fight. Body.", show=[["THE", "COMPLETE", "FIGHTER.*"], ["MIND.", "FIGHT.", "BODY."]]),
-    dict(voice="Nineteen euros. Link in bio.", show=[["€19*"], ["LINK", "IN", "BIO.*"]], map=[0, 2, 3, 4]),
+    dict(voice="Start now. Link in bio.", show=[["START", "NOW.*"], ["LINK", "IN", "BIO.*"]]),
 ]
 GAPS = [0.55, 0.35, 0.45, 0.45, 0.5, 0.4, 0.5, 0.35, 0.5, 0.6, 0.55, 0.6]   # silence after each line

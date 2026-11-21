@@ -664,9 +664,9 @@ def s12(ctx, t, S):
 
 
 def s13(ctx, t, S):
-    """€19, link in bio: slot-machine price, then the arrow up."""
+    """Start now, link in bio: slot-machine reels land on NOW, then the arrow up."""
     w = S.w
-    kp, kb = w[0], w[4]
+    kp, kb = w[1], w[4]
     ent = eo3(prog(t, S.t0, S.t0 + 0.3))
     R.set_font(ctx, R.ALICE, 34)
     lab = "THE COMPLETE FIGHTER"
@@ -674,7 +674,7 @@ def s13(ctx, t, S):
     ctx.move_to(CX - e.x_advance / 2, CY - 215)
     src(ctx, MUTE, ent)
     ctx.show_text(lab)
-    size, glyphs = 200, ["€", "1", "9"]
+    size, glyphs = 200, ["N", "O", "W"]
     R.set_font(ctx, R.ANTON, size)
     adv = [ctx.text_extents(g).x_advance for g in glyphs]
     total = sum(adv) + 12 * 2
@@ -684,7 +684,7 @@ def s13(ctx, t, S):
     draw_poly(ctx, [(x0 - 20, bot), (x0 + total + 20, bot)], ent, MUTE, 0.8, 2)
     x = x0
     for j, g in enumerate(glyphs):
-        strip = (["$", "£", "¥", "€"] * 3)[:-1] + ["€"] if j == 0 else list("0123456789" * 2) + [g]
+        strip = list("XKAERTSQMZBH"[j * 3:] + "XKAERTSQMZBH"[:j * 3]) + [g]
         land = kp + 0.1 * j
         pos = (len(strip) - 1) * eo3(prog(t, S.t0, land))
         ctx.save()
@@ -708,10 +708,10 @@ def s13(ctx, t, S):
     ctx.fill()
     sa = eo3(prog(t, w[2], w[2] + 0.3))
     pose = R.pose_at(t, [(w[2], "stand"), (kb, "stand"), (kb + 0.2, "point")])
-    stick(ctx, pose, CX + 285, CY + 175, 0.7, a=sa)
+    ax = max(CX + 205, x0 + total + 45)
+    stick(ctx, pose, ax + 78, CY + 175, 0.7, a=sa)
     au = eo3(prog(t, kb, kb + 0.3))
     if au > 0:
-        ax = CX + 205
         lift = 0
         for p0 in (kb + 0.3, kb + 0.6):
             p = prog(t, p0, p0 + 0.28)
@@ -969,7 +969,7 @@ def main():
     vid = os.path.join(OUT, "calm_no_audio.mp4")
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "bgra", "-s", f"{W}x{H}",
            "-r", str(FPS), "-i", "-", "-vf", "scale=out_color_matrix=bt709:out_range=tv",
-           "-c:v", "libx264", "-preset", "slow", "-crf", "16", "-pix_fmt", "yuv420p", "-profile:v", "high",
+           "-c:v", "libx264", "-preset", "slow", "-crf", "19", "-maxrate", "14M", "-bufsize", "28M", "-tune", "grain", "-pix_fmt", "yuv420p", "-profile:v", "high",
            "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709", "-movflags", "+faststart", vid]
     ff = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     with Pool(os.cpu_count()) as pool:

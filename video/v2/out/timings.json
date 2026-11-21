@@ -1,6 +1,6 @@
 {
  "voice": "am_michael",
- "speech_end": 29.504,
+ "speech_end": 28.878,
  "lines": [
   {
    "text": "The calm one always wins.",
@@ -299,29 +299,29 @@
    ]
   },
   {
-   "text": "Nineteen euros. Link in bio.",
+   "text": "Start now. Link in bio.",
    "start": 26.962,
-   "end": 29.504,
+   "end": 28.878,
    "words": [
     [
-     "Nineteen",
+     "Start",
      26.962
     ],
     [
-     "euros.",
-     27.615
+     "now.",
+     27.448
     ],
     [
      "Link",
-     28.479
+     27.904
     ],
     [
      "in",
-     28.796
+     28.217
     ],
     [
      "bio.",
-     28.956
+     28.376
     ]
    ]
   }
