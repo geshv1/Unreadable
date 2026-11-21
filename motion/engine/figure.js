@@ -15,6 +15,15 @@
   P.think = { ...base, lean: 0.05, hd: 0.012, hf: 0.015, ra1: 0.62, ra2: 2.9, la1: 0.05, la2: 0.2 };
   P.sideDown = { ...base, lean: 0.2, hd: 0.035, hf: 0.02, la1: 0.1, la2: 0.14, ra1: 0.1, ra2: 0.14 };
   P.point = { ...base, ra1: 1.45, ra2: 1.5, la1: 0.02, la2: 0.1 };
+  // seated (side view, on a chair whose seat sits at hip height)
+  P.sit = { ...base, lean: 0.04, ll1: 1.45, ll2: 0.06, rl1: 1.5, rl2: 0.02, la1: 0.3, la2: 1.0, ra1: 0.35, ra2: 1.05 };
+  P.sitCalm = { ...P.sit, lean: -0.02, hd: 0.006 };
+  P.sitDown = { ...P.sit, lean: 0.2, hd: 0.035, hf: 0.025 };
+  P.sitPhone = { ...P.sit, lean: 0.22, hd: 0.04, hf: 0.028, la1: 0.55, la2: 2.2, ra1: 0.6, ra2: 2.25 };
+  P.sitReach = { ...P.sit, lean: 0.14, ra1: 1.0, ra2: 1.3 };
+  P.sitJolt = { ...P.sit, lean: -0.16, hd: -0.012, la1: 0.95, la2: 2.0, ra1: 0.9, ra2: 1.95 };
+  // hanging from a bar (front view)
+  P.hang = { ...P.front, la1: 2.95, la2: 3.02, ra1: 2.95, ra2: 3.02, ll1: 0.05, ll2: -0.04, rl1: 0.05, rl2: -0.04 };
   M.Pose = P;
 
   /** procedural walk cycle; ph in radians, amp 0 (still) … 1 (walk) … 1.5 (run) */
@@ -67,6 +76,14 @@
     const armL = limb(shL.x, shL.y, p.la1, p.la2, UA, FA, sL);
     const armR = limb(shR.x, shR.y, p.ra1, p.ra2, UA, FA, sR);
 
+    const ox = o.x, oy = o.y - low;
+    const W = (p) => ({ x: ox + p.x, y: oy + p.y });
+    const joints = {
+      head: W(head), top: oy + head.y - HR, hip: { x: ox, y: oy },
+      handR: W(armR[2]), handL: W(armL[2]), shoulder: W(sh), U,
+    };
+    if (o.measure) return joints;
+
     ctx.save();
     ctx.translate(o.x, o.y - low);
     ctx.globalAlpha *= o.alpha ?? 1;
@@ -112,6 +129,6 @@
       line(armR, AW, true);
     }
     ctx.restore();
-    return { head: { x: o.x + head.x, y: o.y - low + head.y }, top: o.y - low + head.y - HR };
+    return joints;
   };
 })();

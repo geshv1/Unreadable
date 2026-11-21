@@ -1,0 +1,19 @@
+{
+  "voice": "am_michael",
+  "speed": 1.1,
+  "preroll": 0.12,
+  "tail": 2.4,
+  "lines": [
+    { "id": "hook",    "gap": 0.0,  "say": "They chose pain over fifteen minutes alone.",                  "show": "They chose *pain* over fifteen minutes *alone.*" },
+    { "id": "room",    "gap": 0.45, "say": "2014. A bare room. No phone. One button that gave a shock.",    "show": "*2014.* A bare room. No phone. One button that gave a *shock.*" },
+    { "id": "pay",     "gap": 0.25, "say": "Each of them had said they'd pay to avoid it.",                 "show": "Each of them had said they'd *pay* to avoid it." },
+    { "id": "men",     "gap": 0.25, "say": "67% of men pressed it anyway.",                                 "show": "*67%* of men pressed it *anyway.*" },
+    { "id": "teens",   "gap": 0.45, "say": "Today, 46% of teens are online almost constantly. Ten years ago, 24%.", "show": "Today, *46%* of teens are online almost constantly. Ten years ago, *24%.*" },
+    { "id": "muscle",  "gap": 0.35, "say": "We didn't cure boredom. We lost the muscle that handles it.",    "show": "We didn't cure boredom. We lost the *muscle* that handles it." },
+    { "id": "fix",     "gap": 0.45, "say": "The fix is small. Fifteen minutes alone, no phone, left people calmer.", "show": "The fix is small. Fifteen minutes alone, no phone, left people *calmer.*" },
+    { "id": "choose",  "gap": 0.25, "say": "Choose it. And pick one thing to think about first.",           "show": "*Choose* it. And pick *one thing* to think about first." },
+    { "id": "corner",  "gap": 0.45, "say": "A fighter gets one minute alone in the corner. It decides the next round.", "show": "A fighter gets one minute alone in the corner. It decides the *next round.*" },
+    { "id": "skill",   "gap": 0.4,  "say": "Being alone with your mind is a skill. Train it.",               "show": "Being alone with your mind is a *skill.* *Train it.*" },
+    { "id": "cta",     "gap": 0.55, "say": "I built a six-week program for exactly this. It's in The Complete Fighter. Link in bio.", "show": "I built a *six-week program* for exactly this. It's in *The Complete Fighter.* Link in bio." }
+  ]
+}

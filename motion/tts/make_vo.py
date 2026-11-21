@@ -1,7 +1,8 @@
 """Synthesise the voiceover with Kokoro-82M (open source, Apache-2.0) and export per-word timings.
 
-usage: HF_HUB_DISABLE_XET=1 python tts/make_vo.py [script.json] [out_dir]
-writes: out_dir/vo.wav and comps/timing.js (window.M.TIMING = {...})
+usage: HF_HUB_DISABLE_XET=1 python tts/make_vo.py [script.json] [out_dir] [name]
+writes: out_dir/vo.wav and comps/timing.js (window.M.TIMING = {...}),
+        or comps/timing-<name>.js (window.M.TIMINGS[name] = {...}) when a name is given
 """
 import json, re, sys, pathlib
 import numpy as np
@@ -65,5 +66,11 @@ chunks.append(np.zeros(int(script["tail"] * SR), dtype=np.float32))
 vo = np.concatenate(chunks)
 sf.write(out_dir / "vo.wav", vo, SR)
 timing = {"duration": round(len(vo) / SR, 3), "voice": script["voice"], "lines": lines}
-(ROOT / "comps" / "timing.js").write_text("window.M.TIMING = " + json.dumps(timing, indent=1) + ";\n")
+name = sys.argv[3] if len(sys.argv) > 3 else None
+if name:
+    (ROOT / "comps" / f"timing-{name}.js").write_text(
+        "window.M.TIMINGS = window.M.TIMINGS || {};\nwindow.M.TIMINGS[%s] = " % json.dumps(name) + json.dumps(timing, indent=1) + ";\n"
+    )
+else:
+    (ROOT / "comps" / "timing.js").write_text("window.M.TIMING = " + json.dumps(timing, indent=1) + ";\n")
 print("duration", timing["duration"])

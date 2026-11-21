@@ -117,7 +117,7 @@
 
   /** arrow drawn from a to b up to k */
   I.arrow = (ctx, x1, y1, x2, y2, k, o = {}) => {
-    if (k <= 0) return;
+    if (k <= 0.002) return;
     const x = M.lerp(x1, x2, k), y = M.lerp(y1, y2, k), a = Math.atan2(y2 - y1, x2 - x1), hs = o.head ?? 14;
     ctx.save();
     ctx.globalAlpha *= o.alpha ?? 1;

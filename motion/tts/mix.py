@@ -73,8 +73,28 @@ def chime():
     return s * np.minimum(t / 0.004, 1) * 0.6
 
 
-SOUNDS = {"tick": tick, "pop": pop, "low": low, "sweep": sweep, "shard": shard, "chime": chime}
-LEVEL = {"tick": 0.10, "pop": 0.13, "low": 0.22, "sweep": 0.10, "shard": 0.07, "chime": 0.11}
+def zap():
+    """short electric buzz: square-ish 110 Hz + crackle, gated"""
+    t = t_(0.22)
+    sq = np.sign(np.sin(2 * np.pi * 110 * t)) * 0.4 + np.sign(np.sin(2 * np.pi * 167 * t)) * 0.25
+    crackle = rng.standard_normal(len(t)) * (rng.random(len(t)) < 0.25) * 0.6
+    gate = (np.sin(2 * np.pi * 38 * t) > -0.3).astype(float)
+    return (sq + crackle) * gate * env(t, 0.002, 0.07)
+
+
+def bell():
+    """boxing bell: inharmonic metallic partials, two strikes"""
+    t = t_(1.6)
+    one = sum(a * np.sin(2 * np.pi * f * t) * np.exp(-t / d) for f, a, d in [(1180, 0.5, 0.5), (2710, 0.3, 0.3), (3890, 0.18, 0.2), (5120, 0.08, 0.12)])
+    one *= np.minimum(t / 0.002, 1)
+    out = one.copy()
+    k = int(0.16 * SR_OUT)
+    out[k:] += one[: len(one) - k] * 0.8
+    return out * 0.7
+
+
+SOUNDS = {"tick": tick, "pop": pop, "low": low, "sweep": sweep, "shard": shard, "chime": chime, "zap": zap, "bell": bell}
+LEVEL = {"tick": 0.10, "pop": 0.13, "low": 0.22, "sweep": 0.10, "shard": 0.07, "chime": 0.11, "zap": 0.09, "bell": 0.12}
 
 sfx = np.zeros(N + SR_OUT, dtype=np.float32)
 for c in json.loads(open(cue_path).read()):

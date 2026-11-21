@@ -22,9 +22,13 @@
 <script src="engine/geometry.js"></script>
 <script src="engine/type.js"></script>
 <script src="engine/info.js"></script>
+<script src="engine/kit.js"></script>
+<script src="comps/assets.js" onerror="void 0"></script>
 <script src="comps/preview.js"></script>
 <script src="comps/timing.js"></script>
 <script src="comps/main.js" onerror="void 0"></script>
+<script src="comps/timing-alone.js" onerror="void 0"></script>
+<script src="comps/alone.js" onerror="void 0"></script>
 <script>
   const q = new URLSearchParams(location.search);
   const comp = M.comps[q.get('comp') || 'preview'];
@@ -34,7 +38,9 @@
   window.COMP = comp;
   window.renderAt = (t) => comp.render(ctx, t);
   if (q.get('render')) document.body.classList.add('render');
-  window.ready = Promise.all(['400', '500', '600'].map((w) => document.fonts.load(`${w} 40px Inter`))).then(() => { renderAt(0); return true; });
+  M.IMG = {};
+  const loadImg = (k, src) => new Promise((res) => { const im = new Image(); im.onload = () => { M.IMG[k] = im; res(); }; im.onerror = () => res(); im.src = src; });
+  window.ready = Promise.all([...['400', '500', '600'].map((w) => document.fonts.load(`${w} 40px Inter`)), loadImg('cover', (M.ASSETS || {}).cover || '../cover.jpg')]).then(() => { renderAt(0); return true; });
 
   if (!q.get('render')) {
     const play = document.getElementById('play'), scrub = document.getElementById('scrub'), tc = document.getElementById('tc');
