@@ -57,7 +57,19 @@
         });
         if (cur.length) pages.push(cur);
       });
-      TM._pages = pages;
+      // a page longer than maxWords is split again at the comma nearest its middle
+      const maxWords = o.maxWords ?? 11;
+      const out = [];
+      for (const p of pages) {
+        if (p.length <= maxWords) { out.push(p); continue; }
+        let best = -1, bd = 1e9;
+        p.forEach((w, i) => {
+          if (i < p.length - 2 && /,$/.test(w.w.replace(/\*/g, '')) && Math.abs(i - p.length / 2) < bd) { bd = Math.abs(i - p.length / 2); best = i; }
+        });
+        if (best < 0) out.push(p);
+        else out.push(p.slice(0, best + 1), p.slice(best + 1));
+      }
+      TM._pages = out;
     }
     const P = TM._pages;
     ctx.save();
@@ -68,7 +80,7 @@
       const last = p[p.length - 1].s;
       const t1 = q ? Math.min(Math.max(last + 0.3, q[0].s - 0.42), q[0].s - 0.38) : null;
       if (t1 != null && g > t1 + 0.6) return;
-      M.T.words(ctx, { text: p.map((w) => w.w).join(' '), x: 540, y: o.y ?? 1390, times: p.map((w) => w.s - 0.06), t1 }, g);
+      M.T.words(ctx, { text: p.map((w) => w.w).join(' '), x: o.x ?? 540, y: o.y ?? 1390, maxW: o.maxW, size: o.size, times: p.map((w) => w.s - 0.06), t1 }, g);
     });
     ctx.restore();
   };

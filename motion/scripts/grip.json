@@ -1,0 +1,18 @@
+{
+  "voice": "am_michael",
+  "speed": 1.1,
+  "preroll": 0.12,
+  "tail": 2.4,
+  "lines": [
+    { "id": "hook",   "gap": 0.0,  "say": "Young men are losing their grip. Literally.",                         "show": "Young men are losing their *grip.* *Literally.*" },
+    { "id": "study",  "gap": 0.5,  "say": "In 2016, researchers tested men aged 20 to 24.",                       "show": "In *2016,* researchers tested men aged 20 to 24." },
+    { "id": "drop",   "gap": 0.2,  "say": "Their grip was 20 pounds weaker than men that age in 1985.",          "show": "Their grip was *20 pounds weaker* than men that age in *1985.*" },
+    { "id": "cause",  "gap": 0.4,  "say": "The likely reason: hands that scroll, but rarely carry, climb or hang.", "show": "The likely reason: hands that *scroll,* but rarely carry, climb or hang." },
+    { "id": "just",   "gap": 0.4,  "say": "And grip isn't just about hands.",                                    "show": "And grip isn't just about *hands.*" },
+    { "id": "lancet", "gap": 0.25, "say": "Across 140,000 people, every 5 kilos of grip lost came with a 16% higher risk of death.", "show": "Across *140,000* people, every *5 kilos* of grip lost came with a *16%* higher risk of death." },
+    { "id": "bp",     "gap": 0.25, "say": "It predicted death better than blood pressure.",                     "show": "It predicted death *better* than blood pressure." },
+    { "id": "keeps",  "gap": 0.45, "say": "Your body keeps only what you ask of it.",                           "show": "Your body keeps only what you *ask* of it." },
+    { "id": "ask",    "gap": 0.3,  "say": "So ask. Hang from a bar. Carry heavy things. Train the pull-up you can't do yet.", "show": "So *ask.* *Hang* from a bar. *Carry* heavy things. Train the *pull-up* you can't do yet." },
+    { "id": "cta",    "gap": 0.55, "say": "In 2022, I had one messy pull-up. My 12-week plan is in The Complete Fighter. Link in bio.", "show": "In 2022, I had *one messy pull-up.* My *12-week plan* is in *The Complete Fighter.* Link in bio." }
+  ]
+}
