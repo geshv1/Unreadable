@@ -21,12 +21,11 @@ export const TOTAL = SCENES.reduce((a, [, d]) => a + d, 0) - TR * (SCENES.length
 // absolute frame where each transition starts
 const CUTS = SCENES.slice(0, -1).map((_, i) => SCENES.slice(0, i + 1).reduce((a, [, d]) => a + d, 0) - TR * (i + 1));
 export const LeastInterest: React.FC = () => (
-  <AbsoluteFill style={{background: C.bg}}>
+  <AbsoluteFill style={{background: '#000'}}>
     {/* Everything is drawn in 1080×1920 design space, then shrunk into TikTok's always-visible region. */}
     <AbsoluteFill style={{transform: `translate(${FRAME.x}px, ${FRAME.y}px) scale(${FRAME.s})`, transformOrigin: '0 0'}}>
-      <div style={{position: 'absolute', left: BOX.x0, top: BOX.y0, width: BOX.x1 - BOX.x0, height: BOX.y1 - BOX.y0, overflow: 'hidden',
-        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, #000 3%, #000 97%, transparent 100%)'}}>
-        <div style={{position: 'absolute', inset: 0, WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, #000 3%, #000 95%, transparent 100%)'}}>
+      <div style={{position: 'absolute', left: BOX.x0, top: BOX.y0, width: BOX.x1 - BOX.x0, height: BOX.y1 - BOX.y0, overflow: 'hidden', borderRadius: 34, background: C.bg, boxShadow: '0 0 0 2px rgba(255,255,255,.06)'}}>
+        <div style={{position: 'absolute', inset: 0}}>
           <div style={{position: 'absolute', left: -BOX.x0, top: -BOX.y0, width: 1080, height: 1920}}>
             <TransitionSeries>
               {SCENES.map(([Comp, d], i) => (

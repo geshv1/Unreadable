@@ -34,5 +34,5 @@ export const CanvasLayer: React.FC<{draw: (t: number) => void; local?: boolean}>
 };
 export const Overlay: React.FC = () => {
   const frame = useCurrentFrame();
-  return <CanvasLayer draw={() => {vignette(0.7); grain(0.055, Math.floor(frame / 2.5));}} />;
+  return <CanvasLayer draw={() => {vignette(0.5); grain(0.018, Math.floor(frame / 2.5));}} />;
 };
