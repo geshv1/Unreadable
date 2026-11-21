@@ -8,9 +8,9 @@ const fadeOut = (frame: number, until?: number) => (until == null ? 1 : interpol
 
 export const Tag: React.FC<{x: number; y: number; text: string; red?: boolean; at?: number; until?: number; size?: number}> = ({x, y, text, red, at = 0, until, size = 24}) => {
   const frame = useCurrentFrame(); const {fps} = useVideoConfig(); if (frame < at) return null;
-  const k = pop(frame, at, fps); const col = red ? C.red : C.white;
+  const k = pop(frame, at, fps); const col = red ? C.red : C.white; const fl = interpolate((frame + x) % 90, [0, 45, 90], [-3, 3, -3], {easing: Easing.inOut(Easing.sin)});
   return (
-    <div style={{position: 'absolute', left: x, top: y, transform: `translate(-50%,-50%) scale(${interpolate(k, [0, 1], [0.6, 1])})`, opacity: Math.min(1, k * 2) * fadeOut(frame, until),
+    <div style={{position: 'absolute', left: x, top: y + fl, transform: `translate(-50%,-50%) scale(${interpolate(k, [0, 1], [0.6, 1])})`, opacity: Math.min(1, k * 2) * fadeOut(frame, until),
       display: 'flex', alignItems: 'center', gap: 12, padding: `${size * 0.42}px ${size * 0.9}px`, borderRadius: 999, background: 'rgba(14,14,17,.92)', border: `2.5px solid ${red ? C.red : 'rgba(242,242,242,.85)'}`,
       boxShadow: `0 0 18px ${red ? C.redGlow : 'rgba(255,255,255,.25)'}`, fontFamily: FONT.bold, fontWeight: 700, fontSize: size, letterSpacing: '0.12em', color: col, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums'}}>
       <span style={{width: size * 0.36, height: size * 0.36, borderRadius: '50%', background: col, boxShadow: `0 0 8px ${col}`}} />{text}

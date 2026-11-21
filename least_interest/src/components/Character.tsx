@@ -1,11 +1,12 @@
 // SVG character built on the shared jointed rig. Same look as the series' canvas characters.
 import React from 'react';
-import {rig, RigInput, Joints} from './rig';
+import {useCurrentFrame, interpolate} from 'remotion';
+import {rig, RigInput, Joints, loop} from './rig';
 import {C} from '../theme';
 
 type Palette = {skin: string; top: string; bot: string; shoe: string; outfit: string; hair: string; hairCol: string};
 export type Mood = 'neutral' | 'angry' | 'sad' | 'shock' | 'calm' | 'smile' | 'smirk';
-export type CharProps = RigInput & {pal: Palette; mood?: Mood; blink?: number; look?: number; glow?: number; shadow?: boolean; id: string; children?: (j: Joints) => React.ReactNode; behind?: (j: Joints) => React.ReactNode};
+export type CharProps = RigInput & {pal: Palette; mood?: Mood; blink?: number; look?: number; glow?: number; shadow?: boolean; still?: boolean; id: string; children?: (j: Joints) => React.ReactNode; behind?: (j: Joints) => React.ReactNode};
 
 const shade = (hex: string, k: number) => {
   const n = parseInt(hex.slice(1), 16); const f = (v: number) => Math.round(Math.max(0, Math.min(255, k > 1 ? v + (255 - v) * (k - 1) : v * k)));
@@ -20,8 +21,15 @@ const Cap: React.FC<{a: number[]; b: number[]; w: number; fill: string; s: numbe
 );
 
 export const Character: React.FC<CharProps> = (props) => {
-  const {pal, s = 1, f = 1, mood = 'neutral', blink = 0, look = 0, glow = 0, shadow = true, id} = props;
-  const J = rig(props);
+  const {pal, s = 1, f = 1, mood = 'neutral', look = 0, glow = 0, shadow = true, id} = props;
+  // Life: automatic blinking and breathing (deterministic per character id).
+  const frame = useCurrentFrame();
+  const seed = id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const bp = 96 + (seed % 41), bph = (frame + seed * 7) % bp;
+  const autoBlink = props.still ? 0 : interpolate(bph, [0, 2, 4, 6], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const blink = Math.max(props.blink ?? 0, autoBlink);
+  const breath = props.breath ?? (props.still ? 0 : loop(frame + seed, 84, 0, 1));
+  const J = rig({...props, breath});
   const lx = -f, legW = 37 * s, armW = 29 * s, tw = 60 * s, r = 34 * s;
   const dk = (c: string) => shade(c, 0.68);
   const foot = (L: number[][], col: string) => {const e = L[2]; return (

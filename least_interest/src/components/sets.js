@@ -43,3 +43,9 @@ export function nightStore(t){const c=C();c.fillStyle=lg(0,0,0,H,[[0,'#040406'],
   c.fillStyle='#0a0a0c';c.fillRect(344,940,36,120);c.fillStyle='#E5383B';c.fillRect(350,950,24,8);c.fillStyle='#08080a';rr(190,1300,140,60,6);c.fill();
   c.fillStyle=lg(0,FL,0,H,[[0,'#17171c'],[1,'#050506']]);c.fillRect(0,FL,W,H-FL);c.globalCompositeOperation='screen';c.fillStyle=rg(280,1150,0,420,[[0,'rgba(255,120,120,.18)'],[1,'rgba(255,120,120,0)']]);c.fillRect(0,700,800,900)});
  rain(t,.5,4,0,690,W,800,60,24)}
+// ---- v3 set variants with frame-driven light events ----
+export function hookSet(t){const f=t*30;const fl=f>=48&&f<60?[1,.35,.9,.5,1,.7,1,.85,1,.9,1,1][Math.floor(f-48)]:1;stage(t,[[360,fl,'#ff8a9c'],[720,1,'#ffffff']])}
+export function carLotSheen(t){carLot(t);const f=t*30;const k=(f-56)/18;if(k>0&&k<1){const c=C();S(()=>{c.globalCompositeOperation='screen';const x=-200+k*1500;c.fillStyle=lg(x-120,0,x+120,0,[[0,'rgba(255,255,255,0)'],[.5,'rgba(255,250,240,.55)'],[1,'rgba(255,255,255,0)']]);c.fillRect(x-120,700,240,1000)})}}
+export function nightStoreNeon(t){nightStore(t);const c=C();const f=Math.floor(t*30);const on=[1,1,1,.2,1,1,1,1,.3,1,1,1,1,1,.15,1][f%16];
+ S(()=>{c.font='900 54px Black';c.textAlign='center';c.textBaseline='middle';c.shadowColor=CR;c.shadowBlur=30*on;c.fillStyle=`rgba(255,90,95,${.25+.75*on})`;c.fillText('OPEN 24/7',770,770);c.shadowBlur=0;
+  c.globalCompositeOperation='screen';c.fillStyle=rg(770,780,0,300,[[0,`rgba(229,56,59,${.18*on})`],[1,'rgba(229,56,59,0)']]);c.fillRect(470,600,600,500)})}
