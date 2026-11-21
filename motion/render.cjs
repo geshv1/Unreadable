@@ -18,6 +18,8 @@ const out = args.out || `${comp}.mp4`;
   page.on('pageerror', (e) => console.error('page error:', e.message));
   await page.goto('file://' + path.resolve(__dirname, 'index.html') + `?comp=${comp}&render=1`);
   await page.evaluate(() => window.ready);
+  const size = await page.evaluate(() => ({ w: window.canvas.width, h: window.canvas.height }));
+  await page.setViewportSize({ width: size.w, height: size.h });
   const duration = await page.evaluate(() => window.COMP.duration);
   if (args.cues) {
     fs.writeFileSync(args.cues, JSON.stringify(await page.evaluate(() => window.COMP.cues || [])));

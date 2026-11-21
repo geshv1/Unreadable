@@ -1,0 +1,17 @@
+{
+  "voice": "am_michael",
+  "speed": 1.08,
+  "preroll": 0.12,
+  "tail": 2.4,
+  "lines": [
+    { "id": "hook",   "gap": 0.0,  "say": "Never laugh at someone's chapter one.",                                  "show": "Never laugh at someone's *chapter one.*" },
+    { "id": "study",  "gap": 0.45, "say": "In 2013, researchers asked 19,000 people how much they'd changed in ten years. And how much they'd change in the next ten.", "show": "In *2013,* researchers asked *19,000 people* how much they'd *changed* in ten years. And how much they'd change in the *next ten.*" },
+    { "id": "every",  "gap": 0.3,  "say": "At every age, people expected far less change ahead than they'd just been through.", "show": "At every age, people expected *far less change* ahead than they'd just been through." },
+    { "id": "name",   "gap": 0.3,  "say": "Psychologists call it the end of history illusion.",                     "show": "Psychologists call it the *end of history illusion.*" },
+    { "id": "others", "gap": 0.4,  "say": "We do it to others too. We freeze them at their worst.",                 "show": "We do it to *others* too. We *freeze* them at their worst." },
+    { "id": "me",     "gap": 0.45, "say": "As a teenager, my grades dropped and I ran with the wrong people.",      "show": "As a teenager, my grades *dropped* and I ran with the *wrong people.*" },
+    { "id": "gym",    "gap": 0.2,  "say": "Then I walked into a boxing gym.",                                      "show": "Then I walked into a *boxing gym.*" },
+    { "id": "concl",  "gap": 0.5,  "say": "So don't mock anyone's life. You don't know what's coming tomorrow.",    "show": "So don't *mock* anyone's life. You don't know what's coming *tomorrow.*" },
+    { "id": "cta",    "gap": 0.6,  "say": "My 20 rounds from the ring are in The Complete Fighter. Link in bio.", "show": "My *20 rounds* from the ring are in *The Complete Fighter.* Link in bio." }
+  ]
+}

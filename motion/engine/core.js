@@ -93,8 +93,10 @@
   };
 
   M.Timeline = class {
-    constructor(duration) {
+    constructor(duration, w = M.W, h = M.H) {
       this.duration = duration;
+      this.w = w;
+      this.h = h;
       this.items = [];
     }
     add(start, dur, draw) {
@@ -106,7 +108,7 @@
       ctx.globalAlpha = 1;
       ctx.filter = 'none';
       ctx.fillStyle = M.C.bg;
-      ctx.fillRect(0, 0, M.W, M.H);
+      ctx.fillRect(0, 0, this.w, this.h);
       for (const it of this.items) {
         if (t < it.start || t > it.start + it.dur) continue;
         ctx.save();

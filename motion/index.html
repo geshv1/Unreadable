@@ -6,11 +6,11 @@
 <style>
   html, body { margin: 0; height: 100%; background: #0d0d0d; color: #aaa; font: 13px Inter, system-ui, sans-serif; }
   body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
-  canvas { height: 86vh; aspect-ratio: 9 / 16; background: #000; }
+  canvas { max-height: 86vh; max-width: 96vw; background: #000; }
   .ui { display: flex; gap: 10px; align-items: center; width: min(48vh, 92vw); }
   .ui input { flex: 1; }
   body.render { display: block; background: #000; }
-  body.render canvas { height: auto; width: 1080px; }
+  body.render canvas { height: auto; width: auto; }
   body.render .ui { display: none; }
 </style>
 </head>
@@ -31,10 +31,14 @@
 <script src="comps/alone.js" onerror="void 0"></script>
 <script src="comps/timing-grip.js" onerror="void 0"></script>
 <script src="comps/grip.js" onerror="void 0"></script>
+<script src="comps/timing-tomorrow.js" onerror="void 0"></script>
+<script src="comps/tomorrow.js" onerror="void 0"></script>
 <script>
   const q = new URLSearchParams(location.search);
   const comp = M.comps[q.get('comp') || 'preview'];
   const canvas = document.getElementById('c');
+  canvas.width = comp.width || 1080;
+  canvas.height = comp.height || 1920;
   const ctx = canvas.getContext('2d');
   window.canvas = canvas;
   window.COMP = comp;
