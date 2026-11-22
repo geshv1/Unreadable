@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+"""Video 6: generate the narrator with Kokoro-82M (local) and write word timings.
+
+KOKORO_DIR must hold model_ts.onnx and voices.npz (see video/voice.py).
+Writes out/voice.wav and out/timings.json
+"""
+import json, os, subprocess, sys
+
+import numpy as np
+import soundfile as sf
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(HERE))
+sys.path.insert(0, HERE)
+import voice as V  # noqa: E402  (synth + Kokoro helpers from video 1)
+from kokoro_onnx import Kokoro  # noqa: E402
+from script import LINES, GAPS  # noqa: E402
+
+V.VOICE = os.environ.get("VOICE", "am_michael")
+SPEED, PITCH, LEAD = 1.06, 0.94, 0.25
+
+
+def synth_split(k, text, speed):
+    """Like voice.synth, but splits phoneme words that merge several text words ("in the")."""
+    import re
+    from kokoro_onnx.sliding import token_edges
+    ph = " ".join(k.tokenizer.phonemize(text, "en-us").split())
+    vocab = k.tokenizer.vocab
+    toks, pwords = [], []          # pwords: [start_token, n_phonetic_chars]
+    for i, ch in enumerate(ph):
+        if ch not in vocab:
+            continue
+        if ch != " " and (i == 0 or ph[i - 1] == " "):
+            pwords.append([len(toks), 0])
+        if ch != " " and ch not in ",.!?;:" and pwords:
+            pwords[-1][1] += 1
+        toks.append(vocab[ch])
+    words = text.split()
+    wl = [max(1, len([c for c in " ".join(k.tokenizer.phonemize(re.sub(r"[^\w']", "", w), "en-us").split())
+                      if c in vocab and c != " "])) for w in words]
+    starts, wi = [], 0
+    for pi, (st, n) in enumerate(pwords):
+        starts.append(st)
+        acc = wl[wi]
+        wi += 1
+        while wi < len(words) and (len(words) - wi) > (len(pwords) - pi - 1) and acc + wl[wi] <= n + 1:
+            starts.append(st + acc)
+            acc += wl[wi]
+            wi += 1
+    assert len(starts) == len(words), (text, ph, len(starts), len(words))
+    style = k.voices[V.VOICE][len(toks) - 1].astype(np.float32)
+    wav, dur = k.sess.run(None, {"input_ids": np.array([[0, *toks, 0]], np.int64), "style": style,
+                                 "speed": np.array([speed], np.float32)})
+    wav, dur = wav.ravel(), dur.ravel()
+    edges = token_edges(dur, len(wav))
+    onsets = [edges[t + 1] / V.SR for t in starts]
+    loud = np.nonzero(np.abs(wav) > 0.01)[0]
+    a, b = max(loud[0] - int(0.03 * V.SR), 0), min(loud[-1] + int(0.08 * V.SR), len(wav))
+    onsets = [max(o - a / V.SR, 0.0) for o in onsets]
+    onsets[0] = 0.0
+    return wav[a:b], onsets, ph
+
+
+def main():
+    k = Kokoro(os.path.join(V.KDIR, "model_ts.onnx"), os.path.join(V.KDIR, "voices.npz"))
+    clips, t, out = [], LEAD, []
+    for i, line in enumerate(LINES):
+        wav, onsets, ph = synth_split(k, line["voice"], SPEED)
+        words = line["voice"].split()
+        assert len(onsets) == len(words), (line["voice"], ph)
+        clips.append((t, wav))
+        out.append({"text": line["voice"], "start": round(t, 3), "end": round(t + len(wav) / V.SR, 3),
+                    "words": [[w, round(t + o, 3)] for w, o in zip(words, onsets)]})
+        t += len(wav) / V.SR + (GAPS[i] if i < len(GAPS) else 0)
+    total = t + 0.1
+    track = np.zeros(int(total * V.SR) + 1, np.float32)
+    for t0, wav in clips:
+        i0 = int(round(t0 * V.SR))
+        track[i0:i0 + len(wav)] += wav
+    raw = os.path.join(HERE, "out", "_raw.wav")
+    sf.write(raw, track / np.abs(track).max() * 0.89, V.SR)
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", raw, "-af",
+                    f"rubberband=pitch={PITCH}:formant=preserved,highpass=f=60,"
+                    "equalizer=f=140:t=q:w=1:g=3,acompressor=threshold=-20dB:ratio=3:attack=5:release=80,"
+                    "loudnorm=I=-14:TP=-1.5:LRA=7", "-ar", "48000", "-ac", "2",
+                    os.path.join(HERE, "out", "voice.wav")], check=True)
+    os.remove(raw)
+    json.dump({"voice": V.VOICE, "speech_end": round(t, 3), "lines": out},
+              open(os.path.join(HERE, "out", "timings.json"), "w"), indent=1)
+    for l in out:
+        print(f"{l['start']:6.2f}-{l['end']:6.2f}  {l['text']}")
+    print("speech ends", round(t, 2))
+
+
+if __name__ == "__main__":
+    main()
