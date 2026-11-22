@@ -1,0 +1,22 @@
+{
+  "voice": "am_michael",
+  "speed": 1.12,
+  "preroll": 0.12,
+  "tail": 2.6,
+  "lines": [
+    { "id": "hook",    "gap": 0.0,  "fx": "hook", "say": "The donkey works harder than the lion.",   "show": "The donkey works *harder* than the lion." },
+    { "id": "why",     "gap": 0.3,  "say": "So why isn't the donkey king?",                       "show": "So why isn't the donkey *king?*" },
+    { "id": "society", "gap": 0.45, "say": "Society says the hardest worker wins.",               "show": "Society says the *hardest worker wins.*" },
+    { "id": "study",   "gap": 0.3,  "say": "But across 88 studies, practice explained only 12% of the difference in performance.", "show": "But across #88 studies, practice explained only *#12%* of the difference in performance." },
+    { "id": "mind",    "gap": 0.3,  "say": "Hours matter. How you use them matters more.",        "show": "Hours matter. *How you use them* matters more." },
+    { "id": "rest",    "gap": 0.45, "say": "A lion rests most of the day. It watches. It waits. Then it strikes.", "show": "A lion rests most of the day. It *watches.* It *waits.* Then it *strikes.*" },
+    { "id": "paper",   "gap": 0.45, "say": "In one experiment, a newspaper printed a message in huge letters.", "show": "In one experiment, a newspaper printed a message in [huge letters.]" },
+    { "id": "quote",   "gap": 0.2,  "fx": "type", "say": "Stop counting. There are 43 photographs in this newspaper.", "show": "\"Stop counting. There are 43 photographs in this newspaper.\"" },
+    { "id": "lucky",   "gap": 0.3,  "say": "Lucky people saw it. Unlucky people kept counting.",  "show": "*Lucky* people saw it. Unlucky people *kept counting.*" },
+    { "id": "attn",    "gap": 0.25, "say": "Opportunity isn't luck. It's attention.",             "show": "Opportunity isn't ~luck.~ It's *attention.*" },
+    { "id": "grit",    "gap": 0.45, "say": "At West Point, grit predicted who survived the brutal first summer better than entrance scores.", "show": "At West Point, *grit* predicted who survived the brutal first summer better than entrance scores." },
+    { "id": "heart",   "gap": 0.25, "say": "That's the lion's heart.",                            "show": "That's the *lion's heart.*" },
+    { "id": "end",     "gap": 0.4,  "say": "Work hard. Think harder. And never quit.",            "show": "Work hard. Think *harder.* And *never quit.*" },
+    { "id": "cta",     "gap": 0.55, "say": "Donkey or lion? Find out what type of fighter you are. Take my 2-minute quiz. Link in bio.", "show": "*Donkey or lion?* Find out what type of *fighter* you are. Take my [2-minute quiz.] Link in bio." }
+  ]
+}

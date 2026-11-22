@@ -20,6 +20,7 @@ case "$COMP" in
   grip)  SCRIPT=scripts/grip.json;  NAME=grip;  OUT=out/losing-grip.mp4 ;;
   tomorrow) SCRIPT=scripts/tomorrow.json; NAME=tomorrow; OUT=out/chapter-one.mp4 ;;
   smart) SCRIPT=scripts/smart.json; NAME=smart; OUT=out/four-strange-things.mp4 ;;
+  lion)  SCRIPT=scripts/lion.json;  NAME=lion;  OUT=out/donkey-and-lion.mp4 ;;
   *)     SCRIPT=scripts/$COMP.json; NAME=$COMP; OUT=out/$COMP.mp4 ;;
 esac
 B=build/$COMP
