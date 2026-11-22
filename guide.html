@@ -7,16 +7,18 @@
 <meta name="description" content="A 12-week interactive program by geshv1: train your mind, handle pressure like a fighter, and build real strength with your own bodyweight.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Lora:ital,wght@1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<!-- digits only: Instrument Serif's "1" reads like an "l" -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&text=0123456789&display=swap" rel="stylesheet">
 <style>
 /* Minimal: one dark world, bone text, one red accent. A fight card read top to bottom,
    sections numbered as rounds. No moving decoration; the proof and the words do the work. */
 :root{
-  --bg:#0b0b0a; --surface:#141412; --surface-2:#1b1a18; --ink:#ece8e0; --muted:#8f897f;
-  --line:#2a2825; --red:#c4161c; --red-soft:#e0343a;
-  --display:"Anton","Impact","Arial Narrow",sans-serif;
+  --bg:#08080b; --surface:#111116; --surface-2:#17171d; --ink:#f1f2f5; --soft:#c9cbd3; --muted:#868893;
+  --line:#23242c; --red:#d42a3c; --red-soft:#f0505f; --glow:rgba(240,80,95,.45);
+  --display:"Playfair Display","Instrument Serif","Times New Roman",Georgia,serif;
   --body:"Archivo","Helvetica Neue",Arial,sans-serif;
-  --serif:"Lora",Georgia,serif;
+  --serif:var(--display);
   --max:1120px;
   color-scheme:dark;
 }
@@ -208,6 +210,80 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
+}
+
+/* ===== Spotlight style: matches the quiz and the videos.
+   Near-black stage, white and cool grey, one crimson accent, serif italic headlines, wide-tracked caps. ===== */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;background:
+  radial-gradient(1px 1px at 8% 14%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 23% 62%,#fff 50%,transparent 51%),
+  radial-gradient(1px 1px at 41% 9%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 57% 38%,#fff 50%,transparent 51%),
+  radial-gradient(1px 1px at 72% 81%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 88% 22%,#fff 50%,transparent 51%),
+  radial-gradient(1px 1px at 94% 58%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 15% 88%,#fff 50%,transparent 51%),
+  radial-gradient(1px 1px at 63% 66%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 33% 31%,#fff 50%,transparent 51%)}
+h1,h2,h3{text-transform:none;letter-spacing:-.01em;font-variant-numeric:lining-nums}
+h1,h2{font-style:italic}
+.hero h1{font-size:clamp(50px,7.6vw,100px);line-height:1}
+.r,.hero h1 .r,.final h2 .r,.cap .year.r{color:var(--red-soft);text-shadow:0 0 28px var(--glow)}
+.eyebrow{display:flex;align-items:center;gap:14px;font-family:var(--body);font-weight:500;font-size:11.5px;letter-spacing:.38em;color:var(--soft)}
+.eyebrow::after{content:"";flex:0 0 28px;height:1px;background:#4a4c56}
+.center .eyebrow{justify-content:center}
+.center .eyebrow::before{content:"";flex:0 0 28px;height:1px;background:#4a4c56}
+.rule{position:relative;width:96px;height:1px;background:#3d3f49;margin:22px auto 0}
+.rule::after{content:"";position:absolute;left:50%;top:-1.5px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--red-soft);box-shadow:0 0 8px var(--glow)}
+.label{font-family:var(--body);font-weight:700;font-size:12px;letter-spacing:.42em;text-transform:uppercase}
+.btn{font-family:var(--body);font-weight:600;font-size:13px;letter-spacing:.26em;padding:19px 32px;border-radius:999px;box-shadow:0 14px 40px -14px var(--glow)}
+.btn:hover{background:#bb2234}
+.btn s{font-size:1em;opacity:.55}
+.ghost{background:transparent;box-shadow:none;border-color:#33343d}
+.ghost:hover{border-color:#5a5c66}
+.top{background:rgba(8,8,11,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.top .btn{font-size:11px;padding:10px 18px;box-shadow:none}
+.logo{font-family:var(--body);font-weight:700;font-size:13px;letter-spacing:.34em}
+.logo b{font-weight:700}
+.lede,.sec-head p,.final p{color:var(--soft)}
+.book{box-shadow:0 40px 90px -20px rgba(0,0,0,.9),0 0 80px -30px var(--glow)}
+.book img{border-radius:6px}
+.clip{border-radius:16px}
+.tag{font-family:var(--body);font-weight:600;letter-spacing:.34em;font-size:11px}
+.cap .year{font-style:italic;font-variant-numeric:lining-nums}
+.ba-note q,.shout blockquote,.story-text .pull{font-size:26px}
+.sign{font-family:var(--body);font-weight:600;font-size:12px;letter-spacing:.3em;text-transform:uppercase}
+.cards{border-radius:16px;overflow:hidden}
+.card h3{font-size:30px}
+.card .fix b{color:var(--red-soft)}
+.card.you{box-shadow:inset 0 0 0 1px var(--red-soft),0 0 40px -20px var(--glow);background:radial-gradient(80% 60% at 50% 0,rgba(212,42,60,.14),transparent 70%),var(--surface)}
+.you-tag{font-family:var(--body);font-weight:600;font-size:10px;letter-spacing:.28em;border-radius:999px;padding:5px 10px}
+.num{font-style:italic;color:#3b3d47;font-variant-numeric:lining-nums}
+.part h3{font-size:36px}
+.part .len,.launch{letter-spacing:.3em;font-size:11px}
+.part li::before{background:var(--red-soft);box-shadow:0 0 6px var(--glow)}
+.stats{border-radius:16px;overflow:hidden}
+.stat b{font-variant-numeric:lining-nums tabular-nums}
+.page img{border-radius:10px}
+.story-text .pull{border-left-color:var(--red-soft)}
+.offer{border-radius:18px;overflow:hidden}
+.offer-l{background:radial-gradient(70% 50% at 0 0,rgba(212,42,60,.12),transparent 70%),var(--surface)}
+.big-price strong{font-variant-numeric:lining-nums}
+.big-price s{color:#4f515b}
+#countdown{font-family:var(--body);font-weight:500;font-size:14px;letter-spacing:.2em;color:var(--soft)}
+summary .pm::before,summary .pm::after{height:1.5px}
+.mbar{background:rgba(8,8,11,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.mbar .p{font-family:var(--display);font-variant-numeric:lining-nums}
+.mbar .btn{font-size:11px;padding:13px 18px}
+
+/* closing stage: the same two fighters as the quiz */
+.final{padding:96px 0 110px}
+.final h2{font-size:clamp(50px,8vw,104px);line-height:1;margin-top:22px}
+.stage{position:relative;max-width:440px;margin:8px auto 0}
+.stage img{display:block;width:100%;height:auto;-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(transparent,#000 9%,#000 78%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(transparent,#000 9%,#000 78%,transparent);mask-composite:intersect}
+.stage .labels span{position:absolute;top:77%;transform:translateX(-50%);padding-left:.42em;white-space:nowrap}
+.stage .labels span:first-child{left:30.6%;color:var(--red-soft);text-shadow:0 0 18px var(--glow)}
+.stage .labels span:last-child{left:69.4%;color:var(--ink);text-shadow:0 0 18px rgba(255,255,255,.35)}
+@media (max-width:560px){
+  .eyebrow{letter-spacing:.26em;gap:10px}
+  .eyebrow::after,.center .eyebrow::before{flex-basis:18px}
+  .stage{margin-left:-22px;margin-right:-22px}
+  .final{padding:72px 0 80px}
 }
 </style>
 </head>
@@ -420,12 +496,12 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
         <div class="eyebrow">Round 07 · Your corner</div>
         <h3 style="margin-top:14px">Everything you get</h3>
         <ul>
-          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#c4161c"/></svg><span><b>The Complete Fighter</b>, 76-page interactive PDF</span></li>
-          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#c4161c"/></svg><span>Part 1: Strengthen Your Mind, 6-week program</span></li>
-          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#c4161c"/></svg><span>Part 2: The Life of a Fighter, 20 daily rounds</span></li>
-          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#c4161c"/></svg><span>Part 3: The Calisthenics Blueprint, 12-week plan</span></li>
-          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#c4161c"/></svg><span>Level test, trackers and a 36-workout checklist</span></li>
-          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#c4161c"/></svg><span>Works on iPhone, Android and computer</span></li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span><b>The Complete Fighter</b>, 76-page interactive PDF</span></li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span>Part 1: Strengthen Your Mind, 6-week program</span></li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span>Part 2: The Life of a Fighter, 20 daily rounds</span></li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span>Part 3: The Calisthenics Blueprint, 12-week plan</span></li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span>Level test, trackers and a 36-workout checklist</span></li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span>Works on iPhone, Android and computer</span></li>
         </ul>
       </div>
       <div class="offer-r">
@@ -461,9 +537,15 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 </section>
 
 <!-- FINAL -->
-<section class="final">
+<section class="final center">
   <div class="wrap" style="position:relative">
+    <div class="eyebrow">Same age. Same city.</div>
     <h2 class="rv">Strong body.<br>Strong mind.<br><span class="r">Keep fighting.</span></h2>
+    <div class="rule" aria-hidden="true"></div>
+    <div class="stage">
+      <img src="fighters.svg" width="320" height="372" loading="lazy" alt="Two stick-figure fighters squaring up, one under a crimson spotlight, one under a white spotlight">
+      <div class="labels label" aria-hidden="true"><span>Reactive</span><span>Steady</span></div>
+    </div>
     <p class="rv">Twelve weeks from now you'll either have the results or the excuses. Start today.</p>
     <a class="btn buy rv" href="#offer">Get it for €12 <s>€19</s> <span class="arrow">→</span></a>
   </div>
