@@ -7,6 +7,7 @@
   python -m edgebot compare-devig            # which margin-removal method is most accurate
   python -m edgebot timing                   # when the best prices appear, per league/market
   python -m edgebot picks                    # the pick sheet the bot would send (sample data)
+  python -m edgebot check arsenal chelsea --odds "1=2.1 X=3.4 2=3.6 O=1.9 U=1.95"   # one match, on demand
   python -m edgebot variants                 # every variant tested so far
   python -m edgebot holdout --confirm        # the ONE-TIME sealed final test
 """
@@ -66,6 +67,12 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--source", choices=["sample", "football_data"], default="sample")
     p.add_argument("--at", help="moment in UTC, e.g. 2025-03-14T12:01 (default: a recent Tue/Fri price snapshot)")
     p.add_argument("--horizon", type=float, default=72.0, help="hours ahead to look (default 72)")
+    p = sub.add_parser("check", help="check one match: link, team names, optional bookmaker odds")
+    p.add_argument("query", nargs="+", help="a match link or team names, e.g. arsenal chelsea")
+    p.add_argument("--odds", help="your bookmaker's odds, e.g. '1=2.10 X=3.40 2=3.60 O=1.90 U=1.95'")
+    p.add_argument("--at", help="pretend the time is this (UTC), for testing")
+    p.add_argument("--book", help="bookmaker (default: the first in bookmakers.playable)")
+    p.add_argument("--config")
     p = sub.add_parser("variants", help="list every variant tested")
     p = sub.add_parser("holdout", help="run the one-time sealed final test")
     _add_common(p)
@@ -126,6 +133,12 @@ def main(argv: list[str] | None = None) -> int:
         from .picks_cli import run_picks
 
         print(run_picks(cfg, args.source, args.at, args.horizon))
+        return 0
+
+    if args.cmd == "check":
+        from .check_cli import run_check
+
+        print(run_check(cfg, " ".join(args.query), args.odds, args.at, args.book))
         return 0
 
     if args.cmd == "variants":

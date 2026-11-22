@@ -102,23 +102,38 @@ def early_capture_time(kickoff_utc: datetime) -> datetime:
     return (ko_local - timedelta(days=2)).astimezone(ZoneInfo("UTC"))
 
 
-def parse_csv(path: Path, league: str, season_code: str, result_delay_minutes: int = 135) -> tuple[pd.DataFrame, pd.DataFrame]:
+def _season_of(kickoff: pd.Timestamp) -> str:
+    year = kickoff.year if kickoff.month >= 7 else kickoff.year - 1
+    return f"{year}/{str(year + 1)[-2:]}"
+
+
+def parse_csv(
+    path: Path,
+    league: str | None,
+    season_code: str | None,
+    result_delay_minutes: int = 135,
+    captured_at: datetime | None = None,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """league/season None: read them per row (the multi-league upcoming-fixtures file).
+    captured_at: when the pre-match prices were collected (if known, e.g. from the file's Last-Modified)."""
     df = _read_csv(path)
     dates = pd.to_datetime(df["Date"], dayfirst=True, format="mixed")
     times = df["Time"].fillna("15:00") if "Time" in df.columns else pd.Series("15:00", index=df.index)
     local = pd.to_datetime(dates.dt.strftime("%Y-%m-%d") + " " + times.astype(str).str.slice(0, 5), format="%Y-%m-%d %H:%M")
     kickoff = local.dt.tz_localize(LONDON, ambiguous=True, nonexistent="shift_forward").dt.tz_convert("UTC")
-    season = season_label(season_code)
+    leagues = df["Div"].astype(str).str.strip().values if league is None else [league] * len(df)
+    seasons = [_season_of(k) for k in kickoff] if season_code is None else [season_label(season_code)] * len(df)
     match_id = [
-        f"{league}-{k:%Y%m%d}-{_slug(h)}-{_slug(a)}" for k, h, a in zip(kickoff, df["HomeTeam"], df["AwayTeam"])
+        f"{lg}-{k:%Y%m%d}-{_slug(h)}-{_slug(a)}" for lg, k, h, a in zip(leagues, kickoff, df["HomeTeam"], df["AwayTeam"])
     ]
-    hg = pd.to_numeric(df.get("FTHG"), errors="coerce")
-    ag = pd.to_numeric(df.get("FTAG"), errors="coerce")
+    nan = pd.Series(float("nan"), index=df.index)
+    hg = pd.to_numeric(df["FTHG"], errors="coerce") if "FTHG" in df.columns else nan
+    ag = pd.to_numeric(df["FTAG"], errors="coerce") if "FTAG" in df.columns else nan
     matches = pd.DataFrame(
         {
             "match_id": match_id,
-            "league": league,
-            "season": season,
+            "league": leagues,
+            "season": seasons,
             "kickoff": kickoff.array,
             "home": df["HomeTeam"].astype(str).values,
             "away": df["AwayTeam"].astype(str).values,
@@ -128,7 +143,10 @@ def parse_csv(path: Path, league: str, season_code: str, result_delay_minutes: i
     )
     matches["kickoff"] = pd.to_datetime(matches["kickoff"], utc=True)
     matches["result_at"] = matches["kickoff"] + pd.Timedelta(minutes=result_delay_minutes)
-    early = pd.to_datetime([early_capture_time(k.to_pydatetime()) for k in matches["kickoff"]], utc=True)
+    if captured_at is not None:
+        early = pd.to_datetime([pd.Timestamp(captured_at)] * len(matches), utc=True)
+    else:
+        early = pd.to_datetime([early_capture_time(k.to_pydatetime()) for k in matches["kickoff"]], utc=True)
     close = matches["kickoff"] - pd.Timedelta(minutes=5)
 
     pieces = []
@@ -167,6 +185,47 @@ def parse_csv(path: Path, league: str, season_code: str, result_delay_minutes: i
     ko = odds["match_id"].map(dict(zip(matches["match_id"], matches["kickoff"])))
     odds = odds[odds["captured_at"] < ko]
     return matches, odds
+
+
+FIXTURES_URL = "https://www.football-data.co.uk/fixtures.csv"
+
+
+def download_fixtures(data_dir: Path, max_age_hours: float = 3.0, timeout: int = 60) -> tuple[Path, datetime]:
+    """Upcoming matches with current prices (free; the site refreshes it about twice a week).
+
+    Returns the file and the time its prices were published (HTTP Last-Modified)."""
+    import email.utils
+    import json
+    import time
+
+    dest = Path(data_dir) / "raw" / "football_data" / "fixtures.csv"
+    meta = dest.with_suffix(".json")
+    fresh = dest.exists() and meta.exists() and (time.time() - dest.stat().st_mtime) < max_age_hours * 3600
+    if not fresh:
+        with urllib.request.urlopen(FIXTURES_URL, timeout=timeout) as resp:  # noqa: S310 - fixed https host
+            content = resp.read()
+            last_mod = resp.headers.get("Last-Modified")
+        if not content.strip():
+            raise IOError("empty fixtures file")
+        published = email.utils.parsedate_to_datetime(last_mod) if last_mod else datetime.now(ZoneInfo("UTC"))
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(content)
+        meta.write_text(json.dumps({"published": published.isoformat()}))
+    published = datetime.fromisoformat(json.loads(meta.read_text())["published"])
+    return dest, published
+
+
+def load_fixtures(data_dir: Path, max_age_hours: float = 3.0) -> tuple[Dataset, datetime]:
+    path, published = download_fixtures(data_dir, max_age_hours)
+    return load_fixtures_file(path, published), published
+
+
+def load_fixtures_file(path: Path, published: datetime) -> Dataset:
+    matches, odds = parse_csv(path, None, None, captured_at=published)
+    odds = odds[odds["captured_at"] == pd.Timestamp(published)]  # closing columns are empty for future games
+    ds = Dataset(matches.drop_duplicates("match_id"), odds, source="fixtures", synthetic=False)
+    ds.notes.append(f"Upcoming matches from football-data.co.uk, prices published {published:%a %d %b %H:%M} UTC.")
+    return ds
 
 
 def load(leagues: list[str], seasons: list[str], data_dir: Path, result_delay_minutes: int = 135, auto_download: bool = True) -> Dataset:

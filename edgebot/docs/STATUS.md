@@ -38,6 +38,13 @@ What this means:
 
 Biggest unknown: Betano, efbet and Winbet are not in any free history. If they are slower than bet365 to move their prices, there could be more value. Only live paper trading can show this.
 
+## On-demand match check (new)
+
+`python -m edgebot check <link or team names> [--odds "1=.. X=.. 2=.. O=.. U=.."]` uses free upcoming-match prices
+(Betfair Exchange, 22 leagues). It gives fair prices, the minimum Betano odds worth betting, the value bet and stake,
+timing and parlays. It understands Betano links and Bulgarian team names, and never guesses an unknown match.
+Screenshots work through the Claude chat for now.
+
 ## Decisions so far
 
 - Bookmaker: **Betano** only (set in `config.yaml`). Betano isn't in free past data, so backtests use bet365 as a clearly labelled stand-in.

@@ -36,11 +36,29 @@ python -m edgebot backtest --strategy B   # own model blended with the market
 python -m edgebot backtest --leagues E0,E1,SP1,I1   # other leagues
 python -m edgebot compare-devig           # which margin-removal method is most accurate
 python -m edgebot timing                  # when the best prices appear, per league/market
+python -m edgebot picks                   # the pick sheet the bot would send
+python -m edgebot check arsenal chelsea   # check one match on demand (see below)
 python -m edgebot variants                # every variant tested so far (honesty log)
 python -m edgebot holdout --confirm       # the sealed final test: runs ONCE, then refuses
 ```
 
 Every report is saved in `reports/` (report.txt, bets.csv, audit_log.csv, timing.csv, summary.json).
+
+## Check one match (link, screenshot or team names)
+
+```bash
+python -m edgebot check "https://www.betano.bg/odds/liverpool-manchester-united/58231001/"
+python -m edgebot check "Ливърпул - Манчестър Юнайтед" --odds "1=1.80 X=4.10 2=4.60 O=1.62 U=2.30"
+```
+
+You get the fair price of every outcome and the **minimum Betano odds worth betting**. With Betano's odds
+you also get which bet has value (only one per match), the stake, a place-before time, what history says
+about timing in that league, and a parlay built from value bets on different matches checked that day.
+Screenshots: send one to Claude in the chat; it reads the teams and odds and runs this check.
+
+Free data limits: fair prices come from football-data.co.uk's upcoming-matches file (Betfair Exchange,
+22 European leagues, refreshed around Tuesday and Friday). Older prices lower the confidence and halve
+the stake; prices over 5 days old are refused. Unknown matches are never guessed.
 
 ## Settings
 
