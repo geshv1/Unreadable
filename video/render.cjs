@@ -4,6 +4,8 @@
      node video/render.cjs ep02-control                 # full render
      node video/render.cjs ep02-control --stills 0,3,9  # only PNG stills at these seconds (for checking)
      node video/render.cjs ep02-control --sections      # frame 0 + middle frame of each scene -> out/sections/
+     node video/render.cjs ep02-control --timeline      # only write out/<title>-timeline.json (then: python3 video/sfx/mix.py it)
+     node video/render.cjs ep02-control --nosfx         # skip the sound-effects mix
      node video/render.cjs ep02-control --debug         # overlay TikTok safe zones on stills            */
 const { chromium } = require('playwright');
 const { spawn } = require('child_process');
@@ -28,6 +30,10 @@ fs.mkdirSync(outDir, { recursive: true });
   const total = Math.round(info.duration * info.fps);
   const grab = (i) => page.evaluate((i) => { V.renderFrame(i); return document.getElementById('c').toDataURL('image/png'); }, i);
   const png = (d) => Buffer.from(d.split(',')[1], 'base64');
+
+  // timeline (scene times + resolved sound cues) for video/sfx/mix.py
+  fs.writeFileSync(path.join(outDir, `${name}-timeline.json`), JSON.stringify(info, null, 1));
+  if (opt('timeline')) { console.log('wrote timeline'); await browser.close(); return; }
 
   // --sections: frame 0 + the middle frame of every scene as PNGs (out/sections/)
   if (opt('sections')) {
@@ -76,4 +82,8 @@ fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(path.join(outDir, `${name}-cuts.txt`), lines.join('\n') + '\n');
   console.log(lines.join('\n'));
   console.log('wrote', mp4);
+  if (!opt('nosfx') && (info.sfx || []).length) {
+    const r = require('child_process').spawnSync('python3', [path.join(__dirname, 'sfx/mix.py'), path.join(outDir, `${name}-timeline.json`)], { stdio: 'inherit' });
+    if (r.status) throw new Error('sfx mix failed');
+  }
 })().catch((e) => { console.error(e); process.exit(1); });

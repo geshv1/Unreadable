@@ -7,6 +7,14 @@
     ep.scenes.forEach((s) => { s.start = t; s.end = t + s.dur; t = s.end; });
     ep.duration = t;
     ep.cuts = ep.scenes.slice(1).map((s) => ({ t: +s.start.toFixed(3), scene: s.id }));
+    // resolve scene-relative sound cues to absolute seconds (+ one whoosh per cut)
+    const byId = Object.fromEntries(ep.scenes.map((s) => [s.id, s]));
+    ep.sfxResolved = (ep.sfx || []).map((c) => {
+      if (!byId[c.scene]) throw new Error('sfx cue for unknown scene ' + c.scene);
+      return Object.assign({}, c, { t: +(byId[c.scene].start + c.at).toFixed(4) });
+    });
+    if (ep.sfxCut) for (const c of ep.cuts) ep.sfxResolved.push({ id: ep.sfxCut.id, gain: ep.sfxCut.gain, t: +(c.t + ep.sfxCut.offset).toFixed(4), note: 'cut -> ' + c.scene });
+    ep.sfxResolved.sort((a, b) => a.t - b.t);
     V.ep = ep;
     return ep;
   };

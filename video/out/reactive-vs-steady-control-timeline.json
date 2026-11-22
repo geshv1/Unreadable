@@ -1,0 +1,557 @@
+{
+ "title": "reactive-vs-steady-control",
+ "duration": 29.5,
+ "fps": 30,
+ "cuts": [
+  {
+   "t": 1.5,
+   "scene": "rule1-street"
+  },
+  {
+   "t": 5,
+   "scene": "rule2-phone"
+  },
+  {
+   "t": 11,
+   "scene": "rule3-office"
+  },
+  {
+   "t": 17,
+   "scene": "rule4-table"
+  },
+  {
+   "t": 23,
+   "scene": "ring-payoff"
+  },
+  {
+   "t": 26.5,
+   "scene": "end-card"
+  }
+ ],
+ "sfx": [
+  {
+   "scene": "hook",
+   "at": 0.326,
+   "id": "hop",
+   "gain": -16,
+   "pan": 0.4,
+   "args": {
+    "seed": 47
+   },
+   "t": 0.326
+  },
+  {
+   "scene": "hook",
+   "at": 0.385,
+   "id": "hop",
+   "gain": -13,
+   "pan": -0.4,
+   "t": 0.385
+  },
+  {
+   "scene": "hook",
+   "at": 0.56,
+   "id": "squeak",
+   "gain": -17,
+   "pan": -0.4,
+   "note": "feint pivot",
+   "t": 0.56
+  },
+  {
+   "scene": "hook",
+   "at": 0.58,
+   "id": "swing",
+   "gain": -16,
+   "pan": -0.2,
+   "note": "feint",
+   "t": 0.58
+  },
+  {
+   "scene": "hook",
+   "at": 0.769,
+   "id": "hop",
+   "gain": -14,
+   "pan": -0.4,
+   "args": {
+    "seed": 27
+   },
+   "t": 0.769
+  },
+  {
+   "scene": "hook",
+   "at": 0.853,
+   "id": "hop",
+   "gain": -16,
+   "pan": 0.4,
+   "args": {
+    "seed": 57
+   },
+   "t": 0.853
+  },
+  {
+   "scene": "hook",
+   "at": 1.154,
+   "id": "hop",
+   "gain": -13,
+   "pan": -0.4,
+   "args": {
+    "seed": 37
+   },
+   "t": 1.154
+  },
+  {
+   "id": "whoosh",
+   "gain": -13,
+   "t": 1.34,
+   "note": "cut -> rule1-street"
+  },
+  {
+   "scene": "rule1-street",
+   "at": 0,
+   "id": "city",
+   "gain": -23,
+   "note": "street bed",
+   "t": 1.5
+  },
+  {
+   "scene": "rule1-street",
+   "at": 0.2,
+   "id": "bump",
+   "gain": -9,
+   "pan": 0.35,
+   "args": {
+    "heavy": 0.7
+   },
+   "note": "stranger bumps Steady",
+   "t": 1.7
+  },
+  {
+   "scene": "rule1-street",
+   "at": 0.72,
+   "id": "bump",
+   "gain": -5,
+   "pan": -0.35,
+   "args": {
+    "seed": 14
+   },
+   "note": "stranger bumps Reactive",
+   "t": 2.22
+  },
+  {
+   "scene": "rule1-street",
+   "at": 0.95,
+   "id": "leash_on",
+   "gain": -8,
+   "pan": -0.45,
+   "note": "red leash appears",
+   "t": 2.45
+  },
+  {
+   "scene": "rule1-street",
+   "at": 1.2,
+   "id": "yank",
+   "gain": -4,
+   "pan": -0.45,
+   "note": "YANK",
+   "t": 2.7
+  },
+  {
+   "id": "whoosh",
+   "gain": -13,
+   "t": 4.84,
+   "note": "cut -> rule2-phone"
+  },
+  {
+   "scene": "rule2-phone",
+   "at": 0.25,
+   "id": "notify",
+   "gain": -7,
+   "note": "we need to talk",
+   "t": 5.25
+  },
+  {
+   "scene": "rule2-phone",
+   "at": 2,
+   "id": "typing",
+   "gain": -15,
+   "pan": -0.35,
+   "args": {
+    "d": 3.4
+   },
+   "t": 7
+  },
+  {
+   "scene": "rule2-phone",
+   "at": 2.05,
+   "id": "send",
+   "gain": -13,
+   "pan": -0.35,
+   "t": 7.05
+  },
+  {
+   "scene": "rule2-phone",
+   "at": 2.8,
+   "id": "send",
+   "gain": -13,
+   "pan": -0.35,
+   "t": 7.8
+  },
+  {
+   "scene": "rule2-phone",
+   "at": 2.86,
+   "id": "phone_down",
+   "gain": -9,
+   "pan": 0.4,
+   "note": "Steady: face-down",
+   "t": 7.86
+  },
+  {
+   "scene": "rule2-phone",
+   "at": 3.55,
+   "id": "send",
+   "gain": -12,
+   "pan": -0.35,
+   "t": 8.55
+  },
+  {
+   "scene": "rule2-phone",
+   "at": 4.3,
+   "id": "send",
+   "gain": -13,
+   "pan": -0.35,
+   "t": 9.3
+  },
+  {
+   "scene": "rule2-phone",
+   "at": 5.05,
+   "id": "send",
+   "gain": -13,
+   "pan": -0.35,
+   "t": 10.05
+  },
+  {
+   "id": "whoosh",
+   "gain": -13,
+   "t": 10.84,
+   "note": "cut -> rule3-office"
+  },
+  {
+   "scene": "rule3-office",
+   "at": 0.3,
+   "id": "scan",
+   "gain": -17,
+   "pan": -0.3,
+   "args": {
+    "d": 2.45
+   },
+   "t": 11.3
+  },
+  {
+   "scene": "rule3-office",
+   "at": 2.6,
+   "id": "confirm",
+   "gain": -10,
+   "pan": -0.35,
+   "note": "DATA ✓",
+   "t": 13.6
+  },
+  {
+   "scene": "rule3-office",
+   "at": 3.15,
+   "id": "scan",
+   "gain": -17,
+   "pan": 0.3,
+   "args": {
+    "d": 1,
+    "seed": 22
+   },
+   "t": 14.15
+  },
+  {
+   "scene": "rule3-office",
+   "at": 4.1,
+   "id": "glitch",
+   "gain": -9,
+   "pan": 0.35,
+   "note": "NO DATA",
+   "t": 15.1
+  },
+  {
+   "id": "whoosh",
+   "gain": -13,
+   "t": 16.84,
+   "note": "cut -> rule4-table"
+  },
+  {
+   "scene": "rule4-table",
+   "at": 0.05,
+   "id": "tick",
+   "gain": -14,
+   "args": {
+    "tock": false
+   },
+   "t": 17.05
+  },
+  {
+   "scene": "rule4-table",
+   "at": 0.61,
+   "id": "plop",
+   "gain": -12,
+   "pan": -0.35,
+   "args": {
+    "seed": 60
+   },
+   "t": 17.61
+  },
+  {
+   "scene": "rule4-table",
+   "at": 1.05,
+   "id": "tick",
+   "gain": -14,
+   "args": {
+    "tock": true
+   },
+   "t": 18.05
+  },
+  {
+   "scene": "rule4-table",
+   "at": 1.23,
+   "id": "plop",
+   "gain": -12,
+   "pan": -0.35,
+   "args": {
+    "seed": 61
+   },
+   "t": 18.23
+  },
+  {
+   "scene": "rule4-table",
+   "at": 1.85,
+   "id": "plop",
+   "gain": -12,
+   "pan": -0.35,
+   "args": {
+    "seed": 62
+   },
+   "t": 18.85
+  },
+  {
+   "scene": "rule4-table",
+   "at": 2.05,
+   "id": "tick",
+   "gain": -14,
+   "args": {
+    "tock": false
+   },
+   "t": 19.05
+  },
+  {
+   "scene": "rule4-table",
+   "at": 2.4699999999999998,
+   "id": "plop",
+   "gain": -12,
+   "pan": -0.35,
+   "args": {
+    "seed": 63
+   },
+   "t": 19.47
+  },
+  {
+   "scene": "rule4-table",
+   "at": 3.05,
+   "id": "tick",
+   "gain": -14,
+   "args": {
+    "tock": true
+   },
+   "t": 20.05
+  },
+  {
+   "scene": "rule4-table",
+   "at": 3.09,
+   "id": "plop",
+   "gain": -12,
+   "pan": -0.35,
+   "args": {
+    "seed": 64
+   },
+   "t": 20.09
+  },
+  {
+   "scene": "rule4-table",
+   "at": 3.71,
+   "id": "plop",
+   "gain": -12,
+   "pan": -0.35,
+   "args": {
+    "seed": 65
+   },
+   "t": 20.71
+  },
+  {
+   "scene": "rule4-table",
+   "at": 4.05,
+   "id": "tick",
+   "gain": -14,
+   "args": {
+    "tock": false
+   },
+   "t": 21.05
+  },
+  {
+   "scene": "rule4-table",
+   "at": 5.05,
+   "id": "tick",
+   "gain": -14,
+   "args": {
+    "tock": true
+   },
+   "t": 22.05
+  },
+  {
+   "id": "whoosh",
+   "gain": -13,
+   "t": 22.84,
+   "note": "cut -> ring-payoff"
+  },
+  {
+   "scene": "ring-payoff",
+   "at": 0.1,
+   "id": "swing",
+   "gain": -10,
+   "pan": -0.1,
+   "args": {
+    "seed": 80
+   },
+   "note": "miss",
+   "t": 23.1
+  },
+  {
+   "scene": "ring-payoff",
+   "at": 0.4,
+   "id": "swing",
+   "gain": -10,
+   "pan": 0.1,
+   "args": {
+    "seed": 81
+   },
+   "note": "miss",
+   "t": 23.4
+  },
+  {
+   "scene": "ring-payoff",
+   "at": 0.7,
+   "id": "swing",
+   "gain": -10,
+   "pan": -0.1,
+   "args": {
+    "seed": 82
+   },
+   "note": "miss",
+   "t": 23.7
+  },
+  {
+   "scene": "ring-payoff",
+   "at": 0.9999999999999999,
+   "id": "swing",
+   "gain": -10,
+   "pan": 0.1,
+   "args": {
+    "seed": 83
+   },
+   "note": "miss",
+   "t": 24
+  },
+  {
+   "scene": "ring-payoff",
+   "at": 1.3,
+   "id": "swing",
+   "gain": -10,
+   "pan": -0.1,
+   "args": {
+    "seed": 84
+   },
+   "note": "miss",
+   "t": 24.3
+  },
+  {
+   "scene": "ring-payoff",
+   "at": 1.84,
+   "id": "punch",
+   "gain": -1,
+   "pan": -0.2,
+   "note": "clean punch lands",
+   "t": 24.84
+  },
+  {
+   "scene": "ring-payoff",
+   "at": 2,
+   "id": "scuff",
+   "gain": -12,
+   "pan": -0.4,
+   "t": 25
+  },
+  {
+   "scene": "ring-payoff",
+   "at": 2.24,
+   "id": "scuff",
+   "gain": -14,
+   "pan": -0.45,
+   "args": {
+    "seed": 91
+   },
+   "t": 25.24
+  },
+  {
+   "id": "whoosh",
+   "gain": -13,
+   "t": 26.34,
+   "note": "cut -> end-card"
+  },
+  {
+   "scene": "end-card",
+   "at": 0.05,
+   "id": "bell",
+   "gain": -6,
+   "note": "CTA",
+   "t": 26.55
+  }
+ ],
+ "scenes": [
+  {
+   "id": "hook",
+   "start": 0,
+   "end": 1.5
+  },
+  {
+   "id": "rule1-street",
+   "start": 1.5,
+   "end": 5
+  },
+  {
+   "id": "rule2-phone",
+   "start": 5,
+   "end": 11
+  },
+  {
+   "id": "rule3-office",
+   "start": 11,
+   "end": 17
+  },
+  {
+   "id": "rule4-table",
+   "start": 17,
+   "end": 23
+  },
+  {
+   "id": "ring-payoff",
+   "start": 23,
+   "end": 26.5
+  },
+  {
+   "id": "end-card",
+   "start": 26.5,
+   "end": 29.5
+  }
+ ]
+}

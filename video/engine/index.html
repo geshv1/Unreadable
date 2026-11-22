@@ -46,7 +46,7 @@ canvas{display:block;width:540px;height:960px}
       const loop = () => { const i = Math.floor(((performance.now() - t0) / 1000) * V.ep.fps) % Math.round(V.ep.duration * V.ep.fps); V.renderFrame(i); requestAnimationFrame(loop); };
       loop();
     } else if (q.has('t')) V.renderFrame(Math.round(+q.get('t') * V.ep.fps));
-    return { duration: V.ep.duration, fps: V.ep.fps, cuts: V.ep.cuts, scenes: V.ep.scenes.map((s) => ({ id: s.id, start: s.start, end: s.end })) };
+    return { title: V.ep.title || V.ep.id, duration: V.ep.duration, fps: V.ep.fps, cuts: V.ep.cuts, sfx: V.ep.sfxResolved, scenes: V.ep.scenes.map((s) => ({ id: s.id, start: s.start, end: s.end })) };
   })();
 })();
 </script>
