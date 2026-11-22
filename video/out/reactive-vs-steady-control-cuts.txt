@@ -1,4 +1,4 @@
-reactive-vs-steady-control — scene transitions (28.5s @ 30fps)
+reactive-vs-steady-control — scene transitions (29.5s @ 30fps)
 
 00:00.00  frame   0  hook
 00:01.50  frame  45  rule1-street

@@ -9,7 +9,8 @@
      top       small spaced top line ("— TEXT —")
      headline  big italic serif headline
      red       the word(s) of the headline shown in red
-     sub       small subline (optional)                                           */
+     sub       small subline (optional; auto-fits, wraps after ' — ' if too long)
+     sub2      extra small bold line under the subline, e.g. the handle (optional)                                           */
 V.EPISODE = {
   id: 'ep02-control',
   series: 'Same age. Same city.',
@@ -40,7 +41,8 @@ V.EPISODE = {
     { id: 'ring-payoff', dur: 3.5, set: 'ring', action: 'ringPayoff',
       top: 'THE QUIET ONE WINS', headline: 'Stay unreadable.', red: 'unreadable.', sub: 'Same rules. Everywhere.' },
 
-    { id: 'end-card', dur: 2, set: 'stage', action: 'endCard',
-      top: 'SAME AGE. SAME CITY.', headline: 'Which one are you?', red: 'you?', sub: '@GESHV1', subColor: '#F4F5F7' },
+    { id: 'end-card', dur: 3, set: 'stage', action: 'endCard',
+      top: 'SAME AGE. SAME CITY.', headline: 'Which one are you?', red: 'you?',
+      sub: 'Free 2-min fighter quiz — link in bio.', subColor: '#F4F5F7', sub2: '@GESHV1' },
   ],
 };

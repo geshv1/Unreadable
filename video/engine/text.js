@@ -20,7 +20,7 @@
     for (let size = 124; size >= 104; size -= 2) if (measure(words, size) <= MAXW) return { size, lines: [words] };
     // two balanced lines
     let best = null;
-    for (let size = 108; size >= 70; size -= 2) {
+    for (let size = 100; size >= 70; size -= 2) {
       for (let k = 1; k < words.length; k++) {
         const a = words.slice(0, k), b = words.slice(k);
         const wa = measure(a, size), wb = measure(b, size);
@@ -74,10 +74,22 @@
     const L = headlineLayout(g, wordsWithColor(sc.headline, sc.red));
     let base = y + 44 + L.size * 0.8;
     L.lines.forEach((ln, i) => { drawLine(g, ln, base, L.size); if (i < L.lines.length - 1) base += L.size * 0.98; });
+    let y2 = base;
     if (sc.sub) {
-      g.font = `400 ${sc.subSize || 36}px ${V.FONT.sans}`; g.letterSpacing = '0.5px';
-      g.fillStyle = sc.subColor || '#C9CBD3'; g.textAlign = 'center';
-      g.fillText(sc.sub, CX, base + 66);
+      g.letterSpacing = '0.5px'; g.textAlign = 'center';
+      g.fillStyle = sc.subColor || '#D2D4DB';
+      let size = sc.subSize || 42, lines = [sc.sub];
+      const fits = (ls, s) => { g.font = `400 ${s}px ${V.FONT.sans}`; return ls.every((l) => g.measureText(l).width <= MAXW); };
+      while (!fits(lines, size) && size > 38) size -= 1;
+      if (!fits(lines, size)) { const i = sc.sub.indexOf(' — '); lines = i > 0 ? [sc.sub.slice(0, i + 2), sc.sub.slice(i + 3)] : [sc.sub]; size = sc.subSize || 42; while (!fits(lines, size) && size > 38) size -= 1; }
+      g.font = `400 ${size}px ${V.FONT.sans}`;
+      lines.forEach((l, i) => g.fillText(l, CX, base + 70 + i * size * 1.22));
+      y2 = base + 70 + (lines.length - 1) * size * 1.22;
+    }
+    if (sc.sub2) {
+      g.font = `700 34px ${V.FONT.sans}`; g.letterSpacing = '6px'; g.textAlign = 'center';
+      g.fillStyle = sc.sub2Color || '#F4F5F7';
+      g.fillText(sc.sub2, CX + 3, y2 + 62);
     }
     g.restore();
   };

@@ -16,9 +16,10 @@
       fist: '#f4f5f7', foot: '#f4f5f7', head: '#f3f4f6', ol: OL, extra: 'hair',
     },
     // the "third figure": dark grey, no spotlight
+    // charcoal body + thin light-grey outline so it never blends with Reactive's grey hoodie
     other: {
-      arm: ['#5a5d67', '#3d3f47', '#7c7f89'], leg: ['#4a4d56', '#33353c', '#666973'], torso: ['#535660', '#3a3c44', '#727580'],
-      fist: '#8d909a', foot: '#7a7d87', head: '#9a9da7', ol: '#0b0b0f', extra: null,
+      arm: ['#2A2A33', '#1f1f26', '#3a3a46'], leg: ['#2A2A33', '#1f1f26', '#3a3a46'], torso: ['#2A2A33', '#1f1f26', '#3a3a46'],
+      fist: '#2A2A33', foot: '#2A2A33', head: '#2A2A33', ol: '#b9bcc6', olW: 1.6, extra: null, flat: true, ink: '#d6d8de',
     },
   };
 
@@ -126,9 +127,9 @@
     g.globalAlpha = alpha; g.strokeStyle = col; g.lineWidth = w;
     g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); g.globalAlpha = 1;
   }
-  function capsule(g, a, b, w, pal, ol) {
+  function capsule(g, a, b, w, pal, ol, olW = 3.2) {
     g.lineCap = 'round';
-    line(g, a, b, ol, w + 3.2);
+    line(g, a, b, ol, w + olW);
     line(g, a, b, pal[0], w);
     const d = sub(b, a), L = len(d) || 1, u = mul(d, 1 / L), n = [-u[1], u[0]];
     const k = clamp((n[0] * LIGHT[0] + n[1] * LIGHT[1]) * 2.5, -1, 1);
@@ -141,20 +142,20 @@
     if (ol) { g.strokeStyle = ol; g.lineWidth = lw; g.stroke(); }
   }
   function fist(g, c, pal) {
-    circle(g, c, 5.7, pal.fist, pal.ol);
-    g.globalAlpha = 0.55; circle(g, [c[0] - 1.7, c[1] - 1.8], 2.1, '#fff'); g.globalAlpha = 1;
+    circle(g, c, 5.7, pal.fist, pal.ol, pal.olW ? 0.8 : 1.6);
+    if (!pal.flat) g.globalAlpha = 0.55; else g.globalAlpha = 0; circle(g, [c[0] - 1.7, c[1] - 1.8], 2.1, '#fff'); g.globalAlpha = 1;
   }
   function foot(g, c, pal) {
     const x = c[0] + 2.5, y = c[1] + 4;
     g.beginPath(); g.ellipse(x, y, 9.5, 4.8, 0, 0, Math.PI * 2); g.fillStyle = pal.foot; g.fill();
-    g.strokeStyle = pal.ol; g.lineWidth = 1.6; g.stroke();
-    g.globalAlpha = 0.9; g.beginPath(); g.ellipse(x - 2.5, y - 1.6, 4.5, 1.4, 0, 0, Math.PI * 2); g.fillStyle = '#fff'; g.fill(); g.globalAlpha = 1;
+    g.strokeStyle = pal.ol; g.lineWidth = pal.olW ? 0.8 : 1.6; g.stroke();
+    g.globalAlpha = pal.flat ? 0 : 0.9; g.beginPath(); g.ellipse(x - 2.5, y - 1.6, 4.5, 1.4, 0, 0, Math.PI * 2); g.fillStyle = '#fff'; g.fill(); g.globalAlpha = 1;
   }
-  function arm(g, s, e, h, pal) { capsule(g, s, e, 8.5, pal.arm, pal.ol); capsule(g, e, h, 8.5, pal.arm, pal.ol); fist(g, h, pal); }
-  function leg(g, hip, k, f, pal) { capsule(g, hip, k, 12, pal.leg, pal.ol); capsule(g, k, f, 11.5, pal.leg, pal.ol); foot(g, f, pal); }
+  function arm(g, s, e, h, pal) { capsule(g, s, e, 8.5, pal.arm, pal.ol, pal.olW); capsule(g, e, h, 8.5, pal.arm, pal.ol, pal.olW); fist(g, h, pal); }
+  function leg(g, hip, k, f, pal) { capsule(g, hip, k, 12, pal.leg, pal.ol, pal.olW); capsule(g, k, f, 11.5, pal.leg, pal.ol, pal.olW); foot(g, f, pal); }
 
   function torso(g, G, f, pal) {
-    capsule(g, G.C, G.P, 24, pal.torso, pal.ol);
+    capsule(g, G.C, G.P, 24, pal.torso, pal.ol, pal.olW);
     g.save(); g.translate(G.C[0], G.C[1]); g.rotate(G.a);
     if (pal.hoodie) {
       g.globalAlpha = 0.8; g.strokeStyle = '#5d6068'; g.lineWidth = 1.2;
@@ -171,8 +172,8 @@
   function head(g, G, f, pal) {
     const H = G.H;
     g.save(); g.translate(H[0], H[1]); g.rotate((f.headTilt || 0) + G.a * 0.5);
-    circle(g, [0, 0], 13.5, pal.head, pal.ol);
-    g.globalAlpha = 0.55; circle(g, [-4, -4.3], 5.1, '#fff'); g.globalAlpha = 1;
+    circle(g, [0, 0], 13.5, pal.head, pal.ol, pal.olW ? 0.8 : 1.6);
+    if (!pal.flat) { g.globalAlpha = 0.55; circle(g, [-4, -4.3], 5.1, '#fff'); g.globalAlpha = 1; }
     if (f.blush) { // red flush over the whole face
       g.globalAlpha = 0.55 * f.blush; circle(g, [3, 2], 12.4, '#ff5a6a'); g.globalAlpha = 1;
     }
@@ -188,14 +189,14 @@
       g.quadraticCurveTo(12, -9, 12, -4); g.quadraticCurveTo(4, -10, -3, -4); g.quadraticCurveTo(-8, 0, -13.5, 2); g.closePath();
       g.fillStyle = '#17181d'; g.fill(); g.strokeStyle = OL; g.lineWidth = 1.2; g.lineJoin = 'round'; g.stroke();
     }
-    face(g, f);
+    face(g, f, pal.ink);
     g.restore();
   }
 
   // Simple expressive faces (drawn only when f.expr is set — default rig is faceless like the original)
-  function face(g, f) {
+  function face(g, f, inkCol) {
     const e = f.expr; if (!e) return;
-    const ink = '#101116';
+    const ink = inkCol || '#101116';
     const lx = (f.look || 0) * 1.6;
     g.strokeStyle = ink; g.fillStyle = ink; g.lineCap = 'round'; g.lineJoin = 'round';
     const dot = (x, y, r = 1.7) => { g.beginPath(); g.arc(x + lx, y, r, 0, Math.PI * 2); g.fill(); };

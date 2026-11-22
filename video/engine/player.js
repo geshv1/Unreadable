@@ -85,6 +85,7 @@
   function drawSafe(g) {
     g.save(); g.fillStyle = 'rgba(0,160,255,0.18)';
     g.fillRect(0, 0, V.W, V.SAFE.top); g.fillRect(0, V.SAFE.bottom, V.W, V.H - V.SAFE.bottom); g.fillRect(V.SAFE.right, 0, V.W - V.SAFE.right, V.H);
+    g.fillStyle = 'rgba(0,160,255,0.08)'; g.fillRect(0, 0, 150, V.H);
     g.strokeStyle = 'rgba(0,200,255,0.8)'; g.lineWidth = 2; g.strokeRect(0, 400, V.W, 350);
     g.restore();
   }

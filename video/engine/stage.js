@@ -120,8 +120,8 @@
   // ---- labels under the floor
   V.drawLabels = function (g) {
     g.save();
-    g.font = `700 30px ${V.FONT.sans}`;
-    g.letterSpacing = '13px';
+    g.font = `700 38px ${V.FONT.sans}`;
+    g.letterSpacing = '12px';
     g.textAlign = 'center'; g.textBaseline = 'alphabetic';
     g.shadowColor = 'rgba(0,0,0,0.9)'; g.shadowBlur = 12;
     // letterSpacing adds trailing space; nudge right by half of it to stay centered

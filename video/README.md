@@ -7,6 +7,7 @@ Canvas renderer for the REACTIVE vs STEADY series. Same rig, palettes and type a
 node video/render.cjs ep02-control                  # -> video/out/<title>.mp4, <title>-frame0.png, <title>-cuts.txt
 node video/render.cjs ep02-control --stills 0,4.2   # PNG stills only (seconds), for checking
 node video/render.cjs ep02-control --stills 3 --debug   # stills with TikTok safe zones overlaid
+node video/render.cjs ep02-control --sections [--debug] # frame 0 + one frame per scene -> out/sections/
 ```
 Preview in a browser: open `video/engine/index.html?ep=ep02-control&play` (or `&t=12.5` for one frame).
 Output: 1080x1920, 30 fps, H.264 High, yuv420p, no audio.
@@ -21,3 +22,7 @@ Output: 1080x1920, 30 fps, H.264 High, yuv420p, no audio.
 4. Backgrounds: `engine/sets.js` (stage, street, room, office, table, ring). Add new ones there.
 
 The text system, spotlights (they follow each character's x), labels, swipe transitions and the cut list are automatic.
+
+## Next episode
+The brief for Pt. 3 ("Same day. Different control.", one continuous day with CONTROL meters) is saved in
+`briefs/ep03-same-day.md`, with notes on the engine changes it needs. Not built yet.

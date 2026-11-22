@@ -3,6 +3,7 @@
    Usage:
      node video/render.cjs ep02-control                 # full render
      node video/render.cjs ep02-control --stills 0,3,9  # only PNG stills at these seconds (for checking)
+     node video/render.cjs ep02-control --sections      # frame 0 + middle frame of each scene -> out/sections/
      node video/render.cjs ep02-control --debug         # overlay TikTok safe zones on stills            */
 const { chromium } = require('playwright');
 const { spawn } = require('child_process');
@@ -28,6 +29,15 @@ fs.mkdirSync(outDir, { recursive: true });
   const grab = (i) => page.evaluate((i) => { V.renderFrame(i); return document.getElementById('c').toDataURL('image/png'); }, i);
   const png = (d) => Buffer.from(d.split(',')[1], 'base64');
 
+  // --sections: frame 0 + the middle frame of every scene as PNGs (out/sections/)
+  if (opt('sections')) {
+    const dir = path.join(outDir, 'sections' + (opt('debug') ? '-debug' : ''));
+    fs.mkdirSync(dir, { recursive: true });
+    const picks = [[0, '00-frame0']].concat(info.scenes.map((s, k) => [Math.round(((s.start + s.end) / 2) * info.fps), `${String(k + 1).padStart(2, '0')}-${s.id}`]));
+    for (const [i, nm] of picks) { fs.writeFileSync(path.join(dir, `${nm}.png`), png(await grab(i))); console.log('wrote', nm, 'frame', i); }
+    await browser.close();
+    return;
+  }
   const stills = opt('stills');
   if (stills) {
     for (const s of String(stills).split(',')) {

@@ -21,7 +21,7 @@
       sPose = yanking ? V.lerpPose(hold, pull, Math.sin(seg(tl, Y0, Y1 + 0.2) * Math.PI)) : V.breathe(hold, tl, 1.2, 3);
       sPose = V.lerpPose(V.walkPose(0.95 * 11), sPose, seg(tl, 0.95, 1.08));
     }
-    const stranger = V.X({ x: sx, face: tl < 0.97 ? -1 : 1, pose: sPose, expr: tl > 0.65 ? 'sneer' : 'neutral' });
+    const stranger = V.X({ s: 0.9, x: sx, face: tl < 0.97 ? -1 : 1, pose: sPose, expr: tl > 0.65 ? 'sneer' : 'neutral' });
 
     // Steady: keeps walking right; small jolt at the bump, one glance back, spotlight follows him
     const stX = kf(tl, [[0, 660], [3.5, 770]], ease.lin);
@@ -58,13 +58,13 @@
           const slack = yanking ? 0 : tl < Y0 ? 70 : 26;
           V.leash(g, a, b, slack, Math.min(1, (tl - T_LEASH) / 0.08), 40 * V.pop(tl - T_LEASH));
         }
-        if (tl >= Y1) V.jagged(g, 360, 812, 196, 72, 'SAY THAT\nAGAIN?!', { size: 42, scale: V.pop(tl - Y1), seed: 8, shake: 10, rot: -0.03 });
+        if (tl >= Y1) V.jagged(g, 410, 812, 172, 72, 'SAY THAT\nAGAIN?!', { size: 42, scale: V.pop(tl - Y1), seed: 8, shake: 10, rot: -0.03 });
       },
     };
   };
 
   // ─────────────────────────────── RULE II — PHONE: a feint is a question
-  const ANGRY_MSGS = ['what??', 'talk about WHAT', 'seriously?!', 'here we go again', "i didn't do anything", 'ANSWER ME', '????', 'wow. ok.', 'fine. whatever.'];
+  const ANGRY_MSGS = ['what??', 'what did I do', 'ANSWER ME', '????', 'fine. whatever.'];
   V.actions.phoneFeint = function (tl) {
     const typing = tl > 2.0;
     let rPose = V.breathe(PO.phone, tl, 1.2, 3.5);
@@ -101,25 +101,25 @@
           V.roundRect(g, 540, V.FLOOR - 16, 74, 14, 5); g.fill(); g.stroke(); g.restore();
         }
         // notification: pops in at 0.25, then splits into both phones at 1.75–2.0
-        if (tl >= 0.25 && tl < 1.75) V.notification(g, 525, 812, 740, V.pop(tl - 0.25), 'MESSAGES', 'we need to talk');
+        if (tl >= 0.25 && tl < 1.75) V.notification(g, 540, 800, 760, V.pop(tl - 0.25), 'MESSAGES', 'we need to talk');
         if (tl >= 1.75 && tl < 2.02) {
           const u = ease.in(seg(tl, 1.75, 2.02));
           const sh = V.figPoint(steady, 'hF');
-          V.notification(g, V.lerp(525, rh[0], u), V.lerp(812, rh[1] - 30, u), 740, V.lerp(0.62, 0.08, u), 'MESSAGES', 'we need to talk');
-          V.notification(g, V.lerp(525, sh[0], u), V.lerp(812, sh[1] - 30, u), 740, V.lerp(0.62, 0.08, u), 'MESSAGES', 'we need to talk');
+          V.notification(g, V.lerp(540, rh[0], u), V.lerp(800, rh[1] - 30, u), 760, V.lerp(0.62, 0.08, u), 'MESSAGES', 'we need to talk');
+          V.notification(g, V.lerp(540, sh[0], u), V.lerp(800, sh[1] - 30, u), 760, V.lerp(0.62, 0.08, u), 'MESSAGES', 'we need to talk');
         }
         // Reactive's angry replies stack up fast
         if (typing) {
-          const t0 = 2.05, gap = 0.36;
+          // one at a time, max 2 on screen, left edge pinned inside the safe box (x >= 150)
+          const t0 = 2.05, gap = 0.75;
           const n = Math.min(ANGRY_MSGS.length, Math.floor((tl - t0) / gap) + 1);
-          for (let i = 0; i < n; i++) {
+          for (let i = Math.max(0, n - 2); i < n; i++) {
             const born = t0 + i * gap;
             const age = n - 1 - i; // 0 = newest
-            const slide = ease.out(seg(tl, born, born + 0.12));
-            const y = 1130 - (age - 1 + slide) * 74 - 74;
-            if (y < 770) continue;
-            const m = V.measureBubble(g, ANGRY_MSGS[i], 30);
-            V.bubble(g, { x: 28 + m.w / 2, y, text: ANGRY_MSGS[i], size: 30, fill: V.COL.red, color: '#fff', scale: V.pop(tl - born, 0.12) });
+            const slide = age ? ease.out(seg(tl, t0 + (i + 1) * gap, t0 + (i + 1) * gap + 0.12)) : 0;
+            const y = 810 - slide * 90;
+            const m = V.measureBubble(g, ANGRY_MSGS[i], 42, `700 42px ${V.FONT.sans}`);
+            V.bubble(g, { x: 156 + m.w / 2, y, text: ANGRY_MSGS[i], size: 42, font: `700 42px ${V.FONT.sans}`, fill: V.COL.red, color: '#fff', scale: V.pop(tl - born, 0.12) });
           }
         }
       },
@@ -163,24 +163,21 @@
         const tagsAll = ['ANGER', 'FEAR', 'SHAME'];
         const rs = { progress: seg(tl, 0.3, 2.6), tags: tagsAll.slice(0, tl > 1.7 ? 3 : tl > 1.1 ? 2 : tl > 0.6 ? 1 : 0) };
         if (tl >= 2.6) { rs.result = 'DATA'; rs.scale = V.pop(tl - 2.6); }
-        V.readout(g, V.POS.reactive, 814, rs);
+        V.readout(g, V.POS.reactive, 822, rs);
         const ss = { progress: 0.26 * seg(tl, 3.15, 4.3), label: tl > 3.15 ? 'READING…' : 'WAITING…', barColor: '#e8eaee', t: tl };
         if (tl >= 4.4) { ss.result = 'NODATA'; ss.glitch = 1 - seg(tl, 4.4, 5.4) * 0.7; ss.scale = V.pop(tl - 4.4); }
         else if (tl > 4.1) { ss.result = 'NODATA'; ss.glitch = 1; }
-        V.readout(g, V.POS.steady, 814, ss);
+        V.readout(g, V.POS.steady, 822, ss);
       },
     };
   };
 
   // ─────────────────────────────── RULE IV — TABLE: silence is pressure
-  const TALK = ['and another thing', 'listen', "I'm just saying", 'you never', 'blah blah', 'no but', 'hear me out', 'ok so', 'literally', 'anyway', 'LIKE', 'what I mean is', 'and ALSO', 'wait wait', 'my point is', 'just listen', 'seriously', 'blah'];
+  // Fewer, bigger bubbles: 6 short lines that stack on Reactive until he's buried to the neck
+  const TALK = ['listen', 'no but', 'you never', 'hear me out', 'my point is', 'blah blah'];
   const PILE = (() => {
-    const r = V.rng(44), slots = [];
-    for (let j = 0; j < TALK.length; j++) {
-      const row = Math.floor(j / 2), col = j % 2;
-      slots.push({ x: 320 + (col ? 78 : -78) + (r() - 0.5) * 40 + (row % 2 ? 20 : -20), y: V.FLOOR - 30 - row * 64, rot: (r() - 0.5) * 0.36, fill: r() > 0.5 ? '#F4F5F7' : '#D9DBE1' });
-    }
-    return slots;
+    const r = V.rng(44);
+    return TALK.map((_, j) => ({ x: 322 + (r() - 0.5) * 24, y: V.FLOOR - 44 - j * 80, rot: (r() - 0.5) * 0.14, fill: j % 2 ? '#F4F5F7' : '#DADCE2' }));
   })();
   V.actions.silenceTable = function (tl) {
     const handsUp = seg(tl, 4.25, 4.5);
@@ -199,14 +196,17 @@
       front(g) {
         // talk bubbles fly out of Reactive's mouth and pile on top of him
         const mouth = V.figPoint(reactive, 'H');
-        const t0 = 0.15, gap = 0.29;
+        const t0 = 0.25, gap = 0.62;
         for (let j = 0; j < TALK.length; j++) {
           const born = t0 + j * gap; if (tl < born) break;
-          const u = ease.inOut(seg(tl, born, born + 0.34));
+          const u = ease.inOut(seg(tl, born, born + 0.36));
           const s = PILE[j];
-          const x = V.lerp(mouth[0] + 60, s.x, u);
-          const y = V.lerp(mouth[1] - 40, s.y, u) - Math.sin(u * Math.PI) * 140;
-          V.bubble(g, { x, y, text: TALK[j], size: 25, fill: s.fill, color: '#101116', stroke: '#16171c', rot: s.rot * u, scale: V.pop(tl - born, 0.12) });
+          const fnt = `700 40px ${V.FONT.sans}`;
+          const m = V.measureBubble(g, TALK[j], 40, fnt);
+          const sx = Math.max(s.x, 150 + m.w / 2 + 10);
+          const x = V.lerp(Math.max(mouth[0] + 60, 150 + m.w / 2 + 10), sx, u);
+          const y = V.lerp(mouth[1] - 60, s.y, u) - Math.sin(u * Math.PI) * 110;
+          V.bubble(g, { x, y, text: TALK[j], size: 40, font: fnt, fill: s.fill, color: '#101116', stroke: '#16171c', rot: s.rot * u, scale: V.pop(tl - born, 0.12) });
         }
         // opponent sweats, fills the silence, gives in
         const oh = headPt(opp);
@@ -215,7 +215,7 @@
         let cur = null; for (const l of lines) if (tl >= l[0]) cur = l;
         if (cur) {
           const isWin = cur[1].startsWith('OK.');
-          V.bubble(g, { x: 640, y: 846, text: cur[1], size: isWin ? 36 : 30, fill: isWin ? '#FFFFFF' : '#C9CBD3', color: '#101116', tail: [oh[0] + 30, oh[1] - 40], scale: V.pop(tl - cur[0], 0.12) });
+          V.bubble(g, { x: 648, y: 846, text: cur[1], size: isWin ? 46 : 40, font: `700 ${isWin ? 46 : 40}px ${V.FONT.sans}`, fill: isWin ? '#FFFFFF' : '#C9CBD3', color: '#101116', tail: [oh[0] + 30, oh[1] - 40], scale: V.pop(tl - cur[0], 0.12) });
         }
       },
     };
@@ -255,7 +255,7 @@
         const h = headPt(reactive);
         V.impact(g, h[0] + 30, h[1], (tl - HIT) / 0.35);
         if (tl > 0.15 && tl < 1.6) {
-          g.save(); g.font = `800 34px ${V.FONT.sans}`; g.fillStyle = 'rgba(255,255,255,0.85)'; g.textAlign = 'center';
+          g.save(); g.font = `800 46px ${V.FONT.sans}`; g.fillStyle = '#ffffff'; g.textAlign = 'center';
           g.letterSpacing = '6px'; const i = Math.floor(tl / per);
           if (tl % per > 0.12) g.fillText('MISS', 560 + (i % 2 ? 30 : -10), 850 - (i % 3) * 10);
           g.restore();

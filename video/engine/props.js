@@ -71,26 +71,26 @@
 
   // Phone notification card
   V.notification = function (g, cx, cy, w, k, app, body, emojiFace = true) {
-    const h = 150;
+    const h = 176;
     withScale(g, cx, cy, k, () => {
       g.save();
       g.shadowColor = 'rgba(0,0,0,0.7)'; g.shadowBlur = 40; g.shadowOffsetY = 10;
       g.fillStyle = 'rgba(246,247,250,0.98)'; V.roundRect(g, cx - w / 2, cy - h / 2, w, h, 32); g.fill();
       g.restore();
       // app icon
-      const ix = cx - w / 2 + 28, iy = cy - h / 2 + 30;
-      g.fillStyle = V.COL.red; V.roundRect(g, ix, iy, 64, 64, 16); g.fill();
-      g.fillStyle = '#fff'; g.beginPath(); g.ellipse(ix + 32, iy + 30, 20, 15, 0, 0, 6.283); g.fill();
-      g.beginPath(); g.moveTo(ix + 18, iy + 38); g.lineTo(ix + 14, iy + 50); g.lineTo(ix + 28, iy + 42); g.fill();
+      const ix = cx - w / 2 + 28, iy = cy - h / 2 + 34;
+      g.fillStyle = V.COL.red; V.roundRect(g, ix, iy, 76, 76, 18); g.fill();
+      g.fillStyle = '#fff'; g.beginPath(); g.ellipse(ix + 38, iy + 35, 24, 18, 0, 0, 6.283); g.fill();
+      g.beginPath(); g.moveTo(ix + 21, iy + 45); g.lineTo(ix + 16, iy + 60); g.lineTo(ix + 33, iy + 50); g.fill();
       g.textAlign = 'left'; g.textBaseline = 'alphabetic';
-      g.fillStyle = '#6b6e78'; g.font = `600 24px ${V.FONT.sans}`; g.letterSpacing = '2px';
-      g.fillText(app, ix + 86, iy + 22); g.letterSpacing = '0px';
-      g.textAlign = 'right'; g.fillText('now', cx + w / 2 - 30, iy + 22);
-      g.textAlign = 'left'; g.fillStyle = '#0d0e12'; g.font = `700 46px ${V.FONT.sans}`;
-      g.fillText(body, ix + 86, iy + 74);
+      g.fillStyle = '#5b5e68'; g.font = `600 30px ${V.FONT.sans}`; g.letterSpacing = '2px';
+      g.fillText(app, ix + 98, iy + 26); g.letterSpacing = '0px';
+      g.textAlign = 'right'; g.fillText('now', cx + w / 2 - 30, iy + 26);
+      g.textAlign = 'left'; g.fillStyle = '#0d0e12'; g.font = `700 54px ${V.FONT.sans}`;
+      g.fillText(body, ix + 98, iy + 84);
       if (emojiFace) {
         const tw = g.measureText(body).width;
-        V.neutralEmoji(g, ix + 86 + tw + 34, iy + 58, 25);
+        V.neutralEmoji(g, ix + 98 + tw + 38, iy + 66, 29);
       }
     });
   };
@@ -145,7 +145,7 @@
 
   // Readout screen above a character. st: {progress 0..1, tags:[], result:'DATA'|'NODATA'|null, glitch 0..1, t}
   V.readout = function (g, cx, cy, st) {
-    const w = 290, h = 108, x = cx - w / 2, y = cy - h / 2;
+    const w = 330, h = 118, x = cx - w / 2, y = cy - h / 2;
     const k = st.scale == null ? 1 : st.scale;
     withScale(g, cx, cy, k, () => {
       const isNo = st.result === 'NODATA';
@@ -174,13 +174,13 @@
         g.letterSpacing = '0px';
         g.restore();
       } else {
-        g.fillStyle = '#C9CBD3'; g.font = `600 22px ${V.FONT.sans}`; g.letterSpacing = '5px';
-        g.fillText(st.label || 'READING…', cx + 3, y + 28); g.letterSpacing = '0px';
-        g.fillStyle = '#24262e'; g.fillRect(x + 22, y + 52, w - 44, 16);
-        g.fillStyle = st.barColor || V.COL.red; g.fillRect(x + 22, y + 52, (w - 44) * V.clamp(st.progress || 0), 16);
+        g.fillStyle = '#E4E6EB'; g.font = `700 34px ${V.FONT.sans}`; g.letterSpacing = '5px';
+        g.fillText(st.label || 'READING…', cx + 3, y + 30); g.letterSpacing = '0px';
+        g.fillStyle = '#24262e'; g.fillRect(x + 22, y + 56, w - 44, 16);
+        g.fillStyle = st.barColor || V.COL.red; g.fillRect(x + 22, y + 56, (w - 44) * V.clamp(st.progress || 0), 16);
         if (st.tags && st.tags.length) {
-          g.font = `700 20px ${V.FONT.sans}`; g.fillStyle = '#ffffff';
-          g.fillText(st.tags.join('  ·  '), cx, y + 88);
+          g.font = `800 34px ${V.FONT.sans}`; g.fillStyle = V.COL.red; g.letterSpacing = '3px';
+          g.fillText(st.tags[st.tags.length - 1], cx + 1, y + 96); g.letterSpacing = '0px';
         }
       }
     });
