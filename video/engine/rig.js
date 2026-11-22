@@ -1,0 +1,266 @@
+/* Character rig — same capsule-limbed fighters as fighters.svg (geometry, palettes, cap, hair),
+   rebuilt as an IK rig so scenes can pose them. Rig units: feet at y=0, cap top ≈ -125, facing +x. */
+(function () {
+  const V = window.V;
+  const { add, sub, mul, len, rot, clamp } = V;
+  const OL = '#16171c';
+
+  // Palettes copied from fighters.svg: [base, shade, highlight]
+  V.PAL = {
+    reactive: {
+      arm: ['#a3a6ae', '#6c6f77', '#cfd1d7'], leg: ['#6f727a', '#4a4c53', '#9a9da5'], torso: ['#8d9099', '#5d6068', '#b9bcc4'],
+      fist: '#eceef1', foot: '#f4f5f7', head: '#f3f4f6', ol: OL, extra: 'cap', hoodie: true,
+    },
+    steady: {
+      arm: ['#e6e8ec', '#aeb1b9', '#ffffff'], leg: ['#a7aab2', '#73767e', '#d3d5da'], torso: ['#eef0f3', '#b9bcc4', '#ffffff'],
+      fist: '#f4f5f7', foot: '#f4f5f7', head: '#f3f4f6', ol: OL, extra: 'hair',
+    },
+    // the "third figure": dark grey, no spotlight
+    other: {
+      arm: ['#5a5d67', '#3d3f47', '#7c7f89'], leg: ['#4a4d56', '#33353c', '#666973'], torso: ['#535660', '#3a3c44', '#727580'],
+      fist: '#8d909a', foot: '#7a7d87', head: '#9a9da7', ol: '#0b0b0f', extra: null,
+    },
+  };
+
+  // ---- Poses (local units, facing right). C = chest top, P = pelvis, hB/hF = back/front fist,
+  //      fB/fF = back/front ankle, hd = head offset. eB/eF/kB/kF = preferred bend directions.
+  const P = (o) => Object.assign({ hd: [0, 0] }, o);
+  V.POSES = {
+    guard: P({ C: [-3, -88], P: [-5, -55], hB: [6, -94], hF: [18, -98], fB: [-19, -5], fF: [12, -5] }),
+    stand: P({ C: [0, -89], P: [-1, -56], hB: [-6, -48], hF: [9, -48], fB: [-8, -5], fF: [8, -5], eB: [-0.6, 1], eF: [0.3, 1] }),
+    phone: P({ C: [1, -88], P: [-1, -55], hB: [14, -66], hF: [17, -70], fB: [-8, -5], fF: [8, -5], hd: [2, 3], eB: [-0.2, 1], eF: [-0.2, 1] }),
+    shout: P({ C: [6, -87], P: [-1, -55], hB: [-18, -64], hF: [34, -104], fB: [-17, -5], fF: [15, -5], hd: [3, -1] }),
+    dragged: P({ C: [14, -82], P: [1, -53], hB: [30, -78], hF: [36, -92], fB: [-22, -6], fF: [6, -5], hd: [4, 2] }),
+    handsUp: P({ C: [-3, -89], P: [-2, -55], hB: [-14, -124], hF: [12, -126], fB: [-8, -5], fF: [8, -5], eB: [-1, 0.4], eF: [1, 0.4] }),
+    cross: P({ C: [0, -89], P: [-1, -56], hB: [13, -72], hF: [-3, -71], fB: [-9, -5], fF: [8, -5], eB: [0.4, 1], eF: [1, 0.7], armsFront: true }),
+    point: P({ C: [1, -88], P: [-2, -55], hB: [-6, -50], hF: [44, -94], fB: [-9, -5], fF: [9, -5], eB: [-0.5, 1] }),
+    jab: P({ C: [3, -87], P: [-4, -55], hB: [8, -95], hF: [46, -98], fB: [-20, -5], fF: [14, -5] }),
+    cross2: P({ C: [6, -86], P: [-3, -55], hB: [44, -96], hF: [16, -96], fB: [-20, -5], fF: [14, -5] }),
+    slip: P({ C: [6, -76], P: [-6, -50], hB: [10, -84], hF: [20, -86], fB: [-20, -5], fF: [13, -5], hd: [2, 4] }),
+    lunge: P({ C: [10, -84], P: [0, -53], hB: [14, -92], hF: [52, -100], fB: [-22, -5], fF: [22, -5] }),
+    stumble: P({ C: [-14, -83], P: [-6, -53], hB: [-32, -96], hF: [-4, -114], fB: [-24, -5], fF: [6, -5], hd: [-4, -2], eB: [-1, 0.2], eF: [0, 1] }),
+    wild: P({ C: [8, -86], P: [-2, -55], hB: [-24, -104], hF: [40, -112], fB: [-18, -5], fF: [16, -5], eB: [-0.5, 1] }),
+    wild2: P({ C: [10, -85], P: [-2, -55], hB: [42, -88], hF: [-12, -112], fB: [-18, -5], fF: [16, -5], eF: [-0.5, -1] }),
+    bend: P({ C: [16, -72], P: [-4, -52], hB: [12, -62], hF: [30, -6], fB: [-12, -5], fF: [10, -5], hd: [3, 3], eF: [1, 0] }),
+    talkA: P({ C: [2, -88], P: [-1, -55], hB: [-4, -60], hF: [30, -84], fB: [-8, -5], fF: [8, -5], eB: [-0.6, 1] }),
+    talkB: P({ C: [3, -88], P: [-1, -55], hB: [20, -80], hF: [28, -100], fB: [-8, -5], fF: [8, -5] }),
+    flinch: P({ C: [-6, -87], P: [-3, -55], hB: [8, -96], hF: [14, -104], fB: [-10, -5], fF: [7, -5], hd: [-3, 1] }),
+    fists: P({ C: [3, -88], P: [-1, -55], hB: [6, -64], hF: [16, -66], fB: [-10, -5], fF: [9, -5] }),
+  };
+
+  V.lerpPose = function (a, b, t) {
+    const o = {};
+    for (const k of new Set([...Object.keys(a), ...Object.keys(b)])) {
+      const x = a[k] !== undefined ? a[k] : b[k], y = b[k] !== undefined ? b[k] : a[k];
+      o[k] = Array.isArray(x) ? x.map((v, i) => V.lerp(v, y[i], t)) : t < 0.5 ? x : y;
+    }
+    return o;
+  };
+  // keys = [[t, poseOrName], ...]
+  V.poseAt = function (t, keys, ease = V.ease.inOut) {
+    const get = (p) => (typeof p === 'string' ? V.POSES[p] : p);
+    if (t <= keys[0][0]) return get(keys[0][1]);
+    for (let i = 1; i < keys.length; i++) {
+      if (t <= keys[i][0]) {
+        const k = ease((t - keys[i - 1][0]) / (keys[i][0] - keys[i - 1][0] || 1));
+        return V.lerpPose(get(keys[i - 1][1]), get(keys[i][1]), k);
+      }
+    }
+    return get(keys[keys.length - 1][1]);
+  };
+  // Offset whole upper body (breathing / bounce), feet stay planted
+  V.shift = function (p, dx, dy, feetToo = false) {
+    const o = Object.assign({}, p);
+    for (const k of ['C', 'P', 'hB', 'hF']) o[k] = [p[k][0] + dx, p[k][1] + dy];
+    if (feetToo) for (const k of ['fB', 'fF']) o[k] = [p[k][0] + dx, p[k][1] + dy];
+    return o;
+  };
+  V.breathe = (p, t, amp = 1.6, speed = 3.4, phase = 0) => V.shift(p, 0, -amp * (0.5 + 0.5 * Math.sin(t * speed + phase)));
+  V.set = (p, k, v) => Object.assign({}, p, { [k]: v });
+
+  // Walk cycle built on the stand pose
+  V.walkPose = function (phase, base = V.POSES.stand, stride = 11) {
+    const s = Math.sin(phase), c = Math.cos(phase);
+    const p = V.shift(base, 0, -1.4 * Math.abs(c) + 0.7);
+    p.fF = [base.fF[0] - 2 + stride * s, -5 - 6 * Math.max(0, c)];
+    p.fB = [base.fB[0] + 2 - stride * s, -5 - 6 * Math.max(0, -c)];
+    p.hF = [base.hF[0] - 2 - 9 * s, base.hF[1] - 0.5];
+    p.hB = [base.hB[0] + 2 + 9 * s, base.hB[1] - 0.5];
+    return p;
+  };
+
+  // ---- IK
+  function ik(A, T, l1, l2, pref) {
+    let d = sub(T, A); let dist = len(d) || 0.001;
+    const u = mul(d, 1 / dist);
+    const dc = clamp(dist, Math.abs(l1 - l2) + 0.5, l1 + l2 - 0.05);
+    const Tc = add(A, mul(u, dc));
+    const a = (l1 * l1 - l2 * l2 + dc * dc) / (2 * dc);
+    const h = Math.sqrt(Math.max(0, l1 * l1 - a * a));
+    const base = add(A, mul(u, a));
+    const n = [-u[1], u[0]];
+    const m1 = add(base, mul(n, h)), m2 = add(base, mul(n, -h));
+    const pick = (m1[0] - base[0]) * pref[0] + (m1[1] - base[1]) * pref[1] >= 0 ? m1 : m2;
+    return [pick, Tc];
+  }
+
+  const TORSO0 = Math.atan2(-33, 2);
+  V.geom = function (p) {
+    const C = p.C, Pp = p.P;
+    const a = Math.atan2(C[1] - Pp[1], C[0] - Pp[0]) - TORSO0;
+    const g = { a, C, P: Pp };
+    g.sB = add(C, rot([-3, 2], a)); g.sF = add(C, rot([7, 2], a));
+    g.hipB = add(Pp, rot([-3, 5], a)); g.hipF = add(Pp, rot([8, 5], a));
+    g.H = add(add(C, rot([5, -20], a)), p.hd || [0, 0]);
+    g.neck = add(C, rot([3, -7], a));
+    [g.eB, g.hB] = ik(g.sB, p.hB, 20.5, 28, p.eB || [0.15, 1]);
+    [g.eF, g.hF] = ik(g.sF, p.hF, 20.5, 28, p.eF || [0.15, 1]);
+    [g.kB, g.fB] = ik(g.hipB, p.fB, 24, 22.7, p.kB || [1, 0.1]);
+    [g.kF, g.fF] = ik(g.hipF, p.fF, 24, 22.7, p.kF || [1, 0.1]);
+    return g;
+  };
+
+  // ---- drawing
+  const LIGHT = [-0.83, -0.55];
+  function line(g, a, b, col, w, alpha = 1) {
+    g.globalAlpha = alpha; g.strokeStyle = col; g.lineWidth = w;
+    g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); g.globalAlpha = 1;
+  }
+  function capsule(g, a, b, w, pal, ol) {
+    g.lineCap = 'round';
+    line(g, a, b, ol, w + 3.2);
+    line(g, a, b, pal[0], w);
+    const d = sub(b, a), L = len(d) || 1, u = mul(d, 1 / L), n = [-u[1], u[0]];
+    const k = clamp((n[0] * LIGHT[0] + n[1] * LIGHT[1]) * 2.5, -1, 1);
+    const a2 = add(a, mul(u, L * 0.12)), b2 = sub(b, mul(u, L * 0.12));
+    line(g, add(a2, mul(n, -k * w * 0.26)), add(b2, mul(n, -k * w * 0.26)), pal[1], w * 0.42, 0.55);
+    line(g, add(a2, mul(n, k * w * 0.27)), add(b2, mul(n, k * w * 0.27)), pal[2], w * 0.3, 0.8);
+  }
+  function circle(g, c, r, fill, ol, lw = 1.6) {
+    g.beginPath(); g.arc(c[0], c[1], r, 0, Math.PI * 2); g.fillStyle = fill; g.fill();
+    if (ol) { g.strokeStyle = ol; g.lineWidth = lw; g.stroke(); }
+  }
+  function fist(g, c, pal) {
+    circle(g, c, 5.7, pal.fist, pal.ol);
+    g.globalAlpha = 0.55; circle(g, [c[0] - 1.7, c[1] - 1.8], 2.1, '#fff'); g.globalAlpha = 1;
+  }
+  function foot(g, c, pal) {
+    const x = c[0] + 2.5, y = c[1] + 4;
+    g.beginPath(); g.ellipse(x, y, 9.5, 4.8, 0, 0, Math.PI * 2); g.fillStyle = pal.foot; g.fill();
+    g.strokeStyle = pal.ol; g.lineWidth = 1.6; g.stroke();
+    g.globalAlpha = 0.9; g.beginPath(); g.ellipse(x - 2.5, y - 1.6, 4.5, 1.4, 0, 0, Math.PI * 2); g.fillStyle = '#fff'; g.fill(); g.globalAlpha = 1;
+  }
+  function arm(g, s, e, h, pal) { capsule(g, s, e, 8.5, pal.arm, pal.ol); capsule(g, e, h, 8.5, pal.arm, pal.ol); fist(g, h, pal); }
+  function leg(g, hip, k, f, pal) { capsule(g, hip, k, 12, pal.leg, pal.ol); capsule(g, k, f, 11.5, pal.leg, pal.ol); foot(g, f, pal); }
+
+  function torso(g, G, f, pal) {
+    capsule(g, G.C, G.P, 24, pal.torso, pal.ol);
+    g.save(); g.translate(G.C[0], G.C[1]); g.rotate(G.a);
+    if (pal.hoodie) {
+      g.globalAlpha = 0.8; g.strokeStyle = '#5d6068'; g.lineWidth = 1.2;
+      g.beginPath(); g.moveTo(-11, 25); g.quadraticCurveTo(-2, 28, 8, 25); g.stroke();
+      g.lineWidth = 1.1; g.beginPath(); g.moveTo(6, 2); g.lineTo(7, 12); g.stroke(); g.globalAlpha = 1;
+    }
+    if (f.tie) {
+      g.fillStyle = '#b0202f'; g.strokeStyle = '#0b0b0f'; g.lineWidth = 0.8;
+      g.beginPath(); g.moveTo(4, 1); g.lineTo(7, 1); g.lineTo(7.5, 4); g.lineTo(8.5, 22); g.lineTo(5.5, 25); g.lineTo(3.5, 22); g.lineTo(4.5, 4); g.closePath(); g.fill(); g.stroke();
+    }
+    g.restore();
+  }
+
+  function head(g, G, f, pal) {
+    const H = G.H;
+    g.save(); g.translate(H[0], H[1]); g.rotate((f.headTilt || 0) + G.a * 0.5);
+    circle(g, [0, 0], 13.5, pal.head, pal.ol);
+    g.globalAlpha = 0.55; circle(g, [-4, -4.3], 5.1, '#fff'); g.globalAlpha = 1;
+    if (f.blush) { // red flush over the whole face
+      g.globalAlpha = 0.55 * f.blush; circle(g, [3, 2], 12.4, '#ff5a6a'); g.globalAlpha = 1;
+    }
+    if (pal.extra === 'cap') {
+      g.lineJoin = 'round';
+      g.beginPath(); g.moveTo(-14, -2); g.quadraticCurveTo(-13, -17, 0, -17); g.quadraticCurveTo(13, -17, 13.5, -2); g.closePath();
+      g.fillStyle = '#d42a3c'; g.fill(); g.strokeStyle = OL; g.lineWidth = 1.6; g.stroke();
+      g.globalAlpha = 0.6; g.beginPath(); g.moveTo(-8, -13); g.quadraticCurveTo(0, -18, 8, -13); g.strokeStyle = '#f06a76'; g.lineWidth = 2; g.stroke(); g.globalAlpha = 1;
+      g.beginPath(); g.moveTo(8, -3); g.quadraticCurveTo(20, -4.5, 26, -1); g.quadraticCurveTo(20, 1.5, 8, 0.5); g.closePath();
+      g.fillStyle = '#c22233'; g.fill(); g.strokeStyle = OL; g.lineWidth = 1.5; g.stroke();
+    } else if (pal.extra === 'hair') {
+      g.beginPath(); g.moveTo(-13.5, 2); g.quadraticCurveTo(-15, -8, -9, -13); g.lineTo(-4, -8); g.lineTo(-1, -15); g.lineTo(3, -9); g.lineTo(8, -14);
+      g.quadraticCurveTo(12, -9, 12, -4); g.quadraticCurveTo(4, -10, -3, -4); g.quadraticCurveTo(-8, 0, -13.5, 2); g.closePath();
+      g.fillStyle = '#17181d'; g.fill(); g.strokeStyle = OL; g.lineWidth = 1.2; g.lineJoin = 'round'; g.stroke();
+    }
+    face(g, f);
+    g.restore();
+  }
+
+  // Simple expressive faces (drawn only when f.expr is set — default rig is faceless like the original)
+  function face(g, f) {
+    const e = f.expr; if (!e) return;
+    const ink = '#101116';
+    const lx = (f.look || 0) * 1.6;
+    g.strokeStyle = ink; g.fillStyle = ink; g.lineCap = 'round'; g.lineJoin = 'round';
+    const dot = (x, y, r = 1.7) => { g.beginPath(); g.arc(x + lx, y, r, 0, Math.PI * 2); g.fill(); };
+    const ln = (pts, w = 1.5) => { g.lineWidth = w; g.beginPath(); g.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) g.lineTo(pts[i][0], pts[i][1]); g.stroke(); };
+    const mouthOpen = (cx, cy, rx, ry) => { g.beginPath(); g.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); g.fillStyle = '#3a0d14'; g.fill(); g.strokeStyle = ink; g.lineWidth = 1.2; g.stroke(); g.fillStyle = ink; };
+    switch (e) {
+      case 'neutral':
+        dot(3.5, 2.5); dot(9.5, 2.5); ln([[4.5, 8], [10.5, 8]], 1.4); break;
+      case 'glance':
+        dot(3.5, 2.5); dot(9.5, 2.5); ln([[5, 8], [10, 8]], 1.3); break;
+      case 'angry':
+        ln([[1, -1.5], [5.5, 1]], 1.8); ln([[11.5, -1.5], [7.5, 1]], 1.8);
+        dot(3.6, 3.2); dot(9.4, 3.2); ln([[4, 9.5], [7, 8], [11, 9.5]], 1.6); break;
+      case 'shout': {
+        ln([[1, -1.8], [5.8, 1]], 2); ln([[12, -1.8], [7.6, 1]], 2);
+        dot(3.6, 3.2); dot(9.4, 3.2); mouthOpen(7.5, 9.2, 3.6, 2.4 + 1.6 * (f.mouth == null ? 1 : f.mouth)); break;
+      }
+      case 'talk':
+        dot(3.6, 2.5); dot(9.4, 2.5); mouthOpen(7.5, 8.6, 3, 0.6 + 2.4 * (f.mouth || 0)); break;
+      case 'fear':
+        g.fillStyle = '#fff'; g.beginPath(); g.arc(3.4, 2.4, 2.7, 0, 7); g.fill(); g.stroke(); g.beginPath(); g.arc(9.6, 2.4, 2.7, 0, 7); g.fill(); g.stroke();
+        g.fillStyle = ink; dot(3.6, 2.6, 1.1); dot(9.8, 2.6, 1.1);
+        ln([[1.5, -2.5], [5, -3.8]], 1.3); ln([[8, -3.8], [11.5, -2.5]], 1.3);
+        ln([[4, 9.4], [5.5, 8.4], [7, 9.4], [8.5, 8.4], [10, 9.4]], 1.3); break;
+      case 'shame':
+        ln([[1.8, 2.6], [5, 2]], 1.6); ln([[8, 2], [11.2, 2.6]], 1.6);
+        ln([[4.5, 9], [6, 8.2], [7.5, 9], [9, 8.2], [10.5, 9]], 1.3); break;
+      case 'sneer':
+        ln([[1.5, 0], [5.5, 1.2]], 1.7); ln([[8, -2], [12, -0.8]], 1.6);
+        dot(3.6, 3); dot(9.4, 3); ln([[3.5, 9.5], [8, 9], [11.5, 6.8]], 1.6); break;
+      case 'nervous':
+        g.fillStyle = '#fff'; g.beginPath(); g.arc(3.4, 2.6, 2.4, 0, 7); g.fill(); g.stroke(); g.beginPath(); g.arc(9.6, 2.6, 2.4, 0, 7); g.fill(); g.stroke();
+        g.fillStyle = ink; dot(3.6, 2.8, 1); dot(9.8, 2.8, 1);
+        ln([[1.5, -1.5], [5, -2.8]], 1.3); ln([[8, -2.8], [11.5, -1.5]], 1.3);
+        if (f.mouth) mouthOpen(7.5, 9, 2.2, 0.6 + 1.8 * f.mouth); else ln([[4, 9.2], [5.5, 8.4], [7, 9.2], [8.5, 8.4], [10, 9.2]], 1.3);
+        break;
+      case 'dizzy':
+        ln([[2, 1], [5, 4]], 1.5); ln([[5, 1], [2, 4]], 1.5); ln([[8, 1], [11, 4]], 1.5); ln([[11, 1], [8, 4]], 1.5);
+        mouthOpen(7.5, 9.2, 2.4, 1.6); break;
+    }
+  }
+
+  V.figLocalToWorld = (f, pt) => [f.x + pt[0] * V.S * (f.s || 1) * (f.face || 1), (f.y == null ? V.FLOOR : f.y) + pt[1] * V.S * (f.s || 1)];
+  V.figPoint = function (f, name) {
+    const G = V.geom(f.pose);
+    return V.figLocalToWorld(f, G[name]);
+  };
+
+  V.drawFigure = function (g, f) {
+    const pal = V.PAL[f.kind] || V.PAL.other;
+    const G = V.geom(f.pose);
+    g.save();
+    g.translate(f.x, f.y == null ? V.FLOOR : f.y);
+    if (f.alpha != null) g.globalAlpha = f.alpha;
+    const sc = V.S * (f.s || 1);
+    g.scale(sc * (f.face || 1), sc);
+    const armsFront = f.pose.armsFront;
+    if (!armsFront) arm(g, G.sB, G.eB, G.hB, pal);
+    leg(g, G.hipB, G.kB, G.fB, pal);
+    torso(g, G, f, pal);
+    leg(g, G.hipF, G.kF, G.fF, pal);
+    head(g, G, f, pal);
+    if (armsFront) arm(g, G.sB, G.eB, G.hB, pal);
+    arm(g, G.sF, G.eF, G.hF, pal);
+    if (f.drawHeld) f.drawHeld(g, G); // props held in hand, in rig space
+    g.restore();
+  };
+})();

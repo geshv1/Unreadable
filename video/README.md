@@ -1,0 +1,23 @@
+# "Same age. Same city." — video renderer
+
+Canvas renderer for the REACTIVE vs STEADY series. Same rig, palettes and type as `fighters.svg` / the site
+(Instrument Serif italic + Archivo, near-black stage, red + white spotlights, reflective grid floor).
+
+```
+node video/render.cjs ep02-control                  # -> video/out/<title>.mp4, <title>-frame0.png, <title>-cuts.txt
+node video/render.cjs ep02-control --stills 0,4.2   # PNG stills only (seconds), for checking
+node video/render.cjs ep02-control --stills 3 --debug   # stills with TikTok safe zones overlaid
+```
+Preview in a browser: open `video/engine/index.html?ep=ep02-control&play` (or `&t=12.5` for one frame).
+Output: 1080x1920, 30 fps, H.264 High, yuv420p, no audio.
+
+## New episode
+1. Copy `episodes/ep02-control/` to `episodes/ep03-whatever/`.
+2. `episode.js`: episode number, title, and the scene list: `dur`, `set`, `action`, `top`, `headline`, `red`, `sub`.
+3. `actions.js`: one function per scene action, `(tl, scene) => ({ figs, back, mid, front, shake })`.
+   Build characters with `V.R()` (Reactive, left), `V.St()` (Steady, right), `V.X()` (third figure);
+   poses in `engine/rig.js` (`V.POSES`, `V.poseAt`, `V.walkPose`, `V.breathe`); props in `engine/props.js`.
+   Generic actions (`idle`, `endCard`) live in `engine/actions-common.js`.
+4. Backgrounds: `engine/sets.js` (stage, street, room, office, table, ring). Add new ones there.
+
+The text system, spotlights (they follow each character's x), labels, swipe transitions and the cut list are automatic.
