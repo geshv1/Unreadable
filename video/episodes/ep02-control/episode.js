@@ -22,10 +22,10 @@ V.EPISODE = {
   transition: { pre: 0.16, post: 0.08 }, // red swipe straddling each cut (0.24s)
 
   scenes: [
-    { id: 'hook', dur: 2.5, set: 'stage', action: 'idle',
+    { id: 'hook', dur: 1.5, set: 'stage', action: 'squareUp',
       top: 'SAME AGE. SAME CITY. — PT. 2', headline: 'Different control.', red: 'control.' },
 
-    { id: 'rule1-street', dur: 6, set: 'street', action: 'streetLeash',
+    { id: 'rule1-street', dur: 3.5, set: 'street', action: 'streetLeash',
       top: 'RULE I', headline: 'Emotion is a leash.', red: 'leash.', sub: 'Whoever pulls it, leads you.' },
 
     { id: 'rule2-phone', dur: 6, set: 'room', action: 'phoneFeint',

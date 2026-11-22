@@ -1,17 +1,17 @@
-reactive-vs-steady-control — scene transitions (32s @ 30fps)
+reactive-vs-steady-control — scene transitions (28.5s @ 30fps)
 
 00:00.00  frame   0  hook
-00:02.50  frame  75  rule1-street
-00:08.50  frame 255  rule2-phone
-00:14.50  frame 435  rule3-office
-00:20.50  frame 615  rule4-table
-00:26.50  frame 795  ring-payoff
-00:30.00  frame 900  end-card
+00:01.50  frame  45  rule1-street
+00:05.00  frame 150  rule2-phone
+00:11.00  frame 330  rule3-office
+00:17.00  frame 510  rule4-table
+00:23.00  frame 690  ring-payoff
+00:26.50  frame 795  end-card
 
 Cuts (whoosh starts ~0.16s before, bass hit on the cut):
-  00:02.50  (2.50s, frame 75)  -> rule1-street
-  00:08.50  (8.50s, frame 255)  -> rule2-phone
-  00:14.50  (14.50s, frame 435)  -> rule3-office
-  00:20.50  (20.50s, frame 615)  -> rule4-table
-  00:26.50  (26.50s, frame 795)  -> ring-payoff
-  00:30.00  (30.00s, frame 900)  -> end-card
+  00:01.50  (1.50s, frame 45)  -> rule1-street
+  00:05.00  (5.00s, frame 150)  -> rule2-phone
+  00:11.00  (11.00s, frame 330)  -> rule3-office
+  00:17.00  (17.00s, frame 510)  -> rule4-table
+  00:23.00  (23.00s, frame 690)  -> ring-payoff
+  00:26.50  (26.50s, frame 795)  -> end-card

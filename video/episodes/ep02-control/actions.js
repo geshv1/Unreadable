@@ -6,40 +6,42 @@
   const step = (t, keys) => { let v = keys[0][1]; for (const [k, x] of keys) if (t >= k) v = x; return v; };
   const headPt = (f) => V.figPoint(f, 'H');
 
-  // ─────────────────────────────── RULE I — STREET: emotion is a leash
+  // ─────────────────────────────── RULE I — STREET: emotion is a leash  (3.5s, essentials only)
+  // 0.0  stranger already mid-stride near Steady → bumps Steady (0.2) → bumps Reactive (0.7)
+  // 0.95 leash pops on Reactive's neck → 1.25 YANK → Reactive dragged, shouting. Steady glances once, keeps walking.
   V.actions.streetLeash = function (tl) {
-    // stranger walks in from the right, bumps Steady (~0.85s) then Reactive (~1.67s), stops on the far left
-    const sx = tl < 2.2 ? kf(tl, [[0, 1120], [2.2, 120]], ease.lin) : kf(tl, [[2.2, 120], [2.6, 40], [4.25, 40], [4.45, 14]], ease.out);
-    const yank1 = seg(tl, 2.55, 2.75), yank2 = seg(tl, 4.25, 4.42);
-    const yanking = (tl > 2.5 && tl < 2.95) || (tl > 4.2 && tl < 4.6);
+    const T_LEASH = 0.95, Y0 = 1.25, Y1 = 1.45;
+    const sx = tl < 0.95 ? kf(tl, [[0, 860], [0.95, 130]], ease.lin) : kf(tl, [[0.95, 130], [Y0, 130], [Y1 + 0.05, 44]], ease.out);
+    const yanking = tl > Y0 - 0.05 && tl < Y1 + 0.25;
     let sPose;
-    if (tl < 2.2) sPose = V.walkPose(tl * 9);
+    if (tl < 0.95) sPose = V.walkPose(tl * 11);
     else {
       const hold = V.set(V.set(PO.stand, 'hF', [24, -128]), 'eF', [1, 0.3]);
       const pull = V.set(V.set(V.shift(PO.stand, -6, 0), 'hF', [6, -132]), 'eF', [1, 0.3]);
-      sPose = yanking ? V.lerpPose(hold, pull, Math.sin(Math.min(1, tl < 3 ? yank1 : yank2) * Math.PI)) : V.breathe(hold, tl, 1.2, 3);
-      sPose = V.lerpPose(V.walkPose(2.2 * 9), sPose, seg(tl, 2.2, 2.35));
+      sPose = yanking ? V.lerpPose(hold, pull, Math.sin(seg(tl, Y0, Y1 + 0.2) * Math.PI)) : V.breathe(hold, tl, 1.2, 3);
+      sPose = V.lerpPose(V.walkPose(0.95 * 11), sPose, seg(tl, 0.95, 1.08));
     }
-    const stranger = V.X({ x: sx, face: tl < 2.22 ? -1 : 1, pose: sPose, expr: tl > 1.6 ? 'sneer' : 'neutral' });
+    const stranger = V.X({ x: sx, face: tl < 0.97 ? -1 : 1, pose: sPose, expr: tl > 0.65 ? 'sneer' : 'neutral' });
 
-    // Steady: keeps walking right, calm; small jolt at the bump, one glance back
-    const stX = kf(tl, [[0, 650], [6, 800]], ease.lin);
-    const jolt = Math.sin(seg(tl, 0.8, 1.0) * Math.PI) * 4;
+    // Steady: keeps walking right; small jolt at the bump, one glance back, spotlight follows him
+    const stX = kf(tl, [[0, 660], [3.5, 770]], ease.lin);
+    const jolt = Math.sin(seg(tl, 0.15, 0.32) * Math.PI) * 4;
+    const glance = tl > 0.3 && tl < 0.85;
     const steady = V.St({ x: stX, face: 1, pose: V.shift(V.walkPose(tl * 6.5 + 1.5), -jolt, 0), expr: 'neutral',
-      look: tl > 0.95 && tl < 1.55 ? -1 : 0, headTilt: tl > 0.95 && tl < 1.55 ? -0.12 : 0 });
+      look: glance ? -1 : 0, headTilt: glance ? -0.12 : 0 });
 
-    // Reactive: walking, gets bumped, turns, leash, dragged, shouting
+    // Reactive: walking → bumped → turns angry → leash → dragged, shouting
     let rx, rPose, rFace = 1, rExpr = 'neutral';
-    if (tl < 1.67) { rx = kf(tl, [[0, 270], [1.67, 322]], ease.lin); rPose = V.walkPose(tl * 7); }
-    else if (tl < 2.55) {
-      rx = 322 + 10 * Math.sin(seg(tl, 1.67, 1.85) * Math.PI);
-      rFace = tl < 1.85 ? 1 : -1;
-      rPose = tl < 1.85 ? PO.flinch : V.breathe(PO.fists, tl, 1.5, 9);
+    if (tl < 0.7) { rx = kf(tl, [[0, 300], [0.7, 322]], ease.lin); rPose = V.walkPose(tl * 8); }
+    else if (tl < Y0) {
+      rx = 322 + 10 * Math.sin(seg(tl, 0.7, 0.85) * Math.PI);
+      rFace = tl < 0.85 ? 1 : -1;
+      rPose = tl < 0.85 ? PO.flinch : V.breathe(PO.fists, tl, 1.5, 9);
       rExpr = 'angry';
     } else {
       rFace = -1;
-      rx = kf(tl, [[2.55, 330], [2.85, 286], [4.25, 286], [4.5, 266]], ease.out);
-      const dragK = Math.max(Math.sin(seg(tl, 2.55, 3.05) * Math.PI), Math.sin(seg(tl, 4.25, 4.65) * Math.PI));
+      rx = kf(tl, [[Y0, 330], [Y1 + 0.05, 278]], ease.out);
+      const dragK = Math.sin(seg(tl, Y0, Y1 + 0.35) * Math.PI);
       const shout = V.lerpPose(PO.shout, V.set(PO.shout, 'hF', [32, -112]), 0.5 + 0.5 * Math.sin(tl * 16));
       rPose = V.lerpPose(shout, PO.dragged, dragK);
       rExpr = 'shout';
@@ -48,21 +50,15 @@
 
     return {
       figs: [stranger, reactive, steady],
-      shake: (tl > 2.55 && tl < 2.75) || (tl > 4.25 && tl < 4.4) ? 8 : 0,
+      shake: tl > Y0 && tl < Y0 + 0.2 ? 10 : 0,
       front(g) {
-        // leash appears (fast pop) at 2.15
-        if (tl >= 2.15) {
+        if (tl >= T_LEASH) {
           const a = V.figPoint(stranger, 'hF');
           const b = V.figPoint(reactive, 'neck');
-          const slack = yanking ? 0 : tl < 2.55 ? 70 : 26;
-          V.leash(g, a, b, slack, Math.min(1, (tl - 2.15) / 0.1), 40 * V.pop(tl - 2.15));
+          const slack = yanking ? 0 : tl < Y0 ? 70 : 26;
+          V.leash(g, a, b, slack, Math.min(1, (tl - T_LEASH) / 0.08), 40 * V.pop(tl - T_LEASH));
         }
-        const h = headPt(reactive);
-        if (tl > 1.7 && tl < 2.6) V.jagged(g, h[0] + 40, 830, 120, 50, 'HEY!', { size: 46, scale: V.pop(tl - 1.7), seed: 3 });
-        if (tl >= 2.75) {
-          const txt = tl < 4.4 ? 'SAY THAT\nAGAIN?!' : 'YOU WANNA\nGO?!';
-          V.jagged(g, 360, 812, 196, 72, txt, { size: 42, scale: V.pop(tl < 4.4 ? tl - 2.75 : tl - 4.4), seed: 8, shake: 10, rot: -0.03 });
-        }
+        if (tl >= Y1) V.jagged(g, 360, 812, 196, 72, 'SAY THAT\nAGAIN?!', { size: 42, scale: V.pop(tl - Y1), seed: 8, shake: 10, rot: -0.03 });
       },
     };
   };
@@ -80,18 +76,12 @@
     }
     const reactive = V.R({ pose: rPose, expr: typing ? (tl > 3.6 ? 'shout' : 'angry') : tl > 0.3 ? 'neutral' : 'neutral', mouth: 0.4 + 0.4 * Math.sin(tl * 18) });
 
-    // Steady: reads → face-down on the floor → shadowboxing
+    // Steady: reads it once → puts the phone face-down on the floor → stands calm, arms crossed. No answer.
     let sPose, sHasPhone = tl < 2.95;
-    const guardB = V.breathe(PO.guard, tl, 1.5, 6);
     if (tl < 2.45) sPose = V.breathe(PO.phone, tl, 1.0, 3);
     else if (tl < 2.95) sPose = poseAt(tl, [[2.45, PO.phone], [2.85, PO.bend]]);
-    else if (tl < 3.4) sPose = poseAt(tl, [[2.95, PO.bend], [3.35, PO.guard]]);
-    else {
-      const p = (tl - 3.4) / 0.5, k = p % 1, n = Math.floor(p);
-      const amt = k < 0.36 ? Math.sin((k / 0.36) * Math.PI) : 0;
-      sPose = V.lerpPose(guardB, n % 2 ? PO.cross2 : PO.jab, amt);
-      sPose = V.shift(sPose, Math.sin(tl * 7) * 1.5, 0, true);
-    }
+    else if (tl < 3.5) sPose = poseAt(tl, [[2.95, PO.bend], [3.45, PO.cross]]);
+    else sPose = V.breathe(PO.cross, tl, 0.8, 2.2);
     const steady = V.St({ pose: sPose, expr: 'neutral', headTilt: tl > 2.05 && tl < 2.45 ? 0.1 : 0 });
 
     const phoneScreen = tl < 0.25 ? 'off' : 'on';
