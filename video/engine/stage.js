@@ -45,7 +45,7 @@
   V.drawFloor = function (g) {
     const fg = g.createLinearGradient(0, V.FLOOR, 0, H);
     fg.addColorStop(0, '#17181e'); fg.addColorStop(1, '#07070a');
-    g.fillStyle = fg; g.fillRect(-200, V.FLOOR, W + 400, H - V.FLOOR);
+    g.fillStyle = fg; g.fillRect(-400, V.FLOOR, W + 800, H - V.FLOOR + 700);
     if (!gridCache) gridCache = buildGrid();
     g.drawImage(gridCache, 0, V.FLOOR);
     g.strokeStyle = '#34363f'; g.lineWidth = 2.5;
@@ -64,10 +64,10 @@
     g.save();
     g.globalAlpha = flick;
     g.filter = 'blur(14px)';
-    const gr = g.createLinearGradient(0, -40, 0, V.FLOOR);
+    const gr = g.createLinearGradient(0, -700, 0, V.FLOOR);
     gr.addColorStop(0, b.c0); gr.addColorStop(0.55, b.c1); gr.addColorStop(1, b.c2);
     g.fillStyle = gr;
-    g.beginPath(); g.moveTo(topX - 30, -40); g.lineTo(topX + 30, -40); g.lineTo(x + 205, V.FLOOR + 6); g.lineTo(x - 205, V.FLOOR + 6); g.closePath(); g.fill();
+    g.beginPath(); g.moveTo(topX - 30 - 34, -700); g.lineTo(topX + 30 + 34, -700); g.lineTo(x + 205, V.FLOOR + 6); g.lineTo(x - 205, V.FLOOR + 6); g.closePath(); g.fill();
     g.filter = 'none';
     // pool of light on the floor
     g.save(); g.translate(x, V.FLOOR + 4); g.scale(1, 0.16);
@@ -118,15 +118,17 @@
   };
 
   // ---- labels under the floor
-  V.drawLabels = function (g) {
+  V.drawLabels = function (g, z = 1) {
+    const lx = (x) => 540 + (x - 540) * z;
     g.save();
-    g.font = `700 38px ${V.FONT.sans}`;
-    g.letterSpacing = '12px';
+    const fs = Math.round(38 * Math.min(1, 0.2 + z));
+    g.font = `700 ${fs}px ${V.FONT.sans}`;
+    g.letterSpacing = `${Math.round(fs * 0.32)}px`;
     g.textAlign = 'center'; g.textBaseline = 'alphabetic';
     g.shadowColor = 'rgba(0,0,0,0.9)'; g.shadowBlur = 12;
     // letterSpacing adds trailing space; nudge right by half of it to stay centered
-    g.fillStyle = V.COL.red; g.fillText('REACTIVE', V.POS.reactive + 6, 1452);
-    g.fillStyle = '#F4F5F7'; g.fillText('STEADY', V.POS.steady + 6, 1452);
+    g.fillStyle = V.COL.red; g.fillText('REACTIVE', lx(V.POS.reactive) + fs * 0.16, 1452);
+    g.fillStyle = '#F4F5F7'; g.fillText('STEADY', lx(V.POS.steady) + fs * 0.16, 1452);
     g.restore();
   };
 })();

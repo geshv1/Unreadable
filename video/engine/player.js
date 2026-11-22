@@ -52,6 +52,9 @@
     const push = 1 + 0.025 * V.ease.inOut(V.clamp(tl / sc.dur));
     const shake = st.shake || 0;
     g.save();
+    // camera zoom (episode.zoom < 1 = zoomed out), pivot on the floor line so the floor stays put
+    const z = ep.zoom || 1;
+    g.translate(540, V.FLOOR); g.scale(z, z); g.translate(-540, -V.FLOOR);
     g.translate(540 + V.hash(i, 3) * shake, 1180 + V.hash(i, 4) * shake); g.scale(push, push); g.translate(-540, -1180);
     (V.sets[sc.set] || V.sets.stage)(g, t);
     V.drawFloor(g);
@@ -64,7 +67,7 @@
     if (st.front) st.front(g);
     g.restore();
 
-    V.drawLabels(g);
+    V.drawLabels(g, ep.zoom || 1);
     V.drawText(g, sc, tl, sc.start > 0);
     if (st.overlay) st.overlay(g);
     drawTransition(g, t);
@@ -73,9 +76,17 @@
     return { t, scene: sc.id };
   };
 
-  // Swipe: a red diagonal band sweeps right->left across the cut (0.24s total), plus a 3-frame flash.
+  // Cut transitions. type 'fade': quick dip to black (fade out `pre`, fade in `post`). type 'swipe': red band.
   function drawTransition(g, t) {
     const tr = V.ep.transition || { pre: 0.16, post: 0.08 };
+    if (tr.type === 'fade') {
+      for (const c of V.ep.cuts) {
+        const d = t - c.t;
+        const a = d < 0 ? 1 + d / tr.pre : 1 - d / tr.post;
+        if (a > 0 && d > -tr.pre && d < tr.post) { g.fillStyle = `rgba(0,0,0,${V.ease.inOut(V.clamp(a)).toFixed(3)})`; g.fillRect(0, 0, V.W, V.H); }
+      }
+      return;
+    }
     for (const c of V.ep.cuts) {
       const u = (t - (c.t - tr.pre)) / (tr.pre + tr.post);
       if (u >= 0 && u <= 1) {

@@ -20,7 +20,8 @@ V.EPISODE = {
   fps: 30,
   width: 1080,
   height: 1920,
-  transition: { pre: 0.16, post: 0.08 }, // red swipe straddling each cut (0.24s)
+  zoom: 0.82,                                     // camera: <1 zooms out (characters ≈ 23% of frame height)
+  transition: { type: 'fade', pre: 0.14, post: 0.14 }, // quick dip to black at each cut (0.28s)
 
   scenes: [
     { id: 'hook', dur: 1.5, set: 'stage', action: 'squareUp',
