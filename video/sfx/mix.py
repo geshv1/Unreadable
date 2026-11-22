@@ -48,7 +48,7 @@ def main(tl_path):
     # soft limiter -> peak about -1 dBFS
     peak = np.abs(mix).max() + 1e-9
     mix = mix / peak * 1.25
-    mix = np.tanh(mix) / np.tanh(1.25) * 0.89
+    mix = np.tanh(mix) / np.tanh(1.25) * 0.71  # peak about -3 dBFS: restrained
     # tail fade on the last 0.25 s so the video ends cleanly
     k = int(0.25 * SR)
     mix[-k:] *= np.linspace(1, 0, k)[:, None]

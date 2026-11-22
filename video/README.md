@@ -28,9 +28,10 @@ The brief for Pt. 3 ("Same day. Different control.", one continuous day with CON
 `briefs/ep03-same-day.md`, with notes on the engine changes it needs. Not built yet.
 
 ## Sound effects
-`video/sfx/synth.py` synthesises every effect in code (no samples, no licences): whooshes, punches, shoulder
-bumps, the leash igniting and yanking, phone chime + buzz, typing, message sends, scanner, DATA beep,
-NO DATA glitch, wall clock, sneaker hops and squeaks, ring bell, street bed. Cues live in the episode
+`video/sfx/synth.py` synthesises effects in code (no samples). The owner wants sound mature and minimal: Ep. 2 uses
+only five physical sounds (shoulder bump, phone vibration, phone face-down, wall clock, the clean punch).
+The cartoonish synth effects (whooshes, beeps, glitch, scanner, bell, squeaks) were rejected; don't use them.
+For realistic recorded-style effects, use real samples or ElevenLabs (connector must be signed in). Cues live in the episode
 config (`sfx`, `sfxCut`), relative to their scene, so retiming a scene keeps its sounds in sync.
 A full render mixes them automatically into `out/<title>-sfx.mp4` (+ `-sfx.wav` stem and `-sfx-cues.txt`).
 The silent `out/<title>.mp4` is still written. Remix only: `node video/render.cjs <ep> --timeline && python3 video/sfx/mix.py video/out/<title>-timeline.json`.

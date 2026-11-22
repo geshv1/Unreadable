@@ -208,12 +208,12 @@ def yank(seed=6, pan=0.0):
     return fade(room(stereo(norm(np.tanh(1.5 * norm(m))), pan), 0.3, 0.12), 0.002, 0.08)
 
 
-def notify(seed=8):
+def notify(seed=8, chime=True):
     """Same message on both phones: chime on each (L and R, a hair apart) + vibration buzz."""
     d = 0.9
     t = T(d)
 
-    def chime(off):
+    def chime_(off):
         x = np.zeros_like(t)
         for f, s in [(1568.0, 0.0), (2093.0, 0.09)]:
             tt = np.maximum(0, t - s - off)
@@ -226,8 +226,9 @@ def notify(seed=8):
         g = (((tt > 0) & (tt < 0.2)) | ((tt > 0.3) & (tt < 0.5))).astype(float)
         return lp(b * lp(g, 60, 2), 1800)
 
-    L = 0.55 * chime(0.0) + 0.25 * buzz(0.0)
-    R = 0.55 * chime(0.025) + 0.25 * buzz(0.03)
+    c = 0.55 if chime else 0.0
+    L = c * chime_(0.0) + 0.25 * buzz(0.0)
+    R = c * chime_(0.025) + 0.25 * buzz(0.03)
     st = np.stack([0.85 * L + 0.25 * R, 0.25 * L + 0.85 * R], axis=1)
     return fade(room(norm(st), 0.25, 0.08), 0.001, 0.05)
 

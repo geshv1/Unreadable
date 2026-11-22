@@ -1,53 +1,12 @@
-reactive-vs-steady-control — sound-effect cues (51)
+reactive-vs-steady-control — sound-effect cues (10)
 
-  0.33s  frame  10  hop         -16.0 dB  
-  0.39s  frame  12  hop         -13.0 dB  
-  0.56s  frame  17  squeak      -17.0 dB  feint pivot
-  0.58s  frame  17  swing       -16.0 dB  feint
-  0.77s  frame  23  hop         -14.0 dB  
-  0.85s  frame  26  hop         -16.0 dB  
-  1.15s  frame  35  hop         -13.0 dB  
-  1.34s  frame  40  whoosh      -13.0 dB  cut -> rule1-street
-  1.50s  frame  45  city        -23.0 dB  street bed
-  1.70s  frame  51  bump         -9.0 dB  stranger bumps Steady
-  2.22s  frame  67  bump         -5.0 dB  stranger bumps Reactive
-  2.45s  frame  74  leash_on     -8.0 dB  red leash appears
-  2.70s  frame  81  yank         -4.0 dB  YANK
-  4.84s  frame 145  whoosh      -13.0 dB  cut -> rule2-phone
-  5.25s  frame 158  notify       -7.0 dB  we need to talk
-  7.00s  frame 210  typing      -15.0 dB  
-  7.05s  frame 212  send        -13.0 dB  
-  7.80s  frame 234  send        -13.0 dB  
-  7.86s  frame 236  phone_down   -9.0 dB  Steady: face-down
-  8.55s  frame 256  send        -12.0 dB  
-  9.30s  frame 279  send        -13.0 dB  
- 10.05s  frame 302  send        -13.0 dB  
- 10.84s  frame 325  whoosh      -13.0 dB  cut -> rule3-office
- 11.30s  frame 339  scan        -17.0 dB  
- 13.60s  frame 408  confirm     -10.0 dB  DATA ✓
- 14.15s  frame 424  scan        -17.0 dB  
- 15.10s  frame 453  glitch       -9.0 dB  NO DATA
- 16.84s  frame 505  whoosh      -13.0 dB  cut -> rule4-table
- 17.05s  frame 512  tick        -14.0 dB  
- 17.61s  frame 528  plop        -12.0 dB  
- 18.05s  frame 542  tick        -14.0 dB  
- 18.23s  frame 547  plop        -12.0 dB  
- 18.85s  frame 566  plop        -12.0 dB  
- 19.05s  frame 572  tick        -14.0 dB  
- 19.47s  frame 584  plop        -12.0 dB  
- 20.05s  frame 602  tick        -14.0 dB  
- 20.09s  frame 603  plop        -12.0 dB  
- 20.71s  frame 621  plop        -12.0 dB  
- 21.05s  frame 632  tick        -14.0 dB  
- 22.05s  frame 662  tick        -14.0 dB  
- 22.84s  frame 685  whoosh      -13.0 dB  cut -> ring-payoff
- 23.10s  frame 693  swing       -10.0 dB  miss
- 23.40s  frame 702  swing       -10.0 dB  miss
- 23.70s  frame 711  swing       -10.0 dB  miss
- 24.00s  frame 720  swing       -10.0 dB  miss
- 24.30s  frame 729  swing       -10.0 dB  miss
- 24.84s  frame 745  punch        -1.0 dB  clean punch lands
- 25.00s  frame 750  scuff       -12.0 dB  
- 25.24s  frame 757  scuff       -14.0 dB  
- 26.34s  frame 790  whoosh      -13.0 dB  cut -> end-card
- 26.55s  frame 796  bell         -6.0 dB  CTA
+  2.22s  frame  67  bump         -6.0 dB  stranger bumps Reactive
+  5.25s  frame 158  notify       -9.0 dB  both phones vibrate
+  7.86s  frame 236  phone_down  -10.0 dB  Steady: phone face-down
+ 17.05s  frame 512  tick        -17.0 dB  clock in the silence
+ 18.05s  frame 542  tick        -17.0 dB  
+ 19.05s  frame 572  tick        -17.0 dB  
+ 20.05s  frame 602  tick        -17.0 dB  
+ 21.05s  frame 632  tick        -17.0 dB  
+ 22.05s  frame 662  tick        -17.0 dB  
+ 24.84s  frame 745  punch        -2.0 dB  the one clean punch
