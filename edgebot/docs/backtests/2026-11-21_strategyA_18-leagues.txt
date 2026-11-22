@@ -1,0 +1,162 @@
+EDGEBOT BACKTEST
+================
+Data: 46,221 matches in 18 leagues (26 Jul 2019 → 31 May 2026); 2,116,533 prices from 13 bookmakers
+Bets simulated: 25 Jul 2020 → 01 Aug 2025. Learning-only warm-up before that.
+Sealed for the one-time final test: everything from 01 Aug 2025.
+Strategy: A · market value · edge ≥ 3% · odds 1.25–8.00 · risk balanced (Kelly × 0.20, max 1.5% per bet)
+Bookmakers you could bet at in this data: bet365 (Betano, efbet, Winbet not in this data)
+Fair-price reference: Pinnacle, Betfair Exchange · margin removal: multiplicative (lowest log loss on warm-up closing prices)
+Pessimistic on purpose: 1%–2% worse odds than quoted, 10% of bets refused, stakes cut to €5 after 200 bets at a bookmaker.
+
+SINGLE BETS
+  1173 bets · staked €3,330 · profit -€131 · ROI -3.9% (95% range -14.6% to +7.0%)
+  Beat the closing price (CLV, after margin): -0.6% (95% range -1.3% to +0.0%); 47.7% of bets beat it
+  Before removing the margin (gross CLV): +3.0% — shown only for comparison
+  Hit rate 23.9%
+  Account limits: 1002 bets placed while limited; asked €3,907, accepted €3,330
+  Bankroll €1,000 → €782 · worst fall from a peak: -32.7% · auto-paused 1×
+  (The auto-pause stops NEW bets at a 20% fall; bets already placed still settle. The backtest resumes after 14 days as if you had reviewed and continued.)
+
+VERDICT: NO CLEAR EDGE
+  Results are within what luck alone could produce. Not a reason to bet.
+
+PARLAYS (every leg had value on its own)
+  174 parlays · avg 2.0 legs · staked €328 · profit -€87 · ROI -26.6% (95% range -67.2% to +20.4%)
+  Avg payout offered 15.45 vs fair 13.23; bookmaker margin built in across legs 11.0%
+  CLV -1.1% · hit rate 6.3% · verdict: NOT ENOUGH DATA
+  Parlays swing much more than singles: long losing runs are normal even with an edge.
+
+BY EDGE SIZE (does a bigger edge really mean more value?)
+  3–5%                                 612 bets   ROI   -9.1%   CLV   -0.5%
+  5–8%                                 330 bets   ROI   -2.0%   CLV   -0.2%
+  8%+                                  231 bets   ROI   +0.7%   CLV   -1.5%  (not enough data)
+BY LEAGUE AND MARKET
+  Greek Super League · 1X2             144 bets   ROI   +5.6%   CLV   -0.7%  (not enough data)
+  La Liga 2 · 1X2                      136 bets   ROI  -13.4%   CLV   -2.3%  (not enough data)
+  Ligue 2 · 1X2                         92 bets   ROI   +0.5%   CLV   -1.1%  (not enough data)
+  Eredivisie · 1X2                      87 bets   ROI   +5.1%   CLV   -1.0%  (not enough data)
+  League Two · 1X2                      85 bets   ROI  -15.9%   CLV   -0.6%  (not enough data)
+  Belgian Pro League · 1X2              80 bets   ROI   -7.3%   CLV   -3.1%  (not enough data)
+  Süper Lig · 1X2                       67 bets   ROI  -37.0%   CLV   -1.8%  (not enough data)
+  League One · 1X2                      65 bets   ROI   +7.9%   CLV   +0.6%  (not enough data)
+  Serie B · 1X2                         50 bets   ROI  -20.7%   CLV   -0.2%  (not enough data)
+  2. Bundesliga · 1X2                   49 bets   ROI  -22.0%   CLV   +1.7%  (not enough data)
+  Primeira Liga · 1X2                   43 bets   ROI  +15.1%   CLV   -2.6%  (not enough data)
+  Championship · 1X2                    30 bets   ROI  -12.3%   CLV   +2.5%  (not enough data)
+  Ligue 1 · 1X2                         30 bets   ROI  +51.3%   CLV   -1.2%  (not enough data)
+  Scottish Premiership · 1X2            30 bets   ROI   +8.4%   CLV   +0.5%  (not enough data)
+  Bundesliga · 1X2                      24 bets   ROI  -66.7%   CLV   +0.9%  (not enough data)
+  Serie A · 1X2                         22 bets   ROI  +53.4%   CLV   +3.3%  (not enough data)
+  La Liga · 1X2                         21 bets   ROI  -53.9%   CLV   -0.9%  (not enough data)
+  Premier League · 1X2                  18 bets   ROI   -0.4%   CLV   +5.9%  (not enough data)
+  Belgian Pro League · OU2.5            10 bets   ROI  -30.5%   CLV   -5.9%  (not enough data)
+  La Liga · OU2.5                       10 bets   ROI  -12.6%   CLV   -2.1%  (not enough data)
+  Bundesliga · OU2.5                    10 bets   ROI  +29.0%   CLV   +9.0%  (not enough data)
+  Premier League · OU2.5                10 bets   ROI  +29.0%   CLV   +5.9%  (not enough data)
+  Serie A · OU2.5                        9 bets   ROI  +84.6%   CLV  +13.6%  (not enough data)
+  Ligue 1 · OU2.5                        9 bets   ROI  +17.9%   CLV   -1.2%  (not enough data)
+  La Liga 2 · OU2.5                      8 bets   ROI   -8.5%   CLV   -8.4%  (not enough data)
+  Eredivisie · OU2.5                     7 bets   ROI -100.0%   CLV   -0.2%  (not enough data)
+  Ligue 2 · OU2.5                        5 bets   ROI  -57.3%   CLV   +4.6%  (not enough data)
+  Süper Lig · OU2.5                      5 bets   ROI  +32.9%   CLV   -7.1%  (not enough data)
+  League Two · OU2.5                     4 bets   ROI   -6.3%   CLV   -2.3%  (not enough data)
+  Greek Super League · OU2.5             4 bets   ROI  +68.9%   CLV   -2.9%  (not enough data)
+  League One · OU2.5                     3 bets   ROI  +25.3%   CLV   -3.1%  (not enough data)
+  Scottish Premiership · OU2.5           2 bets   ROI -100.0%   CLV   -7.7%  (not enough data)
+  Primeira Liga · OU2.5                  2 bets   ROI  +67.8%   CLV   +0.2%  (not enough data)
+  Championship · OU2.5                   1 bets   ROI -100.0%   CLV   -5.2%  (not enough data)
+  Serie B · OU2.5                        1 bets   ROI +112.7%   CLV   -4.1%  (not enough data)
+BY WHEN THE BET WAS PLACED
+  1–3 days before                      910 bets   ROI   -2.1%   CLV   -0.6%
+  3+ days before                       133 bets   ROI   -0.3%   CLV   -3.7%  (not enough data)
+  6–24 h before                         88 bets   ROI  -30.0%   CLV   +3.0%  (not enough data)
+  1–6 h before                          42 bets   ROI  -13.9%   CLV   +1.4%  (not enough data)
+
+TIMING — when do the best prices at your bookmakers appear?
+  Note: this data has only 2 price snapshots per match (Tue/Fri afternoon + kick-off), so timing advice is coarse. Live odds in paper trading will measure it hour by hour.
+  Belgian Pro League · 1X2: no clear pattern — prices are about as good early as late
+  Belgian Pro League · OU2.5: no clear pattern — prices are about as good early as late
+  Bundesliga · 1X2: no clear pattern — prices are about as good early as late
+  Bundesliga · OU2.5: no clear pattern — prices are about as good early as late
+  2. Bundesliga · 1X2: no clear pattern — prices are about as good early as late
+  2. Bundesliga · OU2.5: no clear pattern — prices are about as good early as late
+  Premier League · 1X2: best prices usually appear 3+ days before (0.7% better than last hour) — bet early
+  Premier League · OU2.5: no clear pattern — prices are about as good early as late
+  Championship · 1X2: no clear pattern — prices are about as good early as late
+  Championship · OU2.5: no clear pattern — prices are about as good early as late
+  League One · 1X2: no clear pattern — prices are about as good early as late
+  League One · OU2.5: no clear pattern — prices are about as good early as late
+  League Two · 1X2: no clear pattern — prices are about as good early as late
+  League Two · OU2.5: no clear pattern — prices are about as good early as late
+  Ligue 1 · 1X2: no clear pattern — prices are about as good early as late
+  Ligue 1 · OU2.5: no clear pattern — prices are about as good early as late
+  Ligue 2 · 1X2: no clear pattern — prices are about as good early as late
+  Ligue 2 · OU2.5: no clear pattern — prices are about as good early as late
+  Greek Super League · 1X2: best prices usually appear 1–3 days before (0.8% better than last hour) — bet early
+  Greek Super League · OU2.5: no clear pattern — prices are about as good early as late
+  Serie A · 1X2: no clear pattern — prices are about as good early as late
+  Serie A · OU2.5: no clear pattern — prices are about as good early as late
+  Serie B · 1X2: no clear pattern — prices are about as good early as late
+  Serie B · OU2.5: no clear pattern — prices are about as good early as late
+  Eredivisie · 1X2: best prices usually appear 6–24 h before (0.7% better than last hour) — bet early
+  Eredivisie · OU2.5: no clear pattern — prices are about as good early as late
+  Primeira Liga · 1X2: no clear pattern — prices are about as good early as late
+  Primeira Liga · OU2.5: no clear pattern — prices are about as good early as late
+  Scottish Premiership · 1X2: no clear pattern — prices are about as good early as late
+  Scottish Premiership · OU2.5: no clear pattern — prices are about as good early as late
+  La Liga · 1X2: no clear pattern — prices are about as good early as late
+  La Liga · OU2.5: no clear pattern — prices are about as good early as late
+  La Liga 2 · 1X2: no clear pattern — prices are about as good early as late
+  La Liga 2 · OU2.5: no clear pattern — prices are about as good early as late
+  Süper Lig · 1X2: no clear pattern — prices are about as good early as late
+  Süper Lig · OU2.5: no clear pattern — prices are about as good early as late
+  Average value of the available price vs the final fair price:
+    Belgian Pro League · 1X2: 3+ days before -5.3%, 1–3 days before -7.0%, 6–24 h before -7.1%, 1–6 h before -6.8%, last hour -6.9%
+    Belgian Pro League · OU2.5: 3+ days before -6.2%, 1–3 days before -5.6%, 6–24 h before -5.6%, 1–6 h before -5.6%, last hour -5.5%
+    Bundesliga · 1X2: 3+ days before -4.6%, 1–3 days before -5.4%, 6–24 h before -5.4%, 1–6 h before -4.9%, last hour -5.7%
+    Bundesliga · OU2.5: 3+ days before -3.7%, 1–3 days before -4.6%, 6–24 h before -4.8%, 1–6 h before -4.8%, last hour -4.7%
+    2. Bundesliga · 1X2: 3+ days before -6.8%, 1–3 days before -5.8%, 6–24 h before -5.5%, 1–6 h before -5.4%, last hour -5.6%
+    2. Bundesliga · OU2.5: 3+ days before -5.8%, 1–3 days before -5.9%, 6–24 h before -5.7%, 1–6 h before -5.6%, last hour -5.6%
+    Premier League · 1X2: 3+ days before -5.0%, 1–3 days before -5.4%, 6–24 h before -5.0%, 1–6 h before -5.5%, last hour -5.8%
+    Premier League · OU2.5: 3+ days before -4.8%, 1–3 days before -4.8%, 6–24 h before -4.7%, 1–6 h before -5.0%, last hour -4.8%
+    Championship · 1X2: 3+ days before -5.4%, 1–3 days before -5.3%, 6–24 h before -5.6%, 1–6 h before -5.6%, last hour -5.5%
+    Championship · OU2.5: 3+ days before -5.0%, 1–3 days before -5.1%, 6–24 h before -5.0%, 1–6 h before -4.9%, last hour -4.9%
+    League One · 1X2: 3+ days before -5.4%, 1–3 days before -5.4%, 6–24 h before -5.4%, 1–6 h before -5.8%, last hour -5.5%
+    League One · OU2.5: 3+ days before -5.0%, 1–3 days before -5.0%, 6–24 h before -5.2%, 1–6 h before -5.3%, last hour -5.2%
+    League Two · 1X2: 3+ days before -5.6%, 1–3 days before -5.3%, 6–24 h before -5.3%, 1–6 h before -5.4%, last hour -5.5%
+    League Two · OU2.5: 3+ days before -5.7%, 1–3 days before -5.5%, 6–24 h before -5.5%, 1–6 h before -5.6%, last hour -5.4%
+    Ligue 1 · 1X2: 3+ days before -5.1%, 1–3 days before -5.5%, 6–24 h before -5.7%, 1–6 h before -3.3%, last hour -5.6%
+    Ligue 1 · OU2.5: 3+ days before -4.2%, 1–3 days before -4.7%, 6–24 h before -4.7%, 1–6 h before -4.5%, last hour -4.6%
+    Ligue 2 · 1X2: 3+ days before -7.2%, 1–3 days before -7.2%, 6–24 h before -7.4%, 1–6 h before -7.8%, last hour -7.1%
+    Ligue 2 · OU2.5: 3+ days before -5.7%, 1–3 days before -5.8%, 6–24 h before -5.6%, 1–6 h before -6.1%, last hour -5.6%
+    Greek Super League · 1X2: 3+ days before -6.6%, 1–3 days before -5.6%, 6–24 h before -3.6%, 1–6 h before -5.2%, last hour -6.3%
+    Greek Super League · OU2.5: 3+ days before -6.2%, 1–3 days before -5.9%, 6–24 h before -6.0%, 1–6 h before -5.9%, last hour -5.6%
+    Serie A · 1X2: 3+ days before -5.4%, 1–3 days before -5.6%, 6–24 h before -5.6%, 1–6 h before -5.5%, last hour -5.9%
+    Serie A · OU2.5: 3+ days before -4.6%, 1–3 days before -4.7%, 6–24 h before -5.0%, 1–6 h before -4.7%, last hour -4.7%
+    Serie B · 1X2: 3+ days before -6.4%, 1–3 days before -6.2%, 6–24 h before -6.3%, 1–6 h before -6.4%, last hour -6.3%
+    Serie B · OU2.5: 3+ days before -5.7%, 1–3 days before -5.6%, 6–24 h before -5.6%, 1–6 h before -5.6%, last hour -5.6%
+    Eredivisie · 1X2: 3+ days before -3.0%, 1–3 days before -6.4%, 6–24 h before -5.6%, 1–6 h before -6.6%, last hour -6.3%
+    Eredivisie · OU2.5: 3+ days before -5.1%, 1–3 days before -5.8%, 6–24 h before -5.4%, 1–6 h before -5.4%, last hour -5.6%
+    Primeira Liga · 1X2: 3+ days before -7.8%, 1–3 days before -7.6%, 6–24 h before -7.2%, 1–6 h before -6.8%, last hour -7.6%
+    Primeira Liga · OU2.5: 3+ days before -5.9%, 1–3 days before -5.8%, 6–24 h before -5.7%, 1–6 h before -5.7%, last hour -5.7%
+    Scottish Premiership · 1X2: 3+ days before -3.6%, 1–3 days before -7.0%, 6–24 h before -6.7%, 1–6 h before -6.6%, last hour -6.8%
+    Scottish Premiership · OU2.5: 3+ days before -4.8%, 1–3 days before -5.3%, 6–24 h before -5.3%, 1–6 h before -5.3%, last hour -4.9%
+    La Liga · 1X2: 3+ days before -5.7%, 1–3 days before -5.9%, 6–24 h before -5.9%, 1–6 h before -5.8%, last hour -5.8%
+    La Liga · OU2.5: 3+ days before -5.1%, 1–3 days before -5.1%, 6–24 h before -5.1%, 1–6 h before -5.0%, last hour -4.8%
+    La Liga 2 · 1X2: 3+ days before -6.0%, 1–3 days before -5.6%, 6–24 h before -5.9%, 1–6 h before -5.8%, last hour -5.9%
+    La Liga 2 · OU2.5: 3+ days before -6.3%, 1–3 days before -6.2%, 6–24 h before -5.8%, 1–6 h before -5.6%, last hour -5.8%
+    Süper Lig · 1X2: 3+ days before -7.3%, 1–3 days before -7.1%, 6–24 h before -6.8%, 1–6 h before -7.1%, last hour -7.0%
+    Süper Lig · OU2.5: 3+ days before -5.3%, 1–3 days before -5.5%, 6–24 h before -5.0%, 1–6 h before -5.4%, last hour -5.4%
+
+DOES OUR OWN MODEL ADD ANYTHING? (out-of-sample, same matches, lower log loss = better)
+  1X2 (33673 matches): market 0.9972 · model 1.0200 · blend 0.9996 · closing price 0.9932
+    → The model does not beat the market. Use Strategy A (market value) for this market.
+  OU2.5 (33628 matches): market 0.6750 · model 0.6913 · blend 0.6765 · closing price 0.6725
+    → The model does not beat the market. Use Strategy A (market value) for this market.
+
+HOW TO READ THIS
+  Variants tested so far on this data: 3. The more you try, the more likely the best one is luck.
+  CLV (beating the closing price) is the most reliable early sign of an edge; profit needs far more bets to prove.
+  A backtest is not proof. Real money stays off until paper trading passes every go-live gate.
+  Variant ID: 038354c54e00
+

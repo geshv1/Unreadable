@@ -1,0 +1,355 @@
+<title>EdgeBot Paper Bets</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: a single column like a betting slip — summary on top, open slips you act on, then settled results. */
+:root {
+  --bg: #eef2f0;
+  --surface: #ffffff;
+  --ink: #14201b;
+  --muted: #5d6b65;
+  --line: #d5ddd9;
+  --accent: #1d6b47;
+  --accent-ink: #ffffff;
+  --win: #1d7a4a;
+  --loss: #b3362c;
+  --warn: #9a6a00;
+  --chip: #e3ebe7;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1513; --surface: #161f1c; --ink: #e6ece9; --muted: #96a59f; --line: #29352f;
+    --accent: #45b77c; --accent-ink: #06110c; --win: #4cc285; --loss: #ef7a6e; --warn: #e0b04a; --chip: #1f2b26;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1513; --surface: #161f1c; --ink: #e6ece9; --muted: #96a59f; --line: #29352f;
+  --accent: #45b77c; --accent-ink: #06110c; --win: #4cc285; --loss: #ef7a6e; --warn: #e0b04a; --chip: #1f2b26;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 40px;
+}
+.wrap { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+h1, h2 { font-family: var(--display); font-weight: 700; letter-spacing: 0.01em; margin: 0; text-wrap: balance; }
+h1 { font-size: 2.1rem; line-height: 1; }
+h2 { font-size: 1.15rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
+header { display: flex; flex-direction: column; gap: 8px; }
+.mode { align-self: flex-start; font: 600 0.72rem/1 var(--body); letter-spacing: 0.1em; text-transform: uppercase;
+  background: var(--chip); color: var(--accent); padding: 6px 9px; border-radius: 4px; }
+.sub { color: var(--muted); margin: 0; max-width: 60ch; }
+.note { font-size: 0.85rem; color: var(--warn); margin: 0; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line);
+  border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.stat { background: var(--surface); padding: 12px 10px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.stat .k { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.stat .v { font-family: var(--display); font-size: 1.6rem; font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stat .r { font-size: 0.72rem; color: var(--muted); font-family: var(--mono); }
+@media (max-width: 460px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.gates { display: flex; flex-direction: column; gap: 10px; }
+.bar { height: 8px; background: var(--chip); border-radius: 4px; overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--accent); width: 0; }
+.gate { display: grid; grid-template-columns: 22px 1fr auto; gap: 8px; align-items: baseline; font-size: 0.92rem; }
+.gate .d { color: var(--muted); font-family: var(--mono); font-size: 0.8rem; text-align: right; }
+.tick { font-weight: 700; color: var(--muted); }
+.tick.ok { color: var(--win); }
+
+.slips { display: flex; flex-direction: column; gap: 12px; }
+.slip { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: flex;
+  flex-direction: column; gap: 10px; }
+.slip .top { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.slip .match { font-family: var(--display); font-size: 1.3rem; font-weight: 600; line-height: 1.15; min-width: 0; }
+.slip .when { color: var(--muted); font-size: 0.82rem; }
+.pick { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.pick .label { font-weight: 600; min-width: 0; }
+.pick .odds { font-family: var(--mono); font-size: 1.35rem; font-weight: 500; }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; font-size: 0.82rem; }
+.facts div { display: flex; flex-direction: column; min-width: 0; }
+.facts .k { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.facts .v { font-family: var(--mono); }
+.why { font-size: 0.84rem; color: var(--muted); margin: 0; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+button { font: 600 0.9rem/1 var(--body); padding: 10px 14px; border-radius: 6px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); cursor: pointer; min-height: 42px; }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button:disabled { opacity: 0.5; cursor: default; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.oddsform { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.oddsform input { font: 500 1rem var(--mono); width: 7.5em; padding: 9px 10px; border-radius: 6px; border: 1px solid var(--line);
+  background: var(--bg); color: var(--ink); }
+.chip { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 4px 7px; border-radius: 4px; background: var(--chip); color: var(--muted); }
+.chip.placed { color: var(--accent); }
+.chip.skipped { color: var(--loss); }
+.chip.low { color: var(--warn); }
+.status { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 0.85rem; }
+.link { background: none; border: none; padding: 0; min-height: 0; color: var(--muted); text-decoration: underline; font-weight: 500; }
+
+.results { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.res { display: grid; grid-template-columns: 54px 1fr auto; gap: 10px; padding: 11px 12px; background: var(--surface);
+  align-items: center; border-top: 1px solid var(--line); }
+.res:first-child { border-top: 0; }
+.res .w { font-weight: 700; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.res .w.won { color: var(--win); } .res .w.lost { color: var(--loss); } .res .w.void { color: var(--muted); }
+.res .m { min-width: 0; }
+.res .m b { font-weight: 600; }
+.res .m span { display: block; color: var(--muted); font-size: 0.8rem; }
+.res .p { text-align: right; font-family: var(--mono); font-size: 0.9rem; }
+.res .p span { display: block; color: var(--muted); font-size: 0.75rem; }
+.empty { background: var(--surface); border: 1px dashed var(--line); border-radius: 8px; padding: 16px; color: var(--muted); margin: 0; }
+footer { color: var(--muted); font-size: 0.82rem; display: flex; flex-direction: column; gap: 4px; }
+@media (prefers-reduced-motion: no-preference) { .bar > span { transition: width 0.6s ease; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="mode">Paper mode · pretend money</span>
+    <h1>EdgeBot Paper Bets</h1>
+    <p class="sub">Every value bet Claude finds when you send a Betano screenshot or link lands here. Results and closing prices are checked automatically.</p>
+    <p class="note" id="conn" hidden></p>
+  </header>
+
+  <section aria-labelledby="h-stats">
+    <h2 id="h-stats" style="margin-bottom:10px">So far</h2>
+    <div class="stats" id="stats">
+      <div class="stat"><span class="k">Settled</span><span class="v" id="s-bets">0</span><span class="r" id="s-open">0 open</span></div>
+      <div class="stat"><span class="k">Profit</span><span class="v" id="s-profit">€0</span><span class="r" id="s-staked">€0 staked</span></div>
+      <div class="stat"><span class="k">ROI</span><span class="v" id="s-roi">–</span><span class="r" id="s-roi-r">needs bets</span></div>
+      <div class="stat"><span class="k">CLV</span><span class="v" id="s-clv">–</span><span class="r" id="s-clv-r">beat the close</span></div>
+    </div>
+    <p class="note" id="s-note" style="margin-top:8px">Not enough data to judge anything until about 300 settled bets.</p>
+  </section>
+
+  <section aria-labelledby="h-gates" class="gates">
+    <h2 id="h-gates">Go-live gates</h2>
+    <div class="bar" aria-hidden="true"><span id="gate-bar"></span></div>
+    <div id="gates"></div>
+  </section>
+
+  <section aria-labelledby="h-open">
+    <h2 id="h-open" style="margin-bottom:10px">Open bets</h2>
+    <div class="slips" id="open"></div>
+  </section>
+
+  <section aria-labelledby="h-done">
+    <h2 id="h-done" style="margin-bottom:10px">Results</h2>
+    <div id="done"></div>
+  </section>
+
+  <footer>
+    <span>Real-money mode stays off until every gate passes and you confirm.</span>
+    <span>Tap Placed or Skipped so the record matches what you did. Use Different odds if Betano paid something else.</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+  const GATE_DEFAULTS = [
+    { name: "At least 1,000 paper bets", ok: false, detail: "0 so far" },
+    { name: "Average CLV ≥ 2%", ok: false, detail: "no data" },
+    { name: "CLV 95% range above zero", ok: false, detail: "no data" },
+    { name: "Positive profit", ok: false, detail: "€+0" },
+    { name: "Worst drop ≤ 20%", ok: true, detail: "0%" },
+    { name: "Your confirmation", ok: false, detail: "last step" },
+  ];
+  const state = { bets: [], summary: null, db: null, canWrite: false, busy: new Set(), editing: null };
+  const $ = (id) => document.getElementById(id);
+  const fmtTime = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Sofia", weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  const when = (iso) => { try { return fmtTime.format(new Date(iso)); } catch { return iso || ""; } };
+  const pct = (x, signed = true) => (x === null || x === undefined || Number.isNaN(x)) ? "–" : (signed && x > 0 ? "+" : "") + (x * 100).toFixed(1) + "%";
+  const eur = (x) => (x < 0 ? "-€" : "€") + Math.abs(x).toFixed(Math.abs(x) < 100 ? 2 : 0);
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
+
+  function renderStats() {
+    const s = state.summary;
+    const settled = state.bets.filter((b) => (b.status === "won" || b.status === "lost") && b.placed !== false);
+    const open = state.bets.filter((b) => b.status === "open" && b.placed !== false);
+    const staked = s?.staked ?? settled.reduce((a, b) => a + (b.stake || 0), 0);
+    const profit = s?.profit ?? settled.reduce((a, b) => a + (b.pnl || 0), 0);
+    $("s-bets").textContent = String(s?.bets ?? settled.length);
+    $("s-open").textContent = `${open.length} open`;
+    $("s-profit").textContent = eur(profit);
+    $("s-profit").style.color = profit > 0 ? "var(--win)" : profit < 0 ? "var(--loss)" : "";
+    $("s-staked").textContent = `${eur(staked)} staked`;
+    $("s-roi").textContent = staked > 0 ? pct(profit / staked) : "–";
+    $("s-roi-r").textContent = s?.roi_ci ? `${pct(s.roi_ci[0])} to ${pct(s.roi_ci[1])}` : "needs bets";
+    $("s-clv").textContent = s?.clv !== undefined && s?.clv !== null ? pct(s.clv) : "–";
+    $("s-clv-r").textContent = s?.clv_ci ? `${pct(s.clv_ci[0])} to ${pct(s.clv_ci[1])}` : "beat the close";
+    const n = s?.bets ?? settled.length;
+    $("s-note").hidden = n >= 300;
+    $("s-note").textContent = `Not enough data to judge anything yet (${n} of 300 settled bets). The ranges show how much is still luck.`;
+  }
+
+  function renderGates() {
+    const gates = state.summary?.gates?.length ? state.summary.gates : GATE_DEFAULTS;
+    const n = state.summary?.bets ?? 0;
+    $("gate-bar").style.width = Math.min(100, (n / 1000) * 100) + "%";
+    const box = $("gates");
+    box.replaceChildren();
+    for (const g of gates) {
+      const row = el("div", "gate");
+      row.append(el("span", "tick" + (g.ok ? " ok" : ""), g.ok ? "✓" : "○"), el("span", "", g.name), el("span", "d", g.detail));
+      box.append(row);
+    }
+  }
+
+  async function write(bet, patch) {
+    if (!state.db || state.busy.has(bet.__id)) return;
+    state.busy.add(bet.__id);
+    render();
+    try {
+      await state.db.collection("bets").doc(bet.__id).update({ ...patch, user_updated_at: new Date().toISOString() });
+    } catch (e) {
+      $("conn").hidden = false;
+      $("conn").textContent = e?.code === "invalid_argument" ? "Only the owner can change these bets." : "Couldn't save that. Try again in a moment.";
+    } finally {
+      state.busy.delete(bet.__id);
+      state.editing = null;
+      render();
+    }
+  }
+
+  function slip(b) {
+    const card = el("article", "slip");
+    const top = el("div", "top");
+    const title = b.kind === "parlay" ? `${b.legs?.length || 2}-leg parlay` : `${b.home} v ${b.away}`;
+    top.append(el("span", "match", title), el("span", "when", `${b.league_name || b.league} · ${when(b.kickoff)}`));
+    const pick = el("div", "pick");
+    pick.append(el("span", "label", b.label), el("span", "odds", Number(b.placed_odds || b.odds).toFixed(2)));
+    const facts = el("div", "facts");
+    const kickoff = new Date(b.kickoff);
+    const before = new Date(kickoff.getTime() - 15 * 60000);
+    const items = [
+      ["Stake", eur(b.stake)],
+      ["Edge", pct(b.edge)],
+      [b.kind === "parlay" ? "Fair payout" : "Skip below", b.kind === "parlay" ? Number(b.fair_odds).toFixed(2) : (b.min_odds ? Number(b.min_odds).toFixed(2) : "–")],
+    ];
+    for (const [k, v] of items) { const d = el("div"); d.append(el("span", "k", k), el("span", "v", v)); facts.append(d); }
+    card.append(top, pick, facts);
+    const status = el("div", "status");
+    status.append(el("span", "chip", "Betano"), el("span", "chip" + (b.confidence === "low" ? " low" : ""), `confidence ${b.confidence}`));
+    status.append(el("span", "when", `place before ${when(before.toISOString())}`));
+    card.append(status);
+    if (b.reason) card.append(el("p", "why", b.reason));
+
+    const busy = state.busy.has(b.__id);
+    if (b.placed === true || b.placed === false) {
+      const row = el("div", "status");
+      row.append(el("span", "chip " + (b.placed ? "placed" : "skipped"), b.placed ? (b.placed_odds ? `placed at ${Number(b.placed_odds).toFixed(2)}` : "placed") : "skipped"));
+      if (state.canWrite) {
+        const undo = el("button", "link", "Undo");
+        undo.type = "button"; undo.disabled = busy;
+        undo.addEventListener("click", () => write(b, { placed: null, placed_odds: null }));
+        row.append(undo);
+      }
+      card.append(row);
+    } else if (state.canWrite) {
+      if (state.editing === b.__id) {
+        const form = el("form", "oddsform");
+        const input = el("input");
+        input.id = "odds-" + b.__id; input.inputMode = "decimal"; input.placeholder = Number(b.odds).toFixed(2);
+        input.setAttribute("aria-label", "Odds you got");
+        const save = el("button", "primary", "Save odds"); save.type = "submit";
+        const cancel = el("button", "", "Cancel"); cancel.type = "button";
+        const msg = el("span", "when", "");
+        cancel.addEventListener("click", () => { state.editing = null; render(); });
+        form.addEventListener("submit", (ev) => {
+          ev.preventDefault();
+          const v = parseFloat(String(input.value).replace(",", "."));
+          if (!(v > 1.01 && v < 1000)) { msg.textContent = "Enter decimal odds, e.g. 2.05"; return; }
+          write(b, { placed: true, placed_odds: v });
+        });
+        form.append(input, save, cancel, msg);
+        card.append(form);
+        setTimeout(() => input.focus(), 0);
+      } else {
+        const actions = el("div", "actions");
+        const placed = el("button", "primary", "✅ Placed"); placed.type = "button";
+        const skipped = el("button", "", "❌ Skipped"); skipped.type = "button";
+        const other = el("button", "", "🔢 Different odds"); other.type = "button";
+        for (const btn of [placed, skipped, other]) btn.disabled = busy;
+        placed.addEventListener("click", () => write(b, { placed: true }));
+        skipped.addEventListener("click", () => write(b, { placed: false }));
+        other.addEventListener("click", () => { state.editing = b.__id; render(); });
+        actions.append(placed, skipped, other);
+        card.append(actions);
+      }
+    }
+    return card;
+  }
+
+  function renderOpen() {
+    const box = $("open");
+    box.replaceChildren();
+    const open = state.bets.filter((b) => b.status === "open").sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
+    if (!open.length) {
+      box.append(el("p", "empty", "No open bets. Send Claude a Betano screenshot or match link; when it finds value, the bet appears here with its stake and a place-before time."));
+      return;
+    }
+    for (const b of open) box.append(slip(b));
+  }
+
+  function renderDone() {
+    const box = $("done");
+    box.replaceChildren();
+    const done = state.bets.filter((b) => b.status !== "open").sort((a, b) => String(b.settled_at || "").localeCompare(String(a.settled_at || "")));
+    if (!done.length) { box.append(el("p", "empty", "No results yet. Bets are graded a few hours after full time.")); return; }
+    const list = el("div", "results");
+    for (const b of done) {
+      const row = el("div", "res");
+      row.append(el("span", "w " + b.status, b.status));
+      const m = el("div", "m");
+      const name = el("b", "", b.kind === "parlay" ? "Parlay" : `${b.home} v ${b.away}`);
+      m.append(name, el("span", "", `${b.label} @ ${Number(b.placed_odds || b.odds).toFixed(2)}${b.score ? " · " + b.score : ""}${b.placed === false ? " · skipped" : ""}`));
+      const p = el("div", "p", b.pnl === null || b.pnl === undefined ? "–" : eur(b.pnl));
+      p.style.color = b.pnl > 0 ? "var(--win)" : b.pnl < 0 ? "var(--loss)" : "";
+      p.append(el("span", "", b.clv === null || b.clv === undefined ? "CLV –" : `CLV ${pct(b.clv)}`));
+      row.append(m, p);
+      list.append(row);
+    }
+    box.append(list);
+  }
+
+  function render() { renderStats(); renderGates(); renderOpen(); renderDone(); }
+  render();
+
+  (async () => {
+    const conn = $("conn");
+    const timer = setTimeout(() => { conn.hidden = false; conn.textContent = "Can't reach your bets yet. They'll appear when the connection comes back."; }, 10000);
+    const db = await window.claude?.use?.("db");
+    if (!db) {
+      clearTimeout(timer);
+      conn.hidden = false;
+      conn.textContent = "Open this page in Claude while signed in to see your bets.";
+      return;
+    }
+    state.db = db;
+    try {
+      const user = await window.claude.use("user");
+      state.canWrite = (await user?.isOwner()) ?? false;
+    } catch { state.canWrite = false; }
+    render();
+    db.collection("bets").onSnapshot((snap) => {
+      if (!snap.metadata.fromCache) { clearTimeout(timer); conn.hidden = true; }
+      state.bets = snap.docs.map((d) => ({ ...d.data(), __id: d.id }));
+      render();
+    }, () => { clearTimeout(timer); conn.hidden = false; conn.textContent = "Lost the connection to your bets. Reopen the page to try again."; });
+    db.doc("meta/summary").onSnapshot((snap) => {
+      state.summary = snap.exists ? snap.data() : null;
+      render();
+    }, () => {});
+  })();
+})();
+</script>
