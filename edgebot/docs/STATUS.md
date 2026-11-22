@@ -52,7 +52,13 @@ Screenshots work through the Claude chat for now.
 - A €6/month server is not worth it now: expected profit is about €2 a season on current evidence, and the free data is the real limit, not the server.
 - Strategy A (market value) only; Strategy B is off because the model lost to the market.
 
-## Next: Phase 3 — paper trading (free version, waiting for your go)
+## Phase 3 + chat bot: done (free)
+
+- Send Claude a Betano screenshot or link: it runs `check`, records value bets as paper bets, and keeps the private tracker page in sync
+- `paper grade` / `paper report`: free results, CLV vs Betfair Exchange close, go-live gates
+- Setup script on the cloud environment installs the engine in new chats
+
+## Earlier plan for Phase 3 (kept for reference)
 
 - Fair prices: football-data.co.uk upcoming-matches file (Betfair Exchange reference, about twice a week)
 - Betano prices: free OddsPapi account if it really has Betano; otherwise a "bet only if Betano shows X or more" line on each pick

@@ -12,8 +12,8 @@ NRA-licensed bookmakers where you have your own account.
 |---|---|---|
 | 1 | Data + pricing engine | ✅ done |
 | 2 | Backtester (with parlays + timing analysis) | ✅ done |
-| 3 | Paper trading + reports (live odds) | next |
-| 4 | Telegram bot, Ask Anything, server | later |
+| 3 | Paper trading + reports (free version, through the Claude chat) | ✅ done |
+| 4 | Chat bot: send a screenshot or link to Claude (no Telegram, no server) | ✅ done |
 | 5 | iPhone home-screen app on the same API | later |
 
 Latest results: see [`docs/STATUS.md`](docs/STATUS.md).
@@ -38,6 +38,8 @@ python -m edgebot compare-devig           # which margin-removal method is most 
 python -m edgebot timing                  # when the best prices appear, per league/market
 python -m edgebot picks                   # the pick sheet the bot would send
 python -m edgebot check arsenal chelsea   # check one match on demand (see below)
+python -m edgebot paper grade             # settle paper bets with free results + closing prices
+python -m edgebot paper report            # profit, CLV, go-live gates
 python -m edgebot variants                # every variant tested so far (honesty log)
 python -m edgebot holdout --confirm       # the sealed final test: runs ONCE, then refuses
 ```
@@ -59,6 +61,14 @@ Screenshots: send one to Claude in the chat; it reads the teams and odds and run
 Free data limits: fair prices come from football-data.co.uk's upcoming-matches file (Betfair Exchange,
 22 European leagues, refreshed around Tuesday and Friday). Older prices lower the confidence and halve
 the stake; prices over 5 days old are refused. Unknown matches are never guessed.
+
+## Paper trading and the tracker page
+
+Every ✅ bet from a check becomes a paper bet (pretend money, one per match). `paper grade` settles bets
+with free results and measures CLV against the Betfair Exchange closing price. `paper report` shows
+profit, ROI and CLV with 95% ranges, and progress on every go-live gate. The private tracker page
+(`app/tracker.html`) shows the bets on your phone, with Placed / Skipped / Different odds buttons.
+How Claude keeps the page in sync is described in `../CLAUDE.md`.
 
 ## Settings
 

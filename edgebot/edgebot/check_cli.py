@@ -42,8 +42,15 @@ def league_timing(cfg: dict, league: str, data_dir: Path, max_age_days: float = 
     return recs
 
 
-def run_check(cfg: dict, query: str, odds_text: str | None, at: str | None = None, bookmaker: str | None = None) -> str:
+def run_check(
+    cfg: dict, query: str, odds_text: str | None, at: str | None = None, bookmaker: str | None = None,
+    ledger_path: str | None = None, record: bool = True,
+) -> str:
+    from . import paper
+
     ddir = default_data_dir()
+    lpath = Path(ledger_path) if ledger_path else ddir / "paper_ledger.json"
+    ledger = paper.load_ledger(lpath)
     ds, _published = football_data_uk.load_fixtures(ddir)
     if at:
         ts = pd.Timestamp(at)
@@ -52,5 +59,13 @@ def run_check(cfg: dict, query: str, odds_text: str | None, at: str | None = Non
         now = datetime.now(timezone.utc)
     hit, _ = find_match(query, ds.matches)
     recs = league_timing(cfg, hit.league, ddir) if hit is not None else {}
-    res = check_match(query, ds, cfg, now, parse_odds(odds_text), bookmaker, ddir, recs)
-    return res.render()
+    book = bookmaker or cfg["bookmakers"]["playable"][0]
+    res = check_match(query, ds, cfg, now, parse_odds(odds_text), book, ddir, recs,
+                      extra_legs=paper.open_legs(ledger, now, book))
+    text = res.render()
+    if record and res.best is not None and res.stake > 0:
+        entry = paper.single_from_candidate(res.best, res.stake, now, res.ref_time, float(cfg["strategy"]["edge_threshold"]))
+        ledger, action = paper.upsert(ledger, entry)
+        paper.save_ledger(lpath, ledger)
+        text += f"\n[PAPER] Paper bet {action}: {entry['doc_id']}"
+    return text

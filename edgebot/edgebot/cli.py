@@ -8,6 +8,8 @@
   python -m edgebot timing                   # when the best prices appear, per league/market
   python -m edgebot picks                    # the pick sheet the bot would send (sample data)
   python -m edgebot check arsenal chelsea --odds "1=2.1 X=3.4 2=3.6 O=1.9 U=1.95"   # one match, on demand
+  python -m edgebot paper grade              # settle paper bets with free results + closing prices
+  python -m edgebot paper report             # profit, CLV, go-live gates
   python -m edgebot variants                 # every variant tested so far
   python -m edgebot holdout --confirm        # the ONE-TIME sealed final test
 """
@@ -72,6 +74,19 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--odds", help="your bookmaker's odds, e.g. '1=2.10 X=3.40 2=3.60 O=1.90 U=1.95'")
     p.add_argument("--at", help="pretend the time is this (UTC), for testing")
     p.add_argument("--book", help="bookmaker (default: the first in bookmakers.playable)")
+    p.add_argument("--ledger", help="paper-bet ledger file (default: data/paper_ledger.json)")
+    p.add_argument("--no-record", action="store_true", help="don't record a paper bet")
+    p.add_argument("--config")
+    p = sub.add_parser("paper", help="paper trading: grade, report, mark placed/skipped, record a parlay")
+    p.add_argument("action", choices=["grade", "report", "summary", "mark", "parlay", "import", "export"])
+    p.add_argument("bet_id", nargs="?", help="for mark: the paper bet id")
+    p.add_argument("--placed", choices=["yes", "no"], help="for mark: did you place it?")
+    p.add_argument("--odds", type=float, help="for mark: the odds you really got")
+    p.add_argument("--ledger", help="paper-bet ledger file (default: data/paper_ledger.json)")
+    p.add_argument("--src", help="for import: folder of tracker documents (JSON files)")
+    p.add_argument("--versions", help='for import: JSON map of document id -> version, e.g. \'{"E0-...~OU2.5~O": 3}\'')
+    p.add_argument("--out", help="for export/summary: where to write")
+    p.add_argument("--at", help="pretend the time is this (UTC), for testing")
     p.add_argument("--config")
     p = sub.add_parser("variants", help="list every variant tested")
     p = sub.add_parser("holdout", help="run the one-time sealed final test")
@@ -138,7 +153,13 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "check":
         from .check_cli import run_check
 
-        print(run_check(cfg, " ".join(args.query), args.odds, args.at, args.book))
+        print(run_check(cfg, " ".join(args.query), args.odds, args.at, args.book, args.ledger, not args.no_record))
+        return 0
+
+    if args.cmd == "paper":
+        from .paper_cli import run_paper
+
+        print(run_paper(cfg, args))
         return 0
 
     if args.cmd == "variants":

@@ -199,6 +199,7 @@ def check_match(
     data_dir: Path | None = None,
     timing_recs: dict | None = None,
     remember: bool = True,
+    extra_legs: list[Candidate] | None = None,
 ) -> CheckResult:
     sp = StrategyParams.from_config(cfg)
     book = bookmaker or sp.playable[0]
@@ -292,6 +293,9 @@ def check_match(
         res.parlay_note = "switched off in settings."
     else:
         legs = _load_legs(data_dir, at) if data_dir is not None else []
+        for leg in extra_legs or []:
+            if all(l.match_id != leg.match_id for l in legs) and (res.best is None or leg.match_id != res.best.match_id):
+                legs.append(leg)
         if res.best is not None and all(l.match_id != res.best.match_id for l in legs):
             legs.append(res.best)
         cutoff = at + timedelta(minutes=15)
