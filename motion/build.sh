@@ -2,7 +2,7 @@
 # Full pipeline: voiceover → cues → sound mix → frames → loudness-normalised MP4.
 # Needs: node + playwright (preinstalled), ffmpeg, and a Python venv with kokoro + soundfile
 #   (uv venv -p 3.12 .venv && uv pip install kokoro soundfile "misaki[en]")
-# usage: ./build.sh [comp] [--skip-vo]        comp: main (Go First) | alone (Fifteen Minutes) | grip (Losing Grip) | tomorrow (Chapter One, 4:3)
+# usage: ./build.sh [comp] [--skip-vo]        comp: main (Go First) | alone (Fifteen Minutes) | grip (Losing Grip) | tomorrow (Chapter One, 4:3) | smart (Four Strange Things, 4:3)
 #        VENV=/path/to/venv to override the Python environment
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -19,6 +19,7 @@ case "$COMP" in
   alone) SCRIPT=scripts/alone.json; NAME=alone; OUT=out/fifteen-minutes.mp4 ;;
   grip)  SCRIPT=scripts/grip.json;  NAME=grip;  OUT=out/losing-grip.mp4 ;;
   tomorrow) SCRIPT=scripts/tomorrow.json; NAME=tomorrow; OUT=out/chapter-one.mp4 ;;
+  smart) SCRIPT=scripts/smart.json; NAME=smart; OUT=out/four-strange-things.mp4 ;;
   *)     SCRIPT=scripts/$COMP.json; NAME=$COMP; OUT=out/$COMP.mp4 ;;
 esac
 B=build/$COMP

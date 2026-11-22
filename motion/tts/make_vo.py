@@ -47,7 +47,10 @@ for ln in script["lines"]:
     shown = ln["show"].split()
     words, ti = [], 0
     for w in shown:
-        target, acc, start = norm(w.replace("*", "")), "", None
+        if w.startswith("{"):  # display-only word: timed later, just before the next spoken word
+            words.append({"w": w, "s": None, "e": None, "extra": True})
+            continue
+        target, acc, start = norm(re.sub(r"[*\[\]~#%]", "", w)), "", None
         while ti < len(toks) and len(acc) < len(target):
             start = toks[ti]["s"] if start is None else start
             acc += norm(toks[ti]["t"])
@@ -56,6 +59,14 @@ for ln in script["lines"]:
         if start is None:  # ran out of tokens: reuse last
             start = end = toks[-1]["e"]
         words.append({"w": w, "s": start, "e": end})
+    for i, wd in enumerate(words):
+        if wd.get("extra"):
+            nxt = next((x for x in words[i + 1:] if not x.get("extra")), None)
+            wd["s"] = round((nxt["s"] if nxt else words[i - 1]["e"]) - 0.45, 3)
+            wd["e"] = round(wd["s"] + 0.3, 3)
+    if ln.get("fx"):
+        for wd in words:
+            wd["fx"] = ln["fx"]
     dur = len(audio) / SR
     lines.append({"id": ln["id"], "start": round(cursor, 3), "end": round(cursor + dur, 3), "words": words})
     chunks.append(audio.astype(np.float32))

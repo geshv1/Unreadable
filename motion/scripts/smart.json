@@ -1,0 +1,22 @@
+{
+  "voice": "am_michael",
+  "speed": 1.12,
+  "preroll": 0.12,
+  "tail": 2.6,
+  "lines": [
+    { "id": "hook",    "gap": 0.0,  "fx": "hook", "say": "Intelligent people do four strange things.",                    "show": "Intelligent people do *four* strange things." },
+    { "id": "one",     "gap": 0.45, "say": "One. They walk away from fights they could win.",                        "show": "%One. They walk away from fights they could ~win.~" },
+    { "id": "fly",     "gap": 0.25, "say": "In one study, replaying an insult like a fly on the wall cut anger and aggression.", "show": "In one study, replaying an insult like a [fly on the wall] cut anger and aggression." },
+    { "id": "marcus",  "gap": 0.3,  "fx": "type", "say": "Marcus Aurelius: the best revenge is not to be like them.", "show": "Marcus Aurelius: \"The best revenge is not to be *like them.*\"" },
+    { "id": "two",     "gap": 0.45, "say": "Two. They go looking for discomfort.",                                   "show": "%Two. They go looking for [discomfort.]" },
+    { "id": "improv",  "gap": 0.25, "say": "In an improv class, students told to seek discomfort kept going longer, and learned more.", "show": "In an improv class, students told to seek discomfort kept going *longer,* and learned *more.*" },
+    { "id": "signal",  "gap": 0.25, "fx": "pop", "say": "Discomfort is the signal that you're growing.",              "show": "Discomfort is the *signal* that you're *growing.*" },
+    { "id": "three",   "gap": 0.45, "say": "Three. They're happy alone.",                                           "show": "%Three. They're happy [alone.]" },
+    { "id": "alone",   "gap": 0.25, "say": "Among 15,000 young adults, the smartest were less satisfied the more they saw friends.", "show": "Among #15,000 young adults, the smartest were *less satisfied* the more they saw friends." },
+    { "id": "company", "gap": 0.25, "say": "Their own mind is good company.",                                        "show": "Their own mind is {~lonely~} *good company.*" },
+    { "id": "four",    "gap": 0.45, "say": "Four. They read people like a book.",                                   "show": "%Four. They read people like a [book.]" },
+    { "id": "thin",    "gap": 0.25, "say": "Strangers watched 30 silent seconds of a teacher, and predicted the students' end-of-term ratings.", "show": "Strangers watched #30 silent seconds of a teacher, and predicted the students' *end-of-term ratings.*" },
+    { "id": "look",    "gap": 0.3,  "fx": "pop", "say": "The signal is always there. Most people just aren't looking.", "show": "The signal is always there. Most people just aren't *looking.*" },
+    { "id": "cta",     "gap": 0.55, "say": "So what type of fighter are you, in the ring and in life? Take my 2-minute quiz. Link in bio.", "show": "So what type of *fighter* are you, in the ring and in life? Take my [2-minute quiz.] Link in bio." }
+  ]
+}
