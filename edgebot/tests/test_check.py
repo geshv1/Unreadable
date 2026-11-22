@@ -117,3 +117,16 @@ def test_parlay_from_two_checked_matches(cfg, tmp_path):
 def test_small_league_warning(cfg, tmp_path):
     res = check_match("genk antwerp", _fixtures(), cfg, NOW, parse_odds("1=2.05 X=3.7 2=4.2 O=1.7 U=2.25"), data_dir=tmp_path)
     assert any("outside your main leagues" in w for w in res.warnings)
+
+
+def test_market_moved_since_old_fair_price_is_not_value(cfg, tmp_path):
+    """Brentford 2.24 / 3.6 / 3.5 fair on Friday; on Sunday the bookmaker has Everton much shorter."""
+    later = PUB + timedelta(hours=48)
+    res = check_match("brentford everton", _fixtures(), cfg, later, parse_odds("1=2.35 X=3.50 2=2.95"), data_dir=tmp_path)
+    assert res.best is None
+    assert any("market has probably moved" in w for w in res.warnings)
+    assert "No value" in res.render()
+    # the same prices with a FRESH fair price are judged normally
+    fresh = check_match("brentford everton", _fixtures(), cfg, PUB + timedelta(hours=2),
+                        parse_odds("1=2.35 X=3.50 2=2.95"), data_dir=tmp_path, remember=False)
+    assert fresh.best is not None and fresh.best.selection == "H"

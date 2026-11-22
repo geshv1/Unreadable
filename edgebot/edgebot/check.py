@@ -29,6 +29,7 @@ from .strategies.market_value import MarketValueStrategy
 SOFIA = ZoneInfo("Europe/Sofia")
 STALE_WARN_HOURS = 12.0
 STALE_REFUSE_HOURS = 120.0
+MOVED_PP = 0.03  # with an old fair price, a 3-point gap to the bookmaker's own view means the market moved
 _ODDS_KEYS = {
     "1": ("1X2", "H"), "h": ("1X2", "H"), "home": ("1X2", "H"),
     "x": ("1X2", "D"), "d": ("1X2", "D"), "draw": ("1X2", "D"),
@@ -237,6 +238,19 @@ def check_match(
         given = [offered.get((market, s)) for s in sels]
         complete = all(g is not None for g in given)
         ovr = sum(1.0 / g for g in given) - 1.0 if complete else 0.06
+        moved = None
+        if complete and age > STALE_WARN_HOURS:
+            q = [1.0 / g for g in given]
+            book_view = [x / sum(q) for x in q]
+            gaps = [book_view[i] - float(view.probs[i]) for i in range(len(sels))]
+            j = max(range(len(sels)), key=lambda i: abs(gaps[i]))
+            if abs(gaps[j]) > MOVED_PP:
+                moved = (selection_label(market, sels[j], hit.home, hit.away), gaps[j])
+                res.warnings.append(
+                    f"{MARKET_NAMES[market]}: {book_name(book)}'s prices differ a lot from the {age:.0f}-hour-old fair price "
+                    f"({moved[0]} is {abs(gaps[j]):.0%} {'more' if gaps[j] > 0 else 'less'} likely by {book_name(book)}'s odds). "
+                    "The market has probably moved on news since then, so any 'edge' here isn't reliable."
+                )
         for i, sel in enumerate(sels):
             p = float(view.probs[i])
             line = Line(market, sel, selection_label(market, sel, hit.home, hit.away), p, 1.0 / p, (1.0 + thr) / p)
@@ -255,6 +269,8 @@ def check_match(
                     strategy="check",
                 )
                 ok, why = strategy.qualifies(c)
+                if ok and moved is not None:
+                    ok, why = False, "fair price out of date: the market moved"
                 line.verdict = f"✅ {e:+.1%}" if ok else (f"❌ {e:+.1%}" if e < thr else f"⚠ {e:+.1%} ({why})")
                 if ok:
                     cands.append(c)
