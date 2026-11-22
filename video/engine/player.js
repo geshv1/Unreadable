@@ -68,6 +68,7 @@
     g.restore();
 
     V.drawLabels(g, ep.zoom || 1);
+    if (ep.vignette) drawVignette(g, ep.vignette);
     V.drawText(g, sc, tl, sc.start > 0);
     if (st.overlay) st.overlay(g);
     drawTransition(g, t);
@@ -99,6 +100,23 @@
       const f = t - c.t;
       if (f >= 0 && f < 0.1) { g.fillStyle = `rgba(255,255,255,${0.22 * (1 - f / 0.1)})`; g.fillRect(0, 0, V.W, V.H); }
     }
+  }
+
+  // Black edges: radial falloff from the centre of the action + darker top/bottom bands. Text is drawn after it.
+  let vigCache = null, vigAmt = -1;
+  function drawVignette(g, amt) {
+    if (!vigCache || vigAmt !== amt) {
+      vigCache = V.makeCanvas(V.W, V.H); vigAmt = amt;
+      const x = vigCache.getContext('2d');
+      const r = x.createRadialGradient(540, 1060, 260, 540, 1060, 1180);
+      r.addColorStop(0, 'rgba(0,0,0,0)'); r.addColorStop(0.55, `rgba(0,0,0,${0.35 * amt})`); r.addColorStop(1, `rgba(0,0,0,${amt})`);
+      x.save(); x.translate(540, 1060); x.scale(1, 1.25); x.translate(-540, -1060); x.fillStyle = r; x.fillRect(-400, -600, V.W + 800, V.H + 1200); x.restore();
+      const top = x.createLinearGradient(0, 0, 0, 380); top.addColorStop(0, `rgba(0,0,0,${0.85 * amt})`); top.addColorStop(1, 'rgba(0,0,0,0)');
+      x.fillStyle = top; x.fillRect(0, 0, V.W, 380);
+      const bot = x.createLinearGradient(0, V.H, 0, V.H - 520); bot.addColorStop(0, `rgba(0,0,0,${amt})`); bot.addColorStop(1, 'rgba(0,0,0,0)');
+      x.fillStyle = bot; x.fillRect(0, V.H - 520, V.W, 520);
+    }
+    g.drawImage(vigCache, 0, 0);
   }
 
   function drawSafe(g) {

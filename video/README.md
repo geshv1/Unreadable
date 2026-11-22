@@ -23,9 +23,14 @@ Output: 1080x1920, 30 fps, H.264 High, yuv420p, no audio.
 
 The text system, spotlights (they follow each character's x), labels, swipe transitions and the cut list are automatic.
 
-## Next episode
-The brief for Pt. 3 ("Same day. Different control.", one continuous day with CONTROL meters) is saved in
-`briefs/ep03-same-day.md`, with notes on the engine changes it needs. Not built yet.
+## Episodes
+- `ep02-control` — Pt. 2 "Different control." (leash, feint, data, silence)
+- `ep03-discipline` — Pt. 3 "Different discipline." (alarm, bricks, the hold, no audience)
+
+Episode options: `zoom` (camera, <1 = zoomed out), `vignette` (black edges, 0–1), `transition` (`{type:'fade'}` or swipe).
+
+## Saved brief
+`briefs/next-same-day.md`: "Same day. Different control." (one continuous day with CONTROL meters), not built yet.
 
 ## Sound effects
 `video/sfx/synth.py` synthesises effects in code (no samples). The owner wants sound mature and minimal: Ep. 2 uses

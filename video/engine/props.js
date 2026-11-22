@@ -221,4 +221,114 @@
     g.strokeStyle = 'rgba(224,52,74,0.8)'; g.lineWidth = 3; g.beginPath(); g.arc(cx, cy, r + 14, a0, a1, a1 < a0); g.stroke();
     g.restore();
   };
+
+  // ───────── Pt. 3 props
+  // Dark speech/thought bubble: dark fill, thin outline (red = Reactive, white = Steady/others)
+  V.darkBubble = function (g, o) {
+    return V.bubble(g, Object.assign({ fill: '#15161c', color: '#ffffff', stroke: o.red ? V.COL.red : '#e8eaee', size: 52, font: `700 ${o.size || 52}px ${V.FONT.sans}` }, o));
+  };
+
+  // Alarm card (same family as the notification): clock icon, ALARM, big time, shakes while ringing
+  V.alarmCard = function (g, cx, cy, w, k, time, sub, shake = 0, t = 0) {
+    const h = 210;
+    g.save();
+    g.translate(cx + Math.sin(t * 80) * shake * 6, cy); g.rotate(Math.sin(t * 61) * shake * 0.025); g.scale(k, k);
+    g.shadowColor = 'rgba(0,0,0,0.7)'; g.shadowBlur = 40; g.shadowOffsetY = 10;
+    g.fillStyle = 'rgba(246,247,250,0.98)'; V.roundRect(g, -w / 2, -h / 2, w, h, 36); g.fill();
+    g.shadowColor = 'transparent';
+    const ix = -w / 2 + 34, iy = -h / 2 + 40;
+    g.fillStyle = V.COL.red; V.roundRect(g, ix, iy, 96, 96, 22); g.fill();
+    g.strokeStyle = '#fff'; g.lineWidth = 7; g.lineCap = 'round';
+    g.beginPath(); g.arc(ix + 48, iy + 50, 28, 0, 6.283); g.stroke();
+    g.beginPath(); g.moveTo(ix + 48, iy + 50); g.lineTo(ix + 48, iy + 33); g.moveTo(ix + 48, iy + 50); g.lineTo(ix + 61, iy + 57); g.stroke();
+    g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+    g.fillStyle = '#5b5e68'; g.font = `700 36px ${V.FONT.sans}`; g.letterSpacing = '4px';
+    g.fillText('ALARM', ix + 124, iy + 30); g.letterSpacing = '0px';
+    g.fillStyle = '#0d0e12'; g.font = `800 84px ${V.FONT.sans}`;
+    g.fillText(time, ix + 122, iy + 112);
+    if (sub) { g.textAlign = 'right'; g.fillStyle = '#5b5e68'; g.font = `600 36px ${V.FONT.sans}`; g.fillText(sub, w / 2 - 34, iy + 30); }
+    g.restore();
+    if (shake > 0.05) { // ring marks
+      g.save(); g.strokeStyle = `rgba(255,255,255,${0.7 * shake})`; g.lineWidth = 6; g.lineCap = 'round';
+      for (const sx of [-1, 1]) for (let i = 0; i < 2; i++) {
+        const x0 = cx + sx * (w / 2 * k + 26 + i * 22);
+        g.beginPath(); g.arc(x0 - sx * 70, cy, 60 + i * 22, sx > 0 ? -0.5 : Math.PI - 0.5, sx > 0 ? 0.5 : Math.PI + 0.5); g.stroke();
+      }
+      g.restore();
+    }
+  };
+
+  // Brick (world px), centre x,y
+  V.brick = function (g, x, y, rot = 0, w = 92, h = 44) {
+    g.save(); g.translate(x, y); g.rotate(rot);
+    g.fillStyle = '#c9cbd3'; g.strokeStyle = '#16171c'; g.lineWidth = 4;
+    V.roundRect(g, -w / 2, -h / 2, w, h, 5); g.fill(); g.stroke();
+    g.fillStyle = 'rgba(255,255,255,0.55)'; g.fillRect(-w / 2 + 6, -h / 2 + 5, w - 12, 5);
+    g.fillStyle = 'rgba(0,0,0,0.18)'; g.fillRect(-w / 2 + 6, h / 2 - 9, w - 12, 5);
+    g.restore();
+  };
+
+  // Small caption (e.g. DAY 9) — bold, spaced
+  V.caption = function (g, x, y, text, color = '#F4F5F7', size = 52, k = 1) {
+    g.save(); g.translate(x, y); g.scale(k, k);
+    g.font = `800 ${size}px ${V.FONT.sans}`; g.letterSpacing = `${Math.round(size * 0.12)}px`;
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.shadowColor = 'rgba(0,0,0,0.9)'; g.shadowBlur = 16;
+    g.fillStyle = color; g.fillText(text, size * 0.06, 0);
+    g.restore();
+  };
+
+  // Timer panel (squat hold)
+  V.timerPanel = function (g, cx, cy, text, state = 'run', k = 1) {
+    const w = 300, h = 118, col = state === 'quit' ? V.COL.red : '#e8eaee';
+    g.save(); g.translate(cx, cy); g.scale(k, k);
+    g.shadowColor = state === 'quit' ? 'rgba(224,52,74,0.6)' : 'rgba(255,255,255,0.3)'; g.shadowBlur = 24;
+    g.fillStyle = 'rgba(14,15,20,0.96)'; V.roundRect(g, -w / 2, -h / 2, w, h, 16); g.fill();
+    g.shadowBlur = 0; g.strokeStyle = col; g.lineWidth = 4; V.roundRect(g, -w / 2, -h / 2, w, h, 16); g.stroke();
+    g.fillStyle = state === 'quit' ? V.COL.red : '#ffffff'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.font = `800 70px ${V.FONT.sans}`; g.letterSpacing = '3px';
+    g.fillText(text, 2, 4);
+    g.restore();
+  };
+
+  // Phone on a tripod, screen facing the viewer
+  V.tripodPhone = function (g, x, rec = true, t = 0, screen = null) {
+    const top = V.FLOOR - 300;
+    g.save(); g.strokeStyle = '#cfd2da'; g.lineWidth = 6; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(x, top + 70); g.lineTo(x - 60, V.FLOOR); g.moveTo(x, top + 70); g.lineTo(x + 60, V.FLOOR); g.moveTo(x, top + 70); g.lineTo(x, V.FLOOR - 10); g.stroke();
+    g.fillStyle = '#0d0e12'; g.strokeStyle = '#e8eaee'; g.lineWidth = 5;
+    V.roundRect(g, x - 58, top - 110, 116, 196, 18); g.fill(); g.stroke();
+    if (screen) { g.fillStyle = '#1b1d25'; V.roundRect(g, x - 48, top - 98, 96, 172, 10); g.fill(); }
+    if (rec) {
+      const on = Math.floor(t * 2.4) % 2 === 0;
+      g.fillStyle = on ? '#ff2a44' : 'rgba(255,42,68,0.35)'; g.shadowColor = '#ff2a44'; g.shadowBlur = on ? 20 : 0;
+      g.beginPath(); g.arc(x - 20, top - 70, 11, 0, 6.283); g.fill(); g.shadowBlur = 0;
+      g.fillStyle = '#fff'; g.font = `800 26px ${V.FONT.sans}`; g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillText('REC', x - 4, top - 69);
+    }
+    g.restore();
+    return [x, top - 110];
+  };
+
+  // Jump rope between two hands (world points); phase 0..1 per turn
+  V.jumpRope = function (g, a, b, phase, topY, botY) {
+    const th = phase * Math.PI * 2;
+    const midX = (a[0] + b[0]) / 2, midY = (a[1] + b[1]) / 2;
+    const apexY = V.lerp(topY, botY, 0.5 - 0.5 * Math.cos(th));
+    const cy = midY + 2 * (apexY - midY);
+    g.save(); g.strokeStyle = '#f4f5f7'; g.lineWidth = 5; g.lineCap = 'round';
+    g.globalAlpha = Math.abs(Math.sin(th)) < 0.25 ? 0.65 : 1; // motion blur feel when passing the sides
+    g.beginPath(); g.moveTo(a[0], a[1]); g.quadraticCurveTo(midX + 40 * Math.sin(th), cy, b[0], b[1]); g.stroke();
+    g.restore();
+  };
+
+  // Blanket over a seated figure (world px): mound from the floor up to the shoulders
+  V.blanket = function (g, x, topY, w, k = 1) {
+    g.save(); g.translate(x, V.FLOOR); g.scale(1, k);
+    g.fillStyle = '#5a2730'; g.strokeStyle = '#16171c'; g.lineWidth = 5;
+    g.beginPath(); g.moveTo(-w / 2, 0); g.bezierCurveTo(-w / 2, -(V.FLOOR - topY) * 0.9, -w * 0.18, -(V.FLOOR - topY) * 1.08, w * 0.08, -(V.FLOOR - topY));
+    g.bezierCurveTo(w * 0.35, -(V.FLOOR - topY) * 0.95, w / 2, -(V.FLOOR - topY) * 0.55, w / 2, 0); g.closePath(); g.fill(); g.stroke();
+    g.strokeStyle = 'rgba(255,255,255,0.12)'; g.lineWidth = 4;
+    g.beginPath(); g.moveTo(-w * 0.3, -(V.FLOOR - topY) * 0.5); g.quadraticCurveTo(0, -(V.FLOOR - topY) * 0.62, w * 0.3, -(V.FLOOR - topY) * 0.45); g.stroke();
+    g.restore();
+  };
 })();

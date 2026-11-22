@@ -1,7 +1,8 @@
-# NEXT EPISODE BRIEF — "Same day. Different control." (Pt. 3)
+# SAVED BRIEF — "Same day. Different control." (part number to be decided)
 
-Status: SAVED FOR THE NEXT VIDEO. Not built yet. The owner asked for this to be kept for the next episode
-(do not apply it to ep02). When building it: new folder `video/episodes/ep03-same-day/`, reuse the engine,
+Status: SAVED, NOT BUILT. Pt. 3 became "Different discipline." (episodes/ep03-discipline) at the owner's request;
+this brief is kept for a later part. Its text still says PT. 3 — change the top line to the real part number when building. The owner asked for this to be kept for the next episode
+(do not apply it to ep02). When building it: a new episode folder, reuse the engine,
 and follow every rule below. Owner's words: "I want perfection."
 
 Notes for the implementation (from the ep02 build):

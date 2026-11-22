@@ -20,6 +20,7 @@ V.EPISODE = {
   fps: 30,
   width: 1080,
   height: 1920,
+  vignette: 0.92,                                 // black edges (0 = off)
   zoom: 0.82,                                     // camera: <1 zooms out (characters ≈ 23% of frame height)
   transition: { type: 'fade', pre: 0.14, post: 0.14 }, // quick dip to black at each cut (0.28s)
 

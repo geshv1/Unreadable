@@ -120,4 +120,35 @@
     }
     g.fillStyle = 'rgba(255,255,255,0.05)'; g.fillRect(0, F - 22, V.W, 22);
   };
+
+  // ───────── Pt. 3: minimal line-art sets
+  V.sets.dawn = function (g, t) { // window with first light
+    const wx = 430, wy = 640, ww = 220, wh = 300;
+    const gl = g.createRadialGradient(wx + ww / 2, wy + wh, 10, wx + ww / 2, wy + wh, 420);
+    gl.addColorStop(0, 'rgba(255,170,120,0.22)'); gl.addColorStop(1, 'rgba(255,170,120,0)');
+    g.fillStyle = gl; g.fillRect(wx - 300, wy - 200, ww + 600, wh + 600);
+    g.fillStyle = '#12131a'; g.fillRect(wx, wy, ww, wh);
+    const sky = g.createLinearGradient(0, wy, 0, wy + wh); sky.addColorStop(0, 'rgba(40,46,80,0.5)'); sky.addColorStop(1, 'rgba(255,150,110,0.35)');
+    g.fillStyle = sky; g.fillRect(wx, wy, ww, wh);
+    stroke(g, '#4a4d5a', 5); g.strokeRect(wx, wy, ww, wh);
+    stroke(g, '#4a4d5a', 3); g.beginPath(); g.moveTo(wx + ww / 2, wy); g.lineTo(wx + ww / 2, wy + wh); g.stroke();
+  };
+  V.sets.yard = function (g, t) { // building site: one scaffold silhouette
+    stroke(g, '#34363f', 5);
+    for (const x of [40, 1040]) { g.beginPath(); g.moveTo(x, F); g.lineTo(x, 760); g.stroke(); }
+    for (const y of [900, 1060, 1220]) { g.beginPath(); g.moveTo(40, y); g.lineTo(150, y); g.moveTo(930, y); g.lineTo(1040, y); g.stroke(); }
+  };
+  V.sets.gym = function (g, t) { // squat rack + mirror line
+    stroke(g, '#3b3e4a', 6);
+    const rack = (x) => { g.beginPath(); g.moveTo(x, F); g.lineTo(x, 820); g.moveTo(x + 120, F); g.lineTo(x + 120, 820); g.moveTo(x - 10, 820); g.lineTo(x + 130, 820); g.stroke();
+      g.fillStyle = '#23252d'; g.fillRect(x - 40, 960, 200, 14); };
+    rack(-40); rack(980);
+    stroke(g, '#2a2c35', 3); g.beginPath(); g.moveTo(180, 700); g.lineTo(900, 700); g.stroke();
+  };
+  V.sets.night = function (g, t) { // empty court: one floodlight off, moon
+    g.fillStyle = 'rgba(230,235,255,0.5)'; g.beginPath(); g.arc(860, 640, 30, 0, 6.283); g.fill();
+    g.fillStyle = 'rgba(230,235,255,0.08)'; g.beginPath(); g.arc(860, 640, 70, 0, 6.283); g.fill();
+    stroke(g, '#3b3e4a', 6); g.beginPath(); g.moveTo(1010, F); g.lineTo(1010, 760); g.stroke();
+    g.fillStyle = '#2a2c35'; g.fillRect(960, 730, 100, 36);
+  };
 })();

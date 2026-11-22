@@ -1,0 +1,17 @@
+reactive-vs-steady-discipline — scene transitions (30s @ 30fps)
+
+00:00.00  frame   0  hook
+00:01.50  frame  45  rule1-alarm
+00:07.00  frame 210  rule2-bricks
+00:12.50  frame 375  rule3-hold
+00:18.00  frame 540  rule4-alone
+00:23.50  frame 705  ring-payoff
+00:27.00  frame 810  end-card
+
+Cuts (whoosh starts ~0.16s before, bass hit on the cut):
+  00:01.50  (1.50s, frame 45)  -> rule1-alarm
+  00:07.00  (7.00s, frame 210)  -> rule2-bricks
+  00:12.50  (12.50s, frame 375)  -> rule3-hold
+  00:18.00  (18.00s, frame 540)  -> rule4-alone
+  00:23.50  (23.50s, frame 705)  -> ring-payoff
+  00:27.00  (27.00s, frame 810)  -> end-card

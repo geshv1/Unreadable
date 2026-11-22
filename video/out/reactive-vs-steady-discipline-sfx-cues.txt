@@ -1,0 +1,30 @@
+reactive-vs-steady-discipline — sound-effect cues (28)
+
+  1.70s  frame  51  notify      -10.0 dB  alarm vibrating
+  2.25s  frame  68  notify      -10.0 dB  alarm vibrating
+  2.80s  frame  84  notify      -10.0 dB  alarm vibrating
+  7.49s  frame 225  phone_down  -15.0 dB  
+  7.73s  frame 232  phone_down  -15.0 dB  
+  7.80s  frame 234  phone_down  -17.0 dB  Steady lays a brick
+  7.97s  frame 239  phone_down  -15.0 dB  
+  8.21s  frame 246  phone_down  -15.0 dB  
+  8.35s  frame 250  phone_down  -17.0 dB  
+  8.45s  frame 253  phone_down  -15.0 dB  
+  8.90s  frame 267  phone_down  -17.0 dB  
+  9.45s  frame 284  phone_down  -17.0 dB  
+ 10.00s  frame 300  phone_down  -17.0 dB  
+ 10.42s  frame 313  bump        -11.0 dB  pile collapses
+ 10.51s  frame 315  bump        -12.0 dB  
+ 10.55s  frame 316  phone_down  -17.0 dB  
+ 10.62s  frame 319  bump        -13.0 dB  
+ 10.75s  frame 322  bump        -14.0 dB  
+ 11.10s  frame 333  phone_down  -17.0 dB  
+ 11.65s  frame 350  phone_down  -17.0 dB  
+ 12.20s  frame 366  phone_down  -17.0 dB  
+ 12.55s  frame 376  tick        -17.0 dB  
+ 13.55s  frame 406  tick        -17.0 dB  
+ 14.55s  frame 436  tick        -17.0 dB  
+ 15.55s  frame 466  tick        -17.0 dB  
+ 16.55s  frame 496  tick        -17.0 dB  
+ 17.55s  frame 526  tick        -17.0 dB  
+ 25.54s  frame 766  punch        -2.0 dB  the one clean punch

@@ -37,7 +37,7 @@ fs.mkdirSync(outDir, { recursive: true });
 
   // --sections: frame 0 + the middle frame of every scene as PNGs (out/sections/)
   if (opt('sections')) {
-    const dir = path.join(outDir, 'sections' + (opt('debug') ? '-debug' : ''));
+    const dir = path.join(outDir, `${name}-sections` + (opt('debug') ? '-debug' : ''));
     fs.mkdirSync(dir, { recursive: true });
     const picks = [[0, '00-frame0']].concat(info.scenes.map((s, k) => [Math.round(((s.start + s.end) / 2) * info.fps), `${String(k + 1).padStart(2, '0')}-${s.id}`]));
     for (const [i, nm] of picks) { fs.writeFileSync(path.join(dir, `${nm}.png`), png(await grab(i))); console.log('wrote', nm, 'frame', i); }
