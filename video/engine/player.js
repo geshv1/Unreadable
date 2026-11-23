@@ -15,6 +15,11 @@
     });
     if (ep.sfxCut) for (const c of ep.cuts) ep.sfxResolved.push({ id: ep.sfxCut.id, gain: ep.sfxCut.gain, t: +(c.t + ep.sfxCut.offset).toFixed(4), note: 'cut -> ' + c.scene });
     ep.sfxResolved.sort((a, b) => a.t - b.t);
+    // CONTROL meter track: { reactive: [[scene, at, value], ...], steady: [...] } -> absolute [t, value]
+    if (ep.control) {
+      ep.controlResolved = {};
+      for (const k of Object.keys(ep.control)) ep.controlResolved[k] = ep.control[k].map(([s, at, v]) => [byId[s].start + at / (byId[s].speed || 1), v]);
+    }
     V.ep = ep;
     return ep;
   };
@@ -67,7 +72,7 @@
     (V.sets[sc.set] || V.sets.stage)(g, t);
     V.drawFloor(g);
     if (st.back) st.back(g);
-    for (const f of main) if (f.kind === 'reactive' || f.kind === 'steady') V.drawBeam(g, f.kind, f.x, t, V.POS[f.kind], f.beam == null ? 1 : f.beam, f.beamW || 1, f.beamWarm || 0);
+    for (const f of main) if (f.kind === 'reactive' || f.kind === 'steady') V.drawBeam(g, f.kind, f.beamX != null ? f.beamX : f.x, t, V.POS[f.kind], f.beam == null ? 1 : f.beam, f.beamW || 1, f.beamWarm || 0);
     for (const f of back) V.drawFigure(g, f);
     if (st.mid) st.mid(g);
     V.drawReflections(g, main);
@@ -80,6 +85,17 @@
     if (sc.labels !== false && ep.labels !== false) V.drawLabels(g, z, px);
     if (ep.vignette) drawVignette(g, ep.vignette);
     if (ep.grain) drawGrain(g, ep.grain, i);
+    // CONTROL meters above each character (screen space, follow the camera)
+    if (ep.controlResolved && sc.meters !== false) {
+      const sx = (wx) => 540 + (wx - V.cam.px - 540) * V.cam.z;
+      const ma = sc.meters === 'fade' ? 1 - V.clamp(tl / 0.3) : 1;
+      g.save(); g.globalAlpha = ma;
+      for (const [k, col] of [['reactive', 'red'], ['steady', 'white']]) {
+        const m = V.meterAt(t, ep.controlResolved[k]);
+        V.meter(g, sx(V.POS[k]), ep.meterY || 800, m.v, col, m.flash, m.up);
+      }
+      g.restore();
+    }
     V.drawText(g, sc, tl, sc.start > 0);
     if (st.overlay) st.overlay(g);
     drawTransition(g, t);

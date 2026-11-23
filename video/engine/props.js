@@ -574,4 +574,98 @@
     g.strokeStyle = 'rgba(255,255,255,0.8)'; g.lineWidth = 2; g.beginPath(); g.moveTo(-10, -8); g.lineTo(0, 0); g.lineTo(-6, 6); g.moveTo(0, 0); g.lineTo(14, -6); g.stroke();
     g.restore();
   };
+
+  // ───────── Pt. 6 props
+  // CONTROL meter (screen space): small CONTROL label, big number, thin bar. flash 0..1 on a change.
+  V.meter = function (g, cx, cy, value, color, flash = 0, up = false) {
+    const w = 260;
+    g.save(); g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+    g.shadowColor = 'rgba(0,0,0,0.9)'; g.shadowBlur = 16;
+    g.fillStyle = 'rgba(214,216,223,0.85)'; g.font = `600 22px ${V.FONT.sans}`; g.letterSpacing = '8px';
+    g.fillText('CONTROL', cx + 4, cy - 62); g.letterSpacing = '0px';
+    const k = 1 + 0.12 * flash;
+    g.translate(cx, cy); g.scale(k, k); g.translate(-cx, -cy);
+    g.fillStyle = flash > 0.05 ? (up ? '#ffffff' : V.COL.red) : color === 'white' ? '#F4F5F7' : V.COL.red;
+    if (flash > 0.05) { g.shadowColor = up ? 'rgba(255,220,170,0.9)' : 'rgba(224,52,74,0.9)'; g.shadowBlur = 30 * flash; }
+    g.font = `800 72px ${V.FONT.sans}`;
+    g.fillText(`${Math.round(value)}%`, cx, cy);
+    g.restore();
+    g.save(); g.shadowColor = 'transparent';
+    g.fillStyle = 'rgba(255,255,255,0.14)'; V.roundRect(g, cx - w / 2, cy + 18, w, 8, 4); g.fill();
+    g.fillStyle = color === 'white' ? '#F4F5F7' : V.COL.red;
+    if (color !== 'white') { g.shadowColor = 'rgba(224,52,74,0.7)'; g.shadowBlur = 12; }
+    V.roundRect(g, cx - w / 2, cy + 18, Math.max(8, w * value / 100), 8, 4); g.fill();
+    g.restore();
+  };
+  // value at time t for a list of [time, value] steps, each change ticking over `dur` seconds
+  V.meterAt = function (t, steps, dur = 0.45) {
+    let v = steps[0][1], flash = 0, up = false;
+    for (let i = 1; i < steps.length; i++) {
+      const [ts, to] = steps[i], from = steps[i - 1][1];
+      if (t >= ts) { const u = V.clamp((t - ts) / dur); v = V.lerp(from, to, V.ease.out(u)); if (t - ts < 0.6) { flash = 1 - (t - ts) / 0.6; up = to > from; } }
+    }
+    return { v, flash, up };
+  };
+
+  V.coffee = function (g, hand, k = 1) {
+    g.save(); g.translate(hand[0], hand[1] - 18); g.scale(k, k);
+    g.fillStyle = '#e8eaee'; g.strokeStyle = '#16171c'; g.lineWidth = 4;
+    g.beginPath(); g.moveTo(-17, -26); g.lineTo(17, -26); g.lineTo(13, 22); g.lineTo(-13, 22); g.closePath(); g.fill(); g.stroke();
+    g.fillStyle = '#7a4b2a'; g.fillRect(-15, -8, 30, 14);
+    g.fillStyle = '#c9cbd3'; V.roundRect(g, -20, -34, 40, 10, 4); g.fill(); g.stroke();
+    g.strokeStyle = 'rgba(255,255,255,0.5)'; g.lineWidth = 3; g.beginPath(); g.moveTo(-4, -42); g.quadraticCurveTo(6, -54, -2, -66); g.stroke();
+    g.restore();
+  };
+
+  // Standing desk with an open laptop (world px). x = centre, screen glow.
+  V.desk = function (g, x, laptop = true, glow = 1) {
+    const top = V.FLOOR - 232;
+    g.save(); g.strokeStyle = '#c9cbd3'; g.lineWidth = 8; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(x - 70, top + 10); g.lineTo(x - 70, V.FLOOR - 4); g.moveTo(x + 70, top + 10); g.lineTo(x + 70, V.FLOOR - 4); g.stroke();
+    g.fillStyle = '#e8eaee'; g.strokeStyle = '#16171c'; g.lineWidth = 5; V.roundRect(g, x - 100, top - 6, 200, 18, 6); g.fill(); g.stroke();
+    if (laptop) {
+      g.fillStyle = '#2b2d36'; g.strokeStyle = '#e8eaee'; g.lineWidth = 4;
+      g.beginPath(); g.moveTo(x - 56, top - 6); g.lineTo(x + 50, top - 6); g.lineTo(x + 56, top - 14); g.lineTo(x - 50, top - 14); g.closePath(); g.fill(); g.stroke();
+      g.save(); g.translate(x - 50, top - 14); g.rotate(-1.25);
+      V.roundRect(g, 0, -4, 92, 8, 3); g.fill(); g.stroke();
+      g.restore();
+      g.save(); g.globalAlpha = 0.5 * glow; g.filter = 'blur(10px)'; g.fillStyle = '#9fc3ff';
+      g.beginPath(); g.ellipse(x - 34, top - 60, 30, 46, -0.3, 0, 6.283); g.fill(); g.restore();
+    }
+    g.restore();
+    return top;
+  };
+
+  // Bed (world px): from x0 to x1, mattress top at topY, headboard at the head end
+  V.bed = function (g, x0, x1, topY, headLeft = true, blanket = '#3a3c46') {
+    g.save();
+    g.strokeStyle = '#c9cbd3'; g.lineWidth = 8; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(x0 + 20, topY + 60); g.lineTo(x0 + 20, V.FLOOR - 4); g.moveTo(x1 - 20, topY + 60); g.lineTo(x1 - 20, V.FLOOR - 4); g.stroke();
+    const hx = headLeft ? x0 : x1;
+    g.beginPath(); g.moveTo(hx, V.FLOOR - 4); g.lineTo(hx, topY - 150); g.stroke();
+    g.fillStyle = '#e8eaee'; g.strokeStyle = '#16171c'; g.lineWidth = 5;
+    V.roundRect(g, x0, topY, x1 - x0, 60, 14); g.fill(); g.stroke();
+    g.restore();
+  };
+  V.bedBlanket = function (g, x0, x1, topY, color) {
+    g.save(); g.fillStyle = color; g.strokeStyle = '#16171c'; g.lineWidth = 5;
+    g.beginPath(); g.moveTo(x0, topY + 30); g.quadraticCurveTo(x0, topY - 56, x0 + 40, topY - 60); g.lineTo(x1 - 40, topY - 60); g.quadraticCurveTo(x1, topY - 56, x1, topY + 30); g.closePath(); g.fill(); g.stroke();
+    g.strokeStyle = 'rgba(255,255,255,0.12)'; g.lineWidth = 4; g.beginPath(); g.moveTo(x0 + 40, topY - 30); g.lineTo(x1 - 40, topY - 30); g.stroke();
+    g.restore();
+  };
+  V.pillow = function (g, x, y) { g.save(); g.fillStyle = '#f4f5f7'; g.strokeStyle = '#16171c'; g.lineWidth = 4; V.roundRect(g, x - 60, y - 22, 120, 34, 16); g.fill(); g.stroke(); g.restore(); };
+
+  // Leash snapping: red particles drifting away (u 0..1)
+  V.leashDissolve = function (g, a, b, u, seed = 3) {
+    const r = V.rng(seed);
+    g.save(); g.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 46; i++) {
+      const k = r(), x = V.lerp(a[0], b[0], k), y = V.lerp(a[1], b[1], k) + Math.sin(k * Math.PI) * 30;
+      const dx = (r() - 0.5) * 220 * u, dy = (-60 - r() * 160) * u;
+      g.globalAlpha = (1 - u) * (0.5 + r() * 0.5);
+      g.fillStyle = r() > 0.4 ? '#ff4660' : '#ffd0d5';
+      g.beginPath(); g.arc(x + dx, y + dy, 4 + r() * 5 * (1 - u), 0, 6.283); g.fill();
+    }
+    g.restore();
+  };
 })();

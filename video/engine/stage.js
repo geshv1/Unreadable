@@ -107,7 +107,7 @@
     x.save();
     // world y -> canvas y = FLOOR - y  (mirror about the floor line)
     x.translate(0, V.FLOOR); x.scale(1, -1);
-    for (const f of figs) V.drawFigure(x, f);
+    for (const f of figs) if (!f.noReflect) V.drawFigure(x, f);
     x.restore();
     x.globalCompositeOperation = 'destination-in';
     const m = x.createLinearGradient(0, 0, 0, h * 0.75);
@@ -118,7 +118,7 @@
     g.restore();
     // contact shadows
     for (const f of figs) {
-      if (f.y != null && f.y !== V.FLOOR) continue;
+      if ((f.y != null && f.y !== V.FLOOR) || f.noReflect) continue;
       g.save(); g.translate(f.x, V.FLOOR - 2); g.scale(1, 0.12); g.filter = 'blur(6px)';
       g.fillStyle = 'rgba(0,0,0,0.75)'; g.beginPath(); g.arc(0, 0, 135 * (f.s || 1), 0, 6.283); g.fill(); g.restore();
     }

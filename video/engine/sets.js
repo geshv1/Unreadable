@@ -186,4 +186,13 @@
     const sh = g.createLinearGradient(0, V.FLOOR, 0, V.FLOOR + 160); sh.addColorStop(0, 'rgba(255,226,170,0.10)'); sh.addColorStop(1, 'rgba(255,226,170,0)');
     g.fillStyle = sh; g.fillRect(500, V.FLOOR, 700, 160);
   };
+
+  // ───────── Pt. 6: one prop per place
+  V.sets.lamp = function (g, t) { // a single street lamp, nothing else
+    const lx = 1080;
+    stroke(g, '#4a4d5a', 8); g.beginPath(); g.moveTo(lx, F); g.lineTo(lx, 720); g.quadraticCurveTo(lx, 680, lx - 60, 682); g.stroke();
+    g.fillStyle = '#4a4d5a'; g.beginPath(); g.moveTo(lx - 96, 682); g.lineTo(lx - 30, 682); g.lineTo(lx - 44, 704); g.lineTo(lx - 82, 704); g.closePath(); g.fill();
+    g.save(); g.filter = 'blur(16px)'; g.fillStyle = 'rgba(255,226,170,0.14)';
+    g.beginPath(); g.moveTo(lx - 82, 704); g.lineTo(lx - 44, 704); g.lineTo(lx + 120, F); g.lineTo(lx - 300, F); g.closePath(); g.fill(); g.restore();
+  };
 })();
