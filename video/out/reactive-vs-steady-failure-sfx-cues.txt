@@ -1,0 +1,23 @@
+reactive-vs-steady-failure — sound-effect cues (21)
+
+  2.85s  frame  86  phone_down  -15.0 dB  knock knock
+  3.05s  frame  92  phone_down  -15.0 dB  
+  3.25s  frame  98  phone_down  -15.0 dB  
+  4.40s  frame 132  bump         -9.0 dB  door shuts
+  4.65s  frame 140  phone_down  -16.0 dB  
+  4.85s  frame 146  phone_down  -16.0 dB  
+  5.55s  frame 166  bump        -11.0 dB  
+  5.80s  frame 174  phone_down  -16.0 dB  
+  5.98s  frame 179  phone_down  -16.0 dB  
+  8.02s  frame 241  bump         -7.0 dB  both fall
+  8.08s  frame 242  bump         -8.0 dB  
+ 13.00s  frame 390  phone_down  -14.0 dB  one piece at a time
+ 13.48s  frame 404  phone_down  -14.0 dB  
+ 13.96s  frame 419  phone_down  -14.0 dB  
+ 14.44s  frame 433  phone_down  -14.0 dB  
+ 14.92s  frame 448  phone_down  -14.0 dB  
+ 15.40s  frame 462  phone_down  -14.0 dB  
+ 15.88s  frame 476  phone_down  -14.0 dB  
+ 17.95s  frame 538  phone_down   -8.0 dB  laptop slammed shut
+ 21.58s  frame 647  punch        -5.0 dB  Steady goes down
+ 24.00s  frame 720  punch        -2.0 dB  the clean punch
