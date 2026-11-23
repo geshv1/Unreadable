@@ -1,37 +1,50 @@
 {
  "title": "reactive-vs-steady-ego",
- "duration": 30,
+ "duration": 24.5,
  "fps": 30,
  "cuts": [
   {
-   "t": 2.3,
+   "t": 2,
    "scene": "rule1-win"
   },
   {
-   "t": 7.8,
+   "t": 6.2,
    "scene": "rule2-loss"
   },
   {
-   "t": 13.3,
+   "t": 10.4,
    "scene": "rule3-their-win"
   },
   {
-   "t": 18.3,
+   "t": 14.4,
    "scene": "rule4-scoreboard"
   },
   {
-   "t": 23.3,
+   "t": 18.4,
    "scene": "ring-payoff"
   },
   {
-   "t": 27,
+   "t": 21.7,
    "scene": "end-card"
   }
  ],
  "sfx": [
   {
    "scene": "rule2-loss",
-   "at": 1.25,
+   "at": 0.62,
+   "id": "bump",
+   "gain": -12,
+   "pan": -0.4,
+   "args": {
+    "seed": 43,
+    "heavy": 0.7
+   },
+   "note": "Reactive drops to his knees",
+   "t": 6.82
+  },
+  {
+   "scene": "rule2-loss",
+   "at": 0.95,
    "id": "bump",
    "gain": -6,
    "pan": -0.45,
@@ -40,11 +53,11 @@
     "heavy": 1.2
    },
    "note": "the L lands (x2)",
-   "t": 9.05
+   "t": 7.15
   },
   {
    "scene": "rule2-loss",
-   "at": 1.27,
+   "at": 0.97,
    "id": "bump",
    "gain": -7,
    "pan": 0.45,
@@ -52,40 +65,40 @@
     "seed": 42,
     "heavy": 1.2
    },
-   "t": 9.07
+   "t": 7.17
   },
   {
    "scene": "rule2-loss",
-   "at": 1.95,
+   "at": 1.55,
    "id": "hop",
    "gain": -15,
    "pan": 0.4,
    "note": "Steady steps up",
-   "t": 9.75
+   "t": 7.75
   },
   {
    "scene": "rule2-loss",
-   "at": 2.75,
+   "at": 2.25,
    "id": "hop",
    "gain": -14,
    "pan": 0.3,
    "args": {
     "seed": 23
    },
-   "t": 10.55
+   "t": 8.45
   },
   {
    "scene": "rule3-their-win",
-   "at": 3.62,
+   "at": 2.98,
    "id": "phone_down",
-   "gain": -8,
+   "gain": -7,
    "pan": -0.45,
-   "note": "Reactive throws the phone",
-   "t": 16.92
+   "note": "phone hits the floor",
+   "t": 13.38
   },
   {
    "scene": "ring-payoff",
-   "at": 0.55,
+   "at": 0.45,
    "id": "punch",
    "gain": -11,
    "pan": 0.2,
@@ -93,53 +106,53 @@
     "seed": 9
    },
    "note": "lucky jab",
-   "t": 23.85
+   "t": 18.85
   },
   {
    "scene": "ring-payoff",
-   "at": 2.25,
+   "at": 1.95,
    "id": "punch",
    "gain": -2,
    "pan": -0.15,
    "note": "the clean punch",
-   "t": 25.55
+   "t": 20.35
   }
  ],
  "scenes": [
   {
    "id": "hook",
    "start": 0,
-   "end": 2.3
+   "end": 2
   },
   {
    "id": "rule1-win",
-   "start": 2.3,
-   "end": 7.8
+   "start": 2,
+   "end": 6.2
   },
   {
    "id": "rule2-loss",
-   "start": 7.8,
-   "end": 13.3
+   "start": 6.2,
+   "end": 10.4
   },
   {
    "id": "rule3-their-win",
-   "start": 13.3,
-   "end": 18.3
+   "start": 10.4,
+   "end": 14.4
   },
   {
    "id": "rule4-scoreboard",
-   "start": 18.3,
-   "end": 23.3
+   "start": 14.4,
+   "end": 18.4
   },
   {
    "id": "ring-payoff",
-   "start": 23.3,
-   "end": 27
+   "start": 18.4,
+   "end": 21.7
   },
   {
    "id": "end-card",
-   "start": 27,
-   "end": 30
+   "start": 21.7,
+   "end": 24.5
   }
  ]
 }

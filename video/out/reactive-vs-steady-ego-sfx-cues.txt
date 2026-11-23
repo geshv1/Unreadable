@@ -1,9 +1,10 @@
-reactive-vs-steady-ego — sound-effect cues (7)
+reactive-vs-steady-ego — sound-effect cues (8)
 
-  9.05s  frame 272  bump         -6.0 dB  the L lands (x2)
-  9.07s  frame 272  bump         -7.0 dB  
-  9.75s  frame 292  hop         -15.0 dB  Steady steps up
- 10.55s  frame 316  hop         -14.0 dB  
- 16.92s  frame 508  phone_down   -8.0 dB  Reactive throws the phone
- 23.85s  frame 716  punch       -11.0 dB  lucky jab
- 25.55s  frame 766  punch        -2.0 dB  the clean punch
+  6.82s  frame 205  bump        -12.0 dB  Reactive drops to his knees
+  7.15s  frame 214  bump         -6.0 dB  the L lands (x2)
+  7.17s  frame 215  bump         -7.0 dB  
+  7.75s  frame 232  hop         -15.0 dB  Steady steps up
+  8.45s  frame 253  hop         -14.0 dB  
+ 13.38s  frame 401  phone_down   -7.0 dB  phone hits the floor
+ 18.85s  frame 566  punch       -11.0 dB  lucky jab
+ 20.35s  frame 610  punch        -2.0 dB  the clean punch

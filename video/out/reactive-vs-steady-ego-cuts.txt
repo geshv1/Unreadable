@@ -1,17 +1,17 @@
-reactive-vs-steady-ego — scene transitions (30s @ 30fps)
+reactive-vs-steady-ego — scene transitions (24.5s @ 30fps)
 
 00:00.00  frame   0  hook
-00:02.30  frame  69  rule1-win
-00:07.80  frame 234  rule2-loss
-00:13.30  frame 399  rule3-their-win
-00:18.30  frame 549  rule4-scoreboard
-00:23.30  frame 699  ring-payoff
-00:27.00  frame 810  end-card
+00:02.00  frame  60  rule1-win
+00:06.20  frame 186  rule2-loss
+00:10.40  frame 312  rule3-their-win
+00:14.40  frame 432  rule4-scoreboard
+00:18.40  frame 552  ring-payoff
+00:21.70  frame 651  end-card
 
 Cuts (whoosh starts ~0.16s before, bass hit on the cut):
-  00:02.30  (2.30s, frame 69)  -> rule1-win
-  00:07.80  (7.80s, frame 234)  -> rule2-loss
-  00:13.30  (13.30s, frame 399)  -> rule3-their-win
-  00:18.30  (18.30s, frame 549)  -> rule4-scoreboard
-  00:23.30  (23.30s, frame 699)  -> ring-payoff
-  00:27.00  (27.00s, frame 810)  -> end-card
+  00:02.00  (2.00s, frame 60)  -> rule1-win
+  00:06.20  (6.20s, frame 186)  -> rule2-loss
+  00:10.40  (10.40s, frame 312)  -> rule3-their-win
+  00:14.40  (14.40s, frame 432)  -> rule4-scoreboard
+  00:18.40  (18.40s, frame 552)  -> ring-payoff
+  00:21.70  (21.70s, frame 651)  -> end-card
