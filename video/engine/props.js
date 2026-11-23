@@ -668,4 +668,72 @@
     }
     g.restore();
   };
+
+  // ───────── Pt. 6 (failure) props
+  // Door: frame + panel. open 0 = shut, ~0.15 = a crack, 1 = wide open with warm light
+  V.door = function (g, x, open = 0, light = 0) {
+    const w = 150, h = 330, top = V.FLOOR - h;
+    g.save();
+    if (open > 0.02) {
+      const gw = w * Math.min(1, open);
+      const lg = g.createLinearGradient(0, top, 0, V.FLOOR);
+      lg.addColorStop(0, `rgba(255,214,160,${0.5 * light + 0.15})`); lg.addColorStop(1, `rgba(255,214,160,${0.8 * light + 0.1})`);
+      g.fillStyle = open < 0.3 && light < 0.1 ? '#050507' : lg; g.fillRect(x - w / 2, top, gw, h);
+      if (light > 0.05) {   // light spilling onto the floor
+        g.save(); g.filter = 'blur(18px)'; g.globalAlpha = light;
+        g.fillStyle = 'rgba(255,214,160,0.45)'; g.beginPath(); g.moveTo(x - w / 2, V.FLOOR); g.lineTo(x + w / 2, V.FLOOR); g.lineTo(x + w * 1.6, V.FLOOR + 90); g.lineTo(x - w * 1.6, V.FLOOR + 90); g.closePath(); g.fill(); g.restore();
+      }
+    }
+    // panel (foreshortens as it opens)
+    const pw = w * (1 - Math.min(1, open)), px = x - w / 2 + w - pw;
+    if (pw > 2) {
+      g.fillStyle = '#2b2d36'; g.strokeStyle = '#e8eaee'; g.lineWidth = 5;
+      g.fillRect(px, top, pw, h); g.strokeRect(px, top, pw, h);
+      g.fillStyle = '#e8eaee'; g.beginPath(); g.arc(px + 18, top + h * 0.55, 6, 0, 6.283); g.fill();
+    }
+    g.strokeStyle = '#e8eaee'; g.lineWidth = 9; g.lineJoin = 'round';
+    g.beginPath(); g.moveTo(x - w / 2 - 8, V.FLOOR); g.lineTo(x - w / 2 - 8, top - 8); g.lineTo(x + w / 2 + 8, top - 8); g.lineTo(x + w / 2 + 8, V.FLOOR); g.stroke();
+    g.restore();
+  };
+
+  // Track hurdle; tip 0..1 knocks it over
+  V.hurdle = function (g, x, tip = 0) {
+    g.save(); g.translate(x, V.FLOOR); g.rotate(tip * 1.35);
+    g.strokeStyle = '#e8eaee'; g.lineWidth = 8; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(-6, 0); g.lineTo(-6, -150); g.moveTo(6, 0); g.lineTo(6, -150); g.moveTo(-40, 0); g.lineTo(40, 0); g.stroke();
+    g.fillStyle = '#f4f5f7'; g.strokeStyle = '#16171c'; g.lineWidth = 4; V.roundRect(g, -14, -168, 28, 30, 6); g.fill(); g.stroke();
+    g.fillStyle = V.COL.red; g.fillRect(-12, -160, 24, 8);
+    g.restore();
+  };
+
+  // A problem: heavy block with cracks (world px), bottom on the floor
+  V.block = function (g, x, w, h, cracks = 0) {
+    const top = V.FLOOR - h;
+    g.save();
+    g.fillStyle = '#3a3c46'; g.strokeStyle = '#16171c'; g.lineWidth = 6;
+    V.roundRect(g, x - w / 2, top, w, h, 8); g.fill(); g.stroke();
+    g.fillStyle = 'rgba(255,255,255,0.07)'; g.fillRect(x - w / 2 + 10, top + 10, w - 20, 12);
+    g.strokeStyle = 'rgba(255,255,255,0.35)'; g.lineWidth = 3;
+    const r = V.rng(7);
+    for (let i = 0; i < cracks; i++) {
+      const sx = x - w / 2 + r() * w, sy = top + r() * h * 0.6;
+      g.beginPath(); g.moveTo(sx, sy); g.lineTo(sx + (r() - 0.5) * 50, sy + 30 + r() * 40); g.lineTo(sx + (r() - 0.5) * 70, sy + 70 + r() * 50); g.stroke();
+    }
+    g.restore();
+    return top;
+  };
+
+  // Hammer in hand (world), angle in radians
+  V.hammer = function (g, hand, ang) {
+    g.save(); g.translate(hand[0], hand[1]); g.rotate(ang);
+    g.strokeStyle = '#c9cbd3'; g.lineWidth = 9; g.lineCap = 'round'; g.beginPath(); g.moveTo(0, 18); g.lineTo(0, -70); g.stroke();
+    g.fillStyle = '#e8eaee'; g.strokeStyle = '#16171c'; g.lineWidth = 4; V.roundRect(g, -30, -92, 60, 26, 5); g.fill(); g.stroke();
+    g.restore();
+  };
+
+  // Closed laptop on a desk top (after it was slammed)
+  V.laptopClosed = function (g, x, top) {
+    g.save(); g.fillStyle = '#2b2d36'; g.strokeStyle = '#e8eaee'; g.lineWidth = 4;
+    V.roundRect(g, x - 56, top - 22, 112, 16, 4); g.fill(); g.stroke(); g.restore();
+  };
 })();
