@@ -1,4 +1,4 @@
 reactive-vs-steady-circle — sound-effect cues (2)
 
- 13.15s  frame 394  bump        -11.0 dB  Reactive lands back on the roof
- 32.92s  frame 988  punch       -15.0 dB  gloves touch
+  9.46s  frame 284  bump        -11.0 dB  Reactive lands back on the roof
+ 24.60s  frame 738  punch       -15.0 dB  gloves touch

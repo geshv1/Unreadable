@@ -1,17 +1,17 @@
-reactive-vs-steady-circle — scene transitions (38s @ 30fps)
+reactive-vs-steady-circle — scene transitions (28.6s @ 30fps)
 
 00:00.00  frame   0  cold-open
-00:04.20  frame 126  rule1-circle
-00:10.20  frame 306  rule2-hands
-00:16.20  frame 486  rule3-talk
-00:21.70  frame 651  rule4-outgrow
-00:28.20  frame 846  corner
-00:34.50  frame 1035  end-card
+00:02.60  frame  78  rule1-circle
+00:07.20  frame 216  rule2-hands
+00:11.80  frame 354  rule3-talk
+00:16.00  frame 480  rule4-outgrow
+00:21.00  frame 630  corner
+00:25.80  frame 774  end-card
 
 Cuts (whoosh starts ~0.16s before, bass hit on the cut):
-  00:04.20  (4.20s, frame 126)  -> rule1-circle
-  00:10.20  (10.20s, frame 306)  -> rule2-hands
-  00:16.20  (16.20s, frame 486)  -> rule3-talk
-  00:21.70  (21.70s, frame 651)  -> rule4-outgrow
-  00:28.20  (28.20s, frame 846)  -> corner
-  00:34.50  (34.50s, frame 1035)  -> end-card
+  00:02.60  (2.60s, frame 78)  -> rule1-circle
+  00:07.20  (7.20s, frame 216)  -> rule2-hands
+  00:11.80  (11.80s, frame 354)  -> rule3-talk
+  00:16.00  (16.00s, frame 480)  -> rule4-outgrow
+  00:21.00  (21.00s, frame 630)  -> corner
+  00:25.80  (25.80s, frame 774)  -> end-card
