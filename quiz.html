@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>What Kind of Fighter Are You? · Free Quiz by geshv1</title>
-<meta name="description" content="10 honest questions about the ring and your life. Find your fighter type, your biggest strength and the weakness that keeps holding you back. Free, 2 minutes.">
-<meta property="og:title" content="What kind of fighter are you?">
-<meta property="og:description" content="10 honest questions. Find your fighter type, your strength and the weakness holding you back. Free quiz by geshv1.">
+<title>What Type of Guy Are You? · Free Quiz by geshv1</title>
+<meta name="description" content="10 honest questions about pressure, people and how you live. Find your type, your strength and what people use against you. Free, 2 minutes.">
+<meta property="og:title" content="What type of guy are you?">
+<meta property="og:description" content="10 honest questions. Find your type, your strength and what people use against you. Free quiz by geshv1.">
 <meta property="og:image" content="https://geshv1.github.io/completefighter/cover.jpg">
 <meta name="theme-color" content="#08080b">
 <script src="config.js"></script>
@@ -122,6 +122,8 @@ main{flex:1}
 .blk p{color:#d3d5dc;font-size:18px}
 .blk.truth p{font-family:var(--serif);font-style:italic;font-size:26px;line-height:1.35;color:var(--ink)}
 .blk.today p{color:var(--ink);font-weight:600}
+.blk.used{border-left:2px solid var(--red-soft);padding-left:16px}
+.blk.used h3{color:var(--red-soft)}
 
 .fixbox{margin-top:52px;padding-top:36px;border-top:1px solid var(--line)}
 .fixbox h2{font-size:clamp(38px,9vw,56px);font-style:italic;margin:14px 0 14px}
@@ -174,13 +176,13 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
 <section class="screen intro center" id="intro">
   <div class="wrap">
     <div class="eyebrow">Ten questions. Two minutes.</div>
-    <h1>What kind of <span class="r">fighter</span> are you?</h1>
+    <h1>What type of <span class="r">guy</span> are you?</h1>
     <div class="rule" aria-hidden="true"></div>
     <div class="stage">
       <img src="fighters.svg" width="320" height="372" alt="Two stick-figure fighters squaring up, one under a crimson spotlight, one under a white spotlight">
       <div class="labels label" aria-hidden="true"><span>Reactive</span><span>Steady</span></div>
     </div>
-    <p class="lede">Ten honest questions about the ring and about your life. Find your fighter type, your biggest strength, and the weakness that keeps holding you back.</p>
+    <p class="lede">Ten honest questions about pressure, people and the way you live. Find your type, your real strength, and what people use against you.</p>
     <button class="btn" id="start" type="button">Start round 1 <span aria-hidden="true">→</span></button>
     <p class="note">Answer honestly. Your answers stay on your phone.</p>
     <noscript><p style="margin-top:20px;color:#cfcac1">The quiz needs JavaScript. You can go straight to <a href="./">The Complete Fighter</a>.</p></noscript>
@@ -204,7 +206,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
 <section class="screen" id="result" hidden>
   <div class="wrap">
     <div class="card" id="card">
-      <div class="eyebrow">My fighter type</div>
+      <div class="eyebrow">The type of guy I am</div>
       <h1 class="type" id="rType" tabindex="-1"></h1>
       <p class="tagline" id="rTag"></p>
       <div class="bd" id="bd"></div>
@@ -216,6 +218,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
     <div class="blocks">
       <div class="blk"><h3>Your strength</h3><p id="rStr"></p></div>
       <div class="blk"><h3>Your weakness</h3><p id="rWeak"></p></div>
+      <div class="blk used"><h3>What people use against you</h3><p id="rUsed"></p></div>
       <div class="blk truth"><h3>The truth</h3><p id="rTruth"></p></div>
       <div class="blk today"><h3>Do this today</h3><p id="rToday"></p></div>
     </div>
@@ -223,7 +226,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
     <form class="mail" id="mail" hidden novalidate>
       <div class="eyebrow">Free · by email</div>
       <h2>Keep your result.</h2>
-      <p>Get your fighter type, the fix for it and my best training tips straight to your inbox.</p>
+      <p>Get your type, what people use against you and how to fix it, plus my best training tips, straight to your inbox.</p>
       <div class="mail-row">
         <label class="sr" for="mailInput">Your email</label>
         <input type="email" id="mailInput" name="email_address" placeholder="Your email" autocomplete="email" inputmode="email" required>
@@ -259,108 +262,112 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
 </footer>
 
 <script>
-/* ===== The four fighter types. Edit the text here. ===== */
+/* ===== The four types of guy. Edit the text here. ===== */
 const TYPES = {
-  pf: {
-    name: "Pressure Fighter",
-    tag: "All gas, no pacing.",
-    strength: "When you start something, nobody outworks you. You don't take steps back.",
-    weakness: "Inconsistent. You go all in, burn out, and start over. Again.",
-    truth: "You don't have a motivation problem. You have a pacing problem. Fighters who throw everything in round one get stopped in round three.",
-    today: "Do half of what you planned today. Then do it again tomorrow.",
-    fixHead: "Learn to keep a pace",
-    book: "Part 3's 12-week plan and Part 1's weekly structure give you a pace you can actually keep, with 36 workouts to tick off so you see every week you showed up.",
-    cta: "Fix my pacing"
+  ng: {
+    name: "Nice Guy", a: "a",
+    tag: "Liked by everyone. Respected by no one.",
+    strength: "You're loyal and you can feel what people need. People feel safe around you.",
+    weakness: "You trade respect for approval. You say yes when you mean no.",
+    used: "Guilt. Anyone who knows you hate letting people down can steer you with one sigh.",
+    truth: "Nice isn't the same as good. A man who can't say no isn't kind. He's easy to control.",
+    today: "Say no to one small thing today. No excuse, no long explanation.",
+    fixHead: "Build a frame nobody can bend",
+    book: "Part 1 teaches you to be fine alone and stop needing approval. The 12-week body plan gives you proof that you keep promises to yourself, and that's where real confidence comes from.",
+    cta: "Fix my frame"
   },
-  cp: {
-    name: "Counterpuncher",
-    tag: "Sees everything. Throws nothing.",
-    strength: "You read people and situations better than almost anyone. You think deep.",
-    weakness: "Overthinker. You wait for the perfect opening, and it never comes.",
+  ot: {
+    name: "Overthinker", a: "an",
+    tag: "Sees every move. Makes none.",
+    strength: "You notice what others miss: tone, timing, the look on someone's face.",
+    weakness: "You wait for certainty that never comes, so you never move.",
+    used: "Doubt. One “are you sure?” and you'll talk yourself out of anything.",
     truth: "Thinking feels like progress. It isn't. Your mind is your best weapon and your toughest opponent.",
     today: "Next time you catch yourself replaying something, do one small thing within 5 seconds.",
     fixHead: "Get out of your head",
-    book: "Part 1 gives you a 4-step method to solve your own problems instead of replaying them. Part 2's rounds on fear and pressure teach you to throw before it feels safe.",
+    book: "Part 1's 4-step method turns replaying into deciding. The 12-week body plan gives your mind a scoreboard: three workouts a week, ticked off, no debate.",
     cta: "Fix my overthinking"
   },
-  br: {
-    name: "Brawler",
-    tag: "All heart, no schedule.",
-    strength: "When you feel it, you're unstoppable. You've got more heart than most people.",
-    weakness: "Procrastinator. When the feeling goes, so do you.",
+  hh: {
+    name: "Hothead", a: "a",
+    tag: "Strong. And easy to control.",
+    strength: "You don't back down and you protect your people. There's real fire in you.",
+    weakness: "Whoever makes you angry is in control of you.",
+    used: "Provocation. One comment and you do exactly what they wanted you to do.",
+    truth: "The calmest man in the ring is the most dangerous. Anger makes you predictable, and predictable gets knocked out.",
+    today: "Next time something gets to you, wait 10 seconds before you answer. Just 10.",
+    fixHead: "Turn the fire into control",
+    book: "Part 2's rounds on ego, pain and pressure come straight from the ring and teach you to stay calm when it counts. The 12-week plan puts that fire into training you can see.",
+    cta: "Fix my temper"
+  },
+  dr: {
+    name: "Dreamer", a: "a",
+    tag: "Big plans. Every Monday.",
+    strength: "You think big and you believe things can change. Most people stopped believing that.",
+    weakness: "Motivation runs out by Wednesday, and so do you.",
+    used: "Hype. Anyone selling a shortcut gets your attention, because the shortcut skips the boring part.",
     truth: "Motivation shows up when it wants and leaves without warning. Discipline isn't for the good days. The good days don't need it.",
     today: "Pick one non-negotiable thing. Same time every day, however you feel.",
-    fixHead: "Show up without the feeling",
-    book: "Part 1 gives you a weekly structure you fill in and one real challenge every week, so you show up on the days you don't feel like it.",
-    cta: "Fix my procrastination"
-  },
-  te: {
-    name: "Technician",
-    tag: "Always preparing. Never fighting.",
-    strength: "You care about doing things right. Clean, precise, smart.",
-    weakness: "You wait until you're ready, so you never get tested.",
-    truth: "Ready is a lie. Nobody feels ready for their first fight. My first pull-up in 2022 was one messy rep between two trees.",
-    today: "Do the ugly version today. One messy rep beats a perfect plan.",
-    fixHead: "Step in before you're ready",
-    book: "Part 3's level test starts you exactly where you are today. Part 2's rounds on fear, ego and failure get you in the ring before you feel ready.",
-    cta: "Stop waiting"
+    fixHead: "Turn plans into proof",
+    book: "Part 3's 12-week plan gives you 36 workouts to tick off and a test at the start and the end, so you see every week you actually showed up.",
+    cta: "Start my 12 weeks"
   }
 };
-const ORDER = ["pf", "cp", "br", "te"];
+const ORDER = ["ng", "ot", "hh", "dr"];
 
-/* ===== The 10 questions. Answers are in the order: Pressure Fighter, Counterpuncher, Brawler, Technician.
+/* ===== The 10 questions. Answers are in the order: Nice Guy, Overthinker, Hothead, Dreamer.
    They get shuffled on screen. ===== */
 const QUESTIONS = [
+  { q: "Someone disrespects you in front of everyone. What do you do?", a: [
+    "Laugh it off. You don't want to make it awkward.",
+    "Say nothing, then replay it for three days.",
+    "Go straight back at him. Nobody talks to you like that.",
+    "Tell yourself one day you'll be so successful it won't matter." ] },
   { q: "It's 1am. Phone in your hand. What's going through your head?", a: [
-    "“Tomorrow I change everything.”",
-    "Replaying something you said today, over and over.",
-    "Nothing. You keep scrolling so you don't have to think.",
-    "Planning the perfect routine you'll start once life calms down." ] },
+    "Whether someone's annoyed with you.",
+    "A conversation from today, replayed over and over.",
+    "An argument you're still winning in your head.",
+    "The new life you're starting tomorrow. Again." ] },
+  { q: "A friend asks for a favour you really don't want to do.", a: [
+    "You say yes. You always say yes.",
+    "You think about how to say no until it's too late to say it.",
+    "You tell him straight. Maybe a bit too straight.",
+    "You say “yeah, for sure” and hope he forgets." ] },
   { q: "Round 1. You take a clean shot to the face. What happens?", a: [
-    "You walk straight through it. You don't take steps back.",
-    "You cover up and work out how he caught you.",
-    "Something switches on. You start swinging.",
-    "You reset and go back to the game plan." ] },
-  { q: "Think about the last thing you quit. Be honest. Why did you really stop?", a: [
-    "You went too hard, too fast, and burned out.",
-    "You started doubting it was even worth it.",
-    "The motivation just disappeared.",
-    "It wasn't going perfectly, so you planned to restart properly “later.”" ] },
-  { q: "Someone your age is doing better than you. How does it feel?", a: [
-    "It lights a fire. Next week you go twice as hard.",
-    "You compare everything and wonder where you went wrong.",
-    "It stings. You say you'll start too. You don't.",
-    "You tell yourself you'll catch up once you find the right plan." ] },
-  { q: "Coach says you're sparring today. You didn't see it coming.", a: [
-    "Good. Let's go.",
-    "Heart pounding. You're already picturing everything that could go wrong.",
-    "Depends on the day. Some days you find a reason to leave early.",
-    "You'd rather wait until your technique is sharper." ] },
-  { q: "Monday. Something important is due Friday. What really happens?", a: [
-    "You smash half of it Monday. By Wednesday you're sick of it.",
-    "It's on your mind all week, but starting feels impossible.",
-    "Thursday night, energy drink, somehow it gets done.",
-    "You spend days figuring out the best way, then rush it at the end." ] },
-  { q: "What do you tell yourself most when nobody's around?", a: [
-    "“This time I'm not stopping.”",
-    "“What if I'm not good enough?”",
-    "“I'll do it tomorrow.”",
-    "“Not yet. I'm not ready.”" ] },
+    "You ease off. You don't want it to turn into a war.",
+    "You cover up and try to work out what just happened.",
+    "Something snaps. You start swinging.",
+    "Fire for thirty seconds, then you're gassed." ] },
+  { q: "What do people get wrong about you?", a: [
+    "They think you're fine with everything. You're not.",
+    "They think you're calm. Your head is never quiet.",
+    "They think you're aggressive. You just hate being disrespected.",
+    "They think you're lazy. You've got big plans." ] },
+  { q: "Someone your age is way more successful than you.", a: [
+    "You're happy for him. Out loud, anyway.",
+    "You compare every detail and wonder where you went wrong.",
+    "It gets to you more than you'd ever admit.",
+    "You save the video and say “that'll be me.”" ] },
+  { q: "Someone important leaves you on read.", a: [
+    "You send another message to check everything's okay.",
+    "You reread the whole chat looking for what you did wrong.",
+    "You act like you don't care. You care.",
+    "You've already moved on to your next big idea." ] },
   { q: "What are you most scared people think about you?", a: [
-    "That you never finish what you start.",
+    "That you're weak.",
     "That you're not good enough, and they can see it.",
-    "That you're lazy and wasting your potential.",
-    "That you'll try, fail and look stupid." ] },
-  { q: "Last round. Lungs burning, arms heavy. What gets you through?", a: [
-    "Pure will. You empty the tank.",
-    "Reading him. You wait for the one mistake.",
-    "Pride. You'd rather drop than let him see you break.",
-    "Your training. You trust the hours you put in." ] },
-  { q: "Picture yourself one year from now, exactly the same as today. How does it feel?", a: [
-    "Like another year of starting over.",
-    "Like you thought about it all year and never moved.",
-    "Like you wasted it, and you knew you would.",
-    "Like you were still “getting ready.”" ] }
+    "That you can be pushed around.",
+    "That you're all talk." ] },
+  { q: "Monday. Something important is due Friday. What really happens?", a: [
+    "You help everyone else with theirs first.",
+    "It's on your mind all week, but starting feels impossible.",
+    "You put it off, then do it angry on Thursday night.",
+    "You make a perfect plan on Monday. By Wednesday it's gone." ] },
+  { q: "One year from now, nothing has changed. What hurts most?", a: [
+    "You spent another year living for everyone else.",
+    "You thought about it all year and never moved.",
+    "You let the same things get to you, again and again.",
+    "You said “this is my year” again." ] }
 ];
 
 /* ===== Scoring =====
@@ -368,7 +375,7 @@ const QUESTIONS = [
    Tie: question 10 decides, then 7, then 8, then the latest answer that belongs to one of the tied types. */
 const TIE_ORDER = [9, 6, 7, 8, 5, 4, 3, 2, 1, 0];
 function score(picks){
-  const counts = {pf:0, cp:0, br:0, te:0};
+  const counts = Object.fromEntries(ORDER.map(t => [t, 0]));
   picks.forEach(t => { if (t) counts[t]++; });
   const max = Math.max(...ORDER.map(t => counts[t]));
   const tied = ORDER.filter(t => counts[t] === max);
@@ -433,7 +440,7 @@ function choose(type, btn){
   }, reduce ? 60 : 260);
 }
 
-// Long names like COUNTERPUNCHER: shrink the title until it fits the card
+// Long names like OVERTHINKER: shrink the title until it fits the card
 function fitType(){
   const el = $("rType");
   el.style.fontSize = "";
@@ -444,13 +451,14 @@ function fitType(){
 function finish(){
   const { counts, winner } = score(picks);
   const T = TYPES[winner];
-  store("cfType", winner);
+  store("gType", winner);
   lastType = winner;
   track("quiz-finish", { type: T.name });
   $("rType").textContent = T.name;
   $("rTag").textContent = T.tag;
   $("rStr").textContent = T.strength;
   $("rWeak").textContent = T.weakness;
+  $("rUsed").textContent = T.used;
   $("rTruth").textContent = T.truth;
   $("rToday").textContent = T.today;
   $("rFixHead").textContent = T.fixHead;
@@ -498,7 +506,7 @@ $("retake").addEventListener("click", () => {
   show("quiz"); render();
 });
 
-// Email capture: sends the address (and fighter type) to the Kit form set in config.js
+// Email capture: sends the address (and type of guy) to the Kit form set in config.js
 (function(){
   const form = $("mail"), input = $("mailInput"), btn = $("mailBtn");
   if (!window.KIT_FORM_ID) return;          // no list connected yet: keep the box hidden
@@ -515,7 +523,7 @@ $("retake").addEventListener("click", () => {
     btn.disabled = true; btn.firstChild.textContent = "Sending ";
     const fd = new FormData();
     fd.append("email_address", email);
-    if (lastType) fd.append("fields[fighter_type]", TYPES[lastType].name);
+    if (lastType) fd.append("fields[guy_type]", TYPES[lastType].name);
     try {
       await fetch("https://app.kit.com/forms/" + encodeURIComponent(window.KIT_FORM_ID) + "/subscriptions", { method: "POST", mode: "no-cors", body: fd });
       form.querySelector(".mail-row").hidden = true;
@@ -532,10 +540,10 @@ $("retake").addEventListener("click", () => {
 // Share: native share sheet if the browser has one, otherwise copy the link
 $("share").addEventListener("click", async () => {
   const url = location.origin + location.pathname;
-  const text = "I just found out what kind of fighter I am. Find yours:";
+  const text = "I just found out what type of guy I am. Find yours:";
   const btn = $("share");
   try {
-    if (navigator.share) { await navigator.share({ title: "What kind of fighter are you?", text, url }); return; }
+    if (navigator.share) { await navigator.share({ title: "What type of guy are you?", text, url }); return; }
     await navigator.clipboard.writeText(url);
     btn.textContent = "Link copied";
   } catch (e) {

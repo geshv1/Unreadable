@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Complete Fighter</title>
-<meta name="description" content="A 12-week interactive program by geshv1: train your mind, handle pressure like a fighter, and build real strength with your own bodyweight.">
-<meta property="og:title" content="The Complete Fighter · Mind. Fight. Body.">
-<meta property="og:description" content="A 12-week program from a boxer who started with one messy pull-up. €9.99, instant PDF.">
+<meta name="description" content="From one messy pull-up to clean sets. A 12-week bodyweight plan by geshv1, plus the psychology of fear, ego, pressure and discipline from the ring. €9.99.">
+<meta property="og:title" content="One messy pull-up. Now clean sets. · The Complete Fighter">
+<meta property="og:description" content="The 12-week bodyweight plan I followed from one messy rep to strict pull-ups, plus the psychology that keeps you from quitting. €9.99, instant PDF.">
 <meta property="og:image" content="https://geshv1.github.io/completefighter/cover.jpg">
 <meta name="theme-color" content="#08080b">
 <script src="config.js"></script>
@@ -275,6 +275,32 @@ summary .pm::before,summary .pm::after{height:1.5px}
 .mbar .p{font-family:var(--display);font-variant-numeric:lining-nums}
 .mbar .btn{font-size:11px;padding:13px 18px}
 
+/* hero: before / after clips beside the headline */
+.hero .wrap{grid-template-columns:1.1fr .9fr}
+.hero h1{font-size:clamp(48px,6.2vw,84px)}
+.hero-proof{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hero-proof .clip{aspect-ratio:4/5;margin:0}
+.hero-proof .cap{padding:14px}
+.hero-proof .cap .year{font-size:clamp(34px,4.4vw,56px)}
+.hero-proof .cap p{font-size:14px}
+
+/* 12-week path */
+.path{list-style:none;display:grid;border-top:1px solid var(--line)}
+.path li{display:grid;grid-template-columns:110px 1fr;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.path li b{font-family:var(--body);font-weight:600;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--red-soft)}
+.path h3{font-size:30px;font-style:italic;margin-bottom:6px}
+.path p{color:var(--soft);font-size:16px}
+.fine{margin-top:22px;font-size:15px;color:var(--muted);max-width:620px}
+
+/* psychology grid */
+.psych{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.psych article{background:var(--bg);padding:28px 24px}
+.psych .q{display:block;font-family:var(--display);font-style:italic;font-size:30px;line-height:1.1;margin-bottom:10px}
+.psych p{color:var(--soft);font-size:16px}
+
+/* word labels in "What's inside" */
+.part .num{font-size:44px;line-height:1;color:#4a4c56}
+
 /* free quiz block */
 .quizblock{padding:56px 0;border-bottom:1px solid var(--line)}
 .qcard{display:block;text-decoration:none;color:inherit;text-align:center;max-width:760px;margin:0 auto;padding:44px 26px 40px;border:1px solid var(--line);border-radius:20px;background:radial-gradient(70% 60% at 50% -10%,rgba(212,42,60,.18),transparent 70%),var(--surface);box-shadow:0 30px 70px -40px var(--glow);-webkit-tap-highlight-color:transparent;transition:border-color .2s}
@@ -285,7 +311,20 @@ summary .pm::before,summary .pm::after{height:1.5px}
 .qcard p{color:var(--soft);max-width:520px;margin:0 auto}
 .types{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:24px 0 30px}
 .types li{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--soft);border:1px solid #33343d;border-radius:999px;padding:7px 13px}
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:1fr}
+  .hero-proof{order:-1}
+}
 @media (max-width:560px){
+  .hero-proof{gap:8px;margin:0 -8px}
+  .hero-proof .cap{padding:10px}
+  .hero-proof .cap p{font-size:12px}
+  .hero-proof .tag{top:10px;left:10px}
+  .path li{grid-template-columns:1fr;gap:6px;padding:20px 0}
+  .path h3{font-size:26px}
+  .psych{grid-template-columns:1fr}
+  .psych article{padding:24px 20px}
+  .part .num{font-size:30px}
   .quizblock{padding:40px 0}
   .qcard{padding:34px 18px 32px}
   .qcard .eyebrow::before,.qcard .eyebrow::after{flex-basis:14px}
@@ -323,25 +362,33 @@ summary .pm::before,summary .pm::after{height:1.5px}
 
 <main id="top">
 
-<!-- HERO -->
+<!-- HERO: the transformation first -->
 <div class="hero">
   <div class="wrap">
-    <div>
-      <div class="eyebrow">The Complete Fighter · Mind. Fight. Body.</div>
+    <div class="hero-copy">
+      <div class="eyebrow">The Complete Fighter · Body. Mind. Fight.</div>
       <h1>
-        <span class="line"><span>You know you're</span></span>
-        <span class="line"><span>capable of <span class="r">more.</span></span></span>
-        <span class="line"><span>Now prove it.</span></span>
+        <span class="line">One messy pull-up.</span>
+        <span class="line">Now clean <span class="r">sets.</span></span>
       </h1>
-      <p class="lede">A 12-week program from a boxer who started with one messy pull-up. Train your mind, stay calm under pressure like a fighter, and build real strength with nothing but a bar.</p>
+      <p class="lede">The 12-week bodyweight plan I followed from one shaky rep on a bar between two trees to strict pull-ups from a full hang. Plus the psychology that stops you quitting in week three.</p>
       <div class="cta-row">
-        <a class="btn buy" href="#offer" data-umami-event="buy-click" data-umami-event-spot="hero">Get it for €9.99 <span class="arrow">→</span></a>
-        <a class="btn ghost" href="#inside">See what's inside</a>
+        <a class="btn buy" href="#offer" data-umami-event="buy-click" data-umami-event-spot="hero">Start for €9.99 <span class="arrow">→</span></a>
+        <a class="btn ghost" href="#body">See the plan</a>
       </div>
-      <div class="assure">Instant PDF download · Fill it in on your phone · 14-day refund</div>
+      <div class="assure">Instant PDF · No gym membership · 14-day refund</div>
     </div>
-    <div class="book" aria-label="Book cover: The Complete Fighter">
-      <img src="cover.jpg" alt="Cover of The Complete Fighter: Mind. Fight. Body." width="420" height="680">
+    <div class="hero-proof">
+      <figure class="clip">
+        <span class="tag">BEFORE</span>
+        <video src="before.mp4" autoplay muted loop playsinline preload="metadata" aria-label="2022: struggling through one pull-up on a bar between two trees"></video>
+        <figcaption class="cap"><div class="year">2022</div><p>One messy rep.</p></figcaption>
+      </figure>
+      <figure class="clip">
+        <span class="tag">NOW</span>
+        <video src="now.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Now: clean, strict pull-ups from a full hang"></video>
+        <figcaption class="cap"><div class="year r">Now</div><p>Strict, from a full hang.</p></figcaption>
+      </figure>
     </div>
   </div>
 </div>
@@ -351,76 +398,91 @@ summary .pm::before,summary .pm::after{height:1.5px}
   <div class="wrap">
     <a class="qcard" href="quiz.html" data-umami-event="quiz-click" data-umami-event-spot="quiz-block">
       <div class="eyebrow">Free · 2 minutes</div>
-      <h2 id="qcHead">What kind of <span class="r">fighter</span> are you?</h2>
-      <p id="qcText">Not ready to buy? Start here. Ten honest questions about the ring and your life. Find your type, your biggest strength and the weakness that keeps holding you back.</p>
-      <ul class="types" aria-label="The four fighter types">
-        <li>Pressure Fighter</li><li>Counterpuncher</li><li>Brawler</li><li>Technician</li>
+      <h2 id="qcHead">What type of <span class="r">guy</span> are you?</h2>
+      <p id="qcText">Not ready to buy? Start here. Ten honest questions about pressure, people and the way you live. Find your type, your real strength and what people use against you.</p>
+      <ul class="types" aria-label="The four types">
+        <li>Nice Guy</li><li>Overthinker</li><li>Hothead</li><li>Dreamer</li>
       </ul>
       <span class="btn" id="qcBtn">Take the free quiz <span aria-hidden="true">→</span></span>
     </a>
   </div>
 </div>
 
-<!-- BEFORE / AFTER -->
-<section id="proof">
+<!-- THE BODY: results for the buyer -->
+<section id="body">
   <div class="wrap">
     <div class="sec-head rv">
-      <div class="eyebrow">Round 01 · The proof</div>
-      <h2>Same guy. Different mind.</h2>
-      <p>No gym membership, no secret program. Just the habits, the mindset and the bodyweight training in this book, done week after week.</p>
+      <div class="eyebrow">Round 01 · The body</div>
+      <h2>Twelve weeks. Numbers you can see.</h2>
+      <p>You test yourself on day one, train three times a week and test again at the end. No guessing whether it's working. The numbers tell you.</p>
     </div>
-    <div class="ba rv">
-      <figure class="clip">
-        <span class="tag">BEFORE</span>
-        <video src="before.mp4" autoplay muted loop playsinline preload="metadata" aria-label="2022: struggling through one pull-up on a bar between two trees"></video>
-        <figcaption class="cap"><div class="year">2022</div><p>One messy rep on a bar between two trees.</p></figcaption>
-      </figure>
-      <figure class="clip">
-        <span class="tag">NOW</span>
-        <video src="now.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Now: clean, strict pull-ups from a full hang"></video>
-        <figcaption class="cap"><div class="year r">Now</div><p>Clean, strict pull-ups from a full hang.</p></figcaption>
-      </figure>
+    <ol class="path rv">
+      <li><b>Day 1</b><div><h3>The level test</h3><p>20 minutes. It sets your starting point for every exercise, even if that's zero pull-ups.</p></div></li>
+      <li><b>Phase 1</b><div><h3>Foundation</h3><p>Rows, negatives and the easier version of every movement. The base most people skip.</p></div></li>
+      <li><b>Phase 2</b><div><h3>Build</h3><p>The harder versions come in. More reps, cleaner form, real strength.</p></div></li>
+      <li><b>Phase 3</b><div><h3>Push</h3><p>The hardest weeks. This is where clean sets come from.</p></div></li>
+      <li><b>Week 12</b><div><h3>The final test</h3><p>Same test as day one. Put the two numbers side by side.</p></div></li>
+    </ol>
+    <div class="stats rv">
+      <div class="stat"><b>12</b><span>weeks, start to finish</span></div>
+      <div class="stat"><b>36</b><span>workouts to tick off</span></div>
+      <div class="stat"><b>3</b><span>workouts a week</span></div>
+      <div class="stat"><b>0</b><span>gym membership needed</span></div>
     </div>
-    <div class="ba-note rv">
-      <q>"I'm not where I want to be yet. But I'm far from where I started."</q>
-      <span class="sign">— Georgi, geshv1</span>
+    <p class="fine rv">Also inside: a warm-up, nutrition with real numbers, and trackers for every week. All you need is a pull-up bar, something to dip on and a floor.</p>
+  </div>
+</section>
+
+<!-- THE MIND: psychology, fighting, success -->
+<section id="mind">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">Round 02 · The mind</div>
+      <h2>The psychology that keeps you in the fight.</h2>
+      <p>Most guys don't quit because the workout is hard. They quit because of what happens in their head. The rest of the book is what boxing taught me about fear, ego, pressure and discipline, turned into drills you do every day.</p>
+    </div>
+    <div class="psych rv">
+      <article><span class="q">Why you quit</span><p>Motivation vs discipline, and a weekly structure that works on the days you don't feel like it.</p></article>
+      <article><span class="q">Why you freeze</span><p>Fear and pressure, explained from the ring. How fighters step in before they feel ready.</p></article>
+      <article><span class="q">Why you snap</span><p>Ego and anger. Whoever controls your emotions controls you, in the ring and outside it.</p></article>
+      <article><span class="q">Why you need approval</span><p>Be fine alone, stop needing other people's yes, and solve your own problems with a 4-step method.</p></article>
     </div>
   </div>
 </section>
 
-<!-- WHO: the four fighter types from the quiz -->
+<!-- WHO: the four types from the quiz -->
 <section id="who">
   <div class="wrap">
     <div class="sec-head rv">
-      <div class="eyebrow">Round 02 · Who it's for</div>
-      <h2>Which fighter are you?</h2>
-      <p>Everyone who picks this up is one of four types. Each one has a weakness that keeps him stuck, and the book has a fix for every one.</p>
+      <div class="eyebrow">Round 03 · Who it's for</div>
+      <h2>Which guy are you?</h2>
+      <p>Every guy who picks this up is one of four types. Each one has something that keeps him stuck, and something people use against him. The book has a fix for every one.</p>
       <a class="quizlink" id="quizlink" href="quiz.html" data-umami-event="quiz-click" data-umami-event-spot="who">Not sure? Take the free 2-minute quiz →</a>
     </div>
     <div class="cards rv">
-      <article class="card" data-type="pf">
+      <article class="card" data-type="ng">
         <span class="you-tag">Your type</span>
-        <h3>Pressure Fighter</h3>
-        <p>All gas, no pacing. You've started training five times and quit five times. You go all in, burn out and start over.</p>
-        <p class="fix"><b>You get:</b> a 12-week plan, a level test and 36 workouts to tick off, at a pace you can actually keep.</p>
+        <h3>Nice Guy</h3>
+        <p>Liked by everyone, respected by no one. You say yes when you mean no, and people know it.</p>
+        <p class="fix"><b>You get:</b> a 6-week mind program to stop needing approval, and a body plan that proves you keep your word.</p>
       </article>
-      <article class="card" data-type="cp">
+      <article class="card" data-type="ot">
         <span class="you-tag">Your type</span>
-        <h3>Counterpuncher</h3>
-        <p>Sees everything, throws nothing. You know what you should do, then talk yourself out of it. Overthinking feels like progress.</p>
-        <p class="fix"><b>You get:</b> a 6-week mind program with a 4-step method to solve your own problems and one real challenge every week.</p>
+        <h3>Overthinker</h3>
+        <p>Sees every move, makes none. You know what to do, then talk yourself out of it.</p>
+        <p class="fix"><b>You get:</b> a 4-step method that turns replaying into deciding, and three workouts a week with no debate.</p>
       </article>
-      <article class="card" data-type="br">
+      <article class="card" data-type="hh">
         <span class="you-tag">Your type</span>
-        <h3>Brawler</h3>
-        <p>All heart, no schedule. Unstoppable when you feel it, nothing when you don't. Every week falls apart by Wednesday.</p>
-        <p class="fix"><b>You get:</b> a weekly structure you fill in and actually follow, so you show up without the feeling.</p>
+        <h3>Hothead</h3>
+        <p>Strong, and easy to control. One comment and you do exactly what they wanted.</p>
+        <p class="fix"><b>You get:</b> 20 rounds from the ring on ego, pain and pressure, each with a daily drill to stay calm.</p>
       </article>
-      <article class="card" data-type="te">
+      <article class="card" data-type="dr">
         <span class="you-tag">Your type</span>
-        <h3>Technician</h3>
-        <p>Always preparing, never fighting. You want to start boxing, training, anything, but you're waiting until you're ready.</p>
-        <p class="fix"><b>You get:</b> 20 rounds on fear, ego and failure, each with a daily drill, plus a level test that starts you where you are.</p>
+        <h3>Dreamer</h3>
+        <p>Big plans every Monday. By Wednesday the motivation is gone, and so are you.</p>
+        <p class="fix"><b>You get:</b> a 12-week plan with 36 workouts to tick off and a test at the start and the end.</p>
       </article>
     </div>
   </div>
@@ -430,14 +492,24 @@ summary .pm::before,summary .pm::after{height:1.5px}
 <section id="inside">
   <div class="wrap">
     <div class="sec-head rv">
-      <div class="eyebrow">Round 03 · What's inside</div>
-      <h2>Three programs. One book.</h2>
+      <div class="eyebrow">Round 04 · What's inside</div>
+      <h2>Body. Mind. Fight. One book.</h2>
       <p>Most guides tell you what to think. This one gives you something to do every single day, and a place to write it down.</p>
     </div>
     <div class="parts">
       <div class="part rv">
-        <div class="num">01</div>
-        <div><h3>Strengthen Your Mind</h3><span class="len">6 weeks · one chapter a week</span></div>
+        <div class="num">Body</div>
+        <div><h3>The Calisthenics Blueprint</h3><span class="len">Part 3 · 12 weeks · 3 workouts a week</span></div>
+        <ul>
+          <li>A 20-minute test that sets your level for every exercise</li>
+          <li>Easier and harder versions of every movement</li>
+          <li>Three phases: Foundation, Build, Push, then a final test</li>
+          <li>Warm-up, nutrition with real numbers, and full trackers</li>
+        </ul>
+      </div>
+      <div class="part rv">
+        <div class="num">Mind</div>
+        <div><h3>Strengthen Your Mind</h3><span class="len">Part 1 · 6 weeks · one chapter a week</span></div>
         <ul>
           <li>Build structure when school, work and training collide</li>
           <li>Be fine alone and stop needing approval</li>
@@ -446,8 +518,8 @@ summary .pm::before,summary .pm::after{height:1.5px}
         </ul>
       </div>
       <div class="part rv">
-        <div class="num">02</div>
-        <div><h3>The Life of a Fighter</h3><span class="len">20 rounds · one a day</span></div>
+        <div class="num">Fight</div>
+        <div><h3>The Life of a Fighter</h3><span class="len">Part 2 · 20 rounds · one a day</span></div>
         <ul>
           <li>Fear, ego, pain, failure and pressure, explained from the ring</li>
           <li>Real stories from my own sparring, competitions and hard years</li>
@@ -455,22 +527,12 @@ summary .pm::before,summary .pm::after{height:1.5px}
           <li>Tick it off and log how it went</li>
         </ul>
       </div>
-      <div class="part rv">
-        <div class="num">03</div>
-        <div><h3>The Calisthenics Blueprint</h3><span class="len">12 weeks · 3 workouts a week</span></div>
-        <ul>
-          <li>A 20-minute test that sets your level for every exercise</li>
-          <li>Easier and harder versions of every movement</li>
-          <li>Three phases: Foundation, Build, Push, then a final test</li>
-          <li>Warm-up, nutrition with real numbers, and full trackers</li>
-        </ul>
-      </div>
     </div>
     <div class="stats rv">
-      <div class="stat"><b data-count="76">76</b><span>pages</span></div>
-      <div class="stat"><b data-count="244">244</b><span>fill-in boxes and checkboxes</span></div>
-      <div class="stat"><b data-count="12">12</b><span>weeks, start to finish</span></div>
-      <div class="stat"><b data-count="36">36</b><span>workouts to tick off</span></div>
+      <div class="stat"><b>76</b><span>pages</span></div>
+      <div class="stat"><b>244</b><span>fill-in boxes and checkboxes</span></div>
+      <div class="stat"><b>20</b><span>rounds from the ring</span></div>
+      <div class="stat"><b>6</b><span>weeks of mind training</span></div>
     </div>
   </div>
 </section>
@@ -479,7 +541,7 @@ summary .pm::before,summary .pm::after{height:1.5px}
 <section id="pages">
   <div class="wrap">
     <div class="sec-head rv">
-      <div class="eyebrow">Round 04 · Look inside</div>
+      <div class="eyebrow">Round 05 · Look inside</div>
       <h2>Made to be used, not just read.</h2>
       <p>Every tracker, question and checklist works right inside the PDF. Tap a box to tick it. Tap a line to write.</p>
     </div>
@@ -496,7 +558,7 @@ summary .pm::before,summary .pm::after{height:1.5px}
 <section id="story">
   <div class="wrap story">
     <div class="story-text rv">
-      <div class="eyebrow">Round 05 · Who's behind this</div>
+      <div class="eyebrow">Round 06 · Who's behind this</div>
       <h2 style="font-size:clamp(36px,5vw,58px);margin:14px 0 28px">I wasn't born disciplined.</h2>
       <p>I'm Georgi. As a young teenager I was distant from my family. My grades dropped, I did nothing with myself and I spent my time with the wrong people.</p>
       <p>I walked into a boxing gym because I wanted to believe in myself. The first sessions were humbling. But somewhere in those rounds, my head went quiet. Outside the gym, everything felt loud. Inside the ring, I was the calmest I'd ever been.</p>
@@ -511,7 +573,7 @@ summary .pm::before,summary .pm::after{height:1.5px}
 <section id="community">
   <div class="wrap">
     <div class="sec-head rv">
-      <div class="eyebrow">Round 06 · The community</div>
+      <div class="eyebrow">Round 07 · The community</div>
       <h2>Shoutout to the guys.</h2>
       <p>Real messages and comments from people who follow the page. Respect to everyone who's been here from the start.</p>
     </div>
@@ -529,13 +591,13 @@ summary .pm::before,summary .pm::after{height:1.5px}
   <div class="wrap">
     <div class="offer rv">
       <div class="offer-l">
-        <div class="eyebrow">Round 07 · Your corner</div>
+        <div class="eyebrow">Round 08 · Your corner</div>
         <h3 style="margin-top:14px">Everything you get</h3>
         <ul>
           <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span><b>The Complete Fighter</b>, 76-page interactive PDF</span></li>
-          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span>Part 1: Strengthen Your Mind, 6-week program</span></li>
-          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span>Part 2: The Life of a Fighter, 20 daily rounds</span></li>
-          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span>Part 3: The Calisthenics Blueprint, 12-week plan</span></li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span><b>The body:</b> The Calisthenics Blueprint, 12-week plan</span></li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span><b>The mind:</b> Strengthen Your Mind, 6-week program</span></li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span><b>The fight:</b> The Life of a Fighter, 20 daily rounds</span></li>
           <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span>Level test, trackers and a 36-workout checklist</span></li>
           <li><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" transform="rotate(45 6 6)" fill="#d42a3c"/></svg><span>Works on iPhone, Android and computer</span></li>
         </ul>
@@ -557,12 +619,13 @@ summary .pm::before,summary .pm::after{height:1.5px}
 <section id="faq">
   <div class="wrap">
     <div class="sec-head rv">
-      <div class="eyebrow">Round 08 · Questions</div>
+      <div class="eyebrow">Round 09 · Questions</div>
       <h2>Before you buy</h2>
     </div>
     <div class="faq">
       <details><summary>How do I get the book?<span class="pm"></span></summary><p>Right after checkout you get a download link by email. It's a PDF, so you can open it on your phone, tablet or computer straight away.</p></details>
       <details><summary>Do the fill-in boxes really work on a phone?<span class="pm"></span></summary><p>Yes. On iPhone, open it in Files or Books. On Android or a computer, open it in Adobe Acrobat Reader (free). Tap a box to tick it and tap a line to write. Save the file to keep your answers.</p></details>
+      <details><summary>Will I actually see results?<span class="pm"></span></summary><p>The plan is built so that if you show up for the 36 workouts, your numbers go up. You test on day one and again in week 12, so you'll see exactly how far you came. What I can't do is the reps for you.</p></details>
       <details><summary>Do I need a gym?<span class="pm"></span></summary><p>No. You need a pull-up bar (a park, a gym or a doorway bar), something to dip on (parallel bars, two sturdy chairs or a bench) and a floor.</p></details>
       <details><summary>I'm a complete beginner. Is it for me?<span class="pm"></span></summary><p>Yes. The starting test puts you at the right level for each exercise, and every movement has an easier version. If you can't do a pull-up yet, you start with rows and negatives.</p></details>
       <details><summary>Do I have to box to use it?<span class="pm"></span></summary><p>No. The fighter lessons are about fear, ego, pressure and discipline, and they apply to school, work and training just as much as to the ring.</p></details>
@@ -582,7 +645,7 @@ summary .pm::before,summary .pm::after{height:1.5px}
       <div class="labels label" aria-hidden="true"><span>Reactive</span><span>Steady</span></div>
     </div>
     <p class="rv">Twelve weeks from now you'll either have the results or the excuses. Start today.</p>
-    <a class="btn buy rv" href="#offer" data-umami-event="buy-click" data-umami-event-spot="final">Get it for €9.99 <span class="arrow">→</span></a>
+    <a class="btn buy rv" href="#offer" data-umami-event="buy-click" data-umami-event-spot="final">Start for €9.99 <span class="arrow">→</span></a>
   </div>
 </section>
 
@@ -613,20 +676,21 @@ document.querySelectorAll('a.buy').forEach(a => {
 
 // Quiz result: if the visitor came from the quiz, name their type in the banner and mark their card
 (function(){
-  const NAMES = {pf:"Pressure Fighter", cp:"Counterpuncher", br:"Brawler", te:"Technician"};
+  const NAMES = {ng:"Nice Guy", ot:"Overthinker", hh:"Hothead", dr:"Dreamer"};
+  const AN = {ot:true};
   let t = new URLSearchParams(location.search).get("type");
-  if (!NAMES[t]) { try { t = localStorage.getItem("cfType"); } catch(e) { t = null; } }
+  if (!NAMES[t]) { try { t = localStorage.getItem("gType"); } catch(e) { t = null; } }
   if (!NAMES[t]) return;
   document.getElementById("qbar").hidden = false;
   const a = document.querySelector("#qbar a");
   a.href = "#who";
-  const txt = a.querySelector(".txt"); txt.textContent = "You're a ";
+  const txt = a.querySelector(".txt"); txt.textContent = AN[t] ? "You're an " : "You're a ";
   const b = document.createElement("b"); b.textContent = NAMES[t] + "."; txt.append(b, " The book has your fix.");
   a.querySelector(".go").textContent = "See it ↓";
   const card = document.querySelector('.card[data-type="' + t + '"]');
   if (card) card.classList.add("you");
   document.getElementById("quizlink").textContent = "Want to retake the quiz? →";
-  document.getElementById("qcHead").innerHTML = 'You\'re a <span class="r"></span>';
+  document.getElementById("qcHead").innerHTML = 'You\'re ' + (AN[t] ? "an" : "a") + ' <span class="r"></span>';
   document.querySelector("#qcHead .r").textContent = NAMES[t] + ".";
   document.getElementById("qcText").textContent = "That's your result from the quiz. Want to check again, or send it to a friend so they find theirs?";
   document.getElementById("qcBtn").firstChild.textContent = "Retake the quiz ";
