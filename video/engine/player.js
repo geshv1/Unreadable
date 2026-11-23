@@ -11,7 +11,7 @@
     const byId = Object.fromEntries(ep.scenes.map((s) => [s.id, s]));
     ep.sfxResolved = (ep.sfx || []).map((c) => {
       if (!byId[c.scene]) throw new Error('sfx cue for unknown scene ' + c.scene);
-      return Object.assign({}, c, { t: +(byId[c.scene].start + c.at).toFixed(4) });
+      return Object.assign({}, c, { t: +(byId[c.scene].start + c.at / (byId[c.scene].speed || 1)).toFixed(4) });
     });
     if (ep.sfxCut) for (const c of ep.cuts) ep.sfxResolved.push({ id: ep.sfxCut.id, gain: ep.sfxCut.gain, t: +(c.t + ep.sfxCut.offset).toFixed(4), note: 'cut -> ' + c.scene });
     ep.sfxResolved.sort((a, b) => a.t - b.t);
@@ -38,7 +38,8 @@
     const tl = t - sc.start;
     const act = V.actions[sc.action];
     if (!act) throw new Error('Unknown action ' + sc.action);
-    const st = act(tl, sc, ep) || {};
+    // scene.speed > 1 plays the scene's choreography faster (dur is the real, shortened length)
+    const st = act(tl * (sc.speed || 1), sc, ep) || {};
     const figs = st.figs || [];
     const back = figs.filter((f) => f.depth === 'back');
     const main = figs.filter((f) => f.depth !== 'back');

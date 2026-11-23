@@ -21,8 +21,9 @@
   V.actions.coldOpen = function (tl) {
     const crowd = CROWD.map(({ x, i }) => C({ depth: 'back', x, y: 1296, s: 0.56, alpha: 0.8, face: i % 2 ? 1 : -1,
       pose: V.breathe(i % 3 ? PO.stand : PO.scroll, tl, 0.8, 1.6, i) }));
-    const reactive = V.R({ pose: V.breathe(PO.guard, tl, 1.6, 2.4, 0), expr: tl > 2.6 ? 'neutral' : null });
-    const steady = V.St({ pose: V.breathe(PO.guard, tl, 1.6, 2.2, 1.7), expr: tl > 2.6 ? 'neutral' : null });
+    // both square up: guard, bouncing on their toes (same as the series hook), no faces.
+    // squareUp runs on real time so the bounce isn't sped up by the scene's speed setting.
+    const [reactive, steady] = V.actions.squareUp(tl / (4.2 / 2.6)).figs.map((f) => Object.assign(f, { expr: null }));
     return {
       figs: [...crowd, reactive, steady],
       mid(g) { crowd.forEach((f, k) => { if (k % 3 === 0) phoneGlow(g, f); }); },
