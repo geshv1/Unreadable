@@ -26,8 +26,10 @@ The text system, spotlights (they follow each character's x), labels, swipe tran
 ## Episodes
 - `ep02-control` — Pt. 2 "Different control." (leash, feint, data, silence)
 - `ep03-discipline` — Pt. 3 "Different discipline." (alarm, bricks, the hold, no audience)
+- `ep04-ego` — Pt. 4 "Different ego." (the win, the loss, their win, the scoreboard)
 
-Episode options: `zoom` (camera, <1 = zoomed out), `vignette` (black edges, 0–1), `transition` (`{type:'fade'}` or swipe).
+Episode options: `zoom` (camera, <1 = zoomed out), `vignette` (black edges, 0–1), `transition` (`{type:'fade'}` or swipe),
+`fadeIn` (seconds of fade up from black at the start). Scene option: `zoom: [from, to]` animates the camera over the scene.
 
 ## Saved brief
 `briefs/next-same-day.md`: "Same day. Different control." (one continuous day with CONTROL meters), not built yet.

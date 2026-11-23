@@ -56,6 +56,10 @@
     pickLow: P({ C: [16, -74], P: [-4, -52], hB: [10, -62], hF: [34, -14], fB: [-12, -5], fF: [12, -5], hd: [3, 3], eF: [1, 0] }),
     place: P({ C: [6, -88], P: [-2, -55], hB: [0, -60], hF: [40, -80], fB: [-10, -5], fF: [10, -5], eB: [-0.5, 1], eF: [0, 1] }),
     flex: P({ C: [0, -90], P: [-1, -56], hB: [-20, -112], hF: [20, -112], fB: [-12, -5], fF: [12, -5], eB: [-1, 0.3], eF: [1, 0.3] }),
+    // Pt. 4 additions
+    sitHigh: P({ C: [8, -64], P: [-4, -34], hB: [16, -82], hF: [20, -84], fB: [22, -5], fF: [28, -5], hd: [4, 6], kB: [0.4, -1], kF: [0.4, -1], eB: [0.2, 1], eF: [0.2, 1] }),
+    stepUp: P({ C: [4, -89], P: [0, -56], hB: [-10, -58], hF: [14, -62], fB: [-8, -5], fF: [16, -22], eB: [-0.6, 1] }),
+    cheer: P({ C: [-2, -91], P: [-1, -56], hB: [-16, -128], hF: [16, -130], fB: [-11, -5], fF: [11, -5], hd: [-1, -2], eB: [-1, 0.3], eF: [1, 0.3] }),
     tired: P({ C: [8, -82], P: [-2, -53], hB: [8, -60], hF: [18, -62], fB: [-16, -5], fF: [14, -5], hd: [4, 5] }),
   };
 
@@ -182,6 +186,7 @@
   function head(g, G, f, pal) {
     const H = G.H;
     g.save(); g.translate(H[0], H[1]); g.rotate((f.headTilt || 0) + G.a * 0.5);
+    if (f.headScale && f.headScale !== 1) { g.translate(0, -(f.headScale - 1) * 12); g.scale(f.headScale, f.headScale); }
     circle(g, [0, 0], 13.5, pal.head, pal.ol, pal.olW ? 0.8 : 1.6);
     if (!pal.flat) { g.globalAlpha = 0.55; circle(g, [-4, -4.3], 5.1, '#fff'); g.globalAlpha = 1; }
     if (f.blush) { // red flush over the whole face

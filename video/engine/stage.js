@@ -57,12 +57,12 @@
     reactive: { c0: 'rgba(224,52,74,0.05)', c1: 'rgba(224,52,74,0.30)', c2: 'rgba(240,72,92,0.50)', pool: 'rgba(240,72,92,0.55)', dust: '#ff9aa4' },
     steady: { c0: 'rgba(236,240,246,0.05)', c1: 'rgba(226,230,238,0.22)', c2: 'rgba(242,244,248,0.38)', pool: 'rgba(242,244,248,0.45)', dust: '#ffffff' },
   };
-  V.drawBeam = function (g, kind, x, t, home) {
+  V.drawBeam = function (g, kind, x, t, home, intensity = 1) {
     const b = BEAM[kind]; if (!b) return;
     const topX = home + (x - home) * 0.55;
     const flick = 0.93 + 0.07 * Math.sin(t * 5.3 + (kind === 'steady' ? 2 : 0)) * Math.sin(t * 2.1);
     g.save();
-    g.globalAlpha = flick;
+    g.globalAlpha = flick * intensity;
     g.filter = 'blur(14px)';
     const gr = g.createLinearGradient(0, -700, 0, V.FLOOR);
     gr.addColorStop(0, b.c0); gr.addColorStop(0.55, b.c1); gr.addColorStop(1, b.c2);

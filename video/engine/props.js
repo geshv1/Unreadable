@@ -331,4 +331,116 @@
     g.beginPath(); g.moveTo(-w * 0.3, -(V.FLOOR - topY) * 0.5); g.quadraticCurveTo(0, -(V.FLOOR - topY) * 0.62, w * 0.3, -(V.FLOOR - topY) * 0.45); g.stroke();
     g.restore();
   };
+
+  // ───────── Pt. 4 props
+  // Result card (same family as the notification / alarm): RESULT + big WIN / LOSS
+  V.resultCard = function (g, cx, cy, w, k, word, color) {
+    const h = 200;
+    g.save(); g.translate(cx, cy); g.scale(k, k);
+    g.shadowColor = 'rgba(0,0,0,0.7)'; g.shadowBlur = 40; g.shadowOffsetY = 10;
+    g.fillStyle = 'rgba(246,247,250,0.98)'; V.roundRect(g, -w / 2, -h / 2, w, h, 36); g.fill();
+    g.shadowColor = 'transparent';
+    g.textBaseline = 'middle'; g.textAlign = 'left';
+    g.fillStyle = '#5b5e68'; g.font = `700 38px ${V.FONT.sans}`; g.letterSpacing = '8px';
+    g.fillText('RESULT', -w / 2 + 50, 0);
+    g.letterSpacing = '6px'; g.textAlign = 'right'; g.fillStyle = color; g.font = `800 104px ${V.FONT.sans}`;
+    g.fillText(word, w / 2 - 44, 6);
+    g.restore();
+  };
+
+  // Medal on a red ribbon hanging from the neck (world px)
+  V.medal = function (g, neck, chest, k = 1) {
+    g.save();
+    g.strokeStyle = V.COL.red; g.lineWidth = 12; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(neck[0] - 26, neck[1] - 4); g.lineTo(chest[0], chest[1] - 22); g.lineTo(neck[0] + 26, neck[1] - 4); g.stroke();
+    g.translate(chest[0], chest[1]); g.scale(k, k);
+    g.shadowColor = 'rgba(255,255,255,0.6)'; g.shadowBlur = 24;
+    g.fillStyle = '#eef0f4'; g.strokeStyle = '#16171c'; g.lineWidth = 5;
+    g.beginPath(); g.arc(0, 0, 34, 0, 6.283); g.fill(); g.stroke();
+    g.shadowBlur = 0; g.strokeStyle = '#9a9da7'; g.lineWidth = 4; g.beginPath(); g.arc(0, 0, 22, 0, 6.283); g.stroke();
+    g.fillStyle = '#16171c'; g.font = `800 28px ${V.FONT.sans}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('1', 0, 2);
+    g.restore();
+  };
+  V.medalFlat = function (g, x) { // lying on the floor
+    g.save(); g.fillStyle = '#eef0f4'; g.strokeStyle = '#16171c'; g.lineWidth = 5;
+    g.beginPath(); g.ellipse(x, V.FLOOR - 8, 36, 10, 0, 0, 6.283); g.fill(); g.stroke();
+    g.strokeStyle = V.COL.red; g.lineWidth = 9; g.beginPath(); g.moveTo(x + 30, V.FLOOR - 8); g.quadraticCurveTo(x + 70, V.FLOOR - 6, x + 96, V.FLOOR - 7); g.stroke();
+    g.restore();
+  };
+
+  // Big block letter L (world px). x = left edge, bar w/h, foot length/height. dy = drop offset
+  V.letterL = function (g, x, barW, barH, footL, footH, dy = 0, color = '#eef0f4') {
+    const y0 = V.FLOOR + dy;
+    g.save();
+    g.fillStyle = color; g.strokeStyle = '#16171c'; g.lineWidth = 6; g.lineJoin = 'round';
+    g.beginPath(); g.moveTo(x, y0); g.lineTo(x, y0 - barH); g.lineTo(x + barW, y0 - barH); g.lineTo(x + barW, y0 - footH); g.lineTo(x + footL, y0 - footH); g.lineTo(x + footL, y0); g.closePath();
+    g.shadowColor = 'rgba(0,0,0,0.5)'; g.shadowBlur = 20; g.fill(); g.shadowBlur = 0; g.stroke();
+    g.fillStyle = 'rgba(0,0,0,0.12)'; g.fillRect(x + barW - 14, y0 - barH + 6, 8, barH - footH - 6);
+    g.restore();
+  };
+
+  // Small rain cloud over a head (world px)
+  V.rainCloud = function (g, cx, cy, t, k = 1) {
+    g.save(); g.translate(cx, cy); g.scale(k, k);
+    g.strokeStyle = 'rgba(160,200,255,0.7)'; g.lineWidth = 4; g.lineCap = 'round';
+    for (let i = 0; i < 9; i++) {
+      const x = -80 + i * 20, ph = ((t * 2.2 + i * 0.37) % 1);
+      const y = 30 + ph * 150;
+      g.globalAlpha = 1 - ph; g.beginPath(); g.moveTo(x - 4, y); g.lineTo(x - 10, y + 24); g.stroke();
+    }
+    g.globalAlpha = 1;
+    g.fillStyle = '#3a3c46'; g.strokeStyle = '#16171c'; g.lineWidth = 5;
+    g.beginPath();
+    g.arc(-55, 8, 36, Math.PI * 0.5, Math.PI * 1.5); g.arc(-20, -22, 42, Math.PI, Math.PI * 1.9); g.arc(32, -14, 40, Math.PI * 1.2, Math.PI * 0.1 + Math.PI * 2);
+    g.arc(62, 12, 30, -Math.PI * 0.5, Math.PI * 0.5); g.closePath(); g.fill(); g.stroke();
+    g.restore();
+  };
+
+  // Heart (like) icon
+  V.heart = function (g, x, y, s, alpha = 1, color = V.COL.red) {
+    g.save(); g.translate(x, y); g.scale(s, s); g.globalAlpha = alpha;
+    g.fillStyle = color; g.strokeStyle = '#fff'; g.lineWidth = 3;
+    g.beginPath(); g.moveTo(0, 14); g.bezierCurveTo(-26, -4, -14, -26, 0, -12); g.bezierCurveTo(14, -26, 26, -4, 0, 14); g.closePath(); g.fill(); g.stroke();
+    g.restore();
+  };
+
+  // W / L result chip
+  V.chip = function (g, x, y, letter, k = 1) {
+    const win = letter === 'W', s = 120;
+    g.save(); g.translate(x, y); g.scale(k, k);
+    g.shadowColor = win ? 'rgba(255,255,255,0.45)' : 'rgba(224,52,74,0.6)'; g.shadowBlur = 30;
+    g.fillStyle = win ? '#f4f5f7' : V.COL.red; V.roundRect(g, -s / 2, -s / 2, s, s, 22); g.fill();
+    g.shadowBlur = 0; g.fillStyle = win ? '#0d0e12' : '#ffffff'; g.font = `800 84px ${V.FONT.sans}`; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText(letter, 2, 6);
+    g.restore();
+  };
+
+  // Mood graph panel: samples = array of values in [-1, 1] drawn left->right
+  V.moodGraph = function (g, cx, cy, samples, color, label) {
+    const w = 300, h = 130, x = cx - w / 2, y = cy - h / 2;
+    g.save();
+    g.fillStyle = 'rgba(14,15,20,0.94)'; V.roundRect(g, x, y, w, h, 16); g.fill();
+    g.strokeStyle = 'rgba(255,255,255,0.18)'; g.lineWidth = 3; V.roundRect(g, x, y, w, h, 16); g.stroke();
+    g.strokeStyle = 'rgba(255,255,255,0.12)'; g.setLineDash([8, 8]); g.beginPath(); g.moveTo(x + 16, cy); g.lineTo(x + w - 16, cy); g.stroke(); g.setLineDash([]);
+    if (samples.length > 1) {
+      g.strokeStyle = color; g.lineWidth = 7; g.lineJoin = 'round'; g.lineCap = 'round';
+      g.shadowColor = color; g.shadowBlur = 14;
+      g.beginPath();
+      samples.forEach((v, i) => { const px = x + 18 + (i / (samples.length - 1)) * (w - 36) * (samples.length / samples.max), py = cy - v * (h / 2 - 18); i ? g.lineTo(px, py) : g.moveTo(px, py); });
+      g.stroke();
+    }
+    g.restore();
+  };
+
+  // Confetti (white + red) falling in a band
+  V.confetti = function (g, t, x0, x1, alpha = 1, seed = 3) {
+    const r = V.rng(seed);
+    g.save(); g.globalAlpha = alpha;
+    for (let i = 0; i < 46; i++) {
+      const x = x0 + r() * (x1 - x0), sp = 260 + r() * 240, ph = r(), y = 600 + ((t * sp + ph * 800) % 800);
+      g.save(); g.translate(x + Math.sin(t * 4 + i) * 14, y); g.rotate(t * (2 + r() * 4) + i);
+      g.fillStyle = i % 3 ? '#f4f5f7' : V.COL.red; g.fillRect(-7, -4, 14, 8); g.restore();
+    }
+    g.restore();
+  };
 })();

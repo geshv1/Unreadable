@@ -53,13 +53,15 @@
     const shake = st.shake || 0;
     g.save();
     // camera zoom (episode.zoom < 1 = zoomed out), pivot on the floor line so the floor stays put
-    const z = ep.zoom || 1;
+    // scene.zoom: number or [from, to] animated over the scene (slow push-in / pull-out)
+    const zs = sc.zoom != null ? sc.zoom : ep.zoom || 1;
+    const z = Array.isArray(zs) ? V.lerp(zs[0], zs[1], (sc.zoomEase ? V.ease[sc.zoomEase] : V.ease.inOut)(V.clamp(tl / sc.dur))) : zs;
     g.translate(540, V.FLOOR); g.scale(z, z); g.translate(-540, -V.FLOOR);
     g.translate(540 + V.hash(i, 3) * shake, 1180 + V.hash(i, 4) * shake); g.scale(push, push); g.translate(-540, -1180);
     (V.sets[sc.set] || V.sets.stage)(g, t);
     V.drawFloor(g);
     if (st.back) st.back(g);
-    for (const f of main) if (f.kind === 'reactive' || f.kind === 'steady') V.drawBeam(g, f.kind, f.x, t, V.POS[f.kind]);
+    for (const f of main) if (f.kind === 'reactive' || f.kind === 'steady') V.drawBeam(g, f.kind, f.x, t, V.POS[f.kind], f.beam == null ? 1 : f.beam);
     for (const f of back) V.drawFigure(g, f);
     if (st.mid) st.mid(g);
     V.drawReflections(g, main);
@@ -67,11 +69,13 @@
     if (st.front) st.front(g);
     g.restore();
 
-    V.drawLabels(g, ep.zoom || 1);
+    V.drawLabels(g, z);
     if (ep.vignette) drawVignette(g, ep.vignette);
     V.drawText(g, sc, tl, sc.start > 0);
     if (st.overlay) st.overlay(g);
     drawTransition(g, t);
+    // opening fade from black (episode.fadeIn seconds)
+    if (ep.fadeIn && t < ep.fadeIn) { g.fillStyle = `rgba(0,0,0,${(1 - V.ease.out(t / ep.fadeIn)).toFixed(3)})`; g.fillRect(0, 0, V.W, V.H); }
     if (V.debug) drawSafe(g);
     g.restore();
     return { t, scene: sc.id };
