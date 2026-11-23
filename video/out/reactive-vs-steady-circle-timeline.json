@@ -1,30 +1,30 @@
 {
  "title": "reactive-vs-steady-circle",
- "duration": 38,
+ "duration": 28.6,
  "fps": 30,
  "cuts": [
   {
-   "t": 4.2,
+   "t": 2.6,
    "scene": "rule1-circle"
   },
   {
-   "t": 10.2,
+   "t": 7.2,
    "scene": "rule2-hands"
   },
   {
-   "t": 16.2,
+   "t": 11.8,
    "scene": "rule3-talk"
   },
   {
-   "t": 21.7,
+   "t": 16,
    "scene": "rule4-outgrow"
   },
   {
-   "t": 28.2,
+   "t": 21,
    "scene": "corner"
   },
   {
-   "t": 34.5,
+   "t": 25.8,
    "scene": "end-card"
   }
  ],
@@ -40,7 +40,7 @@
     "heavy": 0.8
    },
    "note": "Reactive lands back on the roof",
-   "t": 13.15
+   "t": 9.4617
   },
   {
    "scene": "corner",
@@ -51,44 +51,44 @@
     "seed": 5
    },
    "note": "gloves touch",
-   "t": 32.92
+   "t": 24.5962
   }
  ],
  "scenes": [
   {
    "id": "cold-open",
    "start": 0,
-   "end": 4.2
+   "end": 2.6
   },
   {
    "id": "rule1-circle",
-   "start": 4.2,
-   "end": 10.2
+   "start": 2.6,
+   "end": 7.199999999999999
   },
   {
    "id": "rule2-hands",
-   "start": 10.2,
-   "end": 16.2
+   "start": 7.199999999999999,
+   "end": 11.799999999999999
   },
   {
    "id": "rule3-talk",
-   "start": 16.2,
-   "end": 21.7
+   "start": 11.799999999999999,
+   "end": 16
   },
   {
    "id": "rule4-outgrow",
-   "start": 21.7,
-   "end": 28.2
+   "start": 16,
+   "end": 21
   },
   {
    "id": "corner",
-   "start": 28.2,
-   "end": 34.5
+   "start": 21,
+   "end": 25.8
   },
   {
    "id": "end-card",
-   "start": 34.5,
-   "end": 38
+   "start": 25.8,
+   "end": 28.6
   }
  ]
 }
