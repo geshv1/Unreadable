@@ -45,19 +45,17 @@
   }
 
   function topLine(g, text, y) {
-    let size = 27;
+    // long lines: first tighten the side lines and letter spacing, only then shrink (never below 21px)
+    let size = 27, sp = 0.36, L = 54, w;
     g.textBaseline = 'middle'; g.textAlign = 'center';
-    let w;
-    do {
-      g.font = `500 ${size}px ${V.FONT.sans}`; g.letterSpacing = `${(size * 0.36).toFixed(1)}px`;
-      w = g.measureText(text).width; if (w + 180 <= MAXW) break; size -= 1;
-    } while (size > 16);
-    const ls = size * 0.36;
+    const fit = () => { g.font = `500 ${size}px ${V.FONT.sans}`; g.letterSpacing = `${(size * sp).toFixed(1)}px`; w = g.measureText(text).width; return w + 2 * (24 + L) <= MAXW; };
+    while (!fit()) { if (L > 26) L -= 4; else if (sp > 0.2) sp -= 0.02; else if (size > 21) size -= 1; else break; }
+    const ls = size * sp;
     g.fillStyle = '#D6D8DF';
     g.fillText(text, CX + ls / 2, y);
     g.letterSpacing = '0px';
     g.strokeStyle = 'rgba(214,216,223,0.75)'; g.lineWidth = 2;
-    const half = w / 2, gap = 24, L = 54;
+    const half = w / 2, gap = 24;
     g.beginPath(); g.moveTo(CX - half - gap - L, y); g.lineTo(CX - half - gap, y);
     g.moveTo(CX + half + gap, y); g.lineTo(CX + half + gap + L, y); g.stroke();
   }
@@ -74,7 +72,8 @@
     }
     g.shadowColor = 'rgba(0,0,0,0.9)'; g.shadowBlur = 22;
     let y = TOP_Y;
-    if (sc.top) { topLine(g, sc.top, y); }
+    const top = sc.top !== undefined ? sc.top : V.ep && V.ep.top;   // episode-wide top line fallback
+    if (top) { topLine(g, top, y); }
     g.textBaseline = 'alphabetic';
     const L = headlineLayout(g, wordsWithColor(sc.headline, sc.red));
     let base = y + 44 + L.size * 0.8;

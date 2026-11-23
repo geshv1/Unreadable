@@ -13,6 +13,7 @@ V.EPISODE = {
   vignette: 0.95,
   stars: false, dust: false, grid: false,   // clean background: focus on the two of them
   labels: false,                            // no REACTIVE / STEADY labels: minimal look
+  top: 'SAME OPPORTUNITIES. SAME 24 HOURS.',  // small spaced top line on every scene
   grain: 0.07,
   zoom: 0.82,
   fadeIn: 0.9,
