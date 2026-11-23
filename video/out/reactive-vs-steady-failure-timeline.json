@@ -1,0 +1,308 @@
+{
+ "title": "reactive-vs-steady-failure",
+ "duration": 28.6,
+ "fps": 30,
+ "cuts": [
+  {
+   "t": 2.6,
+   "scene": "rejection"
+  },
+  {
+   "t": 7.2,
+   "scene": "failure"
+  },
+  {
+   "t": 11.8,
+   "scene": "problem"
+  },
+  {
+   "t": 16.4,
+   "scene": "the-email"
+  },
+  {
+   "t": 21,
+   "scene": "fight-night"
+  },
+  {
+   "t": 25.8,
+   "scene": "end-card"
+  }
+ ],
+ "sfx": [
+  {
+   "scene": "rejection",
+   "at": 0.25,
+   "id": "phone_down",
+   "gain": -15,
+   "args": {
+    "seed": 70
+   },
+   "note": "knock knock",
+   "t": 2.85
+  },
+  {
+   "scene": "rejection",
+   "at": 0.45,
+   "id": "phone_down",
+   "gain": -15,
+   "args": {
+    "seed": 71
+   },
+   "note": "",
+   "t": 3.05
+  },
+  {
+   "scene": "rejection",
+   "at": 0.65,
+   "id": "phone_down",
+   "gain": -15,
+   "args": {
+    "seed": 72
+   },
+   "note": "",
+   "t": 3.25
+  },
+  {
+   "scene": "rejection",
+   "at": 1.8,
+   "id": "bump",
+   "gain": -9,
+   "args": {
+    "seed": 31,
+    "heavy": 0.8
+   },
+   "note": "door shuts",
+   "t": 4.4
+  },
+  {
+   "scene": "rejection",
+   "at": 2.05,
+   "id": "phone_down",
+   "gain": -16,
+   "pan": 0.4,
+   "args": {
+    "seed": 80
+   },
+   "t": 4.65
+  },
+  {
+   "scene": "rejection",
+   "at": 2.25,
+   "id": "phone_down",
+   "gain": -16,
+   "pan": 0.4,
+   "args": {
+    "seed": 81
+   },
+   "t": 4.85
+  },
+  {
+   "scene": "rejection",
+   "at": 2.95,
+   "id": "bump",
+   "gain": -11,
+   "pan": 0.4,
+   "args": {
+    "seed": 32,
+    "heavy": 0.7
+   },
+   "t": 5.55
+  },
+  {
+   "scene": "rejection",
+   "at": 3.2,
+   "id": "phone_down",
+   "gain": -16,
+   "pan": 0.4,
+   "args": {
+    "seed": 90
+   },
+   "t": 5.8
+  },
+  {
+   "scene": "rejection",
+   "at": 3.38,
+   "id": "phone_down",
+   "gain": -16,
+   "pan": 0.4,
+   "args": {
+    "seed": 91
+   },
+   "t": 5.98
+  },
+  {
+   "scene": "failure",
+   "at": 0.82,
+   "id": "bump",
+   "gain": -7,
+   "pan": -0.35,
+   "args": {
+    "seed": 41
+   },
+   "note": "both fall",
+   "t": 8.02
+  },
+  {
+   "scene": "failure",
+   "at": 0.88,
+   "id": "bump",
+   "gain": -8,
+   "pan": 0.35,
+   "args": {
+    "seed": 42
+   },
+   "t": 8.08
+  },
+  {
+   "scene": "problem",
+   "at": 1.2,
+   "id": "phone_down",
+   "gain": -14,
+   "pan": 0.4,
+   "args": {
+    "seed": 100
+   },
+   "note": "one piece at a time",
+   "t": 13
+  },
+  {
+   "scene": "problem",
+   "at": 1.68,
+   "id": "phone_down",
+   "gain": -14,
+   "pan": 0.4,
+   "args": {
+    "seed": 101
+   },
+   "note": "",
+   "t": 13.48
+  },
+  {
+   "scene": "problem",
+   "at": 2.16,
+   "id": "phone_down",
+   "gain": -14,
+   "pan": 0.4,
+   "args": {
+    "seed": 102
+   },
+   "note": "",
+   "t": 13.96
+  },
+  {
+   "scene": "problem",
+   "at": 2.6399999999999997,
+   "id": "phone_down",
+   "gain": -14,
+   "pan": 0.4,
+   "args": {
+    "seed": 103
+   },
+   "note": "",
+   "t": 14.44
+  },
+  {
+   "scene": "problem",
+   "at": 3.12,
+   "id": "phone_down",
+   "gain": -14,
+   "pan": 0.4,
+   "args": {
+    "seed": 104
+   },
+   "note": "",
+   "t": 14.92
+  },
+  {
+   "scene": "problem",
+   "at": 3.5999999999999996,
+   "id": "phone_down",
+   "gain": -14,
+   "pan": 0.4,
+   "args": {
+    "seed": 105
+   },
+   "note": "",
+   "t": 15.4
+  },
+  {
+   "scene": "problem",
+   "at": 4.08,
+   "id": "phone_down",
+   "gain": -14,
+   "pan": 0.4,
+   "args": {
+    "seed": 106
+   },
+   "note": "",
+   "t": 15.88
+  },
+  {
+   "scene": "the-email",
+   "at": 1.55,
+   "id": "phone_down",
+   "gain": -8,
+   "pan": -0.4,
+   "args": {
+    "seed": 120
+   },
+   "note": "laptop slammed shut",
+   "t": 17.95
+  },
+  {
+   "scene": "fight-night",
+   "at": 0.58,
+   "id": "punch",
+   "gain": -5,
+   "pan": 0.2,
+   "note": "Steady goes down",
+   "t": 21.58
+  },
+  {
+   "scene": "fight-night",
+   "at": 3,
+   "id": "punch",
+   "gain": -2,
+   "pan": -0.15,
+   "note": "the clean punch",
+   "t": 24
+  }
+ ],
+ "scenes": [
+  {
+   "id": "cold-open",
+   "start": 0,
+   "end": 2.6
+  },
+  {
+   "id": "rejection",
+   "start": 2.6,
+   "end": 7.199999999999999
+  },
+  {
+   "id": "failure",
+   "start": 7.199999999999999,
+   "end": 11.799999999999999
+  },
+  {
+   "id": "problem",
+   "start": 11.799999999999999,
+   "end": 16.4
+  },
+  {
+   "id": "the-email",
+   "start": 16.4,
+   "end": 21
+  },
+  {
+   "id": "fight-night",
+   "start": 21,
+   "end": 25.8
+  },
+  {
+   "id": "end-card",
+   "start": 25.8,
+   "end": 28.6
+  }
+ ]
+}
