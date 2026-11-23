@@ -354,10 +354,13 @@
     g.strokeStyle = V.COL.red; g.lineWidth = 12; g.lineCap = 'round';
     g.beginPath(); g.moveTo(neck[0] - 26, neck[1] - 4); g.lineTo(chest[0], chest[1] - 22); g.lineTo(neck[0] + 26, neck[1] - 4); g.stroke();
     g.translate(chest[0], chest[1]); g.scale(k, k);
-    g.shadowColor = 'rgba(255,255,255,0.6)'; g.shadowBlur = 24;
-    g.fillStyle = '#eef0f4'; g.strokeStyle = '#16171c'; g.lineWidth = 5;
+    // gold
+    g.shadowColor = 'rgba(255,200,90,0.75)'; g.shadowBlur = 30;
+    const gd = g.createRadialGradient(-10, -12, 4, 0, 0, 38); gd.addColorStop(0, '#FFE9A3'); gd.addColorStop(0.55, '#F2C14E'); gd.addColorStop(1, '#B9832A');
+    g.fillStyle = gd; g.strokeStyle = '#16171c'; g.lineWidth = 5;
     g.beginPath(); g.arc(0, 0, 34, 0, 6.283); g.fill(); g.stroke();
-    g.shadowBlur = 0; g.strokeStyle = '#9a9da7'; g.lineWidth = 4; g.beginPath(); g.arc(0, 0, 22, 0, 6.283); g.stroke();
+    g.shadowBlur = 0; g.strokeStyle = '#9c6a1c'; g.lineWidth = 4; g.beginPath(); g.arc(0, 0, 22, 0, 6.283); g.stroke();
+    g.fillStyle = 'rgba(255,255,255,0.7)'; g.beginPath(); g.ellipse(-12, -14, 8, 4, -0.6, 0, 6.283); g.fill();
     g.fillStyle = '#16171c'; g.font = `800 28px ${V.FONT.sans}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('1', 0, 2);
     g.restore();
   };
@@ -520,6 +523,55 @@
   V.fgFigure = function (g, f, blur = 9, alpha = 0.92) {
     g.save(); g.filter = `blur(${blur}px)`; g.globalAlpha = alpha;
     V.drawFigure(g, Object.assign({ kind: 'shadow' }, f));
+    g.restore();
+  };
+
+  // ───────── Pt. 4 v2 objects
+  V.gymBag = function (g, x, open = 0) { // duffel bag on the floor
+    const y = V.FLOOR;
+    g.save(); g.fillStyle = '#2b2d36'; g.strokeStyle = '#e8eaee'; g.lineWidth = 5;
+    V.roundRect(g, x - 85, y - 82, 170, 82, 30); g.fill(); g.stroke();
+    g.strokeStyle = '#e8eaee'; g.lineWidth = 6; g.beginPath(); g.moveTo(x - 50, y - 80); g.quadraticCurveTo(x, y - 150 - open * 20, x + 50, y - 80); g.stroke();
+    g.strokeStyle = V.COL.red; g.lineWidth = 4; g.beginPath(); g.moveTo(x - 70, y - 60); g.lineTo(x + 70, y - 60); g.stroke();
+    g.restore();
+  };
+  V.dumbbell = function (g, hand, ang = 0) {
+    g.save(); g.translate(hand[0], hand[1]); g.rotate(ang);
+    g.fillStyle = '#c9cbd3'; g.strokeStyle = '#16171c'; g.lineWidth = 4;
+    g.fillRect(-36, -5, 72, 10); g.strokeRect(-36, -5, 72, 10);
+    for (const sx of [-1, 1]) { V.roundRect(g, sx * 38 - 11, -26, 22, 52, 5); g.fillStyle = '#3a3c46'; g.fill(); g.stroke(); }
+    g.restore();
+  };
+  V.flash = function (g, x, y, u, s = 1) { // camera flash pop
+    if (u < 0 || u > 1) return;
+    g.save(); g.translate(x, y); g.scale(s, s); g.globalAlpha = 1 - u; g.globalCompositeOperation = 'lighter';
+    const r = g.createRadialGradient(0, 0, 2, 0, 0, 120 * (0.4 + u)); r.addColorStop(0, 'rgba(255,255,255,0.95)'); r.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = r; g.fillRect(-160, -160, 320, 320);
+    g.strokeStyle = '#fff'; g.lineWidth = 5; g.lineCap = 'round';
+    for (let i = 0; i < 6; i++) { const a = i * 1.047; g.beginPath(); g.moveTo(Math.cos(a) * 30, Math.sin(a) * 30); g.lineTo(Math.cos(a) * (60 + 40 * u), Math.sin(a) * (60 + 40 * u)); g.stroke(); }
+    g.restore();
+  };
+  V.glovesFloor = function (g, x) { // two red boxing gloves dropped on the floor
+    g.save();
+    for (const [dx, rot] of [[-36, -0.4], [34, 0.5]]) {
+      g.save(); g.translate(x + dx, V.FLOOR - 26); g.rotate(rot);
+      g.fillStyle = V.COL.red; g.strokeStyle = '#16171c'; g.lineWidth = 5;
+      g.beginPath(); g.ellipse(0, 0, 40, 28, 0, 0, 6.283); g.fill(); g.stroke();
+      g.fillStyle = '#f4f5f7'; V.roundRect(g, 26, -16, 22, 32, 6); g.fill(); g.stroke();
+      g.restore();
+    }
+    g.restore();
+  };
+  V.clapMarks = function (g, x, y, u) {
+    if (u < 0 || u > 1) return;
+    g.save(); g.strokeStyle = `rgba(255,255,255,${1 - u})`; g.lineWidth = 5; g.lineCap = 'round';
+    for (const a of [-0.9, -0.3, 0.3]) { const r0 = 30 + u * 20; g.beginPath(); g.moveTo(x + Math.cos(a - 1.57) * r0, y + Math.sin(a - 1.57) * r0); g.lineTo(x + Math.cos(a - 1.57) * (r0 + 26), y + Math.sin(a - 1.57) * (r0 + 26)); g.stroke(); }
+    g.restore();
+  };
+  V.crackedPhone = function (g, x) { // phone face-up on the floor with a cracked screen
+    g.save(); g.translate(x, V.FLOOR - 10);
+    g.fillStyle = '#0d0e12'; g.strokeStyle = '#cfd2da'; g.lineWidth = 3; V.roundRect(g, -40, -9, 80, 16, 5); g.fill(); g.stroke();
+    g.strokeStyle = 'rgba(255,255,255,0.8)'; g.lineWidth = 2; g.beginPath(); g.moveTo(-10, -8); g.lineTo(0, 0); g.lineTo(-6, 6); g.moveTo(0, 0); g.lineTo(14, -6); g.stroke();
     g.restore();
   };
 })();

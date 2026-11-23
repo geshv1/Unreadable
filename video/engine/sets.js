@@ -164,12 +164,6 @@
     stroke(g, '#2c2e38', 4); g.beginPath(); g.moveTo(-200, 1130); g.lineTo(1280, 1130); g.stroke();
   };
   V.sets.rooftop = function (g, t) { // night sky, distant city bokeh, roof ledge, water tower
-    const r = V.rng(77);
-    for (let i = 0; i < 46; i++) {
-      const x = -200 + r() * 1500, y = 1040 + r() * 260, rad = 6 + r() * 16, warm = r() > 0.6;
-      g.fillStyle = warm ? `rgba(255,200,140,${0.06 + r() * 0.12})` : `rgba(170,190,255,${0.05 + r() * 0.1})`;
-      g.beginPath(); g.arc(x, y, rad, 0, 6.283); g.fill();
-    }
     stroke(g, '#3b3e4a', 5); g.beginPath(); g.moveTo(-300, 1330); g.lineTo(1400, 1330); g.stroke();
     stroke(g, '#3b3e4a', 5);
     g.strokeRect(960, 560, 150, 170); g.beginPath(); g.moveTo(980, 730); g.lineTo(970, 1330); g.moveTo(1090, 730); g.lineTo(1100, 1330); g.stroke();
@@ -182,7 +176,6 @@
       const lg = g.createLinearGradient(0, 950, 0, 1200); lg.addColorStop(0, 'rgba(255,226,180,0.30)'); lg.addColorStop(1, 'rgba(255,226,180,0.02)');
       g.fillStyle = lg; g.beginPath(); g.moveTo(x - 46, 952); g.lineTo(x + 46, 952); g.lineTo(x + 150, 1200); g.lineTo(x - 150, 1200); g.closePath(); g.fill(); g.restore();
     }
-    g.fillStyle = '#10121a'; g.fillRect(430, 700, 220, 300); stroke(g, '#3f424e', 4); g.strokeRect(430, 700, 220, 300);
   };
   V.sets.rainstreet = function (g, t) { // one street lamp (centre-right), wet floor sheen
     const lx = 1060;

@@ -11,6 +11,7 @@ V.EPISODE = {
   width: 1080,
   height: 1920,
   vignette: 0.95,
+  stars: false, dust: false, grid: false,   // clean background: focus on the two of them
   grain: 0.07,
   zoom: 0.82,
   fadeIn: 1.4,            // opening fade up from black

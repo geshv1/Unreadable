@@ -18,7 +18,7 @@
     hz.addColorStop(0, 'rgba(60,62,78,0.22)'); hz.addColorStop(1, 'rgba(11,11,15,0)');
     g.fillStyle = hz; g.fillRect(0, 0, W, H);
     g.fillStyle = '#c9ccd6';
-    for (const s of STARS) {
+    for (const s of (V.ep && V.ep.stars === false) ? [] : STARS) {
       g.globalAlpha = s.o * (0.75 + 0.25 * Math.sin(t * 1.3 + s.ph));
       g.beginPath(); g.arc(s.x, s.y, s.rad, 0, 6.283); g.fill();
     }
@@ -47,7 +47,7 @@
     fg.addColorStop(0, '#17181e'); fg.addColorStop(1, '#07070a');
     g.fillStyle = fg; g.fillRect(-400, V.FLOOR, W + 800, H - V.FLOOR + 700);
     if (!gridCache) gridCache = buildGrid();
-    g.drawImage(gridCache, 0, V.FLOOR);
+    if (!(V.ep && V.ep.grid === false)) g.drawImage(gridCache, 0, V.FLOOR);
     g.strokeStyle = '#34363f'; g.lineWidth = 2.5;
     g.beginPath(); g.moveTo(-200, V.FLOOR); g.lineTo(W + 200, V.FLOOR); g.stroke();
   };
@@ -84,7 +84,7 @@
     // dust in the beam
     const r = V.rng(kind === 'steady' ? 33 : 11);
     g.fillStyle = b.dust;
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < ((V.ep && V.ep.dust === false) ? 0 : 18); i++) {
       const per = 9 + r() * 7, off = r() * per, u = ((t + off) % per) / per;
       const yy = V.FLOOR - 60 - r() * 700 - u * 160;
       const wv = (yy + 40) / (V.FLOOR + 40);
