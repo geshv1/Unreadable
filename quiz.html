@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Kind of Fighter Are You? · Free Quiz by geshv1</title>
+<meta name="description" content="10 honest questions about the ring and your life. Find your fighter type, your biggest strength and the weakness that keeps holding you back. Free, 2 minutes.">
+<meta property="og:title" content="What kind of fighter are you?">
+<meta property="og:description" content="10 honest questions. Find your fighter type, your strength and the weakness holding you back. Free quiz by geshv1.">
+<meta property="og:image" content="https://geshv1.github.io/completefighter/cover.jpg">
+<meta name="theme-color" content="#08080b">
+<script src="config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<!-- digits only: Instrument Serif's "1" reads like an "l" -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&text=0123456789&display=swap" rel="stylesheet">
+<style>
+/* Spotlight style: near-black stage, white and cool grey, one crimson accent.
+   Serif italic headlines, wide-tracked caps, lots of negative space. */
+:root{
+  --bg:#08080b; --surface:#111116; --surface-2:#17171d; --ink:#f1f2f5; --soft:#c9cbd3; --muted:#868893;
+  --line:#23242c; --red:#d42a3c; --red-soft:#f0505f; --glow:rgba(240,80,95,.45);
+  --display:"Playfair Display","Instrument Serif","Times New Roman",Georgia,serif;
+  --body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --serif:var(--display);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+a{color:inherit}
+/* faint distant specks behind everything */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;background:
+  radial-gradient(1px 1px at 8% 14%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 23% 62%,#fff 50%,transparent 51%),
+  radial-gradient(1px 1px at 41% 9%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 57% 38%,#fff 50%,transparent 51%),
+  radial-gradient(1px 1px at 72% 81%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 88% 22%,#fff 50%,transparent 51%),
+  radial-gradient(1px 1px at 94% 58%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 15% 88%,#fff 50%,transparent 51%),
+  radial-gradient(1px 1px at 63% 66%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 33% 31%,#fff 50%,transparent 51%)}
+:focus-visible{outline:2px solid var(--red-soft);outline-offset:3px}
+[tabindex="-1"]:focus{outline:none}
+.wrap{max-width:720px;margin:0 auto;padding:0 22px;width:100%}
+h1,h2,h3{font-variant-numeric:lining-nums;font-family:var(--display);font-weight:400;letter-spacing:-.01em;line-height:1.02;text-wrap:balance}
+h1{font-style:italic}
+.eyebrow{display:flex;align-items:center;gap:14px;font-family:var(--body);font-weight:500;font-size:11.5px;letter-spacing:.38em;color:var(--soft);text-transform:uppercase}
+.eyebrow::before,.eyebrow::after{content:"";flex:0 0 28px;height:1px;background:#4a4c56}
+.eyebrow::before{display:none}
+.center .eyebrow{justify-content:center}
+.center .eyebrow::before{display:block}
+.r{color:var(--red-soft);text-shadow:0 0 28px var(--glow)}
+.rule{position:relative;width:96px;height:1px;background:#3d3f49;margin:18px 0 0}
+.rule::after{content:"";position:absolute;left:50%;top:-1.5px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--red-soft);box-shadow:0 0 8px var(--glow)}
+.center .rule{margin-left:auto;margin-right:auto}
+.label{font-family:var(--body);font-weight:700;font-size:12px;letter-spacing:.42em;text-transform:uppercase}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:14px;background:var(--red);color:#fff;text-decoration:none;font-family:var(--body);font-weight:600;font-size:13px;letter-spacing:.26em;text-transform:uppercase;padding:19px 32px;border:0;border-radius:999px;cursor:pointer;box-shadow:0 14px 40px -14px var(--glow);transition:background .2s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
+.btn:hover{background:#bb2234;box-shadow:0 14px 46px -12px var(--glow)}
+.ghost{background:transparent;border:0;box-shadow:none;color:var(--muted);font-family:var(--body);font-weight:400;font-size:15px;letter-spacing:0;text-transform:none;padding:12px 0;border-radius:0;text-decoration:underline;text-underline-offset:4px}
+.ghost:hover{background:transparent;box-shadow:none;color:var(--ink)}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:20;background:rgba(8,8,11,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;max-width:1120px}
+.logo{font-family:var(--body);font-weight:700;font-size:13px;letter-spacing:.34em;text-decoration:none}
+.logo b{color:var(--red-soft);font-weight:700}
+.skip{font-size:14px;color:var(--muted);text-decoration:none;padding:8px 0}
+.skip:hover{color:var(--ink)}
+
+main{flex:1}
+.screen{position:relative;padding:56px 0 72px}
+
+/* intro */
+.intro{padding-top:40px;text-align:center}
+.intro h1{font-size:clamp(50px,12.5vw,96px);margin:22px 0 0}
+.stage{position:relative;max-width:440px;margin:4px auto 0}
+.stage img{display:block;width:100%;height:auto;-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(transparent,#000 9%,#000 78%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(transparent,#000 9%,#000 78%,transparent);mask-composite:intersect}
+.stage .labels span{position:absolute;top:77%;transform:translateX(-50%);padding-left:.42em;white-space:nowrap}
+.stage .labels span:first-child{left:30.6%;color:var(--red-soft);text-shadow:0 0 18px var(--glow)}
+.stage .labels span:last-child{left:69.4%;color:var(--ink);text-shadow:0 0 18px rgba(255,255,255,.35)}
+.lede{font-size:18px;color:var(--soft);max-width:460px;margin:8px auto 34px}
+.note{margin-top:18px;font-size:14px;color:var(--muted)}
+
+/* quiz */
+.prog{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:var(--muted);margin-bottom:12px}
+.prog b{color:var(--ink);font-weight:600}
+.segs{height:2px;background:var(--line);margin-bottom:40px}
+.segs i{display:block;height:100%;width:0;background:var(--red-soft);box-shadow:0 0 10px var(--glow);transition:width .35s ease}
+.qtext{font-size:clamp(34px,8vw,54px);line-height:1.06;margin-bottom:28px;outline:none}
+.answers{display:grid;gap:12px}
+.answers{gap:10px}
+.ans{display:block;width:100%;text-align:left;padding:17px 18px;border:1px solid var(--line);background:rgba(255,255,255,.015);font:inherit;font-size:17px;line-height:1.45;color:var(--ink);cursor:pointer;border-radius:14px;transition:border-color .2s,background .2s;-webkit-tap-highlight-color:transparent}
+.ans:hover{border-color:#464853}
+.ans.picked{border-color:var(--red-soft);background:#1a0d11;box-shadow:0 0 0 1px var(--red-soft) inset,0 10px 30px -18px var(--glow)}
+.back{background:none;border:0;font:inherit;font-size:15px;color:var(--muted);cursor:pointer;margin-top:26px;padding:6px 0}
+.back:hover{color:var(--ink)}
+.enter{animation:enter .45s cubic-bezier(.2,.7,.1,1) both}
+@keyframes enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* result card (made to be screenshotted) */
+.card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:18px;padding:30px 22px 18px;background:radial-gradient(70% 60% at 50% -10%,rgba(212,42,60,.16),transparent 70%),var(--surface)}
+.card .type{font-size:clamp(52px,14vw,92px);line-height:.95;margin:16px 0 10px}
+.tagline{font-family:var(--serif);font-style:italic;font-size:24px;line-height:1.3;color:var(--soft)}
+.bd{display:grid;gap:11px;margin:24px 0 8px}
+.row{display:grid;grid-template-columns:128px 1fr 46px;gap:12px;align-items:center;font-size:14px}
+.row .name{color:#b4b6bf}
+.row .track{height:4px;background:#1f2027;border-radius:4px;overflow:hidden}
+.row .fill{display:block;height:100%;width:0;background:#5a5c66;border-radius:4px;transition:width 1.1s cubic-bezier(.2,.7,.1,1)}
+.row .pct{text-align:right;font-family:var(--display);font-variant-numeric:lining-nums tabular-nums;font-size:22px;font-variant-numeric:tabular-nums;color:#b4b6bf}
+.row.win .name{color:var(--ink);font-weight:600}
+.row.win .fill{background:var(--red-soft);box-shadow:0 0 10px var(--glow)}
+.row.win .pct{color:var(--ink)}
+.based{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.card-foot{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:13px;font-family:var(--body);font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.card-foot b{color:var(--ink);font-weight:700}
+.card-foot b i{font-style:normal;color:var(--red-soft)}
+.hint{font-size:14px;color:var(--muted);text-align:center;margin:14px 0 40px}
+
+.blocks{display:grid;gap:30px}
+.blk h3{font-family:var(--body);font-size:11px;font-weight:600;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.blk p{color:#d3d5dc;font-size:18px}
+.blk.truth p{font-family:var(--serif);font-style:italic;font-size:26px;line-height:1.35;color:var(--ink)}
+.blk.today p{color:var(--ink);font-weight:600}
+
+.fixbox{margin-top:52px;padding-top:36px;border-top:1px solid var(--line)}
+.fixbox h2{font-size:clamp(38px,9vw,56px);font-style:italic;margin:14px 0 14px}
+.fixbox p{color:#d3d5dc;margin-bottom:22px}
+.fixbox .btn{width:100%}
+.fixbox small{display:block;margin-top:12px;font-size:13px;color:var(--muted);text-align:center}
+.after{display:flex;gap:28px;margin-top:22px}
+
+/* email capture */
+.mail{margin-top:52px;padding:30px 22px 26px;border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+.mail h2{font-size:clamp(34px,8vw,48px);font-style:italic;margin:14px 0 10px}
+.mail p{color:#d3d5dc;margin-bottom:20px}
+.mail-row{display:flex;gap:10px}
+.mail input{flex:1;min-width:0;font:inherit;font-size:17px;color:var(--ink);background:var(--bg);border:1px solid #33343d;border-radius:999px;padding:16px 20px;outline:none}
+.mail input:focus{border-color:var(--red-soft)}
+.mail input[aria-invalid="true"]{border-color:var(--red-soft)}
+.mail .btn{padding:16px 24px;flex:none}
+.mail small{display:block;margin-top:12px;font-size:13px;color:var(--muted)}
+.mail .mail-ok{margin:16px 0 0;color:var(--ink);font-weight:600}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+footer{padding:28px 0 calc(34px + env(safe-area-inset-bottom));color:var(--muted);font-size:13px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;max-width:1120px}
+
+@media (max-width:420px){
+  .eyebrow{letter-spacing:.26em;gap:10px}
+  .stage{margin-left:-22px;margin-right:-22px}
+  .eyebrow::before,.eyebrow::after{flex-basis:18px}
+  .row{grid-template-columns:112px 1fr 40px;gap:10px;font-size:13px}
+  .mail-row{flex-direction:column}
+  .mail .btn{width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="./">GESHV<b>1</b></a>
+    <a class="skip" href="./">← The book</a>
+  </div>
+</header>
+
+<main>
+
+<!-- INTRO -->
+<section class="screen intro center" id="intro">
+  <div class="wrap">
+    <div class="eyebrow">Ten questions. Two minutes.</div>
+    <h1>What kind of <span class="r">fighter</span> are you?</h1>
+    <div class="rule" aria-hidden="true"></div>
+    <div class="stage">
+      <img src="fighters.svg" width="320" height="372" alt="Two stick-figure fighters squaring up, one under a crimson spotlight, one under a white spotlight">
+      <div class="labels label" aria-hidden="true"><span>Reactive</span><span>Steady</span></div>
+    </div>
+    <p class="lede">Ten honest questions about the ring and about your life. Find your fighter type, your biggest strength, and the weakness that keeps holding you back.</p>
+    <button class="btn" id="start" type="button">Start round 1 <span aria-hidden="true">→</span></button>
+    <p class="note">Answer honestly. Your answers stay on your phone.</p>
+    <noscript><p style="margin-top:20px;color:#cfcac1">The quiz needs JavaScript. You can go straight to <a href="./">The Complete Fighter</a>.</p></noscript>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section class="screen" id="quiz" hidden>
+  <div class="wrap">
+    <div class="prog"><span>Round <b id="num">1</b> / 10</span><span id="lbl"></span></div>
+    <div class="segs" aria-hidden="true"><i id="bar"></i></div>
+    <div id="qbox">
+      <h2 class="qtext" id="q" tabindex="-1"></h2>
+      <div class="answers" id="answers" role="group" aria-labelledby="q"></div>
+    </div>
+    <button class="back" id="back" type="button">← Back</button>
+  </div>
+</section>
+
+<!-- RESULT -->
+<section class="screen" id="result" hidden>
+  <div class="wrap">
+    <div class="card" id="card">
+      <div class="eyebrow">My fighter type</div>
+      <h1 class="type" id="rType" tabindex="-1"></h1>
+      <p class="tagline" id="rTag"></p>
+      <div class="bd" id="bd"></div>
+      <p class="based" id="based">Based on all 10 of my answers</p>
+      <div class="card-foot"><b>@GESHV<i>1</i></b><span>Find yours · link in bio</span></div>
+    </div>
+    <p class="hint">Screenshot your card and tag @geshv1</p>
+
+    <div class="blocks">
+      <div class="blk"><h3>Your strength</h3><p id="rStr"></p></div>
+      <div class="blk"><h3>Your weakness</h3><p id="rWeak"></p></div>
+      <div class="blk truth"><h3>The truth</h3><p id="rTruth"></p></div>
+      <div class="blk today"><h3>Do this today</h3><p id="rToday"></p></div>
+    </div>
+
+    <form class="mail" id="mail" hidden novalidate>
+      <div class="eyebrow">Free · by email</div>
+      <h2>Keep your result.</h2>
+      <p>Get your fighter type, the fix for it and my best training tips straight to your inbox.</p>
+      <div class="mail-row">
+        <label class="sr" for="mailInput">Your email</label>
+        <input type="email" id="mailInput" name="email_address" placeholder="Your email" autocomplete="email" inputmode="email" required>
+        <button class="btn" id="mailBtn" type="submit">Send it <span aria-hidden="true">→</span></button>
+      </div>
+      <small id="mailNote">No spam. Unsubscribe anytime.</small>
+      <p class="mail-ok" id="mailOk" role="status" hidden>You're in. Check your inbox (and your spam folder, just in case).</p>
+    </form>
+
+    <div class="fixbox">
+      <div class="eyebrow">Where the book fixes it</div>
+      <h2 id="rFixHead"></h2>
+      <p id="rBook"></p>
+      <a class="btn" id="rCta" href="./" data-umami-event="quiz-to-book"><span id="rCtaText">See the fix</span> <span aria-hidden="true">→</span></a>
+      <small>The Complete Fighter · €9.99 · 14-day refund</small>
+    </div>
+
+    <div class="after">
+      <button class="btn ghost" id="share" type="button">Share the quiz</button>
+      <button class="btn ghost" id="retake" type="button">Take it again</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 geshv1 · The Complete Fighter</span>
+    <a href="https://www.tiktok.com/@geshv1">TikTok @geshv1</a>
+    <span>A self-reflection quiz, not a psychological test.</span>
+  </div>
+</footer>
+
+<script>
+/* ===== The four fighter types. Edit the text here. ===== */
+const TYPES = {
+  pf: {
+    name: "Pressure Fighter",
+    tag: "All gas, no pacing.",
+    strength: "When you start something, nobody outworks you. You don't take steps back.",
+    weakness: "Inconsistent. You go all in, burn out, and start over. Again.",
+    truth: "You don't have a motivation problem. You have a pacing problem. Fighters who throw everything in round one get stopped in round three.",
+    today: "Do half of what you planned today. Then do it again tomorrow.",
+    fixHead: "Learn to keep a pace",
+    book: "Part 3's 12-week plan and Part 1's weekly structure give you a pace you can actually keep, with 36 workouts to tick off so you see every week you showed up.",
+    cta: "Fix my pacing"
+  },
+  cp: {
+    name: "Counterpuncher",
+    tag: "Sees everything. Throws nothing.",
+    strength: "You read people and situations better than almost anyone. You think deep.",
+    weakness: "Overthinker. You wait for the perfect opening, and it never comes.",
+    truth: "Thinking feels like progress. It isn't. Your mind is your best weapon and your toughest opponent.",
+    today: "Next time you catch yourself replaying something, do one small thing within 5 seconds.",
+    fixHead: "Get out of your head",
+    book: "Part 1 gives you a 4-step method to solve your own problems instead of replaying them. Part 2's rounds on fear and pressure teach you to throw before it feels safe.",
+    cta: "Fix my overthinking"
+  },
+  br: {
+    name: "Brawler",
+    tag: "All heart, no schedule.",
+    strength: "When you feel it, you're unstoppable. You've got more heart than most people.",
+    weakness: "Procrastinator. When the feeling goes, so do you.",
+    truth: "Motivation shows up when it wants and leaves without warning. Discipline isn't for the good days. The good days don't need it.",
+    today: "Pick one non-negotiable thing. Same time every day, however you feel.",
+    fixHead: "Show up without the feeling",
+    book: "Part 1 gives you a weekly structure you fill in and one real challenge every week, so you show up on the days you don't feel like it.",
+    cta: "Fix my procrastination"
+  },
+  te: {
+    name: "Technician",
+    tag: "Always preparing. Never fighting.",
+    strength: "You care about doing things right. Clean, precise, smart.",
+    weakness: "You wait until you're ready, so you never get tested.",
+    truth: "Ready is a lie. Nobody feels ready for their first fight. My first pull-up in 2022 was one messy rep between two trees.",
+    today: "Do the ugly version today. One messy rep beats a perfect plan.",
+    fixHead: "Step in before you're ready",
+    book: "Part 3's level test starts you exactly where you are today. Part 2's rounds on fear, ego and failure get you in the ring before you feel ready.",
+    cta: "Stop waiting"
+  }
+};
+const ORDER = ["pf", "cp", "br", "te"];
+
+/* ===== The 10 questions. Answers are in the order: Pressure Fighter, Counterpuncher, Brawler, Technician.
+   They get shuffled on screen. ===== */
+const QUESTIONS = [
+  { q: "It's 1am. Phone in your hand. What's going through your head?", a: [
+    "“Tomorrow I change everything.”",
+    "Replaying something you said today, over and over.",
+    "Nothing. You keep scrolling so you don't have to think.",
+    "Planning the perfect routine you'll start once life calms down." ] },
+  { q: "Round 1. You take a clean shot to the face. What happens?", a: [
+    "You walk straight through it. You don't take steps back.",
+    "You cover up and work out how he caught you.",
+    "Something switches on. You start swinging.",
+    "You reset and go back to the game plan." ] },
+  { q: "Think about the last thing you quit. Be honest. Why did you really stop?", a: [
+    "You went too hard, too fast, and burned out.",
+    "You started doubting it was even worth it.",
+    "The motivation just disappeared.",
+    "It wasn't going perfectly, so you planned to restart properly “later.”" ] },
+  { q: "Someone your age is doing better than you. How does it feel?", a: [
+    "It lights a fire. Next week you go twice as hard.",
+    "You compare everything and wonder where you went wrong.",
+    "It stings. You say you'll start too. You don't.",
+    "You tell yourself you'll catch up once you find the right plan." ] },
+  { q: "Coach says you're sparring today. You didn't see it coming.", a: [
+    "Good. Let's go.",
+    "Heart pounding. You're already picturing everything that could go wrong.",
+    "Depends on the day. Some days you find a reason to leave early.",
+    "You'd rather wait until your technique is sharper." ] },
+  { q: "Monday. Something important is due Friday. What really happens?", a: [
+    "You smash half of it Monday. By Wednesday you're sick of it.",
+    "It's on your mind all week, but starting feels impossible.",
+    "Thursday night, energy drink, somehow it gets done.",
+    "You spend days figuring out the best way, then rush it at the end." ] },
+  { q: "What do you tell yourself most when nobody's around?", a: [
+    "“This time I'm not stopping.”",
+    "“What if I'm not good enough?”",
+    "“I'll do it tomorrow.”",
+    "“Not yet. I'm not ready.”" ] },
+  { q: "What are you most scared people think about you?", a: [
+    "That you never finish what you start.",
+    "That you're not good enough, and they can see it.",
+    "That you're lazy and wasting your potential.",
+    "That you'll try, fail and look stupid." ] },
+  { q: "Last round. Lungs burning, arms heavy. What gets you through?", a: [
+    "Pure will. You empty the tank.",
+    "Reading him. You wait for the one mistake.",
+    "Pride. You'd rather drop than let him see you break.",
+    "Your training. You trust the hours you put in." ] },
+  { q: "Picture yourself one year from now, exactly the same as today. How does it feel?", a: [
+    "Like another year of starting over.",
+    "Like you thought about it all year and never moved.",
+    "Like you wasted it, and you knew you would.",
+    "Like you were still “getting ready.”" ] }
+];
+
+/* ===== Scoring =====
+   Every answer = 1 point for one type. Most points wins.
+   Tie: question 10 decides, then 7, then 8, then the latest answer that belongs to one of the tied types. */
+const TIE_ORDER = [9, 6, 7, 8, 5, 4, 3, 2, 1, 0];
+function score(picks){
+  const counts = {pf:0, cp:0, br:0, te:0};
+  picks.forEach(t => { if (t) counts[t]++; });
+  const max = Math.max(...ORDER.map(t => counts[t]));
+  const tied = ORDER.filter(t => counts[t] === max);
+  let winner = tied[0];
+  if (tied.length > 1) {
+    for (const i of TIE_ORDER) { if (tied.includes(picks[i])) { winner = picks[i]; break; } }
+  }
+  return { counts, winner };
+}
+
+/* ===== App ===== */
+const $ = id => document.getElementById(id);
+const screens = { intro: $("intro"), quiz: $("quiz"), result: $("result") };
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let picks = new Array(QUESTIONS.length).fill(null);
+let orders = [];
+let cur = 0, locked = false, lastType = null;
+
+function shuffle(n){
+  const a = [...Array(n).keys()];
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+function show(name){
+  Object.entries(screens).forEach(([k, el]) => el.hidden = k !== name);
+  window.scrollTo(0, 0);
+}
+function store(key, val){ try { localStorage.setItem(key, val); } catch(e){} }
+
+
+function render(){
+  const Q = QUESTIONS[cur];
+  if (!orders[cur]) orders[cur] = shuffle(Q.a.length);
+  $("num").textContent = cur + 1;
+  $("lbl").textContent = cur === QUESTIONS.length - 1 ? "Final round" : "";
+  $("bar").style.width = (cur / QUESTIONS.length * 100) + "%";
+  $("q").textContent = Q.q;
+  const box = $("answers"); box.innerHTML = "";
+  orders[cur].forEach(ai => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "ans";
+    const type = ORDER[ai];
+    if (picks[cur] === type) b.classList.add("picked");
+    b.textContent = Q.a[ai];
+    b.addEventListener("click", () => choose(type, b));
+    box.appendChild(b);
+  });
+  $("back").hidden = false;
+  const qb = $("qbox"); qb.classList.remove("enter"); void qb.offsetWidth; if (!reduce) qb.classList.add("enter");
+  $("q").focus({ preventScroll: true });
+}
+
+function choose(type, btn){
+  if (locked) return;
+  locked = true;
+  picks[cur] = type;
+  [...$("answers").children].forEach(b => b.classList.toggle("picked", b === btn));
+  setTimeout(() => {
+    locked = false;
+    if (cur < QUESTIONS.length - 1) { cur++; render(); window.scrollTo(0, 0); }
+    else finish();
+  }, reduce ? 60 : 260);
+}
+
+// Long names like COUNTERPUNCHER: shrink the title until it fits the card
+function fitType(){
+  const el = $("rType");
+  el.style.fontSize = "";
+  let fs = parseFloat(getComputedStyle(el).fontSize);
+  while (el.scrollWidth > el.clientWidth + 1 && fs > 26) { fs -= 2; el.style.fontSize = fs + "px"; }
+}
+
+function finish(){
+  const { counts, winner } = score(picks);
+  const T = TYPES[winner];
+  store("cfType", winner);
+  lastType = winner;
+  track("quiz-finish", { type: T.name });
+  $("rType").textContent = T.name;
+  $("rTag").textContent = T.tag;
+  $("rStr").textContent = T.strength;
+  $("rWeak").textContent = T.weakness;
+  $("rTruth").textContent = T.truth;
+  $("rToday").textContent = T.today;
+  $("rFixHead").textContent = T.fixHead;
+  $("rBook").textContent = T.book;
+  $("rCtaText").textContent = T.cta;
+  $("rCta").href = "./?type=" + winner;
+
+  // breakdown: all four types, highest first, winner on top
+  const total = picks.length;
+  const rows = [...ORDER].sort((a, b) => (b === winner) - (a === winner) || counts[b] - counts[a]);
+  const bd = $("bd"); bd.innerHTML = "";
+  rows.forEach(t => {
+    const pct = Math.round(counts[t] / total * 100);
+    const row = document.createElement("div");
+    row.className = "row" + (t === winner ? " win" : "");
+    row.innerHTML = '<span class="name"></span><span class="track"><span class="fill"></span></span><span class="pct"></span>';
+    row.querySelector(".name").textContent = TYPES[t].name;
+    row.querySelector(".pct").textContent = pct + "%";
+    row.setAttribute("aria-label", TYPES[t].name + ": " + pct + " percent, " + counts[t] + " of " + total + " answers");
+    row.dataset.w = pct;
+    bd.appendChild(row);
+  });
+  // Be open about ties: say which type it tied with and how it was decided
+  const tiedWith = rows.filter(t => t !== winner && counts[t] === counts[winner]).map(t => TYPES[t].name);
+  $("based").textContent = tiedWith.length
+    ? "Tied with " + tiedWith.join(" & ") + ". My most honest answers decided it."
+    : "Based on all 10 of my answers";
+
+  show("result");
+  fitType();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitType);
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    bd.querySelectorAll(".row").forEach(r => r.querySelector(".fill").style.width = r.dataset.w + "%");
+  }));
+  $("rType").focus({ preventScroll: true });
+}
+
+$("start").addEventListener("click", () => { cur = 0; show("quiz"); render(); track("quiz-start"); });
+$("back").addEventListener("click", () => {
+  if (cur > 0) { cur--; render(); }
+  else show("intro");
+});
+$("retake").addEventListener("click", () => {
+  picks = new Array(QUESTIONS.length).fill(null); orders = []; cur = 0;
+  show("quiz"); render();
+});
+
+// Email capture: sends the address (and fighter type) to the Kit form set in config.js
+(function(){
+  const form = $("mail"), input = $("mailInput"), btn = $("mailBtn");
+  if (!window.KIT_FORM_ID) return;          // no list connected yet: keep the box hidden
+  form.hidden = false;
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const email = input.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      input.setAttribute("aria-invalid", "true"); input.focus();
+      $("mailNote").textContent = "That email doesn't look right. Check it and try again.";
+      return;
+    }
+    input.removeAttribute("aria-invalid");
+    btn.disabled = true; btn.firstChild.textContent = "Sending ";
+    const fd = new FormData();
+    fd.append("email_address", email);
+    if (lastType) fd.append("fields[fighter_type]", TYPES[lastType].name);
+    try {
+      await fetch("https://app.kit.com/forms/" + encodeURIComponent(window.KIT_FORM_ID) + "/subscriptions", { method: "POST", mode: "no-cors", body: fd });
+      form.querySelector(".mail-row").hidden = true;
+      $("mailNote").hidden = true;
+      $("mailOk").hidden = false;
+      track("email-signup", lastType ? { type: TYPES[lastType].name } : undefined);
+    } catch (err) {
+      btn.disabled = false; btn.firstChild.textContent = "Send it ";
+      $("mailNote").textContent = "Couldn't send. Check your connection and try again.";
+    }
+  });
+})();
+
+// Share: native share sheet if the browser has one, otherwise copy the link
+$("share").addEventListener("click", async () => {
+  const url = location.origin + location.pathname;
+  const text = "I just found out what kind of fighter I am. Find yours:";
+  const btn = $("share");
+  try {
+    if (navigator.share) { await navigator.share({ title: "What kind of fighter are you?", text, url }); return; }
+    await navigator.clipboard.writeText(url);
+    btn.textContent = "Link copied";
+  } catch (e) {
+    if (e && e.name === "AbortError") return;
+    btn.textContent = url.replace(/^https?:\/\//, "");
+  }
+  setTimeout(() => btn.textContent = "Share the quiz", 2500);
+});
+</script>
+</body>
+</html>
