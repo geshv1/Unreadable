@@ -77,7 +77,7 @@
 
     if (st.fg) st.fg(g);                       // foreground layer (screen space): blurred figures close to the lens
     if (sc.grade) drawGrade(g, sc.grade, tl, sc.dur);
-    if (sc.labels !== false) V.drawLabels(g, z, px);
+    if (sc.labels !== false && ep.labels !== false) V.drawLabels(g, z, px);
     if (ep.vignette) drawVignette(g, ep.vignette);
     if (ep.grain) drawGrain(g, ep.grain, i);
     V.drawText(g, sc, tl, sc.start > 0);
