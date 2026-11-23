@@ -16,6 +16,21 @@
       fist: '#f4f5f7', foot: '#f4f5f7', head: '#f3f4f6', ol: OL, extra: 'hair',
     },
     // the "third figure": dark grey, no spotlight
+    // Steady's circle: same charcoal family, a soft light rim so they read as allies
+    ally: {
+      arm: ['#30303a', '#24242c', '#44444f'], leg: ['#30303a', '#24242c', '#44444f'], torso: ['#30303a', '#24242c', '#44444f'],
+      fist: '#30303a', foot: '#30303a', head: '#30303a', ol: '#b9bcc6', olW: 1.5, extra: null, flat: true, ink: '#e8eaee',
+    },
+    // background crowd: low contrast so the two leads always carry the frame
+    crowd: {
+      arm: ['#1f1f26', '#18181e', '#2a2a33'], leg: ['#1f1f26', '#18181e', '#2a2a33'], torso: ['#1f1f26', '#18181e', '#2a2a33'],
+      fist: '#1f1f26', foot: '#1f1f26', head: '#1f1f26', ol: '#5f626d', olW: 1.3, extra: null, flat: true, ink: '#9a9da7',
+    },
+    // pure silhouette (foreground, close to the lens)
+    shadow: {
+      arm: ['#040406', '#040406', '#040406'], leg: ['#040406', '#040406', '#040406'], torso: ['#040406', '#040406', '#040406'],
+      fist: '#040406', foot: '#040406', head: '#040406', ol: '#040406', olW: 1, extra: null, flat: true, ink: '#040406',
+    },
     // charcoal body + thin light-grey outline so it never blends with Reactive's grey hoodie
     other: {
       arm: ['#2A2A33', '#1f1f26', '#3a3a46'], leg: ['#2A2A33', '#1f1f26', '#3a3a46'], torso: ['#2A2A33', '#1f1f26', '#3a3a46'],
@@ -56,6 +71,16 @@
     pickLow: P({ C: [16, -74], P: [-4, -52], hB: [10, -62], hF: [34, -14], fB: [-12, -5], fF: [12, -5], hd: [3, 3], eF: [1, 0] }),
     place: P({ C: [6, -88], P: [-2, -55], hB: [0, -60], hF: [40, -80], fB: [-10, -5], fF: [10, -5], eB: [-0.5, 1], eF: [0, 1] }),
     flex: P({ C: [0, -90], P: [-1, -56], hB: [-20, -112], hF: [20, -112], fB: [-12, -5], fF: [12, -5], eB: [-1, 0.3], eF: [1, 0.3] }),
+    // Pt. 5 additions
+    climbA: P({ C: [6, -88], P: [-1, -55], hB: [16, -96], hF: [18, -120], fB: [6, -10], fF: [10, -36], hd: [1, -2], eB: [-0.2, 1], eF: [-0.2, 1], kF: [1, 0] }),
+    climbB: P({ C: [6, -88], P: [-1, -55], hB: [18, -120], hF: [16, -96], fB: [10, -36], fF: [6, -10], hd: [1, -2], eB: [-0.2, 1], eF: [-0.2, 1], kB: [1, 0] }),
+    boost: P({ C: [14, -72], P: [-6, -48], hB: [26, -40], hF: [30, -42], fB: [-14, -5], fF: [14, -5], hd: [3, -4], eB: [0, 1], eF: [0, 1] }),
+    reachUp: P({ C: [6, -88], P: [-1, -55], hB: [0, -60], hF: [30, -128], fB: [-10, -5], fF: [12, -5], hd: [2, -4], eF: [1, 0.2] }),
+    stool: P({ C: [4, -84], P: [-4, -50], hB: [14, -56], hF: [20, -58], fB: [16, -5], fF: [24, -5], kB: [1, -0.2], kF: [1, -0.2], eB: [0, 1], eF: [0, 1] }),
+    stoolSlump: P({ C: [10, -78], P: [-4, -50], hB: [22, -52], hF: [26, -54], fB: [16, -5], fF: [24, -5], hd: [4, 6], kB: [1, -0.2], kF: [1, -0.2], eB: [0, 1], eF: [0, 1] }),
+    shoulder: P({ C: [4, -88], P: [-1, -55], hB: [-4, -58], hF: [36, -92], fB: [-9, -5], fF: [9, -5], eF: [0, 1] }),
+    scroll: P({ C: [3, -86], P: [-1, -55], hB: [12, -70], hF: [15, -74], fB: [-8, -5], fF: [8, -5], hd: [3, 5], eB: [-0.2, 1], eF: [-0.2, 1] }),
+    glove: P({ C: [4, -88], P: [-2, -55], hB: [6, -94], hF: [40, -84], fB: [-12, -5], fF: [12, -5], eF: [0, 1] }),
     // Pt. 4 additions
     sitHigh: P({ C: [8, -64], P: [-4, -34], hB: [16, -82], hF: [20, -84], fB: [22, -5], fF: [28, -5], hd: [4, 6], kB: [0.4, -1], kF: [0.4, -1], eB: [0.2, 1], eF: [0.2, 1] }),
     stepUp: P({ C: [4, -89], P: [0, -56], hB: [-10, -58], hF: [14, -62], fB: [-8, -5], fF: [16, -22], eB: [-0.6, 1] }),
@@ -269,8 +294,20 @@
     return V.figLocalToWorld(f, G[name]);
   };
 
+  // Blend a palette toward charcoal (tint 0..1): "becoming like the people around you"
+  const hex = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  const mixHex = (a, b, t) => { const A = hex(a), B = hex(b); return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, '0')).join(''); };
+  const tintCache = new Map();
+  function tinted(pal, t) {
+    const key = pal.arm[0] + Math.round(t * 50);
+    if (tintCache.has(key)) return tintCache.get(key);
+    const C = '#2A2A33', m = (c) => (typeof c === 'string' && c[0] === '#' && c.length === 7 ? mixHex(c, C, t) : c);
+    const o = Object.assign({}, pal, { arm: pal.arm.map(m), leg: pal.leg.map(m), torso: pal.torso.map(m), fist: m(pal.fist), foot: m(pal.foot), head: m(pal.head) });
+    tintCache.set(key, o); return o;
+  }
   V.drawFigure = function (g, f) {
-    const pal = V.PAL[f.kind] || V.PAL.other;
+    let pal = V.PAL[f.kind] || V.PAL.other;
+    if (f.tint) pal = tinted(pal, Math.round(f.tint * 50) / 50);
     const G = V.geom(f.pose);
     g.save();
     g.translate(f.x, f.y == null ? V.FLOOR : f.y);

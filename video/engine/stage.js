@@ -57,7 +57,7 @@
     reactive: { c0: 'rgba(224,52,74,0.05)', c1: 'rgba(224,52,74,0.30)', c2: 'rgba(240,72,92,0.50)', pool: 'rgba(240,72,92,0.55)', dust: '#ff9aa4' },
     steady: { c0: 'rgba(236,240,246,0.05)', c1: 'rgba(226,230,238,0.22)', c2: 'rgba(242,244,248,0.38)', pool: 'rgba(242,244,248,0.45)', dust: '#ffffff' },
   };
-  V.drawBeam = function (g, kind, x, t, home, intensity = 1) {
+  V.drawBeam = function (g, kind, x, t, home, intensity = 1, width = 1, warm = 0) {
     const b = BEAM[kind]; if (!b) return;
     const topX = home + (x - home) * 0.55;
     const flick = 0.93 + 0.07 * Math.sin(t * 5.3 + (kind === 'steady' ? 2 : 0)) * Math.sin(t * 2.1);
@@ -67,13 +67,20 @@
     const gr = g.createLinearGradient(0, -700, 0, V.FLOOR);
     gr.addColorStop(0, b.c0); gr.addColorStop(0.55, b.c1); gr.addColorStop(1, b.c2);
     g.fillStyle = gr;
-    g.beginPath(); g.moveTo(topX - 30 - 34, -700); g.lineTo(topX + 30 + 34, -700); g.lineTo(x + 205, V.FLOOR + 6); g.lineTo(x - 205, V.FLOOR + 6); g.closePath(); g.fill();
+    g.beginPath(); g.moveTo(topX - 30 - 34, -700); g.lineTo(topX + 30 + 34, -700); g.lineTo(x + 205 * width, V.FLOOR + 6); g.lineTo(x - 205 * width, V.FLOOR + 6); g.closePath(); g.fill();
+    if (warm > 0) {
+      g.globalAlpha = flick * intensity * warm;
+      const wg = g.createLinearGradient(0, -700, 0, V.FLOOR);
+      wg.addColorStop(0, 'rgba(255,200,140,0.04)'); wg.addColorStop(1, 'rgba(255,196,130,0.42)');
+      g.fillStyle = wg; g.fill();
+      g.globalAlpha = flick * intensity;
+    }
     g.filter = 'none';
     // pool of light on the floor
     g.save(); g.translate(x, V.FLOOR + 4); g.scale(1, 0.16);
-    const pg = g.createRadialGradient(0, 0, 0, 0, 0, 300);
+    const pg = g.createRadialGradient(0, 0, 0, 0, 0, 300 * width);
     pg.addColorStop(0, b.pool); pg.addColorStop(1, 'rgba(0,0,0,0)');
-    g.fillStyle = pg; g.beginPath(); g.arc(0, 0, 300, 0, 6.283); g.fill(); g.restore();
+    g.fillStyle = pg; g.beginPath(); g.arc(0, 0, 300 * width, 0, 6.283); g.fill(); g.restore();
     // dust in the beam
     const r = V.rng(kind === 'steady' ? 33 : 11);
     g.fillStyle = b.dust;
@@ -118,8 +125,8 @@
   };
 
   // ---- labels under the floor
-  V.drawLabels = function (g, z = 1) {
-    const lx = (x) => 540 + (x - 540) * z;
+  V.drawLabels = function (g, z = 1, px = 0) {
+    const lx = (x) => 540 + (x - px - 540) * z;
     g.save();
     const fs = Math.round(38 * Math.min(1, 0.2 + z));
     g.font = `700 ${fs}px ${V.FONT.sans}`;

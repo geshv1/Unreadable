@@ -65,8 +65,13 @@
   // sc: {top, headline, red, sub}; tl = seconds since scene start; popIn = whether to pop
   V.drawText = function (g, sc, tl, popIn = true) {
     g.save();
-    const k = popIn ? V.pop(tl) : 1;
-    g.translate(CX, 560); g.scale(k, k); g.translate(-CX, -560);
+    if (V.ep && V.ep.textStyle === 'rise') {
+      const u = popIn ? V.ease.out(V.clamp(tl / 0.2)) : 1;
+      g.globalAlpha = u; g.translate(0, (1 - u) * 18);
+    } else {
+      const k = popIn ? V.pop(tl) : 1;
+      g.translate(CX, 560); g.scale(k, k); g.translate(-CX, -560);
+    }
     g.shadowColor = 'rgba(0,0,0,0.9)'; g.shadowBlur = 22;
     let y = TOP_Y;
     if (sc.top) { topLine(g, sc.top, y); }

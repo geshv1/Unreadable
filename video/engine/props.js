@@ -443,4 +443,83 @@
     }
     g.restore();
   };
+
+  // ───────── Pt. 5 props (cinematic)
+  // Glowing ring on the floor around a character: their circle
+  V.floorRing = function (g, x, rx, color, alpha = 1, t = 0) {
+    g.save(); g.translate(x, V.FLOOR + 4); g.scale(1, 0.17); g.globalAlpha = alpha * (0.85 + 0.15 * Math.sin(t * 3));
+    g.shadowColor = color; g.shadowBlur = 40; g.strokeStyle = color; g.lineWidth = 16;
+    g.beginPath(); g.arc(0, 0, rx, 0, 6.283); g.stroke();
+    g.shadowBlur = 0; g.globalAlpha *= 0.5; g.lineWidth = 5; g.strokeStyle = '#ffffff'; g.stroke();
+    g.restore();
+  };
+
+  // Rain: streaks across the whole world area (slanted), plus splashes on the floor
+  V.rain = function (g, t, amt = 1, seed = 11) {
+    const r = V.rng(seed);
+    g.save(); g.strokeStyle = 'rgba(190,210,240,0.45)'; g.lineWidth = 2.5; g.lineCap = 'round';
+    for (let i = 0; i < 150 * amt; i++) {
+      const x0 = -300 + r() * 1700, sp = 1700 + r() * 700, ph = r();
+      const y = -200 + ((t * sp + ph * 1800) % 1800), x = x0 - y * 0.18;
+      g.globalAlpha = 0.35 + r() * 0.5;
+      g.beginPath(); g.moveTo(x, y); g.lineTo(x - 9, y + 46); g.stroke();
+    }
+    g.globalAlpha = 0.5; g.strokeStyle = 'rgba(210,225,250,0.6)'; g.lineWidth = 2;
+    for (let i = 0; i < 26 * amt; i++) {
+      const x = -100 + r() * 1300, ph = (t * 3 + r()) % 1;
+      g.globalAlpha = (1 - ph) * 0.6; g.beginPath(); g.ellipse(x, V.FLOOR + 6, 6 + ph * 22, 2 + ph * 4, 0, 0, 6.283); g.stroke();
+    }
+    g.restore();
+  };
+
+  // Ladder (white line art) from the floor up to topY
+  V.ladder = function (g, x, topY, w = 110) {
+    g.save(); g.strokeStyle = '#e8eaee'; g.lineWidth = 9; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(x - w / 2, V.FLOOR); g.lineTo(x - w / 2, topY); g.moveTo(x + w / 2, V.FLOOR); g.lineTo(x + w / 2, topY); g.stroke();
+    g.lineWidth = 6; g.strokeStyle = '#c9cbd3';
+    for (let y = V.FLOOR - 64; y > topY + 10; y -= 64) { g.beginPath(); g.moveTo(x - w / 2, y); g.lineTo(x + w / 2, y); g.stroke(); }
+    g.restore();
+  };
+
+  // Corner stool
+  V.stool = function (g, x, seatY) {
+    g.save(); g.strokeStyle = '#c9cbd3'; g.lineWidth = 8; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(x - 50, V.FLOOR); g.lineTo(x - 34, seatY); g.moveTo(x + 50, V.FLOOR); g.lineTo(x + 34, seatY); g.moveTo(x - 42, (V.FLOOR + seatY) / 2); g.lineTo(x + 42, (V.FLOOR + seatY) / 2); g.stroke();
+    g.fillStyle = '#e8eaee'; g.strokeStyle = '#16171c'; g.lineWidth = 5; V.roundRect(g, x - 62, seatY - 14, 124, 22, 8); g.fill(); g.stroke();
+    g.restore();
+  };
+
+  // Towel over a shoulder (world neck point)
+  V.towel = function (g, neck, face = 1) {
+    g.save(); g.translate(neck[0], neck[1]); g.scale(face, 1);
+    g.fillStyle = '#f4f5f7'; g.strokeStyle = '#16171c'; g.lineWidth = 5;
+    g.beginPath(); g.moveTo(-40, -6); g.quadraticCurveTo(0, -26, 40, -6); g.lineTo(46, 110); g.lineTo(18, 116); g.lineTo(10, 14); g.lineTo(-14, 14); g.lineTo(-22, 120); g.lineTo(-50, 112); g.closePath(); g.fill(); g.stroke();
+    g.restore();
+  };
+
+  // Notebook + moving pen in front of a hand (world)
+  V.notebook = function (g, hand, t, writing = true) {
+    g.save(); g.translate(hand[0], hand[1]); g.rotate(-0.25);
+    g.fillStyle = '#f4f5f7'; g.strokeStyle = '#16171c'; g.lineWidth = 4; V.roundRect(g, -46, -34, 92, 64, 6); g.fill(); g.stroke();
+    g.strokeStyle = '#9a9da7'; g.lineWidth = 3;
+    for (let i = 0; i < 3; i++) { g.beginPath(); g.moveTo(-34, -16 + i * 16); g.lineTo(-34 + (i === 2 && writing ? 30 + 30 * ((t * 1.5) % 1) : 64), -16 + i * 16); g.stroke(); }
+    if (writing) { g.strokeStyle = V.COL.red; g.lineWidth = 6; const px = -4 + 30 * ((t * 1.5) % 1); g.beginPath(); g.moveTo(px, 18); g.lineTo(px + 26, -16); g.stroke(); }
+    g.restore();
+  };
+
+  // Lightbulb glyph (for an "ideas" bubble)
+  V.bulb = function (g, x, y, s = 1) {
+    g.save(); g.translate(x, y); g.scale(s, s);
+    g.shadowColor = 'rgba(255,240,200,0.9)'; g.shadowBlur = 22; g.fillStyle = '#fff4d6';
+    g.beginPath(); g.arc(0, -8, 20, Math.PI * 0.8, Math.PI * 2.2); g.lineTo(9, 16); g.lineTo(-9, 16); g.closePath(); g.fill();
+    g.shadowBlur = 0; g.fillStyle = '#9a9da7'; g.fillRect(-9, 18, 18, 5); g.fillRect(-7, 25, 14, 4);
+    g.restore();
+  };
+
+  // A figure close to the lens: big, dark, blurred (screen space). feetY usually below the frame.
+  V.fgFigure = function (g, f, blur = 9, alpha = 0.92) {
+    g.save(); g.filter = `blur(${blur}px)`; g.globalAlpha = alpha;
+    V.drawFigure(g, Object.assign({ kind: 'shadow' }, f));
+    g.restore();
+  };
 })();

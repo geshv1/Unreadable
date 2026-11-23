@@ -54,14 +54,19 @@
     g.save();
     // camera zoom (episode.zoom < 1 = zoomed out), pivot on the floor line so the floor stays put
     // scene.zoom: number or [from, to] animated over the scene (slow push-in / pull-out)
-    const zs = sc.zoom != null ? sc.zoom : ep.zoom || 1;
-    const z = Array.isArray(zs) ? V.lerp(zs[0], zs[1], (sc.zoomEase ? V.ease[sc.zoomEase] : V.ease.inOut)(V.clamp(tl / sc.dur))) : zs;
-    g.translate(540, V.FLOOR); g.scale(z, z); g.translate(-540, -V.FLOOR);
+    // scene.cam = { zoom, x, y, ease }: each a number or [from, to] animated over the scene (pan in world px)
+    const cam = sc.cam || {};
+    const zs = cam.zoom != null ? cam.zoom : sc.zoom != null ? sc.zoom : ep.zoom || 1;
+    const cu = (V.ease[cam.ease || sc.zoomEase || 'inOut'])(V.clamp(tl / sc.dur));
+    const anim = (v) => (Array.isArray(v) ? V.lerp(v[0], v[1], cu) : v || 0);
+    const z = anim(zs), px = anim(cam.x), py = anim(cam.y);
+    V.cam = { z, px, py };
+    g.translate(540, V.FLOOR); g.scale(z, z); g.translate(-540 - px, -V.FLOOR - py);
     g.translate(540 + V.hash(i, 3) * shake, 1180 + V.hash(i, 4) * shake); g.scale(push, push); g.translate(-540, -1180);
     (V.sets[sc.set] || V.sets.stage)(g, t);
     V.drawFloor(g);
     if (st.back) st.back(g);
-    for (const f of main) if (f.kind === 'reactive' || f.kind === 'steady') V.drawBeam(g, f.kind, f.x, t, V.POS[f.kind], f.beam == null ? 1 : f.beam);
+    for (const f of main) if (f.kind === 'reactive' || f.kind === 'steady') V.drawBeam(g, f.kind, f.x, t, V.POS[f.kind], f.beam == null ? 1 : f.beam, f.beamW || 1, f.beamWarm || 0);
     for (const f of back) V.drawFigure(g, f);
     if (st.mid) st.mid(g);
     V.drawReflections(g, main);
@@ -69,13 +74,17 @@
     if (st.front) st.front(g);
     g.restore();
 
-    V.drawLabels(g, z);
+    if (st.fg) st.fg(g);                       // foreground layer (screen space): blurred figures close to the lens
+    if (sc.grade) drawGrade(g, sc.grade, tl, sc.dur);
+    if (sc.labels !== false) V.drawLabels(g, z, px);
     if (ep.vignette) drawVignette(g, ep.vignette);
+    if (ep.grain) drawGrain(g, ep.grain, i);
     V.drawText(g, sc, tl, sc.start > 0);
     if (st.overlay) st.overlay(g);
     drawTransition(g, t);
-    // opening fade from black (episode.fadeIn seconds)
-    if (ep.fadeIn && t < ep.fadeIn) { g.fillStyle = `rgba(0,0,0,${(1 - V.ease.out(t / ep.fadeIn)).toFixed(3)})`; g.fillRect(0, 0, V.W, V.H); }
+    // opening fade from black (episode.fadeIn seconds) and closing fade to black (episode.fadeOut)
+    if (ep.fadeIn && t < ep.fadeIn) { g.fillStyle = `rgba(0,0,0,${(1 - V.ease.inOut(t / ep.fadeIn)).toFixed(3)})`; g.fillRect(0, 0, V.W, V.H); }
+    if (ep.fadeOut && t > ep.duration - ep.fadeOut) { g.fillStyle = `rgba(0,0,0,${V.ease.inOut(V.clamp((t - (ep.duration - ep.fadeOut)) / ep.fadeOut)).toFixed(3)})`; g.fillRect(0, 0, V.W, V.H); }
     if (V.debug) drawSafe(g);
     g.restore();
     return { t, scene: sc.id };
@@ -86,9 +95,11 @@
     const tr = V.ep.transition || { pre: 0.16, post: 0.08 };
     if (tr.type === 'fade') {
       for (const c of V.ep.cuts) {
+        const k = V.ep.scenes.findIndex((s) => s.id === c.scene);
+        const pre = V.ep.scenes[k - 1].fadeOut || tr.pre, post = V.ep.scenes[k].fadeIn || tr.post;
         const d = t - c.t;
-        const a = d < 0 ? 1 + d / tr.pre : 1 - d / tr.post;
-        if (a > 0 && d > -tr.pre && d < tr.post) { g.fillStyle = `rgba(0,0,0,${V.ease.inOut(V.clamp(a)).toFixed(3)})`; g.fillRect(0, 0, V.W, V.H); }
+        const a = d < 0 ? 1 + d / pre : 1 - d / post;
+        if (a > 0 && d > -pre && d < post) { g.fillStyle = `rgba(0,0,0,${V.ease.inOut(V.clamp(a)).toFixed(3)})`; g.fillRect(0, 0, V.W, V.H); }
       }
       return;
     }
@@ -121,6 +132,31 @@
       x.fillStyle = bot; x.fillRect(0, V.H - 520, V.W, 520);
     }
     g.drawImage(vigCache, 0, 0);
+  }
+
+  // Colour grade: soft-light wash (e.g. cool rain, warm sunrise). grade = {color, amount, to?, toAmount?}
+  function drawGrade(g, gr, tl, dur) {
+    const u = V.clamp(tl / dur);
+    g.save();
+    g.globalCompositeOperation = 'soft-light';
+    g.globalAlpha = gr.to ? V.lerp(gr.amount, gr.toAmount == null ? gr.amount : gr.toAmount, u) : gr.amount;
+    g.fillStyle = gr.color; g.fillRect(0, 0, V.W, V.H);
+    if (gr.to) { g.globalAlpha = (gr.toAmount == null ? gr.amount : gr.toAmount) * V.ease.inOut(u); g.fillStyle = gr.to; g.fillRect(0, 0, V.W, V.H); }
+    g.restore();
+  }
+  // Film grain: a few pre-baked noise plates cycled per frame
+  let grainPlates = null;
+  function drawGrain(g, amt, i) {
+    if (!grainPlates) {
+      grainPlates = [];
+      for (let p = 0; p < 6; p++) {
+        const c = V.makeCanvas(540, 960), x = c.getContext('2d'), d = x.createImageData(540, 960), r = V.rng(900 + p);
+        for (let k = 0; k < d.data.length; k += 4) { const v = 128 + (r() - 0.5) * 255; d.data[k] = d.data[k + 1] = d.data[k + 2] = v; d.data[k + 3] = 255; }
+        x.putImageData(d, 0, 0); grainPlates.push(c);
+      }
+    }
+    g.save(); g.globalCompositeOperation = 'overlay'; g.globalAlpha = amt; g.imageSmoothingEnabled = false;
+    g.drawImage(grainPlates[i % grainPlates.length], 0, 0, V.W, V.H); g.restore();
   }
 
   function drawSafe(g) {
