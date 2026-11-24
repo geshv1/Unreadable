@@ -1,22 +1,14 @@
-<title>EdgeBot Paper Bets</title>
+<title>EdgeBot</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
 <style>
-/* Layout: a single column like a betting slip — summary on top, open slips you act on, then settled results. */
+/* Layout: one column like a betting slip. Tabs: Analyze (chat), Bets, Precision, Settings. */
 :root {
-  --bg: #eef2f0;
-  --surface: #ffffff;
-  --ink: #14201b;
-  --muted: #5d6b65;
-  --line: #d5ddd9;
-  --accent: #1d6b47;
-  --accent-ink: #ffffff;
-  --win: #1d7a4a;
-  --loss: #b3362c;
-  --warn: #9a6a00;
-  --chip: #e3ebe7;
+  --bg: #eef2f0; --surface: #ffffff; --ink: #14201b; --muted: #5d6b65; --line: #d5ddd9;
+  --accent: #1d6b47; --accent-ink: #ffffff; --win: #1d7a4a; --loss: #b3362c; --warn: #9a6a00; --chip: #e3ebe7;
+  --bubble: #e6efe9;
   --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
   --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -24,332 +16,851 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0e1513; --surface: #161f1c; --ink: #e6ece9; --muted: #96a59f; --line: #29352f;
-    --accent: #45b77c; --accent-ink: #06110c; --win: #4cc285; --loss: #ef7a6e; --warn: #e0b04a; --chip: #1f2b26;
+    --accent: #45b77c; --accent-ink: #06110c; --win: #4cc285; --loss: #ef7a6e; --warn: #e0b04a; --chip: #1f2b26; --bubble: #1c2a24;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0e1513; --surface: #161f1c; --ink: #e6ece9; --muted: #96a59f; --line: #29352f;
-  --accent: #45b77c; --accent-ink: #06110c; --win: #4cc285; --loss: #ef7a6e; --warn: #e0b04a; --chip: #1f2b26;
+  --accent: #45b77c; --accent-ink: #06110c; --win: #4cc285; --loss: #ef7a6e; --warn: #e0b04a; --chip: #1f2b26; --bubble: #1c2a24;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body {
-  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 20px 40px;
-}
-.wrap { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
-h1, h2 { font-family: var(--display); font-weight: 700; letter-spacing: 0.01em; margin: 0; text-wrap: balance; }
-h1 { font-size: 2.1rem; line-height: 1; }
-h2 { font-size: 1.15rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
-header { display: flex; flex-direction: column; gap: 8px; }
-.mode { align-self: flex-start; font: 600 0.72rem/1 var(--body); letter-spacing: 0.1em; text-transform: uppercase;
-  background: var(--chip); color: var(--accent); padding: 6px 9px; border-radius: 4px; }
-.sub { color: var(--muted); margin: 0; max-width: 60ch; }
-.note { font-size: 0.85rem; color: var(--warn); margin: 0; }
-.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 14px 40px; }
+.wrap { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; letter-spacing: 0.01em; }
+h1 { font-size: 2rem; line-height: 1; font-weight: 700; }
+h2 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
+h3 { font-size: 1.25rem; font-weight: 600; }
+p { margin: 0; }
+.top { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+.mode { font: 600 0.7rem/1 var(--body); letter-spacing: 0.1em; text-transform: uppercase; background: var(--chip); color: var(--accent); padding: 6px 9px; border-radius: 4px; }
+.muted { color: var(--muted); }
+.small { font-size: 0.82rem; }
+.warn { color: var(--warn); }
+.num, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+nav.tabs button { border: 0; border-radius: 0; background: transparent; min-height: 44px; font: 600 0.88rem var(--body); color: var(--muted); cursor: pointer; }
+nav.tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); }
+section[role="tabpanel"] { display: flex; flex-direction: column; gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+button.btn { font: 600 0.9rem/1 var(--body); padding: 10px 14px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface);
+  color: var(--ink); cursor: pointer; min-height: 42px; }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button:disabled { opacity: 0.5; cursor: default; }
+button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+label.field { display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; color: var(--muted); }
+input[type="number"], input[type="text"], textarea, select { font: 500 1rem var(--body); padding: 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; }
+textarea { resize: vertical; min-height: 46px; }
+.choice { display: flex; gap: 8px; flex-wrap: wrap; }
+.choice label { flex: 1 1 140px; border: 1px solid var(--line); border-radius: 8px; padding: 10px; display: flex; gap: 8px; align-items: flex-start; cursor: pointer; background: var(--bg); }
+.choice label:has(input:checked) { border-color: var(--accent); }
+.choice b { display: block; }
 
-.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line);
-  border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+/* chat */
+.chat { display: flex; flex-direction: column; gap: 10px; }
+.msg { max-width: 92%; padding: 10px 12px; border-radius: 10px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.msg.me { align-self: flex-end; background: var(--accent); color: var(--accent-ink); }
+.msg.bot { align-self: flex-start; background: var(--bubble); }
+.msg.bot.card-msg { background: transparent; padding: 0; max-width: 100%; width: 100%; white-space: normal; }
+.composer { display: flex; flex-direction: column; gap: 8px; position: sticky; bottom: env(safe-area-inset-bottom, 0px); background: var(--bg); padding-top: 6px; }
+.attach { display: flex; gap: 6px; flex-wrap: wrap; }
+.attach span { font-size: 0.78rem; background: var(--chip); padding: 4px 8px; border-radius: 4px; }
+.quick { display: flex; gap: 6px; flex-wrap: wrap; }
+.quick button { font-size: 0.82rem; min-height: 34px; padding: 6px 10px; }
+
+/* analysis card */
+.an { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.an .head { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; align-items: baseline; }
+.an .match { font-family: var(--display); font-size: 1.3rem; font-weight: 600; line-height: 1.15; }
+.verdict { font-weight: 700; padding: 8px 10px; border-radius: 6px; background: var(--chip); }
+.verdict.bet { color: var(--win); }
+.verdict.skip { color: var(--muted); }
+.tbl { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.tbl th { text-align: left; color: var(--muted); font-weight: 500; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 4px; }
+.tbl td { padding: 6px 4px; border-top: 1px solid var(--line); }
+.tbl td.r, .tbl th.r { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tbl th { white-space: nowrap; }
+.ok { color: var(--win); font-weight: 600; } .no { color: var(--muted); } .bad { color: var(--loss); }
+.scroll { overflow-x: auto; }
+details summary { cursor: pointer; color: var(--muted); font-size: 0.85rem; }
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; font-size: 0.82rem; }
+.facts div { min-width: 0; }
+.form { font-family: var(--mono); letter-spacing: 0.15em; }
+
+/* bets */
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
 .stat { background: var(--surface); padding: 12px 10px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .stat .k { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
-.stat .v { font-family: var(--display); font-size: 1.6rem; font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stat .v { font-family: var(--display); font-size: 1.5rem; font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
 .stat .r { font-size: 0.72rem; color: var(--muted); font-family: var(--mono); }
 @media (max-width: 460px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-
-.gates { display: flex; flex-direction: column; gap: 10px; }
 .bar { height: 8px; background: var(--chip); border-radius: 4px; overflow: hidden; }
 .bar > span { display: block; height: 100%; background: var(--accent); width: 0; }
 .gate { display: grid; grid-template-columns: 22px 1fr auto; gap: 8px; align-items: baseline; font-size: 0.92rem; }
 .gate .d { color: var(--muted); font-family: var(--mono); font-size: 0.8rem; text-align: right; }
-.tick { font-weight: 700; color: var(--muted); }
-.tick.ok { color: var(--win); }
-
-.slips { display: flex; flex-direction: column; gap: 12px; }
-.slip { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: flex;
-  flex-direction: column; gap: 10px; }
-.slip .top { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; flex-wrap: wrap; }
-.slip .match { font-family: var(--display); font-size: 1.3rem; font-weight: 600; line-height: 1.15; min-width: 0; }
-.slip .when { color: var(--muted); font-size: 0.82rem; }
-.pick { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-.pick .label { font-weight: 600; min-width: 0; }
-.pick .odds { font-family: var(--mono); font-size: 1.35rem; font-weight: 500; }
-.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; font-size: 0.82rem; }
-.facts div { display: flex; flex-direction: column; min-width: 0; }
-.facts .k { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
-.facts .v { font-family: var(--mono); }
-.why { font-size: 0.84rem; color: var(--muted); margin: 0; }
-.actions { display: flex; flex-wrap: wrap; gap: 8px; }
-button { font: 600 0.9rem/1 var(--body); padding: 10px 14px; border-radius: 6px; border: 1px solid var(--line);
-  background: var(--surface); color: var(--ink); cursor: pointer; min-height: 42px; }
-button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-button:disabled { opacity: 0.5; cursor: default; }
-button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.oddsform { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.oddsform input { font: 500 1rem var(--mono); width: 7.5em; padding: 9px 10px; border-radius: 6px; border: 1px solid var(--line);
-  background: var(--bg); color: var(--ink); }
-.chip { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
-  padding: 4px 7px; border-radius: 4px; background: var(--chip); color: var(--muted); }
-.chip.placed { color: var(--accent); }
-.chip.skipped { color: var(--loss); }
-.chip.low { color: var(--warn); }
-.status { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 0.85rem; }
-.link { background: none; border: none; padding: 0; min-height: 0; color: var(--muted); text-decoration: underline; font-weight: 500; }
-
-.results { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-.res { display: grid; grid-template-columns: 54px 1fr auto; gap: 10px; padding: 11px 12px; background: var(--surface);
-  align-items: center; border-top: 1px solid var(--line); }
+.tick { font-weight: 700; color: var(--muted); } .tick.ok { color: var(--win); }
+.slip .pick { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.slip .odds { font-family: var(--mono); font-size: 1.3rem; }
+.chip { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 7px; border-radius: 4px; background: var(--chip); color: var(--muted); }
+.chip.placed { color: var(--accent); } .chip.skipped { color: var(--loss); } .chip.low { color: var(--warn); }
+.res { display: grid; grid-template-columns: 54px 1fr auto; gap: 10px; padding: 11px 12px; background: var(--surface); align-items: center; border-top: 1px solid var(--line); }
 .res:first-child { border-top: 0; }
+.results { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
 .res .w { font-weight: 700; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
 .res .w.won { color: var(--win); } .res .w.lost { color: var(--loss); } .res .w.void { color: var(--muted); }
-.res .m { min-width: 0; }
-.res .m b { font-weight: 600; }
-.res .m span { display: block; color: var(--muted); font-size: 0.8rem; }
-.res .p { text-align: right; font-family: var(--mono); font-size: 0.9rem; }
-.res .p span { display: block; color: var(--muted); font-size: 0.75rem; }
-.empty { background: var(--surface); border: 1px dashed var(--line); border-radius: 8px; padding: 16px; color: var(--muted); margin: 0; }
-footer { color: var(--muted); font-size: 0.82rem; display: flex; flex-direction: column; gap: 4px; }
+.res .m { min-width: 0; } .res .m span { display: block; color: var(--muted); font-size: 0.8rem; }
+.res .p { text-align: right; font-family: var(--mono); font-size: 0.9rem; } .res .p span { display: block; color: var(--muted); font-size: 0.75rem; }
+.link { background: none; border: none; padding: 0; color: var(--muted); text-decoration: underline; font: 500 0.85rem var(--body); cursor: pointer; }
+.empty { background: var(--surface); border: 1px dashed var(--line); border-radius: 8px; padding: 16px; color: var(--muted); }
+.oddsform { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.oddsform input { width: 7.5em; font-family: var(--mono); }
 @media (prefers-reduced-motion: no-preference) { .bar > span { transition: width 0.6s ease; } }
 </style>
 
 <div class="wrap">
-  <header>
-    <span class="mode">Paper mode · pretend money</span>
-    <h1>EdgeBot Paper Bets</h1>
-    <p class="sub">Every value bet Claude finds when you send a Betano screenshot or link lands here. Results and closing prices are checked automatically.</p>
-    <p class="note" id="conn" hidden></p>
-  </header>
+  <div class="top">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <span class="mode">Paper mode · pretend money</span>
+      <h1>EdgeBot</h1>
+    </div>
+    <span class="muted small" id="data-age">Loading match data…</span>
+  </div>
+  <p class="warn small" id="conn" hidden></p>
 
-  <section aria-labelledby="h-stats">
-    <h2 id="h-stats" style="margin-bottom:10px">So far</h2>
-    <div class="stats" id="stats">
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" id="tab-analyze" aria-selected="true" aria-controls="p-analyze">Analyze</button>
+    <button role="tab" id="tab-bets" aria-selected="false" aria-controls="p-bets">Bets</button>
+    <button role="tab" id="tab-precision" aria-selected="false" aria-controls="p-precision">Precision</button>
+    <button role="tab" id="tab-settings" aria-selected="false" aria-controls="p-settings">Budget</button>
+  </nav>
+
+  <!-- ANALYZE -->
+  <section role="tabpanel" id="p-analyze" aria-labelledby="tab-analyze">
+    <div class="chat" id="chat"></div>
+    <div class="composer">
+      <div class="quick">
+        <button class="btn" type="button" id="q-watch">Watchlist</button>
+        <button class="btn" type="button" id="q-how">How am I doing?</button>
+        <button class="btn" type="button" id="q-today">Today's value bets</button>
+      </div>
+      <div class="attach" id="attach-list"></div>
+      <form class="row" id="composer" style="flex-wrap:nowrap">
+        <input type="file" id="file" accept="image/*,video/*" multiple hidden>
+        <button class="btn" type="button" id="pick" aria-label="Add screenshots or a screen recording">📷</button>
+        <textarea id="text" rows="1" placeholder="Ask, or add a Betano screenshot / recording" aria-label="Message"></textarea>
+        <button class="btn primary" type="submit" id="send">Send</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- BETS -->
+  <section role="tabpanel" id="p-bets" aria-labelledby="tab-bets" hidden>
+    <div class="stats">
       <div class="stat"><span class="k">Settled</span><span class="v" id="s-bets">0</span><span class="r" id="s-open">0 open</span></div>
       <div class="stat"><span class="k">Profit</span><span class="v" id="s-profit">€0</span><span class="r" id="s-staked">€0 staked</span></div>
       <div class="stat"><span class="k">ROI</span><span class="v" id="s-roi">–</span><span class="r" id="s-roi-r">needs bets</span></div>
       <div class="stat"><span class="k">CLV</span><span class="v" id="s-clv">–</span><span class="r" id="s-clv-r">beat the close</span></div>
     </div>
-    <p class="note" id="s-note" style="margin-top:8px">Not enough data to judge anything until about 300 settled bets.</p>
-  </section>
-
-  <section aria-labelledby="h-gates" class="gates">
-    <h2 id="h-gates">Go-live gates</h2>
-    <div class="bar" aria-hidden="true"><span id="gate-bar"></span></div>
-    <div id="gates"></div>
-  </section>
-
-  <section aria-labelledby="h-open">
-    <h2 id="h-open" style="margin-bottom:10px">Open bets</h2>
-    <div class="slips" id="open"></div>
-  </section>
-
-  <section aria-labelledby="h-done">
-    <h2 id="h-done" style="margin-bottom:10px">Results</h2>
+    <p class="warn small" id="s-note">Not enough data to judge anything until about 300 settled bets.</p>
+    <div class="card">
+      <h2>Go-live gates</h2>
+      <div class="bar" aria-hidden="true"><span id="gate-bar"></span></div>
+      <div id="gates"></div>
+    </div>
+    <h2>Open bets</h2>
+    <div id="open" style="display:flex;flex-direction:column;gap:12px"></div>
+    <h2>Results</h2>
     <div id="done"></div>
   </section>
 
-  <footer>
-    <span>Real-money mode stays off until every gate passes and you confirm.</span>
-    <span>Tap Placed or Skipped so the record matches what you did. Use Different odds if Betano paid something else.</span>
-  </footer>
+  <!-- PRECISION -->
+  <section role="tabpanel" id="p-precision" aria-labelledby="tab-precision" hidden>
+    <div class="card">
+      <h3>How precise is the bot?</h3>
+      <p class="muted small">The honest test: did the prices the bot picked beat the final fair price before kick-off (CLV)? It needs graded bets; ask Claude in your chat for "results" to grade them.</p>
+      <div id="prec-main"></div>
+    </div>
+    <div class="card"><h3>By league</h3><div class="scroll" id="prec-league"></div></div>
+    <div class="card"><h3>By bookmaker</h3><div class="scroll" id="prec-book"></div></div>
+    <div class="card"><h3>Which site paid more</h3><p class="muted small">When you analyze the same match on two sites, this counts which one offered the better price.</p><div class="scroll" id="prec-shop"></div></div>
+    <div class="card"><h3>Checks so far</h3><div id="prec-checks"></div></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section role="tabpanel" id="p-settings" aria-labelledby="tab-settings" hidden>
+    <form class="card" id="settings-form">
+      <h3>Your budget</h3>
+      <p class="muted small">The bot sizes every stake from these numbers. Only use money you can afford to lose.</p>
+      <label class="field" for="set-bankroll">Betting budget right now (€)
+        <input type="number" id="set-bankroll" min="0" step="0.5" inputmode="decimal" placeholder="e.g. 50"></label>
+      <label class="field" for="set-deposit">How much you deposit per month (€)
+        <input type="number" id="set-deposit" min="0" step="1" inputmode="decimal" placeholder="e.g. 20"></label>
+      <div class="field">Your number 1 priority
+        <div class="choice">
+          <label for="goal-protect"><input type="radio" name="goal" id="goal-protect" value="protect"><span><b>Don't lose money</b>Smallest stakes, stops early.</span></label>
+          <label for="goal-grow"><input type="radio" name="goal" id="goal-grow" value="grow"><span><b>Make money</b>Bigger stakes on value bets, more ups and downs.</span></label>
+        </div>
+      </div>
+      <label class="row small" for="set-more"><input type="checkbox" id="set-more"> More risk (only with "Make money")</label>
+      <div class="field">Sites you have an account at
+        <div class="row" id="set-books">
+          <label class="row small" for="bk-betano"><input type="checkbox" id="bk-betano" value="betano"> Betano</label>
+          <label class="row small" for="bk-winbet"><input type="checkbox" id="bk-winbet" value="winbet"> Winbet</label>
+          <label class="row small" for="bk-palmsbet"><input type="checkbox" id="bk-palmsbet" value="palmsbet"> Palms Bet</label>
+          <label class="row small" for="bk-efbet"><input type="checkbox" id="bk-efbet" value="efbet"> efbet</label>
+          <label class="row small" for="bk-bet365"><input type="checkbox" id="bk-bet365" value="bet365"> bet365</label>
+        </div>
+      </div>
+      <label class="field" for="set-min">Smallest bet your site accepts (€)
+        <input type="number" id="set-min" min="0.1" step="0.1" inputmode="decimal" value="0.5"></label>
+      <div class="card" style="background:var(--bg)"><h2>Your rules</h2><div id="rules-preview" class="small"></div></div>
+      <div class="row"><button class="btn primary" type="submit" id="save-settings">Save</button><span class="small muted" id="settings-msg"></span></div>
+      <p class="small muted">No setting can guarantee you won't lose. "Don't lose money" means the smallest stakes and the earliest stop.</p>
+    </form>
+  </section>
 </div>
 
 <script>
 (() => {
-  const GATE_DEFAULTS = [
-    { name: "At least 1,000 paper bets", ok: false, detail: "0 so far" },
-    { name: "Average CLV ≥ 2%", ok: false, detail: "no data" },
-    { name: "CLV 95% range above zero", ok: false, detail: "no data" },
-    { name: "Positive profit", ok: false, detail: "€+0" },
-    { name: "Worst drop ≤ 20%", ok: true, detail: "0%" },
-    { name: "Your confirmation", ok: false, detail: "last step" },
-  ];
-  const state = { bets: [], summary: null, db: null, canWrite: false, busy: new Set(), editing: null };
-  const $ = (id) => document.getElementById(id);
-  const fmtTime = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Sofia", weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-  const when = (iso) => { try { return fmtTime.format(new Date(iso)); } catch { return iso || ""; } };
-  const pct = (x, signed = true) => (x === null || x === undefined || Number.isNaN(x)) ? "–" : (signed && x > 0 ? "+" : "") + (x * 100).toFixed(1) + "%";
-  const eur = (x) => (x < 0 ? "-€" : "€") + Math.abs(x).toFixed(Math.abs(x) < 100 ? 2 : 0);
-  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
+"use strict";
+// ---------- helpers ----------
+const $ = (id) => document.getElementById(id);
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
+const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Sofia", weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+const when = (iso) => { try { return fmt.format(new Date(iso)); } catch { return String(iso || ""); } };
+const pct = (x, signed = true) => (x === null || x === undefined || Number.isNaN(x)) ? "–" : (signed && x > 0 ? "+" : "") + (x * 100).toFixed(1) + "%";
+const eur = (x) => (x < 0 ? "-€" : "€") + Math.abs(x).toFixed(2).replace(/\.00$/, "");
+const SELS = { "1X2": ["H", "D", "A"], "OU2.5": ["O", "U"] };
+const BOOKS = { betano: "Betano", winbet: "Winbet", palmsbet: "Palms Bet", efbet: "efbet", bet365: "bet365", other: "your site" };
+const RISK = {
+  protect: { label: "Don't lose money", kelly: 0.10, maxBet: 0.01, maxDay: 0.05 },
+  grow: { label: "Make money", kelly: 0.20, maxBet: 0.015, maxDay: 0.10 },
+  growMore: { label: "Make money, more risk", kelly: 0.25, maxBet: 0.02, maxDay: 0.10 },
+};
+const state = { data: null, db: null, sample: null, limits: null, canWrite: false, bets: [], checks: [], summary: null,
+  settings: null, settingsVersionKnown: false, chatTurns: [], files: [], busy: false, editing: null, writing: new Set() };
 
-  function renderStats() {
-    const s = state.summary;
-    const settled = state.bets.filter((b) => (b.status === "won" || b.status === "lost") && b.placed !== false);
-    const open = state.bets.filter((b) => b.status === "open" && b.placed !== false);
-    const staked = s?.staked ?? settled.reduce((a, b) => a + (b.stake || 0), 0);
-    const profit = s?.profit ?? settled.reduce((a, b) => a + (b.pnl || 0), 0);
-    $("s-bets").textContent = String(s?.bets ?? settled.length);
-    $("s-open").textContent = `${open.length} open`;
-    $("s-profit").textContent = eur(profit);
-    $("s-profit").style.color = profit > 0 ? "var(--win)" : profit < 0 ? "var(--loss)" : "";
-    $("s-staked").textContent = `${eur(staked)} staked`;
-    $("s-roi").textContent = staked > 0 ? pct(profit / staked) : "–";
-    $("s-roi-r").textContent = s?.roi_ci ? `${pct(s.roi_ci[0])} to ${pct(s.roi_ci[1])}` : "needs bets";
-    $("s-clv").textContent = s?.clv !== undefined && s?.clv !== null ? pct(s.clv) : "–";
-    $("s-clv-r").textContent = s?.clv_ci ? `${pct(s.clv_ci[0])} to ${pct(s.clv_ci[1])}` : "beat the close";
-    const n = s?.bets ?? settled.length;
-    $("s-note").hidden = n >= 300;
-    $("s-note").textContent = `Not enough data to judge anything yet (${n} of 300 settled bets). The ranges show how much is still luck.`;
+function labelFor(market, sel, home, away) {
+  if (market === "1X2") return sel === "H" ? `${home} to win` : sel === "A" ? `${away} to win` : "Draw";
+  return sel === "O" ? "Over 2.5 goals" : "Under 2.5 goals";
+}
+function leagueName(code) { return state.data?.leagues?.[code] || code; }
+
+// ---------- team matching (Latin, Bulgarian Cyrillic, nicknames) ----------
+const CYR = { а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"h",ц:"ts",ч:"ch",ш:"sh",щ:"sht",ъ:"a",ь:"y",ю:"yu",я:"ya" };
+const FILLER = new Set(["fc","cf","afc","sc","ac","as","club","cd","fk","sv","vfl","vfb","tsg","1","de","the","bk","if","ssc","us"]);
+function norm(s) {
+  let t = String(s || "").toLowerCase().split("").map((c) => CYR[c] ?? c).join("");
+  t = t.normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/&/g, " ").replace(/['’]/g, "").replace(/[^a-z0-9]+/g, " ");
+  t = t.replace(/\butd\b/g, "united");
+  return t.split(" ").filter((w) => w && !FILLER.has(w)).join(" ");
+}
+function ratio(a, b) {
+  if (!a || !b) return 0;
+  const m = a.length, n = b.length; let prev = Array.from({ length: n + 1 }, (_, j) => j);
+  for (let i = 1; i <= m; i++) { const cur = [i]; for (let j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; }
+  return 1 - prev[n] / Math.max(m, n);
+}
+function variants(team) { const v = new Set([norm(team)]); for (const a of state.data?.aliases?.[team] || []) v.add(norm(a)); return [...v].filter(Boolean); }
+function teamScore(team, names) {
+  let best = 0;
+  for (const v of variants(team)) for (const n of names) {
+    const q = norm(n); if (!q) continue;
+    best = Math.max(best, ratio(v, q));
+    const words = q.split(" "), k = v.split(" ").length;
+    for (let w = Math.max(1, k - 1); w <= k + 1; w++) for (let i = 0; i + w <= words.length; i++) best = Math.max(best, ratio(v, words.slice(i, i + w).join(" ")));
   }
-
-  function renderGates() {
-    const gates = state.summary?.gates?.length ? state.summary.gates : GATE_DEFAULTS;
-    const n = state.summary?.bets ?? 0;
-    $("gate-bar").style.width = Math.min(100, (n / 1000) * 100) + "%";
-    const box = $("gates");
-    box.replaceChildren();
-    for (const g of gates) {
-      const row = el("div", "gate");
-      row.append(el("span", "tick" + (g.ok ? " ok" : ""), g.ok ? "✓" : "○"), el("span", "", g.name), el("span", "d", g.detail));
-      box.append(row);
-    }
+  return best;
+}
+function findMatch(home, away, extra = []) {
+  if (!state.data) return null;
+  let best = null;
+  for (const m of state.data.matches) {
+    const hs = teamScore(m.home, [home, ...extra]), as = teamScore(m.away, [away, ...extra]);
+    const s = (hs + as) / 2 - (Math.min(hs, as) >= 0.75 ? 0 : 0.25);
+    if (!best || s > best.s) best = { m, s };
   }
+  return best && best.s >= 0.75 ? best.m : null;
+}
 
-  async function write(bet, patch) {
-    if (!state.db || state.busy.has(bet.__id)) return;
-    state.busy.add(bet.__id);
-    render();
-    try {
-      await state.db.collection("bets").doc(bet.__id).update({ ...patch, user_updated_at: new Date().toISOString() });
-    } catch (e) {
-      $("conn").hidden = false;
-      $("conn").textContent = e?.code === "invalid_argument" ? "Only the owner can change these bets." : "Couldn't save that. Try again in a moment.";
-    } finally {
-      state.busy.delete(bet.__id);
-      state.editing = null;
-      render();
-    }
-  }
+// ---------- money rules ----------
+function riskFor(s) { if (!s) return RISK.grow; if (s.goal === "protect") return RISK.protect; return s.more ? RISK.growMore : RISK.grow; }
+function sofiaDay(d) { return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Sofia" }).format(d); }
+function stakeFor(p, odds, opts = {}) {
+  const s = state.settings;
+  if (!s || !(s.bankroll > 0)) return { stake: 0, why: "Set your budget first (Budget tab)." };
+  const r = riskFor(s);
+  const open = state.bets.filter((b) => b.status === "open" && b.placed !== false);
+  const openStake = open.reduce((a, b) => a + (+b.stake || 0), 0);
+  const today = sofiaDay(new Date());
+  const stakedToday = state.bets.filter((b) => b.created_at && sofiaDay(new Date(b.created_at)) === today && b.placed !== false).reduce((a, b) => a + (+b.stake || 0), 0);
+  const month = today.slice(0, 7);
+  const lostMonth = -state.bets.filter((b) => b.settled_at && sofiaDay(new Date(b.settled_at)).slice(0, 7) === month && b.placed !== false).reduce((a, b) => a + (+b.pnl || 0), 0);
+  const monthlyStop = s.deposit > 0 ? Math.min(s.deposit, s.bankroll) : s.bankroll * 0.15;
+  if (lostMonth >= monthlyStop && monthlyStop > 0) return { stake: 0, why: `Monthly stop reached (lost ${eur(lostMonth)} of ${eur(monthlyStop)}). No more bets this month.` };
+  const b = odds - 1; if (b <= 0) return { stake: 0, why: "odds too low" };
+  const kelly = Math.max(0, (p * odds - 1) / b) * r.kelly;
+  const available = Math.max(0, s.bankroll - openStake);
+  let stake = Math.min(kelly, opts.parlay ? 0.005 : r.maxBet) * available;
+  stake = Math.min(stake, Math.max(0, r.maxDay * s.bankroll - stakedToday));
+  if (opts.stale) stake /= 2;
+  stake = Math.floor(stake * 10) / 10;
+  const min = +s.min_stake || 0.5;
+  if (stake < min) return { stake: 0, why: `The right stake for your budget would be under ${eur(min)}, the smallest bet your site takes. Skip it, or raise your budget.` };
+  return { stake, why: opts.stale ? "halved because the fair price is old" : "ok" };
+}
 
-  function slip(b) {
-    const card = el("article", "slip");
-    const top = el("div", "top");
-    const title = b.kind === "parlay" ? `${b.legs?.length || 2}-leg parlay` : `${b.home} v ${b.away}`;
-    top.append(el("span", "match", title), el("span", "when", `${b.league_name || b.league} · ${when(b.kickoff)}`));
-    const pick = el("div", "pick");
-    pick.append(el("span", "label", b.label), el("span", "odds", Number(b.placed_odds || b.odds).toFixed(2)));
-    const facts = el("div", "facts");
-    const kickoff = new Date(b.kickoff);
-    const before = new Date(kickoff.getTime() - 15 * 60000);
-    const items = [
-      ["Stake", eur(b.stake)],
-      ["Edge", pct(b.edge)],
-      [b.kind === "parlay" ? "Fair payout" : "Skip below", b.kind === "parlay" ? Number(b.fair_odds).toFixed(2) : (b.min_odds ? Number(b.min_odds).toFixed(2) : "–")],
-    ];
-    for (const [k, v] of items) { const d = el("div"); d.append(el("span", "k", k), el("span", "v", v)); facts.append(d); }
-    card.append(top, pick, facts);
-    const status = el("div", "status");
-    status.append(el("span", "chip", "Betano"), el("span", "chip" + (b.confidence === "low" ? " low" : ""), `confidence ${b.confidence}`));
-    status.append(el("span", "when", `place before ${when(before.toISOString())}`));
-    card.append(status);
-    if (b.reason) card.append(el("p", "why", b.reason));
-
-    const busy = state.busy.has(b.__id);
-    if (b.placed === true || b.placed === false) {
-      const row = el("div", "status");
-      row.append(el("span", "chip " + (b.placed ? "placed" : "skipped"), b.placed ? (b.placed_odds ? `placed at ${Number(b.placed_odds).toFixed(2)}` : "placed") : "skipped"));
-      if (state.canWrite) {
-        const undo = el("button", "link", "Undo");
-        undo.type = "button"; undo.disabled = busy;
-        undo.addEventListener("click", () => write(b, { placed: null, placed_odds: null }));
-        row.append(undo);
-      }
-      card.append(row);
-    } else if (state.canWrite) {
-      if (state.editing === b.__id) {
-        const form = el("form", "oddsform");
-        const input = el("input");
-        input.id = "odds-" + b.__id; input.inputMode = "decimal"; input.placeholder = Number(b.odds).toFixed(2);
-        input.setAttribute("aria-label", "Odds you got");
-        const save = el("button", "primary", "Save odds"); save.type = "submit";
-        const cancel = el("button", "", "Cancel"); cancel.type = "button";
-        const msg = el("span", "when", "");
-        cancel.addEventListener("click", () => { state.editing = null; render(); });
-        form.addEventListener("submit", (ev) => {
-          ev.preventDefault();
-          const v = parseFloat(String(input.value).replace(",", "."));
-          if (!(v > 1.01 && v < 1000)) { msg.textContent = "Enter decimal odds, e.g. 2.05"; return; }
-          write(b, { placed: true, placed_odds: v });
-        });
-        form.append(input, save, cancel, msg);
-        card.append(form);
-        setTimeout(() => input.focus(), 0);
-      } else {
-        const actions = el("div", "actions");
-        const placed = el("button", "primary", "✅ Placed"); placed.type = "button";
-        const skipped = el("button", "", "❌ Skipped"); skipped.type = "button";
-        const other = el("button", "", "🔢 Different odds"); other.type = "button";
-        for (const btn of [placed, skipped, other]) btn.disabled = busy;
-        placed.addEventListener("click", () => write(b, { placed: true }));
-        skipped.addEventListener("click", () => write(b, { placed: false }));
-        other.addEventListener("click", () => { state.editing = b.__id; render(); });
-        actions.append(placed, skipped, other);
-        card.append(actions);
+// ---------- the analysis (all numbers from the data file; the AI only reads screenshots) ----------
+function analyze(match, odds, book, superOdds) {
+  const R = state.data.rules, now = Date.now();
+  const ko = new Date(match.kickoff).getTime();
+  const ageH = match.ref_time ? (now - new Date(match.ref_time).getTime()) / 3.6e6 : 999;
+  const out = { match, book, odds, ageH, lines: [], best: null, others: [], warnings: [], problem: null, superOdds };
+  if (ko <= now + R.min_minutes * 60000) { out.problem = "Too late: this match starts in less than 15 minutes (or has started)."; return out; }
+  if (ageH > R.stale_refuse_hours) { out.problem = `My free fair price is ${Math.round(ageH)} hours old — too old to trust. I won't guess.`; return out; }
+  const stale = ageH > R.stale_warn_hours;
+  const cands = [];
+  for (const market of ["1X2", "OU2.5"]) {
+    const fair = match.fair[market]; if (!fair) continue;
+    const sels = SELS[market];
+    const given = sels.map((s) => odds[`${market}:${s}`]);
+    const complete = given.every((g) => g > 1);
+    let moved = null;
+    if (complete && stale) {
+      const q = given.map((g) => 1 / g), t = q.reduce((a, b) => a + b, 0);
+      const gaps = q.map((x, i) => x / t - fair[i]);
+      const j = gaps.reduce((bi, g, i) => Math.abs(g) > Math.abs(gaps[bi]) ? i : bi, 0);
+      if (Math.abs(gaps[j]) > R.moved_pp) {
+        moved = j;
+        out.warnings.push(`${BOOKS[book] || book}'s prices differ a lot from the ${Math.round(ageH)}-hour-old fair price (${labelFor(market, sels[j], match.home, match.away)}). The market probably moved on news, so any "edge" here isn't reliable.`);
       }
     }
-    return card;
+    const margin = complete ? given.reduce((a, g) => a + 1 / g, 0) - 1 : null;
+    sels.forEach((sel, i) => {
+      const p = fair[i], o = given[i];
+      const line = { market, sel, label: labelFor(market, sel, match.home, match.away), p, fair: 1 / p, min: (1 + R.edge_threshold) / p, odds: o, edge: null, ok: false, note: "" , model: match.model?.[market]?.[i] };
+      if (o > 1) {
+        line.edge = p * o - 1;
+        let ok = line.edge >= R.edge_threshold && line.edge <= R.max_edge && o >= R.min_odds && o <= R.max_odds;
+        if (line.edge > R.max_edge) line.note = "too good to be true — probably a wrong price";
+        else if (ok && moved !== null) { ok = false; line.note = "fair price out of date"; }
+        else if (line.edge >= R.edge_threshold && (o < R.min_odds || o > R.max_odds)) line.note = "odds outside 1.25–8.00";
+        line.ok = ok;
+        if (ok) cands.push({ ...line, margin });
+      }
+      out.lines.push(line);
+    });
   }
-
-  function renderOpen() {
-    const box = $("open");
-    box.replaceChildren();
-    const open = state.bets.filter((b) => b.status === "open").sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
-    if (!open.length) {
-      box.append(el("p", "empty", "No open bets. Send Claude a Betano screenshot or match link; when it finds value, the bet appears here with its stake and a place-before time."));
-      return;
-    }
-    for (const b of open) box.append(slip(b));
+  cands.sort((a, b) => b.edge - a.edge);
+  if (cands.length) {
+    out.best = cands[0]; out.others = cands.slice(1);
+    const st = stakeFor(out.best.p, out.best.odds, { stale });
+    out.best.stake = st.stake; out.best.stakeWhy = st.why;
+    out.best.confidence = stale ? "low" : out.best.edge >= 0.12 ? "low" : out.best.edge >= 0.05 ? "medium" : "medium";
   }
+  if (stale) out.warnings.push(`The free fair price is ${Math.round(ageH)} h old. News since then (injuries, line-ups) may have changed it, so confidence is low.`);
+  if (!(state.data.core_leagues || []).includes(match.league)) out.warnings.push(`${leagueName(match.league)} is outside your main leagues; past tests found no reliable edge in smaller leagues.`);
+  if (Object.keys(odds).length && Object.keys(odds).length < 5) out.warnings.push("Only some odds were readable; show both the 1X2 and the Over/Under 2.5 tabs for a full check.");
+  return out;
+}
 
-  function renderDone() {
-    const box = $("done");
-    box.replaceChildren();
-    const done = state.bets.filter((b) => b.status !== "open").sort((a, b) => String(b.settled_at || "").localeCompare(String(a.settled_at || "")));
-    if (!done.length) { box.append(el("p", "empty", "No results yet. Bets are graded a few hours after full time.")); return; }
-    const list = el("div", "results");
-    for (const b of done) {
-      const row = el("div", "res");
-      row.append(el("span", "w " + b.status, b.status));
-      const m = el("div", "m");
-      const name = el("b", "", b.kind === "parlay" ? "Parlay" : `${b.home} v ${b.away}`);
-      m.append(name, el("span", "", `${b.label} @ ${Number(b.placed_odds || b.odds).toFixed(2)}${b.score ? " · " + b.score : ""}${b.placed === false ? " · skipped" : ""}`));
-      const p = el("div", "p", b.pnl === null || b.pnl === undefined ? "–" : eur(b.pnl));
-      p.style.color = b.pnl > 0 ? "var(--win)" : b.pnl < 0 ? "var(--loss)" : "";
-      p.append(el("span", "", b.clv === null || b.clv === undefined ? "CLV –" : `CLV ${pct(b.clv)}`));
-      row.append(m, p);
-      list.append(row);
+function bestParlay(newLeg) {
+  const now = Date.now();
+  const legs = state.bets.filter((b) => b.kind === "single" && b.status === "open" && b.placed !== false && new Date(b.kickoff).getTime() > now + 15 * 60000)
+    .map((b) => ({ match_id: b.match_id, label: b.label, home: b.home, away: b.away, odds: +(b.placed_odds || b.odds), p: +b.p_fair, book: b.bookmaker, margin: 0.05, league: b.league, kickoff: b.kickoff, market: b.market, sel: b.selection }));
+  if (newLeg && !legs.some((l) => l.match_id === newLeg.match_id)) legs.push(newLeg);
+  const byBook = {}; for (const l of legs) (byBook[l.book] ||= []).push(l);
+  let best = null;
+  for (const list of Object.values(byBook)) {
+    const pool = list.sort((a, b) => (b.p * b.odds) - (a.p * a.odds)).slice(0, 8);
+    const combos = [];
+    for (let i = 0; i < pool.length; i++) for (let j = i + 1; j < pool.length; j++) { combos.push([pool[i], pool[j]]); for (let k = j + 1; k < pool.length; k++) combos.push([pool[i], pool[j], pool[k]]); }
+    for (const c of combos) {
+      const odds = c.reduce((a, l) => a * l.odds, 1), p = c.reduce((a, l) => a * l.p, 1);
+      const r = riskFor(state.settings); const f = Math.min(Math.max(0, (p * odds - 1) / (odds - 1)) * r.kelly, 0.005);
+      if (f <= 0) continue;
+      const g = p * Math.log1p(f * (odds - 1)) + (1 - p) * Math.log1p(-f);
+      if (!best || g > best.g) best = { legs: c, odds, p, g, margin: 1 - c.reduce((a, l) => a / (1 + l.margin), 1) };
     }
-    box.append(list);
   }
+  return best;
+}
 
-  function render() { renderStats(); renderGates(); renderOpen(); renderDone(); }
-  render();
+// ---------- storage ----------
+const docId = (id) => id.replace(/\|/g, "~").replace(/,/g, ".");
+async function saveBet(an) {
+  if (!state.db || !an.best || !(an.best.stake > 0)) return null;
+  const m = an.match, b = an.best;
+  const existing = state.bets.find((x) => x.kind === "single" && x.status === "open" && x.match_id === m.id);
+  if (existing?.placed) return "kept (you already placed one on this match)";
+  const id = `${m.id}|${b.market}|${b.sel}`;
+  const entry = {
+    id, doc_id: docId(id), kind: "single", mode: "paper", created_at: new Date().toISOString(), match_id: m.id, league: m.league,
+    league_name: leagueName(m.league), home: m.home, away: m.away, kickoff: m.kickoff, min_odds: +b.min.toFixed(3),
+    market: b.market, selection: b.sel, label: b.label, bookmaker: an.book, odds: b.odds, fair_odds: +b.fair.toFixed(3),
+    p_fair: +b.p.toFixed(5), edge: +b.edge.toFixed(5), stake: b.stake, confidence: b.confidence, ref_time: m.ref_time,
+    reason: `${BOOKS[an.book] || an.book} pays ${b.odds.toFixed(2)} for ${b.label}; the fair price is ${b.fair.toFixed(2)} after removing the margin, so this is ${pct(b.edge)} better than fair.`,
+    legs: [{ match_id: m.id, league: m.league, home: m.home, away: m.away, kickoff: m.kickoff, market: b.market, selection: b.sel, odds: b.odds }],
+    placed: null, placed_odds: null, status: "open", pnl: null, clv: null, closing_fair_odds: null, score: null, settled_at: null,
+  };
+  try {
+    if (existing && existing.__id !== entry.doc_id) await state.db.collection("bets").doc(existing.__id).delete();
+    await state.db.collection("bets").doc(entry.doc_id).set(entry);
+    return existing ? "updated" : "added";
+  } catch (e) { return null; }
+}
+async function logCheck(an) {
+  if (!state.db) return;
+  const doc = { at: new Date().toISOString(), match_id: an.match.id, league: an.match.league, book: an.book, odds: an.odds,
+    best_edge: an.best ? +an.best.edge.toFixed(4) : Math.max(...an.lines.filter((l) => l.edge !== null).map((l) => l.edge), -1),
+    verdict: an.problem ? "refused" : an.best ? "value" : "skip", ref_age_h: Math.round(an.ageH) };
+  try { await state.db.collection("checks").add(doc); } catch { /* the check itself still worked */ }
+}
 
-  (async () => {
-    const conn = $("conn");
-    const timer = setTimeout(() => { conn.hidden = false; conn.textContent = "Can't reach your bets yet. They'll appear when the connection comes back."; }, 10000);
-    const db = await window.claude?.use?.("db");
-    if (!db) {
-      clearTimeout(timer);
-      conn.hidden = false;
-      conn.textContent = "Open this page in Claude while signed in to see your bets.";
-      return;
+// ---------- rendering: analysis card ----------
+function renderAnalysis(an) {
+  const m = an.match, box = el("div", "an");
+  const head = el("div", "head");
+  head.append(el("span", "match", `${m.home} v ${m.away}`), el("span", "muted small", `${leagueName(m.league)} · ${when(m.kickoff)}`));
+  box.append(head);
+  if (an.problem) { box.append(el("div", "verdict skip", an.problem)); return box; }
+  const book = BOOKS[an.book] || an.book;
+  const v = el("div", "verdict " + (an.best ? "bet" : "skip"));
+  if (an.best) {
+    const b = an.best;
+    v.textContent = b.stake > 0
+      ? `✅ BET: ${b.label} @ ${b.odds.toFixed(2)} at ${book} · stake ${eur(b.stake)} · edge ${pct(b.edge)} · confidence ${b.confidence}`
+      : `✅ Value: ${b.label} @ ${b.odds.toFixed(2)} (${pct(b.edge)}) — but ${b.stakeWhy}`;
+  } else if (Object.keys(an.odds).length) v.textContent = `❌ No value at these ${book} odds. Skip this match. Bankroll protected.`;
+  else v.textContent = `Send ${book}'s odds (a screenshot) and I'll tell you if one is worth it.`;
+  box.append(v);
+  if (an.best && an.best.stake > 0) {
+    const ko = new Date(m.kickoff).getTime();
+    box.append(el("p", "small", `Place before ${when(new Date(ko - 15 * 60000).toISOString())}. If the odds drop below ${an.best.min.toFixed(2)}, skip it.`));
+    if (an.others.length) box.append(el("p", "small muted", `Also value: ${an.others.map((o) => `${o.label} (${pct(o.edge)})`).join(", ")} — but take only ONE bet per match.`));
+  }
+  const wrap = el("div", "scroll"), t = el("table", "tbl");
+  const thead = el("tr"); ["Bet", "Fair", "Min", book, "Edge", "Model"].forEach((h, i) => { const th = el("th", i ? "r" : "", h); thead.append(th); });
+  t.append(thead);
+  for (const l of an.lines) {
+    const tr = el("tr");
+    tr.append(el("td", "", l.label), el("td", "r", l.fair.toFixed(2)), el("td", "r", l.min.toFixed(2)),
+      el("td", "r", l.odds ? l.odds.toFixed(2) : "–"));
+    const e = el("td", "r " + (l.ok ? "ok" : l.edge === null ? "no" : l.edge < 0 ? "no" : "warn"), l.edge === null ? "–" : (l.ok ? "✅ " : "") + pct(l.edge));
+    if (l.note) e.title = l.note;
+    tr.append(e, el("td", "r muted", l.model ? (1 / l.model).toFixed(2) : "–"));
+    t.append(tr);
+  }
+  wrap.append(t); box.append(wrap);
+  const ageNote = m.ref_time ? `Fair prices: ${m.refs.join(", ").replace("betfair_exchange", "Betfair Exchange").replace("pinnacle", "Pinnacle")}, margin removed, ${Math.round(an.ageH)} h old.` : "";
+  box.append(el("p", "small muted", `Min = the lowest odds worth betting. ${ageNote} "Model" is our own second opinion from team history; in tests it was less accurate than the market, so it never decides a bet.`));
+  for (const w of an.warnings) box.append(el("p", "small warn", "⚠ " + w));
+  // facts
+  const det = el("details"); det.append(el("summary", "", "Match facts: form, goals, xG, head-to-head"));
+  const f = el("div", "facts");
+  for (const [team, facts] of [[m.home, m.home_facts], [m.away, m.away_facts]]) {
+    const d = el("div");
+    d.append(el("b", "", team));
+    if (!facts || !facts.played) d.append(el("div", "muted", "no recent data"));
+    else {
+      const form = el("div"); form.append("Form ", el("span", "form", facts.form || "–")); d.append(form);
+      d.append(el("div", "", `Goals: ${facts.goals_for} for, ${facts.goals_against} against (last ${facts.played})`));
+      if (facts.xg_for !== undefined) d.append(el("div", "", `xG: ${facts.xg_for} for, ${facts.xg_against} against (last 5)`));
+      d.append(el("div", "muted", `${facts.rest_days} days since last match`));
     }
-    state.db = db;
-    try {
-      const user = await window.claude.use("user");
-      state.canWrite = (await user?.isOwner()) ?? false;
-    } catch { state.canWrite = false; }
-    render();
-    db.collection("bets").onSnapshot((snap) => {
-      if (!snap.metadata.fromCache) { clearTimeout(timer); conn.hidden = true; }
-      state.bets = snap.docs.map((d) => ({ ...d.data(), __id: d.id }));
-      render();
-    }, () => { clearTimeout(timer); conn.hidden = false; conn.textContent = "Lost the connection to your bets. Reopen the page to try again."; });
-    db.doc("meta/summary").onSnapshot((snap) => {
-      state.summary = snap.exists ? snap.data() : null;
-      render();
-    }, () => {});
-  })();
+    f.append(d);
+  }
+  det.append(f);
+  if (m.model?.expected_goals) det.append(el("p", "small", `Model expects about ${m.model.expected_goals[0]} – ${m.model.expected_goals[1]} goals.`));
+  if (m.h2h?.length) det.append(el("p", "small", "Head-to-head: " + m.h2h.map((h) => `${h.home} ${h.score} ${h.away} (${h.date.slice(0, 4)})`).join(" · ")));
+  det.append(el("p", "small muted", "No player, injury or line-up data is available for free, so none is used."));
+  box.append(det);
+  const timing = state.data.timing?.[`${m.league}|${an.best?.market || "1X2"}`];
+  if (timing) box.append(el("p", "small muted", `Timing: ${timing}.`));
+  return box;
+}
+
+// ---------- chat ----------
+function addMsg(who, content) {
+  const chat = $("chat");
+  const m = el("div", "msg " + who + (content instanceof Node ? " card-msg" : ""));
+  if (content instanceof Node) m.append(content); else m.textContent = content;
+  chat.append(m); m.scrollIntoView({ block: "end", behavior: "smooth" });
+  return m;
+}
+function sampleError(e) {
+  const c = e?.code;
+  if (c === "not_granted" || c === "sampling_disabled") return "Claude isn't allowed for this page, so I can't read screenshots or chat here. You can still use Watchlist, Bets and Budget.";
+  if (c === "rate_limited") return "Too many requests right now (or your Claude usage limit). Try again in a few minutes.";
+  if (c === "image_rejected") return "That file couldn't be read. Try a normal screenshot or a shorter recording.";
+  if (c === "invalid_json") return "I couldn't read the odds from that. Try again, or send a clearer screenshot.";
+  if (c === "cancelled") return "Stopped.";
+  return "Something went wrong talking to Claude. Try again.";
+}
+
+async function videoFrames(file, maxFrames) {
+  const url = URL.createObjectURL(file);
+  try {
+    const v = document.createElement("video"); v.muted = true; v.playsInline = true; v.preload = "auto"; v.src = url;
+    await new Promise((res, rej) => { v.onloadeddata = res; v.onerror = () => rej(new Error("video")); setTimeout(() => rej(new Error("timeout")), 15000); });
+    const dur = isFinite(v.duration) ? v.duration : 10;
+    const n = Math.max(1, Math.min(maxFrames, Math.ceil(dur / 1.2)));
+    const scale = Math.min(1, 720 / (v.videoWidth || 720));
+    const c = document.createElement("canvas"); c.width = Math.round((v.videoWidth || 720) * scale); c.height = Math.round((v.videoHeight || 1280) * scale);
+    const ctx = c.getContext("2d"); const out = [];
+    for (let i = 0; i < n; i++) {
+      await new Promise((res) => { const t = setTimeout(res, 3000); v.onseeked = () => { clearTimeout(t); res(); }; v.currentTime = Math.min(dur - 0.05, (dur * (i + 0.5)) / n); });
+      ctx.drawImage(v, 0, 0, c.width, c.height);
+      out.push(await new Promise((r) => c.toBlob(r, "image/jpeg", 0.85)));
+    }
+    return out.filter(Boolean);
+  } finally { URL.revokeObjectURL(url); }
+}
+
+const READ_PROMPT = `These images are screenshots or frames of a screen recording from a betting site on a phone (often Betano, Winbet or Palms Bet, often in Bulgarian).
+Read every FOOTBALL match visible with its decimal odds. Merge the same match seen in several frames into one entry.
+Markets to read:
+- the main full-time result (1 / X / 2, Bulgarian "Краен резултат"). If a boosted "Super odds" / "Супер коефициенти" / "СК" version is also shown, use those higher numbers and set "super": true.
+- Over/Under 2.5 total goals ("Над 2.5" / "Под 2.5", "Общо голове").
+Only copy numbers you can clearly read; leave a field out if unsure. Never guess or calculate odds.
+Give English club names in home_en/away_en (e.g. "Ливърпул" -> "Liverpool", "Манчестър Юнайтед" -> "Man United").
+Reply with only JSON like:
+{"bookmaker":"betano","matches":[{"home":"Ливърпул","away":"Манчестър Юнайтед","home_en":"Liverpool","away_en":"Man United","date":"22/11 18:30","super":false,"odds":{"1":1.75,"X":4.1,"2":4.3,"over25":1.5,"under25":2.6}}]}
+bookmaker is one of betano, winbet, palmsbet, efbet, bet365, other. If no football odds are visible, reply {"bookmaker":"other","matches":[]}.`;
+
+async function readScreens(files, note) {
+  const maxCount = Math.min(state.limits?.images?.maxCount || 8, 16);
+  let images = [];
+  for (const f of files) {
+    if (f.type.startsWith("video/") || /\.(mov|mp4|m4v)$/i.test(f.name)) images.push(...await videoFrames(f, maxCount));
+    else images.push(f);
+  }
+  if (images.length > maxCount) { const step = images.length / maxCount; images = Array.from({ length: maxCount }, (_, i) => images[Math.floor(i * step)]); }
+  const prompt = READ_PROMPT + (note ? `\nThe user added: ${note.slice(0, 300)}` : "");
+  return state.sample.json(prompt, { images, modelTier: "default" });
+}
+
+async function handleScreens(files, note) {
+  const thinking = addMsg("bot", "Reading the odds… (recordings take up to a minute)");
+  let read;
+  try { read = await readScreens(files, note); } catch (e) { thinking.textContent = sampleError(e); return; }
+  const book = (read?.bookmaker || "other").toLowerCase();
+  const list = Array.isArray(read?.matches) ? read.matches : [];
+  if (!list.length) { thinking.textContent = "I couldn't see any football odds in that. Make sure the 1 / X / 2 numbers are on screen."; return; }
+  thinking.textContent = `Read ${list.length} match${list.length > 1 ? "es" : ""} from ${BOOKS[book] || "the site"}. Checking each against the fair price…`;
+  let found = 0, value = 0; const notCovered = [];
+  for (const r of list) {
+    const m = findMatch(r.home_en || r.home, r.away_en || r.away, [r.home, r.away].filter(Boolean));
+    if (!m) { notCovered.push(`${r.home_en || r.home} v ${r.away_en || r.away}`); continue; }
+    found++;
+    const o = r.odds || {}, odds = {};
+    const num = (x) => { const v = parseFloat(String(x).replace(",", ".")); return v > 1 ? v : null; };
+    if (num(o["1"])) odds["1X2:H"] = num(o["1"]); if (num(o["X"])) odds["1X2:D"] = num(o["X"]); if (num(o["2"])) odds["1X2:A"] = num(o["2"]);
+    if (num(o.over25)) odds["OU2.5:O"] = num(o.over25); if (num(o.under25)) odds["OU2.5:U"] = num(o.under25);
+    const an = analyze(m, odds, book, !!r.super);
+    addMsg("bot", renderAnalysis(an));
+    logCheck(an);
+    if (an.best && an.best.stake > 0) {
+      value++;
+      const action = await saveBet(an);
+      if (action) addMsg("bot", `[PAPER] Saved to your bets (${action}).`);
+      const pl = bestParlay({ match_id: m.id, label: an.best.label, home: m.home, away: m.away, odds: an.best.odds, p: an.best.p, book, margin: an.best.margin ?? 0.05 });
+      if (pl && pl.legs.some((l) => l.match_id === m.id)) {
+        const st = stakeFor(pl.p, pl.odds, { parlay: true });
+        addMsg("bot", `Parlay option (${pl.legs.length} value legs at ${BOOKS[book] || book}): ${pl.legs.map((l) => `${l.home}–${l.away}: ${l.label} @ ${l.odds.toFixed(2)}`).join("; ")}. Pays ${pl.odds.toFixed(2)}, fair ${(1 / pl.p).toFixed(2)}, chance all win ${(pl.p * 100).toFixed(0)}%, bookmaker margin across legs ~${(pl.margin * 100).toFixed(0)}%. ${st.stake > 0 ? `Stake at most ${eur(st.stake)}.` : st.why}`);
+      }
+    }
+  }
+  const parts = [`Checked ${found} of ${list.length} matches.`];
+  if (found) parts.push(value ? `${value} value bet${value > 1 ? "s" : ""} found.` : "No value bets: skip them all. Bankroll protected.");
+  if (notCovered.length) parts.push(`Not in my free data (I won't guess): ${notCovered.slice(0, 8).join("; ")}${notCovered.length > 8 ? "…" : ""}.`);
+  if (!state.settings) parts.push("Set your budget in the Budget tab so I can size stakes.");
+  thinking.textContent = `Read ${list.length} match${list.length > 1 ? "es" : ""} from ${BOOKS[book] || "the site"}.`;
+  addMsg("bot", parts.join(" "));
+}
+
+// tools the chat AI may call: all numbers come from here
+function matchSummary(m) {
+  const lines = {};
+  for (const mk of ["1X2", "OU2.5"]) if (m.fair[mk]) SELS[mk].forEach((s, i) => { lines[labelFor(mk, s, m.home, m.away)] = { fair_odds: +(1 / m.fair[mk][i]).toFixed(2), worth_it_from: +((1 + state.data.rules.edge_threshold) / m.fair[mk][i]).toFixed(2), model_odds: m.model?.[mk] ? +(1 / m.model[mk][i]).toFixed(2) : null }; });
+  return { match: `${m.home} v ${m.away}`, league: leagueName(m.league), kickoff_sofia: when(m.kickoff), fair_price_age_hours: m.ref_time ? Math.round((Date.now() - new Date(m.ref_time)) / 3.6e6) : null,
+    lines, home_facts: m.home_facts, away_facts: m.away_facts, head_to_head: m.h2h, model_expected_goals: m.model?.expected_goals || null };
+}
+function statsSummary() {
+  const done = state.bets.filter((b) => (b.status === "won" || b.status === "lost") && b.placed !== false);
+  const staked = done.reduce((a, b) => a + +b.stake, 0), profit = done.reduce((a, b) => a + +b.pnl, 0);
+  const clv = done.filter((b) => b.clv !== null && b.clv !== undefined).map((b) => +b.clv);
+  return { settled_bets: done.length, open_bets: state.bets.filter((b) => b.status === "open").length, profit_eur: +profit.toFixed(2),
+    roi: staked ? +(profit / staked).toFixed(3) : null, avg_clv: clv.length ? +(clv.reduce((a, b) => a + b, 0) / clv.length).toFixed(3) : null,
+    checks_done: state.checks.length, note: "Under ~300 settled bets nothing is proven." };
+}
+const TOOLS = [
+  { name: "find_match", description: "Look up one upcoming match in the free data. Returns fair odds, the minimum odds worth betting, our model's odds, form, goals, xG and head-to-head, or an error if not covered.",
+    inputSchema: { type: "object", properties: { home: { type: "string" }, away: { type: "string" } }, required: ["home", "away"] },
+    execute: (i) => { const m = findMatch(String(i.home || ""), String(i.away || "")); if (!m) throw new Error("Not in the free data (covered: 22 European leagues, prices refreshed Tue/Fri). Do not guess."); return matchSummary(m); } },
+  { name: "watchlist", description: "List upcoming matches in the user's main leagues with the minimum odds worth betting for each outcome.",
+    execute: () => (state.data?.matches || []).filter((m) => state.data.core_leagues.includes(m.league)).slice(0, 25).map((m) => { const s = matchSummary(m); return { match: s.match, kickoff: s.kickoff_sofia, worth_it_from: Object.fromEntries(Object.entries(s.lines).map(([k, v]) => [k, v.worth_it_from])) }; }) },
+  { name: "my_stats", description: "The user's paper-betting results so far: settled bets, profit, ROI, average CLV, number of checks.", execute: () => statsSummary() },
+  { name: "my_budget", description: "The user's budget settings and the stake rules that follow from them.",
+    execute: () => { const s = state.settings; if (!s) return { set: false }; const r = riskFor(s); return { set: true, budget_eur: s.bankroll, monthly_deposit_eur: s.deposit, priority: r.label, max_per_bet_eur: +(s.bankroll * r.maxBet).toFixed(2), max_per_day_eur: +(s.bankroll * r.maxDay).toFixed(2), sites: s.books }; } },
+];
+const RULES = `You are EdgeBot's chat inside the user's private betting app. The user is not a programmer; answer in short, plain English.
+Hard rules:
+- Every number you give (odds, probabilities, stakes, results) must come from a tool result in this conversation. Never invent or estimate odds, probabilities or picks yourself.
+- If a match is not covered, say so plainly; do not guess.
+- A bet is only worth it when the bookmaker's odds are at or above "worth_it_from". If the user hasn't given the bookmaker's odds, tell them the "worth it from" prices and ask for a screenshot.
+- "Our model" is only a second opinion; in tests it was less accurate than the market, so it never decides a bet.
+- No player, injury or line-up data is available; say so if asked.
+- Be honest: past tests found only a small, unproven edge in top leagues. Never promise profit; never use hype words. This is paper mode (pretend money) until the go-live gates pass.
+- To size a stake, use my_budget; if the budget isn't set, ask the user to fill in the Budget tab.`;
+
+async function handleText(text) {
+  if (!state.sample) { addMsg("bot", "Chat needs Claude, which isn't available on this page right now. Use the buttons above."); return; }
+  state.chatTurns.push({ role: "user", content: text });
+  const turns = state.chatTurns.slice(-10);
+  const bubble = addMsg("bot", "Thinking…");
+  try {
+    const { text: answer } = await state.sample([{ role: "user", content: RULES }, ...turns], { tools: TOOLS, modelTier: "quick", onText: ({ text: t }) => { bubble.textContent = t; } });
+    bubble.textContent = answer; state.chatTurns.push({ role: "assistant", content: answer });
+  } catch (e) { bubble.textContent = e?.text || sampleError(e); }
+}
+
+function showWatchlist() {
+  const list = (state.data?.matches || []).filter((m) => state.data.core_leagues.includes(m.league));
+  if (!list.length) { addMsg("bot", "No upcoming matches in your main leagues in the current free data. New prices come on Tuesday and Friday."); return; }
+  const box = el("div", "an"); box.append(el("h3", "", "Watchlist · worth it from (minimum odds)"));
+  const wrap = el("div", "scroll"), t = el("table", "tbl"); const hr = el("tr");
+  ["Match", "1", "X", "2", "O2.5", "U2.5"].forEach((h, i) => hr.append(el("th", i ? "r" : "", h))); t.append(hr);
+  const thr = state.data.rules.edge_threshold;
+  for (const m of list) {
+    const tr = el("tr"); const name = el("td"); name.append(el("div", "", `${m.home} v ${m.away}`), el("div", "muted small", when(m.kickoff))); tr.append(name);
+    for (const [mk, i] of [["1X2", 0], ["1X2", 1], ["1X2", 2], ["OU2.5", 0], ["OU2.5", 1]]) tr.append(el("td", "r", m.fair[mk] ? ((1 + thr) / m.fair[mk][i]).toFixed(2) : "–"));
+    t.append(tr);
+  }
+  wrap.append(t); box.append(wrap, el("p", "small muted", "If your site shows a price at or above a number, send me a screenshot. Most will be below — that's normal."));
+  addMsg("bot", box);
+}
+
+// ---------- bets tab ----------
+async function writeBet(b, patch) {
+  if (!state.db || state.writing.has(b.__id)) return;
+  state.writing.add(b.__id); renderBets();
+  try { await state.db.collection("bets").doc(b.__id).update({ ...patch, user_updated_at: new Date().toISOString() }); }
+  catch { $("conn").hidden = false; $("conn").textContent = "Couldn't save that. Try again in a moment."; }
+  finally { state.writing.delete(b.__id); state.editing = null; renderBets(); }
+}
+function slip(b) {
+  const card = el("article", "card slip");
+  const top = el("div", "row"); top.style.justifyContent = "space-between";
+  top.append(el("b", "", b.kind === "parlay" ? `${b.legs?.length || 2}-leg parlay` : `${b.home} v ${b.away}`), el("span", "muted small", `${b.league_name || b.league} · ${when(b.kickoff)}`));
+  const pick = el("div", "pick"); pick.append(el("span", "", b.label), el("span", "odds", Number(b.placed_odds || b.odds).toFixed(2)));
+  card.append(top, pick, el("p", "small mono", `Stake ${eur(+b.stake)} · edge ${pct(+b.edge)} · skip below ${b.min_odds ? Number(b.min_odds).toFixed(2) : "–"} · ${BOOKS[b.bookmaker] || b.bookmaker}`));
+  const busy = state.writing.has(b.__id);
+  if (b.placed === true || b.placed === false) {
+    const row = el("div", "row"); row.append(el("span", "chip " + (b.placed ? "placed" : "skipped"), b.placed ? (b.placed_odds ? `placed at ${Number(b.placed_odds).toFixed(2)}` : "placed") : "skipped"));
+    if (state.canWrite) { const u = el("button", "link", "Undo"); u.type = "button"; u.disabled = busy; u.onclick = () => writeBet(b, { placed: null, placed_odds: null }); row.append(u); }
+    card.append(row);
+  } else if (state.canWrite) {
+    if (state.editing === b.__id) {
+      const form = el("form", "oddsform"); const input = el("input"); input.type = "text"; input.inputMode = "decimal"; input.id = "odds-" + b.__id; input.placeholder = Number(b.odds).toFixed(2); input.setAttribute("aria-label", "Odds you got");
+      const save = el("button", "btn primary", "Save odds"); save.type = "submit"; const cancel = el("button", "btn", "Cancel"); cancel.type = "button"; const msg = el("span", "small muted", "");
+      cancel.onclick = () => { state.editing = null; renderBets(); };
+      form.onsubmit = (ev) => { ev.preventDefault(); const v = parseFloat(String(input.value).replace(",", ".")); if (!(v > 1.01 && v < 1000)) { msg.textContent = "Enter decimal odds, e.g. 2.05"; return; } writeBet(b, { placed: true, placed_odds: v }); };
+      form.append(input, save, cancel, msg); card.append(form); setTimeout(() => input.focus(), 0);
+    } else {
+      const a = el("div", "row");
+      const p = el("button", "btn primary", "✅ Placed"), s = el("button", "btn", "❌ Skipped"), o = el("button", "btn", "🔢 Different odds");
+      [p, s, o].forEach((x) => { x.type = "button"; x.disabled = busy; });
+      p.onclick = () => writeBet(b, { placed: true }); s.onclick = () => writeBet(b, { placed: false }); o.onclick = () => { state.editing = b.__id; renderBets(); };
+      a.append(p, s, o); card.append(a);
+    }
+  }
+  return card;
+}
+function renderBets() {
+  const s = state.summary;
+  const done = state.bets.filter((b) => (b.status === "won" || b.status === "lost") && b.placed !== false);
+  const open = state.bets.filter((b) => b.status === "open");
+  const staked = s?.staked ?? done.reduce((a, b) => a + +b.stake, 0), profit = s?.profit ?? done.reduce((a, b) => a + +b.pnl, 0);
+  $("s-bets").textContent = String(s?.bets ?? done.length); $("s-open").textContent = `${open.length} open`;
+  $("s-profit").textContent = eur(profit); $("s-profit").style.color = profit > 0 ? "var(--win)" : profit < 0 ? "var(--loss)" : "";
+  $("s-staked").textContent = `${eur(staked)} staked`; $("s-roi").textContent = staked > 0 ? pct(profit / staked) : "–";
+  $("s-roi-r").textContent = s?.roi_ci ? `${pct(s.roi_ci[0])} to ${pct(s.roi_ci[1])}` : "needs bets";
+  $("s-clv").textContent = s?.clv != null ? pct(s.clv) : "–"; $("s-clv-r").textContent = s?.clv_ci ? `${pct(s.clv_ci[0])} to ${pct(s.clv_ci[1])}` : "beat the close";
+  const n = s?.bets ?? done.length; $("s-note").hidden = n >= 300; $("s-note").textContent = `Not enough data to judge anything yet (${n} of 300 settled bets).`;
+  const gates = s?.gates?.length ? s.gates : [
+    { name: "At least 1,000 paper bets", ok: false, detail: `${n} so far` }, { name: "Average CLV ≥ 2%", ok: false, detail: "no data" },
+    { name: "CLV 95% range above zero", ok: false, detail: "no data" }, { name: "Positive profit", ok: false, detail: eur(profit) },
+    { name: "Worst drop ≤ 20%", ok: true, detail: "0%" }, { name: "Your confirmation", ok: false, detail: "last step" }];
+  $("gate-bar").style.width = Math.min(100, (n / 1000) * 100) + "%";
+  $("gates").replaceChildren(...gates.map((g) => { const r = el("div", "gate"); r.append(el("span", "tick" + (g.ok ? " ok" : ""), g.ok ? "✓" : "○"), el("span", "", g.name), el("span", "d", g.detail)); return r; }));
+  const ob = $("open"); ob.replaceChildren();
+  if (!open.length) ob.append(el("p", "empty", "No open bets. Send a screenshot in Analyze; value bets appear here."));
+  else open.sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff))).forEach((b) => ob.append(slip(b)));
+  const db = $("done"); db.replaceChildren();
+  const settled = state.bets.filter((b) => b.status !== "open").sort((a, b) => String(b.settled_at || "").localeCompare(String(a.settled_at || "")));
+  if (!settled.length) db.append(el("p", "empty", "No results yet. Bets are graded after full time."));
+  else { const list = el("div", "results"); for (const b of settled) { const r = el("div", "res"); r.append(el("span", "w " + b.status, b.status)); const m = el("div", "m"); m.append(el("b", "", b.kind === "parlay" ? "Parlay" : `${b.home} v ${b.away}`), el("span", "", `${b.label} @ ${Number(b.placed_odds || b.odds).toFixed(2)}${b.score ? " · " + b.score : ""}`)); const p = el("div", "p", b.pnl == null ? "–" : eur(+b.pnl)); p.style.color = b.pnl > 0 ? "var(--win)" : b.pnl < 0 ? "var(--loss)" : ""; p.append(el("span", "", b.clv == null ? "CLV –" : `CLV ${pct(+b.clv)}`)); r.append(m, p); list.append(r); } db.append(list); }
+}
+
+// ---------- precision tab ----------
+function groupTable(rows, key, label) {
+  const g = {}; for (const r of rows) (g[key(r)] ||= []).push(r);
+  const keys = Object.keys(g); if (!keys.length) return el("p", "muted small", "No graded bets yet.");
+  const t = el("table", "tbl"); const h = el("tr"); [label, "Bets", "Beat close", "Avg CLV", "Profit"].forEach((x, i) => h.append(el("th", i ? "r" : "", x))); t.append(h);
+  for (const k of keys.sort((a, b) => g[b].length - g[a].length)) {
+    const list = g[k], clv = list.filter((b) => b.clv != null).map((b) => +b.clv);
+    const tr = el("tr"); tr.append(el("td", "", k), el("td", "r", String(list.length)), el("td", "r", clv.length ? Math.round(100 * clv.filter((x) => x > 0).length / clv.length) + "%" : "–"),
+      el("td", "r", clv.length ? pct(clv.reduce((a, b) => a + b, 0) / clv.length) : "–"), el("td", "r", eur(list.reduce((a, b) => a + (+b.pnl || 0), 0)))); t.append(tr);
+  }
+  return t;
+}
+function renderPrecision() {
+  const graded = state.bets.filter((b) => b.status === "won" || b.status === "lost");
+  const clv = graded.filter((b) => b.clv != null).map((b) => +b.clv);
+  const main = $("prec-main"); main.replaceChildren();
+  if (!clv.length) main.append(el("p", "", "No graded bets yet. Precision appears after your first value bets are settled."));
+  else {
+    const avg = clv.reduce((a, b) => a + b, 0) / clv.length, beat = clv.filter((x) => x > 0).length / clv.length;
+    main.append(el("p", "", `${clv.length} graded bets · ${Math.round(beat * 100)}% beat the closing price · average CLV ${pct(avg)}.`));
+    main.append(el("p", "small muted", clv.length < 100 ? "Too few to trust yet; this number settles down after a few hundred bets." : avg > 0 ? "Positive CLV is the best early sign of a real edge." : "Negative CLV means the bot's prices were usually not better than the close. That's the honest warning sign."));
+  }
+  $("prec-league").replaceChildren(groupTable(graded, (b) => b.league_name || b.league, "League"));
+  $("prec-book").replaceChildren(groupTable(graded, (b) => BOOKS[b.bookmaker] || b.bookmaker, "Site"));
+  // line shopping: same match, same day, different sites
+  const byMatch = {}; for (const c of state.checks) (byMatch[c.match_id] ||= []).push(c);
+  const wins = {}; let compared = 0;
+  for (const list of Object.values(byMatch)) {
+    const books = [...new Set(list.map((c) => c.book))]; if (books.length < 2) continue;
+    for (const key of ["1X2:H", "1X2:D", "1X2:A", "OU2.5:O", "OU2.5:U"]) {
+      let best = null; for (const c of list) { const o = c.odds?.[key]; if (o && (!best || o > best.o)) best = { o, book: c.book }; }
+      if (best) { wins[best.book] = (wins[best.book] || 0) + 1; compared++; }
+    }
+  }
+  const shop = $("prec-shop"); shop.replaceChildren();
+  if (!compared) shop.append(el("p", "muted small", "Send the same match from two sites to compare them."));
+  else shop.append(el("p", "", Object.entries(wins).sort((a, b) => b[1] - a[1]).map(([b, n]) => `${BOOKS[b] || b}: best price ${n} of ${compared} times`).join(" · ")));
+  const checks = $("prec-checks"); checks.replaceChildren();
+  const v = state.checks.filter((c) => c.verdict === "value").length;
+  checks.append(el("p", "", state.checks.length ? `${state.checks.length} matches checked · ${v} had value (${Math.round(100 * v / state.checks.length)}%).` : "No checks yet."));
+}
+
+// ---------- settings ----------
+function readForm() {
+  const goal = document.querySelector('input[name="goal"]:checked')?.value || "protect";
+  return { bankroll: Math.max(0, +$("set-bankroll").value || 0), deposit: Math.max(0, +$("set-deposit").value || 0), goal,
+    more: goal === "grow" && $("set-more").checked, books: [...document.querySelectorAll("#set-books input:checked")].map((x) => x.value),
+    min_stake: Math.max(0.1, +$("set-min").value || 0.5) };
+}
+function previewRules() {
+  const s = readForm(), r = riskFor(s), box = $("rules-preview"); box.replaceChildren();
+  if (!s.bankroll) { box.append(el("p", "muted", "Enter your budget to see your rules.")); return; }
+  const stop = s.deposit > 0 ? Math.min(s.deposit, s.bankroll) : s.bankroll * 0.15;
+  box.append(el("p", "", `${r.label}: at most ${eur(s.bankroll * r.maxBet)} per bet, ${eur(s.bankroll * r.maxDay)} per day, parlays at most ${eur(s.bankroll * 0.005)}.`),
+    el("p", "", `Monthly stop: after losing ${eur(stop)} in a month, no more bets until next month.`),
+    el("p", "muted", `Stakes are a share of your budget based on the edge (Kelly × ${r.kelly}); most value bets will be well under the maximum.`));
+  if (s.bankroll * r.maxBet < s.min_stake) box.append(el("p", "warn", `With this budget the maximum bet (${eur(s.bankroll * r.maxBet)}) is below your site's minimum (${eur(s.min_stake)}), so the bot will mostly say "too small to bet". That's the safe answer.`));
+}
+function fillForm(s) {
+  if (!s) return;
+  $("set-bankroll").value = s.bankroll ?? ""; $("set-deposit").value = s.deposit ?? ""; $("set-min").value = s.min_stake ?? 0.5;
+  const g = document.getElementById(s.goal === "grow" ? "goal-grow" : "goal-protect"); if (g) g.checked = true;
+  $("set-more").checked = !!s.more;
+  document.querySelectorAll("#set-books input").forEach((x) => { x.checked = (s.books || []).includes(x.value); });
+  previewRules();
+}
+
+// ---------- tabs ----------
+function selectTab(name) {
+  for (const t of ["analyze", "bets", "precision", "settings"]) {
+    $("tab-" + t).setAttribute("aria-selected", String(t === name)); $("p-" + t).hidden = t !== name;
+  }
+  if (name === "precision") renderPrecision();
+}
+for (const t of ["analyze", "bets", "precision", "settings"]) $("tab-" + t).onclick = () => selectTab(t);
+
+// ---------- wiring ----------
+$("pick").onclick = () => $("file").click();
+$("file").onchange = () => {
+  state.files = [...$("file").files];
+  $("attach-list").replaceChildren(...state.files.map((f) => el("span", "", (f.type.startsWith("video") ? "🎬 " : "🖼 ") + f.name)));
+};
+$("composer").onsubmit = async (ev) => {
+  ev.preventDefault(); if (state.busy) return;
+  const text = $("text").value.trim(), files = state.files;
+  if (!text && !files.length) return;
+  state.busy = true; $("send").disabled = true;
+  addMsg("me", text || `${files.length} file${files.length > 1 ? "s" : ""}`);
+  $("text").value = ""; state.files = []; $("file").value = ""; $("attach-list").replaceChildren();
+  try {
+    if (!state.data) addMsg("bot", "Match data is still loading. Try again in a moment.");
+    else if (files.length) { if (!state.sample || !state.limits?.images) addMsg("bot", "Reading screenshots needs Claude with images, which isn't available here."); else await handleScreens(files, text); }
+    else await handleText(text);
+  } finally { state.busy = false; $("send").disabled = false; }
+};
+$("q-watch").onclick = () => { addMsg("me", "Watchlist"); showWatchlist(); };
+$("q-how").onclick = () => { selectTab("bets"); };
+$("q-today").onclick = () => {
+  addMsg("me", "Today's value bets");
+  const open = state.bets.filter((b) => b.status === "open" && new Date(b.kickoff) > new Date());
+  addMsg("bot", open.length ? open.map((b) => `${b.home} v ${b.away}: ${b.label} @ ${Number(b.odds).toFixed(2)} at ${BOOKS[b.bookmaker] || b.bookmaker}, stake ${eur(+b.stake)}, skip below ${Number(b.min_odds).toFixed(2)}`).join("\n") : "No open value bets right now. Send a screenshot to check matches.");
+};
+document.getElementById("settings-form").addEventListener("input", previewRules);
+$("settings-form").onsubmit = async (ev) => {
+  ev.preventDefault(); const s = readForm();
+  if (!s.bankroll) { $("settings-msg").textContent = "Enter your budget first."; return; }
+  if (!s.books.length) s.books = ["betano"];
+  if (!state.db) { state.settings = s; $("settings-msg").textContent = "Saved for this visit only (storage unavailable)."; return; }
+  $("save-settings").disabled = true;
+  try { await state.db.doc("settings/profile").set({ ...s, updated_at: new Date().toISOString() }); $("settings-msg").textContent = "Saved."; }
+  catch { $("settings-msg").textContent = "Couldn't save. Try again."; }
+  finally { $("save-settings").disabled = false; }
+};
+
+function greet() {
+  if (!state.settings) {
+    addMsg("bot", "Hi! Before I size any bet: open the Budget tab and tell me your betting budget, how much you deposit per month, and whether your priority is to make money or not to lose money.\n\nThen send me a Betano screenshot or screen recording (show the 1 / X / 2 and Over/Under 2.5 odds) and I'll tell you if anything is worth betting.");
+  } else {
+    addMsg("bot", "Send a screenshot or screen recording of the odds, tap Watchlist, or ask me anything about a covered match.");
+  }
+}
+
+// ---------- start ----------
+fetch("data/matches.json").then((r) => r.ok ? r.json() : Promise.reject(r.status)).then((d) => {
+  state.data = d;
+  const age = Math.round((Date.now() - new Date(d.published)) / 3.6e6);
+  $("data-age").textContent = `${d.matches.length} matches · fair prices ${age} h old`;
+}).catch(() => { $("data-age").textContent = "Match data unavailable"; });
+
+renderBets(); previewRules();
+let greeted = false;
+const greetOnce = () => { if (!greeted) { greeted = true; greet(); } };
+const greetTimer = setTimeout(greetOnce, 4000);
+
+(async () => {
+  const conn = $("conn");
+  const timer = setTimeout(() => { conn.hidden = false; conn.textContent = "Can't reach your saved data yet. It will appear when the connection comes back."; }, 10000);
+  const [db, user, sample] = await Promise.all([window.claude?.use?.("db"), window.claude?.use?.("user"), window.claude?.use?.("sample")]);
+  state.sample = sample || null;
+  if (sample) { try { state.limits = await sample.limits(); } catch { state.limits = null; } }
+  if (!state.limits?.images) $("pick").hidden = true;
+  if (!db) { clearTimeout(timer); conn.hidden = false; conn.textContent = "Open this page in Claude while signed in to save bets and settings."; greetOnce(); return; }
+  state.db = db;
+  try { state.canWrite = (await user?.isOwner()) ?? false; } catch { state.canWrite = false; }
+  db.collection("bets").onSnapshot((snap) => { if (!snap.metadata.fromCache) { clearTimeout(timer); conn.hidden = true; } state.bets = snap.docs.map((d) => ({ ...d.data(), __id: d.id })); renderBets(); if (!$("p-precision").hidden) renderPrecision(); },
+    () => { clearTimeout(timer); conn.hidden = false; conn.textContent = "Lost the connection to your bets. Reopen the page to try again."; });
+  db.doc("meta/summary").onSnapshot((snap) => { state.summary = snap.exists ? snap.data() : null; renderBets(); }, () => {});
+  db.collection("checks").onSnapshot((snap) => { state.checks = snap.docs.map((d) => d.data()); if (!$("p-precision").hidden) renderPrecision(); }, () => {});
+  let first = true;
+  db.doc("settings/profile").onSnapshot((snap) => {
+    state.settings = snap.exists ? snap.data() : null;
+    if (first) { first = false; fillForm(state.settings); clearTimeout(greetTimer); greetOnce(); if (!state.settings) selectTab("analyze"); }
+  }, () => { greetOnce(); });
+})();
 })();
 </script>

@@ -88,6 +88,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--out", help="for export/summary: where to write")
     p.add_argument("--at", help="pretend the time is this (UTC), for testing")
     p.add_argument("--config")
+    p = sub.add_parser("appdata", help="build the phone app's match data file")
+    p.add_argument("--out", default="app/data/matches.json")
+    p.add_argument("--config")
     p = sub.add_parser("variants", help="list every variant tested")
     p = sub.add_parser("holdout", help="run the one-time sealed final test")
     _add_common(p)
@@ -160,6 +163,18 @@ def main(argv: list[str] | None = None) -> int:
         from .paper_cli import run_paper
 
         print(run_paper(cfg, args))
+        return 0
+
+    if args.cmd == "appdata":
+        from . import appdata
+        from .check_cli import league_timing
+
+        timing = {}
+        for lg in cfg["football"]["leagues"]:
+            timing.update(league_timing(cfg, lg, data_dir()))
+        data = appdata.build(data_dir(), cfg, timing=timing)
+        out = appdata.write(Path(args.out), data)
+        print(f"{len(data['matches'])} matches written to {out} (prices published {data['published']})")
         return 0
 
     if args.cmd == "variants":
