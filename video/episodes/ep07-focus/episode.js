@@ -21,7 +21,7 @@ V.EPISODE = {
   transition: { type: 'fade', pre: 0.2, post: 0.2 },
 
   scenes: [
-    { id: 'cold-open', dur: 2.6, set: 'stage', action: 'coldOpen7', cam: { zoom: [0.55, 0.84], ease: 'inOut' },
+    { id: 'cold-open', dur: 2.6, labels: true, set: 'stage', action: 'coldOpen7', cam: { zoom: [0.55, 0.84], ease: 'inOut' },
       headline: 'Different focus.', red: 'focus.' },
 
     { id: 'morning', dur: 4.6, set: 'dawn', action: 'morning7', cam: { zoom: [0.8, 0.84] },
@@ -46,7 +46,7 @@ V.EPISODE = {
 
     { id: 'end-card', dur: 2.8, set: 'stage', action: 'endCard', fadeIn: 0.4,
       headline: 'Which one are you?', red: 'you?',
-      sub: 'Free 2-min fighter quiz — link in bio.', subColor: '#F4F5F7', sub2: '@GESHV1' },
+      sub: 'Free 2-minute quiz — link in bio.', subColor: '#F4F5F7', sub2: '@GESHV1' },
   ],
 
   // ── SOUND — minimal, physical only

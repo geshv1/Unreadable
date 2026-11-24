@@ -82,7 +82,8 @@
 
     if (st.fg) st.fg(g);                       // foreground layer (screen space): blurred figures close to the lens
     if (sc.grade) drawGrade(g, sc.grade, tl, sc.dur);
-    if (sc.labels !== false && ep.labels !== false) V.drawLabels(g, z, px);
+    // labels: scene setting wins (true/false), otherwise the episode setting
+    if (sc.labels != null ? sc.labels : ep.labels !== false) V.drawLabels(g, z, px);
     if (ep.vignette) drawVignette(g, ep.vignette);
     if (ep.grain) drawGrain(g, ep.grain, i);
     // CONTROL meters above each character (screen space, follow the camera)
