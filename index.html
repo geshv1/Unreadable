@@ -8,7 +8,7 @@
 <meta property="og:title" content="Unreadable · Read them. Stay unreadable.">
 <meta property="og:description" content="The book for guys who are done being read, used and underestimated. Dark psychology, the fighter's mind and a 12-week body plan. Instant PDF.">
 <meta property="og:image" content="https://geshv1.github.io/completefighter/cover.jpg">
-<meta name="theme-color" content="#08080b">
+<meta name="theme-color" content="#030304">
 <script src="config.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,8 +20,8 @@
    Serif italic for the voice, wide-tracked caps for labels, Anton only for the book's name.
    Sections are numbered as rounds. Film grain instead of decoration. */
 :root{
-  --bg:#08080b; --surface:#111116; --surface-2:#17171d; --ink:#f1f2f5; --soft:#c9cbd3; --muted:#868893;
-  --line:#23242c; --red:#d42a3c; --red-soft:#f0505f; --glow:rgba(240,80,95,.45);
+  --bg:#030304; --surface:#09090b; --surface-2:#0e0e11; --ink:#e4e2de; --soft:#a8a7a4; --muted:#6b6a6e;
+  --line:#17171b; --red:#8c1322; --red-soft:#c4323f; --glow:rgba(140,19,34,.4);
   --serif:"Playfair Display","Instrument Serif",Georgia,serif;
   --body:"Archivo","Helvetica Neue",Arial,sans-serif;
   --brand:"Anton","Arial Narrow",Impact,sans-serif;
@@ -45,21 +45,21 @@ h1,h2,h3{font-family:var(--serif);font-weight:400;font-style:italic;letter-spaci
 h2{font-size:clamp(38px,5.4vw,64px);margin:16px 0 16px}
 .eyebrow{display:flex;align-items:center;gap:12px;font-weight:500;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted)}
 .eyebrow b{color:var(--red-soft);font-weight:600}
-.eyebrow::after{content:"";flex:0 0 28px;height:1px;background:#3d3f49}
+.eyebrow::after{content:"";flex:0 0 28px;height:1px;background:#26272c}
 .center .eyebrow{justify-content:center}
-.center .eyebrow::before{content:"";flex:0 0 28px;height:1px;background:#3d3f49}
+.center .eyebrow::before{content:"";flex:0 0 28px;height:1px;background:#26272c}
 .lead{color:var(--soft);max-width:600px}
 .wordmark{font-family:var(--brand);font-weight:400;letter-spacing:.004em;line-height:.95;white-space:nowrap}
 .wordmark .o{color:transparent;-webkit-text-stroke:1.5px var(--red-soft)}
 
 /* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;background:var(--red);color:#fff;text-decoration:none;font-weight:600;font-size:13px;letter-spacing:.26em;text-transform:uppercase;padding:19px 34px;border-radius:999px;box-shadow:0 16px 44px -16px var(--glow);transition:background .2s,box-shadow .2s}
-.btn:hover{background:#bb2234;box-shadow:0 18px 50px -14px var(--glow)}
+.btn:hover{background:#70101c;box-shadow:0 18px 50px -14px var(--glow)}
 .textlink{color:var(--red-soft);font-weight:600;font-size:15px;text-decoration:none}
 .textlink:hover{text-decoration:underline;text-underline-offset:4px}
 
 /* top bar + quiz result banner */
-.top{position:sticky;top:0;z-index:20;background:rgba(8,8,11,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top{position:sticky;top:0;z-index:20;background:rgba(3,3,4,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
 .logo{font-weight:700;font-size:13px;letter-spacing:.34em;text-decoration:none}
 .logo b{color:var(--red-soft)}
@@ -77,12 +77,12 @@ section{padding:104px 0;border-top:1px solid var(--line);position:relative}
 /* 1 · hero */
 .hero{position:relative;padding:64px 0 84px;overflow:hidden}
 .hero::before{content:"";position:absolute;left:68%;top:-120px;width:900px;height:900px;transform:translateX(-50%);pointer-events:none;
-  background:radial-gradient(closest-side,rgba(212,42,60,.20),rgba(212,42,60,.06) 55%,transparent 75%)}
+  background:radial-gradient(closest-side,rgba(140,19,34,.16),rgba(140,19,34,.04) 55%,transparent 75%)}
 .hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
 .kick{font-size:11px;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:var(--muted)}
 .hero h1{margin:0}
 .hero .wordmark{display:block;font-family:var(--brand);font-style:normal;font-size:clamp(56px,18.6vw,128px);margin-top:16px;letter-spacing:.004em}
-.hero .tagline{display:block;font-size:clamp(30px,3.6vw,44px);margin-top:12px;color:#ece9e2}
+.hero .tagline{display:block;font-size:clamp(30px,3.6vw,44px);margin-top:12px;color:#dcd8d0}
 .hero .lede{margin-top:18px;max-width:520px;color:var(--soft);font-size:18px}
 .hero .cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;margin-top:30px}
 .trust{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:20px;font-size:13px;color:var(--muted)}
@@ -98,23 +98,23 @@ section{padding:104px 0;border-top:1px solid var(--line);position:relative}
 .familiar .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
 .chat{display:grid;gap:22px}
 .msg{justify-self:end;max-width:88%;text-align:right}
-.bubble{display:inline-block;text-align:left;background:linear-gradient(180deg,#2b2b31,#232328);color:#f4f4f6;padding:12px 16px;border-radius:21px 21px 6px 21px;font-size:17px;line-height:1.35}
+.bubble{display:inline-block;text-align:left;background:linear-gradient(180deg,#1b1b1f,#151518);color:#e6e4e0;padding:12px 16px;border-radius:21px 21px 6px 21px;font-size:17px;line-height:1.35}
 .meta{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:8px}
 .meta b{color:var(--red-soft);font-weight:600}
 .msg .fix{display:none;text-align:right;font-size:14px;line-height:1.5;color:var(--ink);margin-top:8px}
 .msg.you .bubble{box-shadow:0 0 0 1.5px var(--red-soft),0 12px 34px -12px var(--glow)}
 .msg.you .meta::before{content:"You · ";color:var(--ink);font-weight:600}
 .msg.you .fix{display:block}
-.closer{font-family:var(--serif);font-style:italic;font-size:clamp(28px,3.2vw,40px);line-height:1.12;color:#ece9e2;margin:28px 0 18px}
+.closer{font-family:var(--serif);font-style:italic;font-size:clamp(28px,3.2vw,40px);line-height:1.12;color:#dcd8d0;margin:28px 0 18px}
 
 /* 3 · playbook */
-.play{max-width:760px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:linear-gradient(180deg,#121217,#0e0e12)}
+.play{max-width:760px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:linear-gradient(180deg,#0a0a0d,#070709)}
 .play .row{display:grid;grid-template-columns:1fr;padding:22px 22px 18px;border-bottom:1px solid var(--line)}
 .play .mv{font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--red-soft)}
 .play q{display:block;quotes:none;font-family:var(--serif);font-style:italic;font-size:clamp(23px,2.6vw,30px);line-height:1.2;color:var(--ink);margin:8px 0 14px}
 .ctr{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 .ctr .bars{display:flex;gap:6px;flex:1}
-.bar{height:13px;border-radius:2px;background:#000;box-shadow:inset 0 0 0 1px #2a2a31}
+.bar{height:13px;border-radius:2px;background:#000;box-shadow:inset 0 0 0 1px #1b1b20}
 .ctr svg{flex:none}
 .play .more{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 22px;font-size:15px;color:var(--soft);text-decoration:none}
 .play .more b{color:var(--ink);font-weight:600}
@@ -143,7 +143,7 @@ section{padding:104px 0;border-top:1px solid var(--line);position:relative}
 .pg img{width:100%;height:auto;aspect-ratio:643/1040;border-radius:5px;box-shadow:0 24px 48px -20px rgba(0,0,0,.95),0 0 0 1px rgba(255,255,255,.06)}
 .pg figcaption{font-size:13px;color:var(--muted);margin-top:12px}
 .dots{display:flex;gap:6px;justify-content:center;margin-top:22px}
-.dots i{width:6px;height:6px;border-radius:3px;background:#34353d;transition:width .25s,background .25s}
+.dots i{width:6px;height:6px;border-radius:3px;background:#222228;transition:width .25s,background .25s}
 .dots i.on{background:var(--red-soft);width:18px}
 
 /* 6 · proof */
@@ -157,11 +157,11 @@ section{padding:104px 0;border-top:1px solid var(--line);position:relative}
 .compare .lab{position:absolute;top:16px;z-index:2;font-family:var(--serif);font-style:italic;font-size:30px;line-height:1;pointer-events:none;text-shadow:0 1px 14px rgba(0,0,0,.75)}
 .compare .lab.a{left:18px}
 .compare .lab.n{right:18px;color:var(--red-soft);text-shadow:0 1px 14px rgba(0,0,0,.8),0 0 24px var(--glow)}
-.compare .cap{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;display:flex;justify-content:space-between;gap:10px;font-size:12px;color:#e6e3dc;pointer-events:none}
+.compare .cap{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;display:flex;justify-content:space-between;gap:10px;font-size:12px;color:#d6d3cc;pointer-events:none}
 .compare input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .hint{font-size:13px;color:var(--muted);margin-top:12px;text-align:center}
 .timeline{list-style:none;position:relative;margin:8px 0 0;padding-left:26px}
-.timeline::before{content:"";position:absolute;left:5px;top:10px;bottom:10px;width:1px;background:#33343d}
+.timeline::before{content:"";position:absolute;left:5px;top:10px;bottom:10px;width:1px;background:#222228}
 .timeline li{position:relative;padding:0 0 22px}
 .timeline li::before{content:"";position:absolute;left:-25px;top:8px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:1.5px solid var(--red-soft)}
 .timeline li:last-child::before{background:var(--red-soft);box-shadow:0 0 12px var(--glow)}
@@ -172,7 +172,7 @@ section{padding:104px 0;border-top:1px solid var(--line);position:relative}
 
 /* story */
 .story .wrap{max-width:760px}
-.story p{margin-bottom:18px;color:#d6d3cc;font-size:18px}
+.story p{margin-bottom:18px;color:#c2beb6;font-size:18px}
 .story .pull{font-family:var(--serif);font-style:italic;font-size:28px;line-height:1.35;color:var(--ink);border-left:2px solid var(--red-soft);padding-left:22px;margin:30px 0}
 .sign{font-family:var(--serif);font-style:italic;font-size:30px;color:var(--ink);margin-top:26px}
 .sign small{display:block;font-family:var(--body);font-style:normal;font-size:11px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--red-soft);margin-top:4px}
@@ -181,27 +181,27 @@ section{padding:104px 0;border-top:1px solid var(--line);position:relative}
 .dms{display:grid;grid-template-columns:1fr 1fr;gap:26px 32px;max-width:900px}
 .dm{display:flex;gap:12px;align-items:flex-end}
 .av{width:32px;height:32px;border-radius:50%;flex:none;filter:blur(.5px)}
-.dm .b{background:#1b1b20;border:1px solid #27272e;border-radius:21px 21px 21px 6px;padding:12px 16px;font-size:16px;line-height:1.4;color:#ececef}
+.dm .b{background:#111114;border:1px solid #1c1c21;border-radius:21px 21px 21px 6px;padding:12px 16px;font-size:16px;line-height:1.4;color:#dddbd7}
 .src{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:8px 0 0 44px}
 
 /* 8 · ticket */
 .offer .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
-.ticket{position:relative;border-radius:22px;background:linear-gradient(180deg,#16161b,#0f0f13);border:1px solid #2c2c34;overflow:hidden;box-shadow:0 40px 90px -50px var(--glow)}
+.ticket{position:relative;border-radius:22px;background:linear-gradient(180deg,#0c0c0f,#08080a);border:1px solid #1c1c21;overflow:hidden;box-shadow:0 40px 90px -50px var(--glow)}
 .ticket .tp{display:flex;gap:18px;padding:26px 26px 22px;align-items:center}
 .ticket .tp img{width:72px;height:auto;border-radius:3px;box-shadow:0 12px 26px -8px rgba(0,0,0,.9),0 0 34px -8px var(--glow)}
 .ticket .nm{font-size:34px}
 .ticket .nm .o{-webkit-text-stroke-width:1.1px}
 .ticket .sb{font-size:13px;color:var(--muted);margin-top:6px}
-.perf{position:relative;height:0;border-top:1.5px dashed #33343c;margin:0 20px}
-.perf::before,.perf::after{content:"";position:absolute;top:-14px;width:28px;height:28px;border-radius:50%;background:var(--bg);border:1px solid #2c2c34}
+.perf{position:relative;height:0;border-top:1.5px dashed #222228;margin:0 20px}
+.perf::before,.perf::after{content:"";position:absolute;top:-14px;width:28px;height:28px;border-radius:50%;background:var(--bg);border:1px solid #1c1c21}
 .perf::before{left:-35px}.perf::after{right:-35px}
 .ticket .bt{padding:22px 26px 26px}
 .price{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
 .price strong{font-family:var(--serif);font-weight:400;font-size:clamp(64px,8vw,84px);line-height:.85;font-variant-numeric:lining-nums}
-.seal{width:84px;height:84px;flex:none;border-radius:50%;border:1px solid #5a3038;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--red-soft);font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;line-height:1.3;transform:rotate(-8deg)}
+.seal{width:84px;height:84px;flex:none;border-radius:50%;border:1px solid #4a1820;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--red-soft);font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;line-height:1.3;transform:rotate(-8deg)}
 .seal b{font-family:var(--serif);font-size:28px;letter-spacing:0;color:var(--ink);font-weight:400;line-height:1}
 .checks{list-style:none;margin:22px 0 24px;display:grid;gap:10px}
-.checks li{font-size:15px;color:#dddbd6;display:flex;gap:12px;align-items:baseline}
+.checks li{font-size:15px;color:#cbc8c1;display:flex;gap:12px;align-items:baseline}
 .checks li::before{content:"";flex:none;width:10px;height:5px;border-left:1.5px solid var(--red-soft);border-bottom:1.5px solid var(--red-soft);transform:rotate(-45deg) translateY(-3px)}
 .ticket .btn{width:100%}
 .ticket .fine{text-align:center;margin:14px 0 0;font-size:13px}
@@ -224,11 +224,12 @@ details p{color:var(--soft);margin-top:12px;max-width:680px}
 .final{text-align:center;padding:96px 0 110px}
 .final h2{font-size:clamp(50px,8vw,104px);line-height:1;margin-top:22px}
 .final p{margin:20px auto 34px;max-width:520px;color:var(--soft)}
-.rule{position:relative;width:96px;height:1px;background:#3d3f49;margin:22px auto 0}
+.rule{position:relative;width:96px;height:1px;background:#26272c;margin:22px auto 0}
 .rule::after{content:"";position:absolute;left:50%;top:-1.5px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--red-soft);box-shadow:0 0 8px var(--glow)}
 .label{font-weight:700;font-size:12px;letter-spacing:.42em;text-transform:uppercase}
 .fighters{position:relative;max-width:440px;margin:8px auto 0}
 .fighters img{display:block;width:100%;height:auto;-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(transparent,#000 9%,#000 78%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(transparent,#000 9%,#000 78%,transparent);mask-composite:intersect}
+.fighters .quote{font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.3;color:var(--soft);max-width:330px;margin:-4px auto 0;text-wrap:balance}
 .fighters .labels span{position:absolute;top:77%;transform:translateX(-50%);padding-left:.42em;white-space:nowrap}
 .fighters .labels span:first-child{left:30.6%;color:var(--red-soft);text-shadow:0 0 18px var(--glow)}
 .fighters .labels span:last-child{left:69.4%;color:var(--ink);text-shadow:0 0 18px rgba(255,255,255,.35)}
@@ -309,8 +310,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
       <h1><span class="wordmark" aria-label="Unreadable">UN<span class="o">READ</span>ABLE</span><span class="tagline">Read them. Stay unreadable.</span></h1>
       <p class="lede">For the guy who's done being read, used and underestimated. How people steer you, how to stay calm under pressure, and a 12-week body plan that proves it.</p>
       <div class="cta">
-        <a class="btn buy" href="#offer" data-umami-event="buy-click" data-umami-event-spot="hero">Get the book <span aria-hidden="true">→</span></a>
-        <a class="textlink" href="#pages">Look inside first</a>
+        <a class="btn" href="#pages" data-umami-event="look-inside" data-umami-event-spot="hero">Look inside <span aria-hidden="true">↓</span></a>
       </div>
       <div class="trust"><span>Instant PDF</span><span>58 pages</span><span>14-day refund</span></div>
     </div>
@@ -353,11 +353,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
     </div>
     <div class="play">
       <div class="row"><div class="mv">The guilt trip</div><q>"After everything I've done for you..."</q>
-        <div class="ctr">Counter<span class="bars" aria-label="Hidden: the counter is in the book"><i class="bar" style="width:46%"></i><i class="bar" style="width:30%"></i></span><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5" width="8" height="6" rx="1" fill="#868893"/><path d="M4 5V3.6a2 2 0 0 1 4 0V5" stroke="#868893" stroke-width="1.3" fill="none"/></svg></div></div>
+        <div class="ctr">Counter<span class="bars" aria-label="Hidden: the counter is in the book"><i class="bar" style="width:46%"></i><i class="bar" style="width:30%"></i></span><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5" width="8" height="6" rx="1" fill="#6b6a6e"/><path d="M4 5V3.6a2 2 0 0 1 4 0V5" stroke="#6b6a6e" stroke-width="1.3" fill="none"/></svg></div></div>
       <div class="row"><div class="mv">Gaslighting</div><q>"That never happened. You're overreacting."</q>
-        <div class="ctr">Counter<span class="bars" aria-label="Hidden: the counter is in the book"><i class="bar" style="width:24%"></i><i class="bar" style="width:52%"></i></span><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5" width="8" height="6" rx="1" fill="#868893"/><path d="M4 5V3.6a2 2 0 0 1 4 0V5" stroke="#868893" stroke-width="1.3" fill="none"/></svg></div></div>
+        <div class="ctr">Counter<span class="bars" aria-label="Hidden: the counter is in the book"><i class="bar" style="width:24%"></i><i class="bar" style="width:52%"></i></span><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5" width="8" height="6" rx="1" fill="#6b6a6e"/><path d="M4 5V3.6a2 2 0 0 1 4 0V5" stroke="#6b6a6e" stroke-width="1.3" fill="none"/></svg></div></div>
       <div class="row"><div class="mv">The bait</div><q>"What, you scared?"</q>
-        <div class="ctr">Counter<span class="bars" aria-label="Hidden: the counter is in the book"><i class="bar" style="width:58%"></i><i class="bar" style="width:18%"></i></span><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5" width="8" height="6" rx="1" fill="#868893"/><path d="M4 5V3.6a2 2 0 0 1 4 0V5" stroke="#868893" stroke-width="1.3" fill="none"/></svg></div></div>
+        <div class="ctr">Counter<span class="bars" aria-label="Hidden: the counter is in the book"><i class="bar" style="width:58%"></i><i class="bar" style="width:18%"></i></span><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5" width="8" height="6" rx="1" fill="#6b6a6e"/><path d="M4 5V3.6a2 2 0 0 1 4 0V5" stroke="#6b6a6e" stroke-width="1.3" fill="none"/></svg></div></div>
       <a class="more" href="#offer" data-umami-event="playbook-more"><span><b>+ 8 more moves</b>, each with the exact words to answer</span><span aria-hidden="true">→</span></a>
     </div>
     <p class="honest">For defence, not for using on people. The book teaches you to see the move and answer it calmly, never to hurt someone.</p>
@@ -519,12 +519,12 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 <!-- FINAL -->
 <section class="final center">
   <div class="wrap" style="position:relative">
-    <div class="eyebrow">Same age. Same city.</div>
+    <div class="eyebrow">Pawn or king</div>
     <h2>Strong body.<br>Strong mind.<br><span class="r">Keep fighting.</span></h2>
     <div class="rule" aria-hidden="true"></div>
     <div class="fighters">
-      <img src="fighters.svg" width="320" height="372" loading="lazy" alt="Two stick-figure fighters squaring up, one under a crimson spotlight, one under a white spotlight">
-      <div class="labels label" aria-hidden="true"><span>Reactive</span><span>Steady</span></div>
+      <img src="mirror-king.jpg" width="1080" height="1350" loading="lazy" alt="A pawn stands in front of a mirror. Its reflection is a king.">
+      <p class="quote">The only person who can really break you is <span class="r">you.</span></p>
     </div>
     <p>Twelve weeks from now you'll either have the results or the excuses. Start today.</p>
     <a class="btn buy" href="#offer" data-umami-event="buy-click" data-umami-event-spot="final">Get the book <span aria-hidden="true">→</span></a>
