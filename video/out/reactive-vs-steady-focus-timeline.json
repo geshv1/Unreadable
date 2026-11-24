@@ -1,0 +1,321 @@
+{
+ "title": "reactive-vs-steady-focus",
+ "duration": 28.6,
+ "fps": 30,
+ "cuts": [
+  {
+   "t": 2.6,
+   "scene": "morning"
+  },
+  {
+   "t": 7.2,
+   "scene": "pings"
+  },
+  {
+   "t": 11.8,
+   "scene": "slot"
+  },
+  {
+   "t": 16.4,
+   "scene": "night"
+  },
+  {
+   "t": 21,
+   "scene": "fight-night"
+  },
+  {
+   "t": 25.8,
+   "scene": "end-card"
+  }
+ ],
+ "sfx": [
+  {
+   "scene": "pings",
+   "at": 0.4,
+   "id": "notify",
+   "gain": -11,
+   "pan": -0.3,
+   "args": {
+    "chime": false,
+    "seed": 20
+   },
+   "note": "the pings",
+   "t": 7.6
+  },
+  {
+   "scene": "pings",
+   "at": 0.95,
+   "id": "phone_down",
+   "gain": -12,
+   "pan": 0.4,
+   "note": "Steady boxes the phone",
+   "t": 8.15
+  },
+  {
+   "scene": "pings",
+   "at": 1,
+   "id": "notify",
+   "gain": -15,
+   "pan": -0.3,
+   "args": {
+    "chime": false,
+    "seed": 21
+   },
+   "note": "",
+   "t": 8.2
+  },
+  {
+   "scene": "pings",
+   "at": 1.6,
+   "id": "notify",
+   "gain": -15,
+   "pan": -0.3,
+   "args": {
+    "chime": false,
+    "seed": 22
+   },
+   "note": "",
+   "t": 8.8
+  },
+  {
+   "scene": "pings",
+   "at": 2.2,
+   "id": "notify",
+   "gain": -15,
+   "pan": -0.3,
+   "args": {
+    "chime": false,
+    "seed": 23
+   },
+   "note": "",
+   "t": 9.4
+  },
+  {
+   "scene": "pings",
+   "at": 2.8,
+   "id": "notify",
+   "gain": -15,
+   "pan": -0.3,
+   "args": {
+    "chime": false,
+    "seed": 24
+   },
+   "note": "",
+   "t": 10
+  },
+  {
+   "scene": "pings",
+   "at": 3.4,
+   "id": "notify",
+   "gain": -15,
+   "pan": -0.3,
+   "args": {
+    "chime": false,
+    "seed": 25
+   },
+   "note": "",
+   "t": 10.6
+  },
+  {
+   "scene": "slot",
+   "at": 0.48,
+   "id": "bump",
+   "gain": -15,
+   "pan": -0.4,
+   "args": {
+    "seed": 50,
+    "heavy": 0.5
+   },
+   "note": "lever pulls",
+   "t": 12.28
+  },
+  {
+   "scene": "slot",
+   "at": 1.28,
+   "id": "bump",
+   "gain": -15,
+   "pan": -0.4,
+   "args": {
+    "seed": 51,
+    "heavy": 0.5
+   },
+   "note": "",
+   "t": 13.08
+  },
+  {
+   "scene": "slot",
+   "at": 2.08,
+   "id": "bump",
+   "gain": -15,
+   "pan": -0.4,
+   "args": {
+    "seed": 52,
+    "heavy": 0.5
+   },
+   "note": "",
+   "t": 13.88
+  },
+  {
+   "scene": "slot",
+   "at": 2.8800000000000003,
+   "id": "bump",
+   "gain": -15,
+   "pan": -0.4,
+   "args": {
+    "seed": 53,
+    "heavy": 0.5
+   },
+   "note": "",
+   "t": 14.68
+  },
+  {
+   "scene": "slot",
+   "at": 3.68,
+   "id": "bump",
+   "gain": -15,
+   "pan": -0.4,
+   "args": {
+    "seed": 54,
+    "heavy": 0.5
+   },
+   "note": "",
+   "t": 15.48
+  },
+  {
+   "scene": "night",
+   "at": 0.1,
+   "id": "tick",
+   "gain": -17,
+   "args": {
+    "tock": false
+   },
+   "t": 16.5
+  },
+  {
+   "scene": "night",
+   "at": 0.6,
+   "id": "tick",
+   "gain": -17,
+   "args": {
+    "tock": true
+   },
+   "t": 17
+  },
+  {
+   "scene": "night",
+   "at": 1.1,
+   "id": "tick",
+   "gain": -17,
+   "args": {
+    "tock": false
+   },
+   "t": 17.5
+  },
+  {
+   "scene": "night",
+   "at": 1.6,
+   "id": "tick",
+   "gain": -17,
+   "args": {
+    "tock": true
+   },
+   "t": 18
+  },
+  {
+   "scene": "night",
+   "at": 2.1,
+   "id": "tick",
+   "gain": -17,
+   "args": {
+    "tock": false
+   },
+   "t": 18.5
+  },
+  {
+   "scene": "night",
+   "at": 2.6,
+   "id": "tick",
+   "gain": -17,
+   "args": {
+    "tock": true
+   },
+   "t": 19
+  },
+  {
+   "scene": "night",
+   "at": 3.1,
+   "id": "tick",
+   "gain": -17,
+   "args": {
+    "tock": false
+   },
+   "t": 19.5
+  },
+  {
+   "scene": "night",
+   "at": 3.6,
+   "id": "tick",
+   "gain": -17,
+   "args": {
+    "tock": true
+   },
+   "t": 20
+  },
+  {
+   "scene": "night",
+   "at": 4.1,
+   "id": "tick",
+   "gain": -17,
+   "args": {
+    "tock": false
+   },
+   "t": 20.5
+  },
+  {
+   "scene": "fight-night",
+   "at": 2.3,
+   "id": "punch",
+   "gain": -2,
+   "pan": -0.15,
+   "note": "the clean punch",
+   "t": 23.3
+  }
+ ],
+ "scenes": [
+  {
+   "id": "cold-open",
+   "start": 0,
+   "end": 2.6
+  },
+  {
+   "id": "morning",
+   "start": 2.6,
+   "end": 7.199999999999999
+  },
+  {
+   "id": "pings",
+   "start": 7.199999999999999,
+   "end": 11.799999999999999
+  },
+  {
+   "id": "slot",
+   "start": 11.799999999999999,
+   "end": 16.4
+  },
+  {
+   "id": "night",
+   "start": 16.4,
+   "end": 21
+  },
+  {
+   "id": "fight-night",
+   "start": 21,
+   "end": 25.8
+  },
+  {
+   "id": "end-card",
+   "start": 25.8,
+   "end": 28.6
+  }
+ ]
+}
