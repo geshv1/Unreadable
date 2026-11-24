@@ -1,0 +1,24 @@
+reactive-vs-steady-focus — sound-effect cues (22)
+
+  7.60s  frame 228  notify      -11.0 dB  the pings
+  8.15s  frame 244  phone_down  -12.0 dB  Steady boxes the phone
+  8.20s  frame 246  notify      -15.0 dB  
+  8.80s  frame 264  notify      -15.0 dB  
+  9.40s  frame 282  notify      -15.0 dB  
+ 10.00s  frame 300  notify      -15.0 dB  
+ 10.60s  frame 318  notify      -15.0 dB  
+ 12.28s  frame 368  bump        -15.0 dB  lever pulls
+ 13.08s  frame 392  bump        -15.0 dB  
+ 13.88s  frame 416  bump        -15.0 dB  
+ 14.68s  frame 440  bump        -15.0 dB  
+ 15.48s  frame 464  bump        -15.0 dB  
+ 16.50s  frame 495  tick        -17.0 dB  
+ 17.00s  frame 510  tick        -17.0 dB  
+ 17.50s  frame 525  tick        -17.0 dB  
+ 18.00s  frame 540  tick        -17.0 dB  
+ 18.50s  frame 555  tick        -17.0 dB  
+ 19.00s  frame 570  tick        -17.0 dB  
+ 19.50s  frame 585  tick        -17.0 dB  
+ 20.00s  frame 600  tick        -17.0 dB  
+ 20.50s  frame 615  tick        -17.0 dB  
+ 23.30s  frame 699  punch        -2.0 dB  the clean punch

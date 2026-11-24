@@ -1,0 +1,17 @@
+reactive-vs-steady-focus — scene transitions (28.6s @ 30fps)
+
+00:00.00  frame   0  cold-open
+00:02.60  frame  78  morning
+00:07.20  frame 216  pings
+00:11.80  frame 354  slot
+00:16.40  frame 492  night
+00:21.00  frame 630  fight-night
+00:25.80  frame 774  end-card
+
+Cuts (whoosh starts ~0.16s before, bass hit on the cut):
+  00:02.60  (2.60s, frame 78)  -> morning
+  00:07.20  (7.20s, frame 216)  -> pings
+  00:11.80  (11.80s, frame 354)  -> slot
+  00:16.40  (16.40s, frame 492)  -> night
+  00:21.00  (21.00s, frame 630)  -> fight-night
+  00:25.80  (25.80s, frame 774)  -> end-card
