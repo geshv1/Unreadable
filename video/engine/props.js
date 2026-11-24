@@ -736,4 +736,90 @@
     g.save(); g.fillStyle = '#2b2d36'; g.strokeStyle = '#e8eaee'; g.lineWidth = 4;
     V.roundRect(g, x - 56, top - 22, 112, 16, 4); g.fill(); g.stroke(); g.restore();
   };
+
+  // ───────── Pt. 7 (focus) props
+  V.progressBar = function (g, x, y, w, v, color) {
+    g.save();
+    g.fillStyle = 'rgba(255,255,255,0.12)'; V.roundRect(g, x - w / 2, y - 8, w, 16, 8); g.fill();
+    g.fillStyle = color; g.shadowColor = color; g.shadowBlur = 16;
+    V.roundRect(g, x - w / 2, y - 8, Math.max(16, w * V.clamp(v)), 16, 8); g.fill();
+    g.restore();
+  };
+  V.badge = function (g, x, y, n, k = 1) { // red notification badge
+    g.save(); g.translate(x, y); g.scale(k, k);
+    g.fillStyle = V.COL.red; g.shadowColor = 'rgba(224,52,74,0.8)'; g.shadowBlur = 18;
+    g.beginPath(); g.arc(0, 0, 30, 0, 6.283); g.fill(); g.shadowBlur = 0;
+    g.fillStyle = '#fff'; g.font = `800 34px ${V.FONT.sans}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(String(n), 0, 2);
+    g.restore();
+  };
+  V.phoneBox = function (g, x, top, lid = 0) { // small box on a desk; lid 0 closed .. 1 open
+    g.save(); g.fillStyle = '#2b2d36'; g.strokeStyle = '#e8eaee'; g.lineWidth = 4;
+    V.roundRect(g, x - 44, top - 46, 88, 46, 6); g.fill(); g.stroke();
+    g.translate(x - 44, top - 46); g.rotate(-1.9 * lid);
+    g.fillStyle = '#3a3c46'; V.roundRect(g, 0, -10, 88, 12, 4); g.fill(); g.stroke();
+    g.restore();
+  };
+  const ICONS = ['heart', 'star', 'dot'];
+  function icon(g, kind, x, y, s) {
+    g.save(); g.translate(x, y); g.scale(s, s);
+    if (kind === 'heart') { g.fillStyle = V.COL.red; g.beginPath(); g.moveTo(0, 12); g.bezierCurveTo(-22, -4, -12, -22, 0, -10); g.bezierCurveTo(12, -22, 22, -4, 0, 12); g.fill(); }
+    else if (kind === 'star') { g.fillStyle = '#F2C14E'; g.beginPath(); for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, r = i % 2 ? 8 : 18; g.lineTo(Math.cos(a) * r, Math.sin(a) * r); } g.closePath(); g.fill(); }
+    else { g.fillStyle = '#9fc3ff'; g.beginPath(); g.arc(0, 0, 12, 0, 6.283); g.fill(); }
+    g.restore();
+  }
+  // Slot machine (world): x centre, spin 0..1 while spinning, result = icon index per reel, glow on a win
+  V.slotMachine = function (g, x, t, spinning, result, win = 0, lever = 0) {
+    const w = 190, h = 380, top = V.FLOOR - h;
+    g.save();
+    g.fillStyle = '#23252d'; g.strokeStyle = '#e8eaee'; g.lineWidth = 5;
+    V.roundRect(g, x - w / 2, top, w, h, 22); g.fill(); g.stroke();
+    g.fillStyle = '#0d0e12'; V.roundRect(g, x - w / 2 + 18, top + 60, w - 36, 90, 10); g.fill(); g.stroke();
+    for (let r = 0; r < 3; r++) {
+      const cx = x - 50 + r * 50, cy = top + 105;
+      g.save(); g.beginPath(); g.rect(cx - 22, top + 64, 44, 82); g.clip();
+      if (spinning) { const off = ((t * 18 + r * 0.37) % 1) * 60; for (let k = -1; k < 2; k++) icon(g, ICONS[(Math.floor(t * 18) + k + r) % 3], cx, cy + k * 60 + off - 30, 1); }
+      else icon(g, ICONS[result[r]], cx, cy, 1.1);
+      g.restore();
+    }
+    if (win > 0) { g.save(); g.globalAlpha = win; g.shadowColor = '#F2C14E'; g.shadowBlur = 40; g.strokeStyle = '#F2C14E'; g.lineWidth = 6; V.roundRect(g, x - w / 2 + 18, top + 60, w - 36, 90, 10); g.stroke(); g.restore(); }
+    g.fillStyle = V.COL.red; V.roundRect(g, x - w / 2 + 30, top + 18, w - 60, 26, 13); g.fill();
+    // lever on the right side
+    const lx = x + w / 2 + 14, ly = top + 150, ang = -0.25 + lever * 1.6;
+    g.strokeStyle = '#c9cbd3'; g.lineWidth = 9; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(x + w / 2, ly); g.lineTo(lx, ly); g.stroke();
+    g.beginPath(); g.moveTo(lx, ly); g.lineTo(lx + Math.sin(ang) * 10, ly - Math.cos(ang) * 110); g.stroke();
+    g.fillStyle = V.COL.red; g.beginPath(); g.arc(lx + Math.sin(ang) * 10, ly - Math.cos(ang) * 110, 16, 0, 6.283); g.fill();
+    g.restore();
+    return [lx + Math.sin(ang) * 10, ly - Math.cos(ang) * 110];
+  };
+  // Open book in front of the hands (world), page flip 0..1
+  V.book = function (g, hand, flip = 0, face = 1) {
+    g.save(); g.translate(hand[0], hand[1] - 10); g.scale(face, 1);
+    g.fillStyle = '#f4f5f7'; g.strokeStyle = '#16171c'; g.lineWidth = 4;
+    g.beginPath(); g.moveTo(0, 0); g.lineTo(-62, -12); g.lineTo(-62, 44); g.lineTo(0, 56); g.closePath(); g.fill(); g.stroke();
+    g.beginPath(); g.moveTo(0, 0); g.lineTo(62, -12); g.lineTo(62, 44); g.lineTo(0, 56); g.closePath(); g.fill(); g.stroke();
+    g.strokeStyle = '#9a9da7'; g.lineWidth = 3;
+    for (let i = 0; i < 3; i++) { g.beginPath(); g.moveTo(10, 8 + i * 12); g.lineTo(50, 2 + i * 12); g.stroke(); g.beginPath(); g.moveTo(-10, 8 + i * 12); g.lineTo(-50, 2 + i * 12); g.stroke(); }
+    if (flip > 0 && flip < 1) { const x = 62 * Math.cos(flip * Math.PI); g.fillStyle = '#e8eaee'; g.beginPath(); g.moveTo(0, 0); g.lineTo(x, -12 - Math.sin(flip * Math.PI) * 18); g.lineTo(x, 44 - Math.sin(flip * Math.PI) * 18); g.lineTo(0, 56); g.closePath(); g.fill(); g.stroke(); }
+    g.restore();
+  };
+  // Wall clock: hours as a float (e.g. 23.5)
+  V.wallClock = function (g, x, y, r, hours) {
+    g.save(); g.translate(x, y);
+    g.fillStyle = '#f4f5f7'; g.strokeStyle = '#16171c'; g.lineWidth = 6; g.shadowColor = 'rgba(255,255,255,0.3)'; g.shadowBlur = 24;
+    g.beginPath(); g.arc(0, 0, r, 0, 6.283); g.fill(); g.shadowBlur = 0; g.stroke();
+    g.strokeStyle = '#16171c'; g.lineWidth = 4;
+    for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; g.beginPath(); g.moveTo(Math.sin(a) * r * 0.8, -Math.cos(a) * r * 0.8); g.lineTo(Math.sin(a) * r * 0.92, -Math.cos(a) * r * 0.92); g.stroke(); }
+    const ha = ((hours % 12) / 12) * 2 * Math.PI, ma = ((hours % 1)) * 2 * Math.PI;
+    g.lineCap = 'round'; g.lineWidth = 8; g.beginPath(); g.moveTo(0, 0); g.lineTo(Math.sin(ha) * r * 0.5, -Math.cos(ha) * r * 0.5); g.stroke();
+    g.strokeStyle = V.COL.red; g.lineWidth = 5; g.beginPath(); g.moveTo(0, 0); g.lineTo(Math.sin(ma) * r * 0.78, -Math.cos(ma) * r * 0.78); g.stroke();
+    g.fillStyle = '#16171c'; g.beginPath(); g.arc(0, 0, 7, 0, 6.283); g.fill();
+    g.restore();
+  };
+  V.glass = function (g, hand) {
+    g.save(); g.translate(hand[0], hand[1] - 16);
+    g.fillStyle = 'rgba(200,225,255,0.35)'; g.strokeStyle = '#e8eaee'; g.lineWidth = 4;
+    g.beginPath(); g.moveTo(-15, -26); g.lineTo(15, -26); g.lineTo(12, 24); g.lineTo(-12, 24); g.closePath(); g.fill(); g.stroke();
+    g.restore();
+  };
 })();
