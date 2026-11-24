@@ -6,8 +6,8 @@
 window.GUMROAD_URL = "";
 
 // Checkout link: every "Get the book" button goes here (used while GUMROAD_URL is empty).
-// Payhip store. A direct product link (payhip.com/b/...) skips one tap.
-window.BUY_URL = "https://payhip.com/geshv1";
+// Payhip product page for Unreadable.
+window.BUY_URL = "https://payhip.com/b/fPu7S";
 
 // Umami analytics (free): paste your Website ID from cloud.umami.is. Empty = analytics off.
 window.UMAMI_ID = "";
