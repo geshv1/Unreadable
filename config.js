@@ -1,7 +1,7 @@
 /* ===== SITE SETTINGS: the only file you need to edit =====
    Both pages (the book page and the quiz) read these lines. */
 
-// Gumroad product link, e.g. "https://geshv1.gumroad.com/l/completefighter".
+// Gumroad product link, e.g. "https://geshv1.gumroad.com/l/unreadable".
 // When filled in, every "Get the book" button opens the checkout in a pop-up on the page.
 window.GUMROAD_URL = "";
 
