@@ -130,3 +130,26 @@ def test_market_moved_since_old_fair_price_is_not_value(cfg, tmp_path):
     fresh = check_match("brentford everton", _fixtures(), cfg, PUB + timedelta(hours=2),
                         parse_odds("1=2.35 X=3.50 2=2.95"), data_dir=tmp_path, remember=False)
     assert fresh.best is not None and fresh.best.selection == "H"
+
+
+def test_derived_markets_match_the_market():
+    import numpy as np
+    from edgebot.core import selection_won
+    from edgebot.pricing.derived import expected_value, fit_goals, market_prob
+    p1x2, pover = [0.47, 0.27, 0.26], 0.52
+    lam, mu = fit_goals(p1x2, pover)
+    assert abs(market_prob("1X2", "H", lam, mu) - 0.47) < 0.02
+    assert abs(market_prob("OU2.5", "O", lam, mu) - 0.52) < 0.02
+    assert market_prob("DC", "1X", lam, mu, p1x2) == pytest.approx(0.74)
+    assert market_prob("DNB", "H", lam, mu, p1x2) == pytest.approx(0.47 / 0.73)
+    o15, o35 = market_prob("OU1.5", "O", lam, mu), market_prob("OU3.5", "O", lam, mu)
+    assert o15 > 0.52 > o35
+    assert 0 < market_prob("BTTS", "Y", lam, mu) < 1
+    assert market_prob("HTOU0.5", "O", lam, mu) < market_prob("OU0.5", "O", lam, mu)
+    total_cs = sum(market_prob("CS", f"{h}-{a}", lam, mu) for h in range(11) for a in range(11))
+    assert total_cs == pytest.approx(1.0, abs=1e-6)
+    assert expected_value("DNB", "H", 1.5, 0.66, 0.27) == pytest.approx(0.73 * (0.66 * 1.5 - 1))
+    assert selection_won("DNB", "H", 1, 1) is None
+    assert selection_won("DC", "X2", 0, 0) and not selection_won("DC", "12", 1, 1)
+    assert selection_won("BTTS", "Y", 2, 1) and selection_won("HOU1.5", "O", 2, 0) and not selection_won("AOU0.5", "O", 2, 0)
+    assert selection_won("CS", "2-1", 2, 1)

@@ -25,6 +25,7 @@ from .core import MARKETS, Candidate, book_name, league_name, selection_won
 from .data import football_data_uk
 from .data.prices import PriceIndex
 from .backtest.metrics import bootstrap_ci
+from .pricing.derived import expected_value, fit_goals, market_prob
 
 RESULT_REFRESH_HOURS = 6.0
 
@@ -168,6 +169,7 @@ def grade(ledger: list[dict], data_dir: Path, now: datetime, weights: dict | Non
             continue
         won, void, p_close, scores = True, False, 1.0, []
         pending = False
+        p_draw = None
         for leg in e["legs"]:
             key = (leg["league"], season_code(datetime.fromisoformat(leg["kickoff"])))
             if key not in cache:
@@ -179,24 +181,40 @@ def grade(ledger: list[dict], data_dir: Path, now: datetime, weights: dict | Non
                 break
             hg, ag = int(row["home_goals"]), int(row["away_goals"])
             scores.append(f"{hg}-{ag}")
-            won = won and selection_won(leg["market"], leg["selection"], hg, ag)
-            prices = PriceIndex(o[o["match_id"] == row["match_id"]], sharp, "multiplicative")
-            p, used, _ = prices.closing_fair(row["match_id"], leg["market"], row["kickoff"].to_pydatetime(), weights)
-            if p is None:
-                p_close = math.nan
+            result = selection_won(leg["market"], leg["selection"], hg, ag)
+            if result is None:
+                void = True
             else:
-                p_close *= float(p[MARKETS[leg["market"]].index(leg["selection"])])
+                won = won and result
+            prices = PriceIndex(o[o["match_id"] == row["match_id"]], sharp, "multiplicative")
+            ko = row["kickoff"].to_pydatetime()
+            if leg["market"] in MARKETS:
+                p, used, _ = prices.closing_fair(row["match_id"], leg["market"], ko, weights)
+                p_leg = None if p is None else float(p[MARKETS[leg["market"]].index(leg["selection"])])
+            else:  # goals market priced from the closing 1X2 + Over/Under 2.5 (estimate)
+                p1, _, _ = prices.closing_fair(row["match_id"], "1X2", ko, weights)
+                pou, _, _ = prices.closing_fair(row["match_id"], "OU2.5", ko, weights)
+                p_leg = None
+                if p1 is not None:
+                    lam, mu = fit_goals(p1, None if pou is None else float(pou[0]))
+                    p_leg = market_prob(leg["market"], leg["selection"], lam, mu, p1)
+                    p_draw = float(p1[1])
+            p_close = math.nan if p_leg is None else p_close * p_leg
         if pending:
             continue
         odds = float(e.get("placed_odds") or e["odds"])
         stake = float(e["stake"])
-        e["status"] = "won" if won else "lost"
-        e["pnl"] = round(stake * (odds - 1.0), 2) if won else -stake
+        if void and e["kind"] == "single":
+            e["status"], e["pnl"] = "void", 0.0
+        else:
+            e["status"] = "won" if won else "lost"
+            e["pnl"] = round(stake * (odds - 1.0), 2) if won else -stake
         e["score"] = ", ".join(scores)
         e["settled_at"] = now.isoformat()
         if not math.isnan(p_close) and p_close > 0:
             e["closing_fair_odds"] = round(1.0 / p_close, 3)
-            e["clv"] = round(odds * p_close - 1.0, 5)
+            mkt = e["legs"][0]["market"] if e["kind"] == "single" else None
+            e["clv"] = round(expected_value(mkt or "", e["legs"][0]["selection"], odds, p_close, p_draw), 5)
         settled += 1
     return ledger, settled
 

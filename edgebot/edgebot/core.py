@@ -1,6 +1,7 @@
 """Shared types and small helpers used across the engine."""
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
@@ -47,7 +48,8 @@ BOOK_NAMES: dict[str, str] = {
     "betfair_exchange": "Betfair Exchange",
 }
 
-MARKET_NAMES = {"1X2": "Match result", "OU2.5": "Over/Under 2.5 goals"}
+MARKET_NAMES = {"1X2": "Match result", "OU2.5": "Over/Under 2.5 goals", "DC": "Double chance", "DNB": "Draw no bet",
+                "BTTS": "Both teams to score", "CS": "Correct score"}
 
 
 def league_name(code: str) -> str:
@@ -66,15 +68,31 @@ def selection_label(market: str, selection: str, home: str = "Home", away: str =
     raise ValueError(f"unknown market {market}")
 
 
-def selection_won(market: str, selection: str, home_goals: int, away_goals: int) -> bool:
+def selection_won(market: str, selection: str, home_goals: int, away_goals: int) -> bool | None:
+    """True / False, or None when the stake is refunded (draw no bet on a draw)."""
+    h, a = home_goals, away_goals
     if market == "1X2":
-        if home_goals > away_goals:
+        if h > a:
             return selection == "H"
-        if home_goals < away_goals:
+        if h < a:
             return selection == "A"
         return selection == "D"
-    if market == "OU2.5":
-        over = (home_goals + away_goals) > 2.5
+    if market == "DC":
+        res = "1" if h > a else "2" if h < a else "X"
+        return res in selection
+    if market == "DNB":
+        if h == a:
+            return None
+        return (h > a) == (selection == "H")
+    if market == "BTTS":
+        yes = h > 0 and a > 0
+        return yes if selection == "Y" else not yes
+    if market == "CS":
+        return selection == f"{h}-{a}"
+    m = re.match(r"^(H|A)?OU(\d+(?:\.\d+)?)$", market)
+    if m:
+        goals = h if m.group(1) == "H" else a if m.group(1) == "A" else h + a
+        over = goals > float(m.group(2))
         return over if selection == "O" else not over
     raise ValueError(f"unknown market {market}")
 
