@@ -1,12 +1,13 @@
 /* ===== SITE SETTINGS: the only file you need to edit =====
    Both pages (the book page and the quiz) read these lines. */
 
-// Gumroad product link, e.g. "https://geshv1.gumroad.com/l/completefighter".
+// Gumroad product link, e.g. "https://geshv1.gumroad.com/l/unreadable".
 // When filled in, every "Get the book" button opens the checkout in a pop-up on the page.
 window.GUMROAD_URL = "";
 
-// Beacons checkout link: used only while GUMROAD_URL is empty
-window.BUY_URL = "https://shop.beacons.ai/geshv1/cf9f8f01-9fad-461e-a346-1a0034c07603";
+// Checkout link: every "Get the book" button goes here (used while GUMROAD_URL is empty).
+// Payhip store. A direct product link (payhip.com/b/...) skips one tap.
+window.BUY_URL = "https://payhip.com/geshv1";
 
 // Umami analytics (free): paste your Website ID from cloud.umami.is. Empty = analytics off.
 window.UMAMI_ID = "";
