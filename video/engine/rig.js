@@ -9,11 +9,11 @@
   V.PAL = {
     reactive: {
       arm: ['#a3a6ae', '#6c6f77', '#cfd1d7'], leg: ['#6f727a', '#4a4c53', '#9a9da5'], torso: ['#8d9099', '#5d6068', '#b9bcc4'],
-      fist: '#eceef1', foot: '#f4f5f7', head: '#f3f4f6', ol: OL, extra: 'cap', hoodie: true,
+      fist: '#eceef1', foot: '#f4f5f7', head: '#f3f4f6', ol: OL, extra: 'cap', hoodie: true, cuff: '#5d6068', sole: '#c22233',
     },
     steady: {
       arm: ['#e6e8ec', '#aeb1b9', '#ffffff'], leg: ['#a7aab2', '#73767e', '#d3d5da'], torso: ['#eef0f3', '#b9bcc4', '#ffffff'],
-      fist: '#f4f5f7', foot: '#f4f5f7', head: '#f3f4f6', ol: OL, extra: 'hair',
+      fist: '#f4f5f7', foot: '#f4f5f7', head: '#f3f4f6', ol: OL, extra: 'hair', sleeve: true, belt: '#2a2c35', sole: '#2a2c35',
     },
     // the "third figure": dark grey, no spotlight
     // Steady's circle: same charcoal family, a soft light rim so they read as allies
@@ -214,17 +214,33 @@
     g.beginPath(); g.arc(c[0], c[1], r, 0, Math.PI * 2); g.fillStyle = fill; g.fill();
     if (ol) { g.strokeStyle = ol; g.lineWidth = lw; g.stroke(); }
   }
+  const DETAIL = () => !!(V.ep && V.ep.detail);
   function fist(g, c, pal) {
     circle(g, c, 5.7, pal.fist, pal.ol, pal.olW ? 0.8 : 1.6);
+    if (DETAIL() && !pal.flat) circle(g, [c[0] + 2.4, c[1] - 3.4], 2.3, pal.fist, pal.ol, 1.1);   // thumb
     if (!pal.flat) g.globalAlpha = 0.55; else g.globalAlpha = 0; circle(g, [c[0] - 1.7, c[1] - 1.8], 2.1, '#fff'); g.globalAlpha = 1;
   }
   function foot(g, c, pal) {
     const x = c[0] + 2.5, y = c[1] + 4;
+    if (DETAIL() && !pal.flat) {   // sneaker: upper, sole stripe, laces
+      g.lineJoin = 'round';
+      g.beginPath(); g.moveTo(x - 8.5, y + 3); g.lineTo(x - 8.8, y - 2.4); g.quadraticCurveTo(x - 6, y - 5.2, x + 1, y - 4.6);
+      g.quadraticCurveTo(x + 6, y - 3.8, x + 11, y - 0.6); g.quadraticCurveTo(x + 13.4, y + 1.2, x + 12, y + 3); g.closePath();
+      g.fillStyle = pal.foot; g.fill(); g.strokeStyle = pal.ol; g.lineWidth = 1.5; g.stroke();
+      V.roundRect(g, x - 9.4, y + 1.6, 22.2, 3.4, 1.6); g.fillStyle = pal.sole || '#2a2c35'; g.fill(); g.lineWidth = 1.1; g.stroke();
+      g.strokeStyle = '#9a9da7'; g.lineWidth = 0.9; g.beginPath(); g.moveTo(x + 0.5, y - 4.2); g.lineTo(x + 2.5, y - 2.2); g.moveTo(x + 3.3, y - 3.6); g.lineTo(x + 5.3, y - 1.6); g.stroke();
+      return;
+    }
     g.beginPath(); g.ellipse(x, y, 9.5, 4.8, 0, 0, Math.PI * 2); g.fillStyle = pal.foot; g.fill();
     g.strokeStyle = pal.ol; g.lineWidth = pal.olW ? 0.8 : 1.6; g.stroke();
     g.globalAlpha = pal.flat ? 0 : 0.9; g.beginPath(); g.ellipse(x - 2.5, y - 1.6, 4.5, 1.4, 0, 0, Math.PI * 2); g.fillStyle = '#fff'; g.fill(); g.globalAlpha = 1;
   }
-  function arm(g, s, e, h, pal) { capsule(g, s, e, 8.5, pal.arm, pal.ol, pal.olW); capsule(g, e, h, 8.5, pal.arm, pal.ol, pal.olW); fist(g, h, pal); }
+  function arm(g, s, e, h, pal) {
+    capsule(g, s, e, 8.5, pal.arm, pal.ol, pal.olW); capsule(g, e, h, 8.5, pal.arm, pal.ol, pal.olW);
+    if (DETAIL() && pal.sleeve) capsule(g, s, V.lerp2(s, e, 0.48), 10.6, pal.torso, pal.ol, pal.olW);          // t-shirt sleeve
+    if (DETAIL() && pal.cuff) { line(g, V.lerp2(e, h, 0.74), V.lerp2(e, h, 0.86), pal.cuff, 8.9); }               // hoodie cuff
+    fist(g, h, pal);
+  }
   function leg(g, hip, k, f, pal) { capsule(g, hip, k, 12, pal.leg, pal.ol, pal.olW); capsule(g, k, f, 11.5, pal.leg, pal.ol, pal.olW); foot(g, f, pal); }
 
   function torso(g, G, f, pal) {
@@ -235,6 +251,8 @@
       g.beginPath(); g.moveTo(-11, 25); g.quadraticCurveTo(-2, 28, 8, 25); g.stroke();
       g.lineWidth = 1.1; g.beginPath(); g.moveTo(6, 2); g.lineTo(7, 12); g.stroke(); g.globalAlpha = 1;
     }
+    if (DETAIL() && pal.belt) { g.strokeStyle = pal.belt; g.lineWidth = 2.4; g.beginPath(); g.moveTo(-10.5, 31); g.lineTo(10.5, 31); g.stroke();
+      g.fillStyle = '#8a8d98'; g.fillRect(2.2, 29.6, 3.2, 2.8); }
     if (f.tie) {
       g.fillStyle = '#b0202f'; g.strokeStyle = '#0b0b0f'; g.lineWidth = 0.8;
       g.beginPath(); g.moveTo(4, 1); g.lineTo(7, 1); g.lineTo(7.5, 4); g.lineTo(8.5, 22); g.lineTo(5.5, 25); g.lineTo(3.5, 22); g.lineTo(4.5, 4); g.closePath(); g.fill(); g.stroke();
@@ -246,6 +264,10 @@
     const H = G.H;
     g.save(); g.translate(H[0], H[1]); g.rotate((f.headTilt || 0) + G.a * 0.5);
     if (f.headScale && f.headScale !== 1) { g.translate(0, -(f.headScale - 1) * 12); g.scale(f.headScale, f.headScale); }
+    if (DETAIL() && pal.hoodie) {   // hood resting behind the neck
+      g.beginPath(); g.ellipse(-7.5, 7.5, 11.5, 9, -0.35, 0, Math.PI * 2); g.fillStyle = pal.torso[0]; g.fill(); g.strokeStyle = pal.ol; g.lineWidth = 1.5; g.stroke();
+      g.beginPath(); g.ellipse(-8.5, 9, 6, 4.5, -0.35, 0, Math.PI * 2); g.fillStyle = pal.torso[1]; g.fill();
+    }
     circle(g, [0, 0], 13.5, pal.head, pal.ol, pal.olW ? 0.8 : 1.6);
     if (!pal.flat) { g.globalAlpha = 0.55; circle(g, [-4, -4.3], 5.1, '#fff'); g.globalAlpha = 1; }
     if (f.blush) { // red flush over the whole face
@@ -267,13 +289,16 @@
     g.restore();
   }
 
+  const BLINK = new Set(['neutral', 'glance', 'angry', 'focus', 'smile', 'jealous', 'proud', 'talk', 'pant', 'grin', 'shout', 'sneer', 'nervous']);
   // Simple expressive faces (drawn only when f.expr is set — default rig is faceless like the original)
   function face(g, f, inkCol) {
     const e = f.expr; if (!e) return;
     const ink = inkCol || '#101116';
     const lx = (f.look || 0) * 1.6;
     g.strokeStyle = ink; g.fillStyle = ink; g.lineCap = 'round'; g.lineJoin = 'round';
-    const dot = (x, y, r = 1.7) => { g.beginPath(); g.arc(x + lx, y, r, 0, Math.PI * 2); g.fill(); };
+    // natural blinks (detail mode): eyes close for ~0.12s every few seconds, offset per character
+    const blink = DETAIL() && !f.noBlink && BLINK.has(e) && (((V.time || 0) + (f.kind === 'steady' ? 1.3 : f.kind === 'reactive' ? 0 : 2.1)) % 3.3) < 0.12;
+    const dot = (x, y, r = 1.7) => { if (blink && r > 1.2) { g.lineWidth = 1.4; g.beginPath(); g.moveTo(x + lx - 1.8, y + 0.4); g.lineTo(x + lx + 1.8, y + 0.4); g.stroke(); return; } g.beginPath(); g.arc(x + lx, y, r, 0, Math.PI * 2); g.fill(); };
     const ln = (pts, w = 1.5) => { g.lineWidth = w; g.beginPath(); g.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) g.lineTo(pts[i][0], pts[i][1]); g.stroke(); };
     const mouthOpen = (cx, cy, rx, ry) => { g.beginPath(); g.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); g.fillStyle = '#3a0d14'; g.fill(); g.strokeStyle = ink; g.lineWidth = 1.2; g.stroke(); g.fillStyle = ink; };
     switch (e) {

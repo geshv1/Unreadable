@@ -1,0 +1,31 @@
+reactive-vs-steady-envy — sound-effect cues (29)
+
+  2.08s  frame  62  notify      -10.0 dB  the post
+  5.39s  frame 162  notify      -11.0 dB  
+  6.03s  frame 181  tick        -14.0 dB  like
+  7.07s  frame 212  notify      -13.0 dB  his reply
+  8.77s  frame 263  swing       -16.0 dB  
+  9.05s  frame 271  punch        -6.0 dB  the counter lands
+ 12.08s  frame 362  swing       -16.0 dB  
+ 12.36s  frame 371  punch        -8.0 dB  
+ 14.17s  frame 425  swing       -14.0 dB  he slips it
+ 16.59s  frame 498  plop        -12.0 dB  the book hits the floor
+ 17.00s  frame 510  tick        -20.0 dB  
+ 17.26s  frame 518  tick        -20.0 dB  
+ 17.52s  frame 526  tick        -20.0 dB  
+ 17.79s  frame 534  tick        -20.0 dB  
+ 18.05s  frame 541  tick        -20.0 dB  
+ 18.31s  frame 549  tick        -20.0 dB  
+ 18.86s  frame 566  plop        -22.0 dB  books stack up
+ 19.07s  frame 572  plop        -22.0 dB  
+ 19.28s  frame 578  plop        -22.0 dB  
+ 19.48s  frame 584  plop        -22.0 dB  
+ 19.69s  frame 591  plop        -22.0 dB  
+ 19.90s  frame 597  plop        -22.0 dB  
+ 20.10s  frame 603  plop        -22.0 dB  
+ 20.31s  frame 609  plop        -22.0 dB  
+ 20.52s  frame 616  plop        -22.0 dB  
+ 20.72s  frame 622  plop        -22.0 dB  
+ 20.93s  frame 628  plop        -22.0 dB  
+ 21.14s  frame 634  plop        -22.0 dB  
+ 22.19s  frame 666  bump        -12.0 dB  gloves touch

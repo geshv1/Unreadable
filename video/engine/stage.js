@@ -12,10 +12,11 @@
   })();
 
   V.drawBackground = function (g, t) {
-    g.fillStyle = V.COL.bg; g.fillRect(0, 0, W, H);
+    const E = V.ep || {};
+    g.fillStyle = E.bgColor || V.COL.bg; g.fillRect(0, 0, W, H);
     // faint central haze so the frame never reads as pure black
     const hz = g.createRadialGradient(W / 2, V.FLOOR - 300, 50, W / 2, V.FLOOR - 300, 900);
-    hz.addColorStop(0, 'rgba(60,62,78,0.22)'); hz.addColorStop(1, 'rgba(11,11,15,0)');
+    hz.addColorStop(0, `rgba(60,62,78,${(0.22 * (E.haze == null ? 1 : E.haze)).toFixed(3)})`); hz.addColorStop(1, 'rgba(11,11,15,0)');
     g.fillStyle = hz; g.fillRect(0, 0, W, H);
     g.fillStyle = '#c9ccd6';
     const sf = V.ep && V.ep.starField;   // {n, drift}: fewer dots that drift slowly upward and sideways
@@ -48,11 +49,12 @@
   }
   V.drawFloor = function (g) {
     const fg = g.createLinearGradient(0, V.FLOOR, 0, H);
-    fg.addColorStop(0, '#17181e'); fg.addColorStop(1, '#07070a');
+    const dark = V.ep && V.ep.floor === 'dark';
+    fg.addColorStop(0, dark ? '#0d0e12' : '#17181e'); fg.addColorStop(1, dark ? '#040406' : '#07070a');
     g.fillStyle = fg; g.fillRect(-400, V.FLOOR, W + 800, H - V.FLOOR + 700);
     if (!gridCache) gridCache = buildGrid();
     if (!(V.ep && V.ep.grid === false)) g.drawImage(gridCache, 0, V.FLOOR);
-    g.strokeStyle = '#34363f'; g.lineWidth = 2.5;
+    g.strokeStyle = dark ? '#202229' : '#34363f'; g.lineWidth = 2.5;
     g.beginPath(); g.moveTo(-200, V.FLOOR); g.lineTo(W + 200, V.FLOOR); g.stroke();
   };
 
@@ -66,6 +68,7 @@
     const topX = home + (x - home) * 0.55;
     const flick = 0.93 + 0.07 * Math.sin(t * 5.3 + (kind === 'steady' ? 2 : 0)) * Math.sin(t * 2.1);
     g.save();
+    intensity *= (V.ep && V.ep.beamAlpha) || 1;
     g.globalAlpha = flick * intensity;
     g.filter = 'blur(14px)';
     const gr = g.createLinearGradient(0, -700, 0, V.FLOOR);
@@ -117,7 +120,7 @@
     const m = x.createLinearGradient(0, 0, 0, h * 0.75);
     m.addColorStop(0, 'rgba(0,0,0,0.9)'); m.addColorStop(1, 'rgba(0,0,0,0)');
     x.fillStyle = m; x.fillRect(0, 0, W, h);
-    g.save(); g.globalAlpha = 0.3; g.filter = 'blur(5px)';
+    g.save(); g.globalAlpha = (V.ep && V.ep.reflect != null) ? V.ep.reflect : 0.3; g.filter = 'blur(5px)';
     g.drawImage(refCanvas, 0, V.FLOOR + 4);
     g.restore();
     // contact shadows

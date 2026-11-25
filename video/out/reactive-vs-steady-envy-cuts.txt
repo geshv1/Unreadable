@@ -1,0 +1,21 @@
+reactive-vs-steady-envy — scene transitions (27.56206896551724s @ 30fps)
+
+00:00.00  frame   0  hook
+00:02.00  frame  60  post-reactive
+00:05.31  frame 159  post-steady
+00:08.62  frame 259  spar-reactive
+00:11.93  frame 358  spar-steady
+00:15.24  frame 457  book-reactive
+00:18.55  frame 557  book-steady
+00:21.86  frame 656  payoff
+00:24.46  frame 734  end-card
+
+Cuts (whoosh starts ~0.16s before, bass hit on the cut):
+  00:02.00  (2.00s, frame 60)  -> post-reactive
+  00:05.31  (5.31s, frame 159)  -> post-steady
+  00:08.62  (8.62s, frame 259)  -> spar-reactive
+  00:11.93  (11.93s, frame 358)  -> spar-steady
+  00:15.24  (15.24s, frame 457)  -> book-reactive
+  00:18.55  (18.55s, frame 557)  -> book-steady
+  00:21.86  (21.86s, frame 656)  -> payoff
+  00:24.46  (24.46s, frame 734)  -> end-card

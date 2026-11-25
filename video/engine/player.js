@@ -39,6 +39,7 @@
     const ep = V.ep;
     g = g || V.ctx;
     const t = i / ep.fps;
+    V.time = t;
     const sc = sceneAt(t);
     const tl = t - sc.start;
     const act = V.actions[sc.action];
