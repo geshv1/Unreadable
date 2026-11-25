@@ -1,24 +1,24 @@
 reactive-vs-steady-overthinking — sound-effect cues (22)
 
-  3.05s  frame  92  notify       -9.0 dB  the “ok.” arrives
+  2.31s  frame  69  notify       -9.0 dB  the “ok.” arrives
+  3.13s  frame  94  tick        -18.0 dB  
+  3.49s  frame 105  tick        -18.0 dB  
+  3.84s  frame 115  tick        -18.0 dB  
   4.20s  frame 126  tick        -18.0 dB  
-  4.70s  frame 141  tick        -18.0 dB  
-  5.20s  frame 156  tick        -18.0 dB  
-  5.70s  frame 171  tick        -18.0 dB  
-  6.20s  frame 186  tick        -18.0 dB  
-  6.70s  frame 201  tick        -18.0 dB  
-  7.20s  frame 216  tick        -18.0 dB  
-  7.70s  frame 231  tick        -18.0 dB  
-  9.55s  frame 286  phone_down  -10.0 dB  Steady puts the phone face down
- 13.95s  frame 418  scuff       -14.0 dB  
- 16.75s  frame 502  swing       -19.0 dB  
- 17.13s  frame 514  swing       -19.0 dB  
- 17.51s  frame 525  swing       -19.0 dB  
- 17.89s  frame 537  swing       -19.0 dB  
- 18.27s  frame 548  swing       -19.0 dB  
- 18.65s  frame 560  swing       -19.0 dB  
- 19.25s  frame 578  scuff       -14.0 dB  
- 26.10s  frame 783  typing      -16.0 dB  the research
- 30.82s  frame 925  hop         -10.0 dB  jumps to the bar
- 33.15s  frame 994  plop        -11.0 dB  lands
- 36.23s  frame 1087  bump        -12.0 dB  gloves touch
+  4.56s  frame 137  tick        -18.0 dB  
+  4.91s  frame 147  tick        -18.0 dB  
+  5.27s  frame 158  tick        -18.0 dB  
+  5.63s  frame 169  tick        -18.0 dB  
+  6.95s  frame 208  phone_down  -10.0 dB  Steady puts the phone face down
+ 10.52s  frame 316  scuff       -14.0 dB  
+ 12.52s  frame 376  swing       -19.0 dB  
+ 12.79s  frame 384  swing       -19.0 dB  
+ 13.06s  frame 392  swing       -19.0 dB  
+ 13.34s  frame 400  swing       -19.0 dB  
+ 13.61s  frame 408  swing       -19.0 dB  
+ 13.88s  frame 416  swing       -19.0 dB  
+ 14.31s  frame 429  scuff       -14.0 dB  
+ 19.63s  frame 589  typing      -16.0 dB  the research
+ 23.00s  frame 690  hop         -10.0 dB  jumps to the bar
+ 24.66s  frame 740  plop        -11.0 dB  lands
+ 27.39s  frame 822  bump        -12.0 dB  gloves touch
