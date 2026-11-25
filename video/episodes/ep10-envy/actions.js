@@ -139,8 +139,8 @@
     let cp = E.cp, cExpr = 'focus';
     if (tl >= 1.25) cp = poseAt(tl, [[1.25, PO.guard], [1.45, PO.point], [2.3, PO.point], [2.6, PO.stand], [3.05, PO.handsUp], [3.4, PO.stand]]), cExpr = tl > 3.0 ? 'neutral' : 'focus';
     if (tl >= 1.25 && tl < 2.9) rp = poseAt(tl, [[1.25, PO.guard], [1.5, PO.stand], [1.95, PO.stand], [2.15, PO.talkA], [2.6, PO.talkA], [2.9, PO.stand]]);
-    if (tl >= 2.9) { face = tl < 3.05 ? V.lerp(1, -1, seg(tl, 2.9, 3.05)) : -1; rx = tl < 3.05 ? 330 : kf(tl, [[3.05, 330], [4.4, 205]], ease.inOut); rp = tl < 3.05 ? PO.stand : V.walkPose((tl - 3.05) * 8.5); expr = 'sneer'; }
-    const reactive = V.R({ x: rx, face: Math.abs(face) < 0.2 ? Math.sign(face || 1) * 0.2 : face, pose: rp, expr });
+    if (tl >= 2.9) { face = tl < 3.0 ? 1 : -1; /* clean turn: a squashed in-between reads as a glitch */ rx = tl < 3.05 ? 330 : kf(tl, [[3.05, 330], [4.4, 220]], ease.inOut); rp = tl < 3.05 ? PO.stand : tl < 4.4 ? V.walkPose((tl - 3.05) * 6.5) : V.breathe(PO.stand, tl, 1, 3); expr = 'sneer'; }
+    const reactive = V.R({ x: rx, face, pose: rp, expr });
     const coach = C({ x: 650 - E.cstep, face: -1, pose: cp, expr: cExpr });
     return {
       figs: [coach, reactive],

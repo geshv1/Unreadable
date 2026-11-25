@@ -1,35 +1,35 @@
 reactive-vs-steady-envy — sound-effect cues (33)
 
-  1.85s  frame  55  notify      -10.0 dB  the post
-  5.83s  frame 175  notify      -11.0 dB  
-  7.31s  frame 219  tick        -14.0 dB  like
-  8.27s  frame 248  notify      -13.0 dB  his reply
- 11.51s  frame 345  swing       -16.0 dB  
- 11.78s  frame 353  punch        -6.0 dB  the counter lands
- 16.05s  frame 481  swing       -16.0 dB  
- 16.31s  frame 489  punch        -8.0 dB  
- 18.07s  frame 542  swing       -14.0 dB  he slips it
- 21.80s  frame 654  plop        -12.0 dB  the book hits the floor
- 22.20s  frame 666  tick        -20.0 dB  
- 22.45s  frame 674  tick        -20.0 dB  
- 22.71s  frame 681  tick        -20.0 dB  
- 22.96s  frame 689  tick        -20.0 dB  
- 23.21s  frame 696  tick        -20.0 dB  
- 25.37s  frame 761  plop        -22.0 dB  books stack up
- 25.57s  frame 767  plop        -22.0 dB  
- 25.77s  frame 773  plop        -22.0 dB  
- 25.97s  frame 779  plop        -22.0 dB  
- 26.17s  frame 785  plop        -22.0 dB  
- 26.37s  frame 791  plop        -22.0 dB  
- 26.57s  frame 797  plop        -22.0 dB  
- 26.77s  frame 803  plop        -22.0 dB  
- 26.97s  frame 809  plop        -22.0 dB  
- 27.17s  frame 815  plop        -22.0 dB  
- 27.37s  frame 821  plop        -22.0 dB  
- 27.57s  frame 827  plop        -22.0 dB  
- 28.05s  frame 841  scuff       -24.0 dB  on their toes
- 28.42s  frame 853  scuff       -24.0 dB  
- 28.79s  frame 864  scuff       -24.0 dB  
- 29.16s  frame 875  scuff       -24.0 dB  
- 29.53s  frame 886  scuff       -24.0 dB  
- 29.90s  frame 897  scuff       -24.0 dB  
+  2.17s  frame  65  notify      -10.0 dB  the post
+  7.82s  frame 234  notify      -11.0 dB  
+  9.52s  frame 286  tick        -14.0 dB  like
+ 10.95s  frame 328  notify      -13.0 dB  his reply
+ 15.52s  frame 466  swing       -16.0 dB  
+ 15.92s  frame 478  punch        -6.0 dB  the counter lands
+ 22.02s  frame 661  swing       -16.0 dB  
+ 22.42s  frame 673  punch        -8.0 dB  
+ 25.05s  frame 752  swing       -14.0 dB  he slips it
+ 30.35s  frame 910  plop        -12.0 dB  the book hits the floor
+ 30.95s  frame 928  tick        -20.0 dB  
+ 31.33s  frame 940  tick        -20.0 dB  
+ 31.71s  frame 951  tick        -20.0 dB  
+ 32.09s  frame 963  tick        -20.0 dB  
+ 32.47s  frame 974  tick        -20.0 dB  
+ 35.40s  frame 1062  plop        -22.0 dB  books stack up
+ 35.70s  frame 1071  plop        -22.0 dB  
+ 36.00s  frame 1080  plop        -22.0 dB  
+ 36.30s  frame 1089  plop        -22.0 dB  
+ 36.60s  frame 1098  plop        -22.0 dB  
+ 36.90s  frame 1107  plop        -22.0 dB  
+ 37.20s  frame 1116  plop        -22.0 dB  
+ 37.50s  frame 1125  plop        -22.0 dB  
+ 37.80s  frame 1134  plop        -22.0 dB  
+ 38.10s  frame 1143  plop        -22.0 dB  
+ 38.40s  frame 1152  plop        -22.0 dB  
+ 38.70s  frame 1161  plop        -22.0 dB  
+ 39.63s  frame 1189  scuff       -24.0 dB  on their toes
+ 40.00s  frame 1200  scuff       -24.0 dB  
+ 40.37s  frame 1211  scuff       -24.0 dB  
+ 40.74s  frame 1222  scuff       -24.0 dB  
+ 41.11s  frame 1233  scuff       -24.0 dB  
+ 41.48s  frame 1244  scuff       -24.0 dB  

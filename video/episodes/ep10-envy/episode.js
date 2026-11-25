@@ -5,12 +5,12 @@
    (sneakers, hood, sleeves, thumbs, blinks), tighter framing with dark margins clear of TikTok's UI. */
 // Caption rule: in every solo scene the thought + its line show alone for CAP seconds (calm setup, no action),
 // fade out, then the action plays at RATE with no caption on screen.
-const CAP = 1.6, RATE = 1.5;
+const CAP = 1.8, RATE = 1.0, HOLD = 0.3;   // action at its natural pace; a short beat at the end lets each moment land
 // remap pieces: [localT, actionT, rate]. Setup either plays slowly under the caption (posts) or is a calm
 // pre-roll before the action starts (actionT < 0: guard, standing, reading).
 const SETUP = (len) => [[0, 0, len / CAP], [CAP, len, RATE]];
 const PREROLL = [[0, -CAP, 1], [CAP, 0, RATE]];
-const durOf = (remap, end) => { const [l0, a0, r] = remap[remap.length - 1]; return l0 + (end - a0) / r; };
+const durOf = (remap, end) => { const [l0, a0, r] = remap[remap.length - 1]; return l0 + (end - a0) / r + HOLD; };
 const at = (remap, a) => { let t = null; for (const [l0, a0, r] of remap) if (a >= a0) t = l0 + (a - a0) / (r || 1); return +t.toFixed(3); };
 const CAPTION = (headline, red, sub) => [{ at: 0, until: CAP - 0.18, top: '', headline, red, sub }];
 
@@ -39,7 +39,7 @@ V.EPISODE = {
   fadeOut: 0.5,
 
   scenes: [
-    { id: 'hook', dur: 1.7, set: 'stage', action: 'squareUp', cam: { zoom: [0.8, 0.85] },
+    { id: 'hook', dur: 2.0, set: 'stage', action: 'squareUp', cam: { zoom: [0.8, 0.85] },
       top: 'SAME AGE. SAME CITY.', headline: 'Different eyes.', red: 'eyes.' },
 
     // ── 1. THE POST
@@ -61,12 +61,12 @@ V.EPISODE = {
       beats: CAPTION('He stays a student.', 'student.', 'One book a month. Twelve a year.') },
 
     // ── FINALE: ready to fight, then the question, then the quiz picture
-    { id: 'ready', dur: 2.9, set: 'stage', action: 'evReady', cam: { zoom: [0.82, 0.87] },
+    { id: 'ready', dur: 3.4, set: 'stage', action: 'evReady', cam: { zoom: [0.82, 0.87] },
       beats: [
         { at: 0, top: 'SAME AGE. SAME CITY.', headline: 'Envy watches. Humility learns.', red: 'learns.' },
-        { at: 1.5, top: '', headline: 'Which one are you?', red: 'you?' },
+        { at: 1.8, top: '', headline: 'Which one are you?', red: 'you?' },
       ] },
-    { id: 'quiz', dur: 2.8, set: 'stage', action: 'evPawn', labels: false, headline: '' },
+    { id: 'quiz', dur: 3.2, set: 'stage', action: 'evPawn', labels: false, headline: '' },
   ],
 
   // ── SOUND — physical only
