@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Same age. Same city. — renderer</title>
+<style>
+@font-face{font-family:"Instrument Serif";font-style:italic;font-weight:400;src:url(../fonts/InstrumentSerif-Italic.ttf) format("truetype")}
+@font-face{font-family:"Instrument Serif";font-style:normal;font-weight:400;src:url(../fonts/InstrumentSerif-Regular.ttf) format("truetype")}
+@font-face{font-family:"Archivo";font-weight:100 900;src:url(../fonts/Archivo-VF.ttf) format("truetype")}
+html,body{margin:0;background:#0B0B0F}
+canvas{display:block;width:540px;height:960px}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script src="core.js"></script>
+<script src="rig.js"></script>
+<script src="stage.js"></script>
+<script src="sets.js"></script>
+<script src="props.js"></script>
+<script src="text.js"></script>
+<script src="player.js"></script>
+<script src="actions-common.js"></script>
+<script>
+// Loads ../episodes/<ep>/episode.js (data) and actions.js (scene actions), then exposes V.ready.
+(function () {
+  const q = new URLSearchParams(location.search);
+  const ep = q.get('ep') || 'ep02-control';
+  V.debug = q.has('debug');
+  V.ctx = document.getElementById('c').getContext('2d');
+  const load = (src) => new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => rej(new Error('missing ' + src)); document.head.appendChild(s); });
+  V.ready = (async () => {
+    await load(`../episodes/${ep}/actions.js`);
+    await load(`../episodes/${ep}/episode.js`);
+    await Promise.all([
+      document.fonts.load('italic 400 100px "Instrument Serif"'),
+      document.fonts.load('400 30px "Archivo"'),
+      document.fonts.load('700 30px "Archivo"'),
+    ]);
+    await document.fonts.ready;
+    V.load(V.EPISODE);
+    V.renderFrame(0);
+    // preview mode: ?play to watch in a browser
+    if (q.has('play')) {
+      const t0 = performance.now();
+      const loop = () => { const i = Math.floor(((performance.now() - t0) / 1000) * V.ep.fps) % Math.round(V.ep.duration * V.ep.fps); V.renderFrame(i); requestAnimationFrame(loop); };
+      loop();
+    } else if (q.has('t')) V.renderFrame(Math.round(+q.get('t') * V.ep.fps));
+    return { title: V.ep.title || V.ep.id, duration: V.ep.duration, fps: V.ep.fps, cuts: V.ep.cuts, sfx: V.ep.sfxResolved, scenes: V.ep.scenes.map((s) => ({ id: s.id, start: s.start, end: s.end })) };
+  })();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+reactive-vs-steady-overthinking — scene transitions (43.099999999999994s @ 30fps)
+
+00:00.00  frame   0  hook
+00:02.90  frame  87  the-text
+00:13.90  frame 417  the-comeback
+00:24.90  frame 747  the-start
+00:35.90  frame 1077  payoff
+00:39.30  frame 1179  end-card
+
+Cuts (whoosh starts ~0.16s before, bass hit on the cut):
+  00:02.90  (2.90s, frame 87)  -> the-text
+  00:13.90  (13.90s, frame 417)  -> the-comeback
+  00:24.90  (24.90s, frame 747)  -> the-start
+  00:35.90  (35.90s, frame 1077)  -> payoff
+  00:39.30  (39.30s, frame 1179)  -> end-card
