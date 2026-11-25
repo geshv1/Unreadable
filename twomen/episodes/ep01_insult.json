@@ -1,0 +1,60 @@
+{
+  "title": "The Insult",
+  "slug": "ep01_insult",
+  "voice": {"voice": "am_onyx", "speed": 0.9, "lang": "en-us"},
+  "pacing": {"lead_in": 0.10, "default_gap": 0.35, "target_seconds": [30, 35], "auto_fit": true},
+  "text_style": {"font": "Montserrat-ExtraBold.ttf", "size": 112, "y": 0.30},
+  "audio": {"lufs": -14, "drone_level": 0.20, "duck_db": -9, "whoosh_level": 0.45, "bass_level": 0.95},
+  "shots": [
+    {"name": "hook", "scene": "two_men", "grade": "neutral", "section": "hook",
+     "camera": {"zoom": [1.04, 1.16]}, "footage_terms": "two men silhouette dark",
+     "beats": [
+       {"vo": "Two men.", "text": "TWO MEN", "gap": 0.18},
+       {"vo": "Same insult.", "text": "SAME [INSULT]", "gap": 0.18},
+       {"vo": "One loses everything.", "text": "ONE LOSES [EVERYTHING]", "gap": 0.40}]},
+    {"name": "room", "scene": "room_crowd", "grade": "neutral", "section": "neutral",
+     "camera": {"zoom": [1.02, 1.10]}, "params": {"laugh": true}, "footage_terms": "office meeting people laughing",
+     "beats": [{"vo": "Someone mocks them in front of the whole room.", "text": "IN FRONT OF [EVERYONE]", "gap": 0.40}]},
+    {"name": "fires_back", "scene": "man1_fire", "grade": "man1", "section": "man1", "text_y": 0.42,
+     "camera": {"zoom": [1.06, 1.12], "shake": 12}, "footage_terms": "angry man arguing",
+     "beats": [{"vo": "The first one fires back.", "text": "HE [FIRES BACK]", "gap": 0.20}]},
+    {"name": "louder", "scene": "man1_cuts", "grade": "man1", "section": "man1",
+     "params": {"cut_every": 0.5, "variants": ["shout_profile", "point_close", "gesture"]},
+     "camera": {"zoom": [1.05, 1.05], "shake": 16, "punch": 0.07}, "footage_terms": "man shouting; pointing finger",
+     "beats": [
+       {"vo": "Raises his voice.", "text": "LOUDER.", "gap": 0.15},
+       {"vo": "Explains himself.", "text": "EXPLAINS.", "gap": 0.30}]},
+    {"name": "room_watches", "scene": "room_watch", "grade": "man1", "section": "man1",
+     "camera": {"zoom": [1.0, 1.30], "drift": [0.0, -0.03]}, "footage_terms": "people watching smirk",
+     "beats": [{"vo": "And the room watches him do exactly what they wanted.", "text": "EXACTLY WHAT THEY [WANTED]", "gap": 0.15}]},
+    {"name": "black", "scene": "black", "grade": "black", "section": "transition", "duration": 0.5, "sfx": "whoosh"},
+    {"name": "pause", "scene": "man2_pause", "grade": "man2", "section": "man2", "slowmo": 0.5,
+     "camera": {"zoom": [1.04, 1.07]}, "footage_terms": "calm man slow motion dark",
+     "beats": [
+       {"vo": "The second one...", "gap": 0.55},
+       {"vo": "pauses.", "text": "HE [PAUSES].", "gap": 0.45}]},
+    {"name": "eye_to_eye", "scene": "faceoff", "grade": "man2", "section": "man2", "slowmo": 0.5,
+     "params": {"dim_beat": 1}, "text_y": 0.72,
+     "camera": {"zoom": [1.03, 1.08]}, "footage_terms": "man eyes close up dark",
+     "beats": [
+       {"vo": "Looks him in the eye.", "gap": 0.45},
+       {"vo": "Says nothing.", "text": "[NOTHING].", "drone": "low", "gap": 0.55}]},
+    {"name": "walks_on", "scene": "walk_away", "grade": "man2", "section": "man2", "slowmo": 0.5,
+     "camera": {"zoom": [1.02, 1.04]}, "footage_terms": "man walking away city night",
+     "beats": [{"vo": "Then carries on, like it never happened.", "text": "LIKE IT NEVER [HAPPENED]", "gap": 0.35}]},
+    {"name": "insult_is_his", "scene": "alone", "grade": "man2", "section": "man2", "slowmo": 0.5,
+     "camera": {"zoom": [1.0, 1.18]}, "footage_terms": "man uncomfortable silence",
+     "beats": [{"vo": "Now the insult belongs to the one who said it.", "text": "THE INSULT IS [HIS] NOW", "gap": 0.30}]},
+    {"name": "principle", "scene": "black", "grade": "black", "section": "principle", "silence_before": 0.55,
+     "text_y": 0.40, "tail": 1.6,
+     "beats": [
+       {"vo": "Whoever needs the reaction...", "text": "WHOEVER NEEDS THE REACTION", "gap": 0.60},
+       {"vo": "loses.", "text": "[LOSES.]", "text_size": 200, "bass_hit": true, "gap": 0.0}]}
+  ],
+  "cover": {"shot": 0, "t": 1.0, "zoom": 1.08, "text": [{"text": "TWO MEN. | SAME | [INSULT].", "size": 150, "y": 0.175}]},
+  "post": {
+    "caption": "Which one are you?",
+    "pinned_comment": "Man 1 or man 2? Be honest.",
+    "hashtags": ["#darkpsychology", "#mindset", "#selfcontrol", "#discipline", "#psychology"]
+  }
+}
