@@ -12,15 +12,15 @@ reactive-vs-steady-overthinking — sound-effect cues (24)
   5.96s  frame 179  notify      -10.0 dB  
   7.75s  frame 233  phone_down  -10.0 dB  phone face down
   7.83s  frame 235  tick        -13.0 dB  lamp off
- 11.25s  frame 338  scuff       -14.0 dB  
- 13.19s  frame 396  swing       -19.0 dB  
- 13.45s  frame 403  swing       -19.0 dB  
- 13.71s  frame 411  swing       -19.0 dB  
- 13.97s  frame 419  swing       -19.0 dB  
- 14.23s  frame 427  swing       -19.0 dB  
- 14.50s  frame 435  swing       -19.0 dB  
- 14.91s  frame 447  scuff       -14.0 dB  
- 20.10s  frame 603  typing      -16.0 dB  the research
- 23.36s  frame 701  hop         -10.0 dB  jumps to the bar
- 25.07s  frame 752  plop        -11.0 dB  lands
- 27.66s  frame 830  bump        -12.0 dB  gloves touch
+  9.68s  frame 290  scuff       -14.0 dB  
+ 11.61s  frame 348  swing       -19.0 dB  
+ 11.88s  frame 356  swing       -19.0 dB  
+ 12.14s  frame 364  swing       -19.0 dB  
+ 12.40s  frame 372  swing       -19.0 dB  
+ 12.66s  frame 380  swing       -19.0 dB  
+ 12.92s  frame 388  swing       -19.0 dB  
+ 13.34s  frame 400  scuff       -14.0 dB  
+ 16.96s  frame 509  typing      -16.0 dB  the research
+ 20.21s  frame 606  hop         -10.0 dB  jumps to the bar
+ 21.92s  frame 658  plop        -11.0 dB  lands
+ 22.94s  frame 688  bump        -12.0 dB  gloves touch

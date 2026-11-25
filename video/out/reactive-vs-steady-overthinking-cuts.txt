@@ -1,27 +1,21 @@
-reactive-vs-steady-overthinking — scene transitions (33.22807881773399s @ 30fps)
+reactive-vs-steady-overthinking — scene transitions (28.513793103448275s @ 30fps)
 
 00:00.00  frame   0  hook
 00:02.20  frame  66  text-reactive
 00:05.86  frame 176  text-steady
-00:09.65  frame 289  text-rule
-00:11.22  frame 337  comeback-reactive
-00:14.87  frame 446  comeback-steady
-00:17.70  frame 531  comeback-rule
-00:19.27  frame 578  start-reactive
-00:22.93  frame 688  start-steady
-00:25.76  frame 773  start-rule
-00:27.33  frame 820  payoff
-00:30.03  frame 901  end-card
+00:09.65  frame 289  comeback-reactive
+00:13.30  frame 399  comeback-steady
+00:16.13  frame 484  start-reactive
+00:19.79  frame 594  start-steady
+00:22.61  frame 678  payoff
+00:25.31  frame 759  end-card
 
 Cuts (whoosh starts ~0.16s before, bass hit on the cut):
   00:02.20  (2.20s, frame 66)  -> text-reactive
   00:05.86  (5.86s, frame 176)  -> text-steady
-  00:09.65  (9.65s, frame 289)  -> text-rule
-  00:11.22  (11.22s, frame 337)  -> comeback-reactive
-  00:14.88  (14.88s, frame 446)  -> comeback-steady
-  00:17.70  (17.70s, frame 531)  -> comeback-rule
-  00:19.27  (19.27s, frame 578)  -> start-reactive
-  00:22.93  (22.93s, frame 688)  -> start-steady
-  00:25.76  (25.76s, frame 773)  -> start-rule
-  00:27.33  (27.33s, frame 820)  -> payoff
-  00:30.03  (30.03s, frame 901)  -> end-card
+  00:09.65  (9.65s, frame 289)  -> comeback-reactive
+  00:13.30  (13.30s, frame 399)  -> comeback-steady
+  00:16.13  (16.13s, frame 484)  -> start-reactive
+  00:19.79  (19.79s, frame 594)  -> start-steady
+  00:22.61  (22.61s, frame 678)  -> payoff
+  00:25.31  (25.31s, frame 759)  -> end-card

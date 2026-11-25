@@ -39,8 +39,6 @@ V.EPISODE = {
         { at: 0, top: '11:47 PM', headline: 'Same text: “ok.”', red: '“ok.”' },
         { at: 1.4, top: 'STEADY', headline: '“Ok means ok.”', red: 'ok.”', sub: 'If it’s something, she’ll say it.' },
       ] },
-    { id: 'text-rule', dur: (SC - RULE) / RP, speed: RP, offset: RULE, rule: true, set: 'stage', action: 'otText', cam: { zoom: [0.73, 0.75] },
-      top: 'RULE 1', headline: 'Read the text, not her mind.', red: 'not her mind.' },
 
     // ── 2. THE COMEBACK
     { id: 'comeback-reactive', dur: SB / SP, speed: SP, solo: 'reactive', labelY: 1410, set: 'stage', action: 'otComeback', cam: { zoom: [0.88, 0.92], x: -160, y: -40 },
@@ -54,8 +52,6 @@ V.EPISODE = {
         { at: 0, top: 'AT THE GYM', headline: 'Same shot.', red: 'shot.' },
         { at: 1.4, top: 'STEADY', headline: 'One calm line. Done.', red: 'Done.', sub: 'Nothing left to replay.' },
       ] },
-    { id: 'comeback-rule', dur: (SC - RULE) / RP, speed: RP, offset: RULE, rule: true, set: 'gym', action: 'otComeback', cam: { zoom: [0.73, 0.75] },
-      top: 'RULE 2', headline: 'Say it now, or let it go.', red: 'let it go.' },
 
     // ── 3. THE START
     { id: 'start-reactive', dur: SB / SP, speed: SP, solo: 'reactive', labelY: 1410, set: 'stage', action: 'otStart', cam: { zoom: [0.88, 0.92], x: -270, y: -40 },
@@ -65,8 +61,6 @@ V.EPISODE = {
       ] },
     { id: 'start-steady', dur: (RULE - SB) / SP, speed: SP, solo: 'steady', labelY: 1410, offset: SB, set: 'stage', action: 'otStart', cam: { zoom: [0.8, 0.83], x: 220, y: -60 },
       top: 'STEADY · DAY 1', headline: 'One messy rep.', red: 'messy', sub: 'Ugly start. Still a start.' },
-    { id: 'start-rule', dur: (SC - RULE) / RP, speed: RP, offset: RULE, rule: true, set: 'stage', action: 'otStart', cam: { zoom: [0.73, 0.75] },
-      top: 'RULE 3', headline: 'Action kills doubt.', red: 'doubt.' },
 
     // ── PAYOFF
     { id: 'payoff', dur: 2.7, set: 'stage', action: 'otPayoff', cam: { zoom: [0.74, 0.77] },
