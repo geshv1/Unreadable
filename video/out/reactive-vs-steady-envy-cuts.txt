@@ -1,21 +1,21 @@
-reactive-vs-steady-envy — scene transitions (27.56206896551724s @ 30fps)
+reactive-vs-steady-envy — scene transitions (33.56666666666666s @ 30fps)
 
 00:00.00  frame   0  hook
-00:02.00  frame  60  post-reactive
-00:05.31  frame 159  post-steady
-00:08.62  frame 259  spar-reactive
-00:11.93  frame 358  spar-steady
-00:15.24  frame 457  book-reactive
-00:18.55  frame 557  book-steady
-00:21.86  frame 656  payoff
-00:24.46  frame 734  end-card
+00:01.70  frame  51  post-reactive
+00:05.63  frame 169  post-steady
+00:09.77  frame 293  spar-reactive
+00:14.30  frame 429  spar-steady
+00:18.90  frame 567  book-reactive
+00:23.47  frame 704  book-steady
+00:27.87  frame 836  ready
+00:30.77  frame 923  quiz
 
 Cuts (whoosh starts ~0.16s before, bass hit on the cut):
-  00:02.00  (2.00s, frame 60)  -> post-reactive
-  00:05.31  (5.31s, frame 159)  -> post-steady
-  00:08.62  (8.62s, frame 259)  -> spar-reactive
-  00:11.93  (11.93s, frame 358)  -> spar-steady
-  00:15.24  (15.24s, frame 457)  -> book-reactive
-  00:18.55  (18.55s, frame 557)  -> book-steady
-  00:21.86  (21.86s, frame 656)  -> payoff
-  00:24.46  (24.46s, frame 734)  -> end-card
+  00:01.70  (1.70s, frame 51)  -> post-reactive
+  00:05.63  (5.63s, frame 169)  -> post-steady
+  00:09.77  (9.77s, frame 293)  -> spar-reactive
+  00:14.30  (14.30s, frame 429)  -> spar-steady
+  00:18.90  (18.90s, frame 567)  -> book-reactive
+  00:23.47  (23.47s, frame 704)  -> book-steady
+  00:27.87  (27.87s, frame 836)  -> ready
+  00:30.77  (30.77s, frame 923)  -> quiz

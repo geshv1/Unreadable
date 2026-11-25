@@ -94,8 +94,8 @@
         phoneIn(g, reactive);
         const k = (0.9 + 0.1 * slideIn) * (1 + 0.07 * ease.inOut(seg(tl, 1.0, 1.35)));
         if (slideIn > 0 && out < 1) alphaDo(g, slideIn * (1 - out), () => postCard(g, 655, 935 + 120 * (1 - slideIn) - 520 * out, k, 1204, false, 0));
-        alphaDo(g, showWin(tl, 1.15, 2.35), () => say(g, { red: true, x: 330, y: 780, text: 'must be nice.', scale: V.pop(tl - 1.15) }));
-        alphaDo(g, showWin(tl, 2.4, 4.8), () => say(g, { red: true, x: 330, y: 780, text: 'he got lucky.', scale: V.pop(tl - 2.4) }));
+        alphaDo(g, showWin(tl, 1.4, 2.45), () => say(g, { red: true, x: 330, y: 780, text: 'must be nice.', scale: V.pop(tl - 1.4) }));
+        alphaDo(g, showWin(tl, 2.5, 4.8), () => say(g, { red: true, x: 330, y: 780, text: 'he got lucky.', scale: V.pop(tl - 2.5) }));
       },
     };
   };
@@ -103,16 +103,16 @@
   // ─────────────────────────────── 1. THE POST — Steady asks how
   V.actions.evPostS = function (tl) {
     let p = V.breathe(PO.phone, tl, 1.1, 2.6);
-    if (tl > 0.85 && tl < 1.2) p = V.set(p, 'hF', [17 + 3 * Math.sin(seg(tl, 0.85, 1.2) * Math.PI), -70 + 2 * Math.sin(seg(tl, 0.85, 1.2) * Math.PI)]);   // thumb taps like
+    if (tl > 1.0 && tl < 1.3) p = V.set(p, 'hF', [17 + 3 * Math.sin(seg(tl, 1.0, 1.3) * Math.PI), -70 + 2 * Math.sin(seg(tl, 1.0, 1.3) * Math.PI)]);   // thumb taps like
     if (tl >= 3.1) p = poseAt(tl, [[3.1, PO.phone], [3.45, PO.read]]);
-    const steady = V.St({ x: 690, pose: p, expr: tl < 1.0 ? 'neutral' : tl < 3.1 ? 'smile' : 'focus', look: tl < 1.6 ? 0.8 : 0 });
-    const slideIn = ease.out(seg(tl, 0.08, 0.42)), cardOut = seg(tl, 1.45, 1.65);
+    const steady = V.St({ x: 690, pose: p, expr: tl < 0.5 ? 'neutral' : tl < 3.1 ? 'smile' : 'focus', look: tl < 1.7 ? 0.8 : 0 });
+    const slideIn = ease.out(seg(tl, 0.08, 0.42)), cardOut = seg(tl, 1.55, 1.75);
     return {
       figs: [steady],
       front(g) {
         if (tl < 3.25) phoneIn(g, steady, 1 - seg(tl, 3.0, 3.25)); else V.notebook(g, V.figPoint(steady, 'hF'), tl, true);
-        if (slideIn > 0 && cardOut < 1) alphaDo(g, slideIn * (1 - cardOut), () => postCard(g, 435, 935 + 120 * (1 - slideIn), 0.9 + 0.1 * slideIn, tl > 1.0 ? 1205 : 1204, tl > 1.0, (tl - 1.0) / 0.3));
-        if (tl > 1.0 && tl < 1.6) V.heart(g, 435 - 40, 900 - (tl - 1.0) * 160, 1.6, 1 - seg(tl, 1.2, 1.6));
+        if (slideIn > 0 && cardOut < 1) alphaDo(g, slideIn * (1 - cardOut), () => postCard(g, 435, 935 + 120 * (1 - slideIn), 0.9 + 0.1 * slideIn, tl > 1.12 ? 1205 : 1204, tl > 1.12, (tl - 1.12) / 0.3));
+        if (tl > 1.12 && tl < 1.7) V.heart(g, 435 - 40, 900 - (tl - 1.12) * 160, 1.6, 1 - seg(tl, 1.32, 1.7));
         alphaDo(g, showWin(tl, 1.6, 2.5), () => say(g, { x: 600, y: 780, text: 'congrats. how?', scale: V.pop(tl - 1.6) }));
         alphaDo(g, showWin(tl, 2.55, 3.55), () => V.bubble(g, { x: 560, y: 780, text: '5am. every day.', size: 48, font: `700 48px ${V.FONT.sans}`, fill: '#2c2e37', color: '#ffffff', scale: V.pop(tl - 2.55) }));
         if (tl > 3.5) alphaDo(g, seg(tl, 3.5, 3.7), () => say(g, { x: 600, y: 780, text: 'noted.', scale: V.pop(tl - 3.5) }));
@@ -139,7 +139,7 @@
     let cp = E.cp, cExpr = 'focus';
     if (tl >= 1.25) cp = poseAt(tl, [[1.25, PO.guard], [1.45, PO.point], [2.3, PO.point], [2.6, PO.stand], [3.05, PO.handsUp], [3.4, PO.stand]]), cExpr = tl > 3.0 ? 'neutral' : 'focus';
     if (tl >= 1.25 && tl < 2.9) rp = poseAt(tl, [[1.25, PO.guard], [1.5, PO.stand], [1.95, PO.stand], [2.15, PO.talkA], [2.6, PO.talkA], [2.9, PO.stand]]);
-    if (tl >= 2.9) { face = tl < 3.05 ? V.lerp(1, -1, seg(tl, 2.9, 3.05)) : -1; rx = tl < 3.05 ? 330 : kf(tl, [[3.05, 330], [4.8, 190]], ease.inOut); rp = tl < 3.05 ? PO.stand : V.walkPose((tl - 3.05) * 8.5); expr = 'sneer'; }
+    if (tl >= 2.9) { face = tl < 3.05 ? V.lerp(1, -1, seg(tl, 2.9, 3.05)) : -1; rx = tl < 3.05 ? 330 : kf(tl, [[3.05, 330], [4.4, 205]], ease.inOut); rp = tl < 3.05 ? PO.stand : V.walkPose((tl - 3.05) * 8.5); expr = 'sneer'; }
     const reactive = V.R({ x: rx, face: Math.abs(face) < 0.2 ? Math.sign(face || 1) * 0.2 : face, pose: rp, expr });
     const coach = C({ x: 650 - E.cstep, face: -1, pose: cp, expr: cExpr });
     return {
@@ -150,7 +150,7 @@
         if (tl > 0.62 && tl < 1.0) { const h = V.figPoint(reactive, 'H'); V.impact(g, h[0] + 18, h[1], (tl - 0.62) / 0.32); }
         alphaDo(g, showWin(tl, 1.4, 2.4), () => say(g, { x: 660, y: 780, text: 'hands up.', scale: V.pop(tl - 1.4) }));
         alphaDo(g, showWin(tl, 2.05, 3.05), () => say(g, { red: true, x: 330, y: 780, text: 'I know.', scale: V.pop(tl - 2.05) }));
-        alphaDo(g, showWin(tl, 3.15, 4.8), () => say(g, { red: true, x: 420, y: 780, text: 'he’s just older.', scale: V.pop(tl - 3.15) }));
+        alphaDo(g, showWin(tl, 3.15, 4.6), () => say(g, { red: true, x: 420, y: 780, text: 'he’s just older.', scale: V.pop(tl - 3.15) }));
       },
     };
   };
@@ -182,13 +182,13 @@
         if (tl > 0.62 && tl < 0.95) { const h = V.figPoint(steady, 'H'); V.impact(g, h[0] - 18, h[1], (tl - 0.62) / 0.3); }
         alphaDo(g, showWin(tl, 1.4, 2.3), () => say(g, { x: 420, y: 780, text: 'hands up.', scale: V.pop(tl - 1.4) }));
         alphaDo(g, showWin(tl, 2.4, 3.2), () => say(g, { x: 700, y: 780, text: 'show me again.', scale: V.pop(tl - 2.4) }));
-        if (tl > 3.6) alphaDo(g, seg(tl, 3.6, 3.75) * (1 - seg(tl, 4.6, 4.8)), () => say(g, { x: 420, y: 780, text: 'good.', scale: V.pop(tl - 3.6) }));
+        if (tl > 3.6) alphaDo(g, seg(tl, 3.6, 3.75) * (1 - seg(tl, 4.4, 4.6)), () => say(g, { x: 420, y: 780, text: 'good.', scale: V.pop(tl - 3.6) }));
       },
     };
   };
 
   // ─────────────────────────────── 3. THE BOOK — "I know all that." vs one book a month
-  const CLIPS = ['10 SECRETS\nOF THE RICH', 'MILLIONAIRE\nAT 19', 'DO THIS\nEVERY DAY', 'THE ONE\nMINDSET', 'STOP\nDOING THIS', 'HOW HE\nDID IT'];
+  const CLIPS = ['10 SECRETS\nOF THE RICH', 'MILLIONAIRE\nAT 19', 'DO THIS\nEVERY DAY', 'THE ONE\nMINDSET', 'STOP\nDOING THIS'];
   V.actions.evBookR = function (tl) {
     let rp = V.breathe(PO.stand, tl, 1, 3), rExpr = 'neutral';
     if (tl > 0.8) { rp = poseAt(tl, [[0.8, PO.stand], [1.05, PO.cross], [2.2, PO.cross], [2.45, PO.phone]]); rExpr = tl < 2.3 ? 'sneer' : tl < 3.3 ? 'neutral' : 'sleepy'; }
@@ -236,12 +236,67 @@
     };
   };
 
-  // ─────────────────────────────── PAYOFF — square up, touch gloves
-  V.actions.evPayoff = function (tl, sc) {
-    const st = V.actions.squareUp(tl, sc);
-    const k = Math.sin(seg(tl, 0.0, 0.7) * Math.PI);
-    st.figs.forEach((f) => { f.pose = V.lerpPose(f.pose, V.set(PO.jab, 'hF', [41, -98]), k * 0.95); });
-    st.figs[0].expr = 'focus'; st.figs[1].expr = 'focus';
-    return st;
+  // ─────────────────────────────── FINALE — both ready to fight, up on their toes
+  V.actions.evReady = function (tl) {
+    const toes = (t, hz, h) => -Math.abs(Math.sin(t * Math.PI * hz)) * h;
+    // Reactive: fast, loose bounce, shoulders rolling, a cocky head bob, one twitchy feint
+    let rp = V.set(V.set(PO.guard, 'C', [3, -85]), 'hd', [2, 1]);
+    const feint = Math.sin(seg(tl, 1.05, 1.3) * Math.PI);
+    rp = V.lerpPose(rp, V.set(PO.jab, 'hF', [30, -100]), feint * 0.7);
+    rp = V.shift(rp, Math.sin(tl * 9) * 1.6, toes(tl, 2.7, 7), true);
+    rp.hB = [rp.hB[0] + Math.sin(tl * 11) * 1.8, rp.hB[1] + Math.cos(tl * 13) * 1.4];
+    const rx = V.POS.reactive + 10 + 12 * Math.sin(tl * 3.6);
+    // Steady: tight, even rhythm, chin down, eyes locked, a small step in
+    let sp = V.set(V.set(PO.guard, 'C', [-2, -85]), 'hd', [1, 2]);
+    sp = V.shift(sp, 0, toes(tl + 0.15, 2.1, 4.5), true);
+    const sx = V.POS.steady - 6 - 10 * ease.inOut(seg(tl, 0.4, 1.4)) - 4 * Math.sin(tl * 2.6);
+    return {
+      figs: [
+        V.R({ x: rx, pose: rp, expr: tl < 1.0 ? 'grin' : 'angry', headTilt: 0.05 * Math.sin(tl * 4.5) }),
+        V.St({ x: sx, pose: sp, expr: 'focus', look: 0.4 }),
+      ],
+    };
+  };
+
+  // ─────────────────────────────── CTA — the pawn and the king in the mirror (the quiz's picture)
+  const PAWN = new Image();
+  V.assetsReady = new Promise((res) => {
+    // loaded as a data URL (assets/images/pawn-mirror.js): a file:// image would taint the canvas
+    const sc = document.createElement('script'); sc.src = '../assets/images/pawn-mirror.js';
+    sc.onload = () => { PAWN.onload = res; PAWN.onerror = res; PAWN.src = V.ASSET_PAWN; }; sc.onerror = res;
+    document.head.appendChild(sc);
+  });
+  V.actions.evPawn = function (tl) {
+    return {
+      figs: [],
+      overlay(g) {
+        g.save();
+        g.fillStyle = '#030305'; g.fillRect(0, 0, V.W, V.H);   // the picture's own black, so it blends in
+        // top: the quiz question (from the picture)
+        const kTop = 0.97 + 0.03 * ease.out(V.clamp(tl / 0.35));
+        g.save(); g.translate(540, 430); g.scale(kTop, kTop); g.translate(-540, -430);
+        g.drawImage(PAWN, 0, 120, 1178, 400, 540 - 1178 * 0.74 / 2, 300, 1178 * 0.74, 400 * 0.74);
+        g.restore();
+        // the call to action
+        g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.shadowColor = 'rgba(0,0,0,0.9)'; g.shadowBlur = 14;
+        const a1 = ease.out(V.clamp((tl - 0.35) / 0.25)), a2 = ease.out(V.clamp((tl - 0.6) / 0.25));
+        g.globalAlpha = a1; g.fillStyle = '#F4F5F7'; g.font = `400 44px ${V.FONT.sans}`;
+        g.fillText('Free 2-min quiz — link in bio.', 540, 660 + 10 * (1 - a1));
+        g.globalAlpha = a2; g.fillStyle = '#D6D8DF'; g.font = `700 32px ${V.FONT.sans}`; g.letterSpacing = '6px';
+        g.fillText('THE FIX: UNREADABLE', 543, 716 + 10 * (1 - a2)); g.letterSpacing = '0px';
+        g.globalAlpha = 1; g.shadowBlur = 0;
+        // bottom: pawn + mirror, slow push-in, the king's red glow breathing
+        const z = 1 + 0.04 * ease.inOut(V.clamp(tl / 3));
+        const W = 1178 * 0.56, Hh = 1260 * 0.56, x0 = 540 - W / 2, y0 = 752;
+        g.save(); g.translate(546, 1060); g.scale(z, z); g.translate(-546, -1060);
+        g.drawImage(PAWN, 0, 600, 1178, 1260, x0, y0, W, Hh);
+        g.globalCompositeOperation = 'lighter';
+        const gl = g.createRadialGradient(x0 + 600 * 0.56, y0 + 520 * 0.56, 10, x0 + 600 * 0.56, y0 + 520 * 0.56, 230);
+        gl.addColorStop(0, `rgba(224,52,74,${(0.10 + 0.07 * Math.sin(tl * 3)).toFixed(3)})`); gl.addColorStop(1, 'rgba(224,52,74,0)');
+        g.fillStyle = gl; g.fillRect(x0, y0, W, Hh);
+        g.restore();
+        g.restore();
+      },
+    };
   };
 })();

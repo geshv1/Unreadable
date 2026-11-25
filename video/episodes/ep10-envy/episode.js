@@ -3,7 +3,18 @@
    Each situation = Reactive's own scene, then Steady's own scene (out in their world).
    Style: darker and more minimal (no grid, darker floor, fewer drifting dots), detailed figures
    (sneakers, hood, sleeves, thumbs, blinks), tighter framing with dark margins clear of TikTok's UI. */
-const SP = 1.45;   // choreography plays 1.45x faster than authored
+// Caption rule: in every solo scene the thought + its line show alone for CAP seconds (calm setup, no action),
+// fade out, then the action plays at RATE with no caption on screen.
+const CAP = 1.6, RATE = 1.5;
+// remap pieces: [localT, actionT, rate]. Setup either plays slowly under the caption (posts) or is a calm
+// pre-roll before the action starts (actionT < 0: guard, standing, reading).
+const SETUP = (len) => [[0, 0, len / CAP], [CAP, len, RATE]];
+const PREROLL = [[0, -CAP, 1], [CAP, 0, RATE]];
+const durOf = (remap, end) => { const [l0, a0, r] = remap[remap.length - 1]; return l0 + (end - a0) / r; };
+const at = (remap, a) => { let t = null; for (const [l0, a0, r] of remap) if (a >= a0) t = l0 + (a - a0) / (r || 1); return +t.toFixed(3); };
+const CAPTION = (headline, red, sub) => [{ at: 0, until: CAP - 0.18, top: '', headline, red, sub }];
+
+const PR = SETUP(1.3), PS = SETUP(1.0);
 
 V.EPISODE = {
   id: 'ep10-envy',
@@ -28,64 +39,50 @@ V.EPISODE = {
   fadeOut: 0.5,
 
   scenes: [
-    { id: 'hook', dur: 2.0, set: 'stage', action: 'squareUp', cam: { zoom: [0.8, 0.85] },
+    { id: 'hook', dur: 1.7, set: 'stage', action: 'squareUp', cam: { zoom: [0.8, 0.85] },
       top: 'SAME AGE. SAME CITY.', headline: 'Different eyes.', red: 'eyes.' },
 
     // ── 1. THE POST
-    { id: 'post-reactive', dur: 4.8 / SP, speed: SP, solo: 'reactive', set: 'stage', action: 'evPostR', cam: { zoom: [0.98, 1.02], x: -120 },
-      beats: [
-        { at: 0, top: '11:02 PM', headline: 'A friend posts a win.', red: 'win.' },
-        { at: 1.05, top: 'REACTIVE', headline: '“Why him?”', red: 'him?”', sub: 'Envy keeps score of other people.' },
-      ] },
-    { id: 'post-steady', dur: 4.8 / SP, speed: SP, solo: 'steady', set: 'stage', action: 'evPostS', cam: { zoom: [0.98, 1.02], x: 130 },
-      beats: [
-        { at: 0, top: '11:02 PM', headline: 'Same post.', red: 'post.' },
-        { at: 1.0, top: 'STEADY', headline: '“How did he do it?”', red: 'How', sub: 'His win is free information.' },
-      ] },
+    { id: 'post-reactive', dur: durOf(PR, 4.8), remap: PR, solo: 'reactive', set: 'stage', action: 'evPostR', cam: { zoom: [0.98, 1.02], x: -120 },
+      beats: CAPTION('“Why him?”', 'him?”', 'Envy keeps score of other people.') },
+    { id: 'post-steady', dur: durOf(PS, 4.8), remap: PS, solo: 'steady', set: 'stage', action: 'evPostS', cam: { zoom: [0.98, 1.02], x: 130 },
+      beats: CAPTION('“How did he do it?”', 'How', 'His win is free information.') },
 
     // ── 2. SPARRING
-    { id: 'spar-reactive', dur: 4.8 / SP, speed: SP, solo: 'reactive', set: 'stage', action: 'evSparR', cam: { zoom: [0.96, 1.0], x: -60 },
-      beats: [
-        { at: 0, top: 'SPARRING', headline: 'Someone better shows up.', red: 'better' },
-        { at: 1.3, top: 'REACTIVE', headline: '“I know.”', red: 'know.”', sub: 'Pride protects him from the lesson.' },
-      ] },
-    { id: 'spar-steady', dur: 4.8 / SP, speed: SP, solo: 'steady', set: 'stage', action: 'evSparS', cam: { zoom: [0.96, 1.0], x: 60 },
-      beats: [
-        { at: 0, top: 'SPARRING', headline: 'Same beating.', red: 'beating.' },
-        { at: 1.3, top: 'STEADY', headline: '“Show me again.”', red: 'again.”', sub: 'He loses the round. Keeps the lesson.' },
-      ] },
+    { id: 'spar-reactive', dur: durOf(PREROLL, 4.4), remap: PREROLL, solo: 'reactive', set: 'stage', action: 'evSparR', cam: { zoom: [0.96, 1.0], x: -60 },
+      beats: CAPTION('“I already know.”', 'know.”', 'Pride protects him from the lesson.') },
+    { id: 'spar-steady', dur: durOf(PREROLL, 4.5), remap: PREROLL, solo: 'steady', set: 'stage', action: 'evSparS', cam: { zoom: [0.96, 1.0], x: 60 },
+      beats: CAPTION('“Show me again.”', 'again.”', 'He loses the round. Keeps the lesson.') },
 
     // ── 3. THE BOOK
-    { id: 'book-reactive', dur: 4.8 / SP, speed: SP, solo: 'reactive', set: 'stage', action: 'evBookR', cam: { zoom: [0.98, 1.02], x: -60 },
-      beats: [
-        { at: 0, top: 'A FRIEND SAYS', headline: '“Read this.”', red: 'this.”' },
-        { at: 0.95, top: 'REACTIVE', headline: '“I know all that.”', red: 'know', sub: '100 clips a day. Nothing sticks.' },
-      ] },
-    { id: 'book-steady', dur: 4.8 / SP, speed: SP, solo: 'steady', set: 'stage', action: 'evBookS', cam: { zoom: [0.98, 1.02], x: 40 },
-      top: 'STEADY', headline: 'He stays a student.', red: 'student.', sub: 'One book a month. Twelve a year.' },
+    { id: 'book-reactive', dur: durOf(PREROLL, 4.45), remap: PREROLL, solo: 'reactive', set: 'stage', action: 'evBookR', cam: { zoom: [0.98, 1.02], x: -60 },
+      beats: CAPTION('“I know all that.”', 'know', '100 clips a day. Nothing sticks.') },
+    { id: 'book-steady', dur: durOf(PREROLL, 4.2), remap: PREROLL, solo: 'steady', set: 'stage', action: 'evBookS', cam: { zoom: [0.98, 1.02], x: 40 },
+      beats: CAPTION('He stays a student.', 'student.', 'One book a month. Twelve a year.') },
 
-    // ── PAYOFF + CTA
-    { id: 'payoff', dur: 2.6, set: 'stage', action: 'evPayoff', cam: { zoom: [0.81, 0.85] },
-      top: 'SAME AGE. SAME CITY.', headline: 'Envy watches. Humility learns.', red: 'learns.' },
-    { id: 'end-card', dur: 3.1, set: 'stage', action: 'endCard', cam: { zoom: [0.81, 0.84] },
-      top: 'WHICH ONE ARE YOU?', headline: 'Find your type.', red: 'type.',
-      sub: 'Free 2-min quiz — link in bio.', subColor: '#F4F5F7', sub2: 'THE FIX: UNREADABLE' },
+    // ── FINALE: ready to fight, then the question, then the quiz picture
+    { id: 'ready', dur: 2.9, set: 'stage', action: 'evReady', cam: { zoom: [0.82, 0.87] },
+      beats: [
+        { at: 0, top: 'SAME AGE. SAME CITY.', headline: 'Envy watches. Humility learns.', red: 'learns.' },
+        { at: 1.5, top: '', headline: 'Which one are you?', red: 'you?' },
+      ] },
+    { id: 'quiz', dur: 2.8, set: 'stage', action: 'evPawn', labels: false, headline: '' },
   ],
 
   // ── SOUND — physical only
   sfx: [
-    { scene: 'post-reactive', at: 0.12, id: 'notify', gain: -10, args: { chime: false, seed: 51 }, note: 'the post' },
-    { scene: 'post-steady', at: 0.12, id: 'notify', gain: -11, args: { chime: false, seed: 52 } },
-    { scene: 'post-steady', at: 1.05, id: 'tick', gain: -14, note: 'like' },
-    { scene: 'post-steady', at: 2.55, id: 'notify', gain: -13, args: { chime: false, seed: 53 }, note: 'his reply' },
-    { scene: 'spar-reactive', at: 0.22, id: 'swing', gain: -16, args: { seed: 70 } },
-    { scene: 'spar-reactive', at: 0.62, id: 'punch', gain: -6, note: 'the counter lands' },
-    { scene: 'spar-steady', at: 0.22, id: 'swing', gain: -16, args: { seed: 71 } },
-    { scene: 'spar-steady', at: 0.62, id: 'punch', gain: -8 },
-    { scene: 'spar-steady', at: 3.25, id: 'swing', gain: -14, args: { seed: 72 }, note: 'he slips it' },
-    { scene: 'book-reactive', at: 1.95, id: 'plop', gain: -12, note: 'the book hits the floor' },
-    ...[0, 1, 2, 3, 4, 5].map((k) => ({ scene: 'book-reactive', at: 2.55 + k * 0.38, id: 'tick', gain: -20 })),
-    ...[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((k) => ({ scene: 'book-steady', at: 0.45 + k * 0.3, id: 'plop', gain: -22, note: k ? '' : 'books stack up' })),
-    { scene: 'payoff', at: 0.33, id: 'bump', gain: -12, args: { heavy: 0.4 }, note: 'gloves touch' },
+    { scene: 'post-reactive', at: at(PR, 0.12), id: 'notify', gain: -10, args: { chime: false, seed: 51 }, note: 'the post' },
+    { scene: 'post-steady', at: at(PS, 0.12), id: 'notify', gain: -11, args: { chime: false, seed: 52 } },
+    { scene: 'post-steady', at: at(PS, 1.12), id: 'tick', gain: -14, note: 'like' },
+    { scene: 'post-steady', at: at(PS, 2.55), id: 'notify', gain: -13, args: { chime: false, seed: 53 }, note: 'his reply' },
+    { scene: 'spar-reactive', at: at(PREROLL, 0.22), id: 'swing', gain: -16, args: { seed: 70 } },
+    { scene: 'spar-reactive', at: at(PREROLL, 0.62), id: 'punch', gain: -6, note: 'the counter lands' },
+    { scene: 'spar-steady', at: at(PREROLL, 0.22), id: 'swing', gain: -16, args: { seed: 71 } },
+    { scene: 'spar-steady', at: at(PREROLL, 0.62), id: 'punch', gain: -8 },
+    { scene: 'spar-steady', at: at(PREROLL, 3.25), id: 'swing', gain: -14, args: { seed: 72 }, note: 'he slips it' },
+    { scene: 'book-reactive', at: at(PREROLL, 1.95), id: 'plop', gain: -12, note: 'the book hits the floor' },
+    ...[0, 1, 2, 3, 4].map((k) => ({ scene: 'book-reactive', at: at(PREROLL, 2.55 + k * 0.38), id: 'tick', gain: -20 })),
+    ...[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((k) => ({ scene: 'book-steady', at: at(PREROLL, 0.45 + k * 0.3), id: 'plop', gain: -22, note: k ? '' : 'books stack up' })),
+    ...[0, 1, 2, 3, 4, 5].map((k) => ({ scene: 'ready', at: 0.18 + k * 0.37, id: 'scuff', gain: -24, args: { seed: 80 + k }, note: k ? '' : 'on their toes' })),
   ],
 };

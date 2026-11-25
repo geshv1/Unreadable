@@ -67,7 +67,7 @@
     g.save();
     if (V.ep && V.ep.textStyle === 'rise') {
       const u = popIn ? V.ease.out(V.clamp(tl / 0.2)) : 1;
-      g.globalAlpha = u; g.translate(0, (1 - u) * 18);
+      g.globalAlpha = u * (sc._alpha == null ? 1 : sc._alpha); g.translate(0, (1 - u) * 18);
     } else {
       const k = popIn ? V.pop(tl) : 1;
       g.translate(CX, 560); g.scale(k, k); g.translate(-CX, -560);

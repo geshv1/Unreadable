@@ -38,6 +38,7 @@ canvas{display:block;width:540px;height:960px}
       document.fonts.load('700 30px "Archivo"'),
     ]);
     await document.fonts.ready;
+    if (V.assetsReady) await V.assetsReady;   // images an episode preloads (e.g. the CTA picture)
     V.load(V.EPISODE);
     V.renderFrame(0);
     // preview mode: ?play to watch in a browser

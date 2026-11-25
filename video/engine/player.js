@@ -48,7 +48,7 @@
     // scene.offset / scene.remap replay a slice of an action's choreography: remap = [[localT, actionT], ...]
     const lt = tl * (sc.speed || 1);
     let at = lt + (sc.offset || 0);
-    if (sc.remap) for (const [l0, a0] of sc.remap) if (lt >= l0) at = a0 + (lt - l0);
+    if (sc.remap) for (const [l0, a0, rate] of sc.remap) if (lt >= l0) at = a0 + (lt - l0) * (rate == null ? 1 : rate);   // [localT, actionT, rate]
     sc._lt = lt;
     const st = act(at, sc, ep) || {};
     // scene.solo = 'reactive' | 'steady': a dedicated scene for one lead (the other lead is left out)
@@ -110,7 +110,9 @@
     if (sc.beats) {
       let b = sc.beats[0];
       for (const x of sc.beats) if (tl * (sc.speed || 1) >= x.at) b = x;
-      V.drawText(g, Object.assign({}, sc, b), tl - b.at / (sc.speed || 1), sc.start > 0 || b.at > 0);
+      // beat.until: the caption fades out (0.18s) and the scene plays on without text
+      const fade = b.until != null ? 1 - V.clamp((tl * (sc.speed || 1) - b.until) / 0.18) : 1;
+      if (fade > 0) V.drawText(g, Object.assign({}, sc, b, { _alpha: fade }), tl - b.at / (sc.speed || 1), sc.start > 0 || b.at > 0);
     } else V.drawText(g, sc, tl, sc.start > 0);
     if (st.overlay) st.overlay(g);
     drawTransition(g, t);
