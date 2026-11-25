@@ -44,8 +44,14 @@
     const act = V.actions[sc.action];
     if (!act) throw new Error('Unknown action ' + sc.action);
     // scene.speed > 1 plays the scene's choreography faster (dur is the real, shortened length)
-    const st = act(tl * (sc.speed || 1), sc, ep) || {};
-    const figs = st.figs || [];
+    // scene.offset / scene.remap replay a slice of an action's choreography: remap = [[localT, actionT], ...]
+    const lt = tl * (sc.speed || 1);
+    let at = lt + (sc.offset || 0);
+    if (sc.remap) for (const [l0, a0] of sc.remap) if (lt >= l0) at = a0 + (lt - l0);
+    sc._lt = lt;
+    const st = act(at, sc, ep) || {};
+    // scene.solo = 'reactive' | 'steady': a dedicated scene for one lead (the other lead is left out)
+    const figs = (st.figs || []).filter((f) => !sc.solo || !(f.kind === 'reactive' || f.kind === 'steady') || f.kind === sc.solo);
     const back = figs.filter((f) => f.depth === 'back');
     const main = figs.filter((f) => f.depth !== 'back');
 
@@ -85,7 +91,7 @@
     if (st.fg) st.fg(g);                       // foreground layer (screen space): blurred figures close to the lens
     if (sc.grade) drawGrade(g, sc.grade, tl, sc.dur);
     // labels: scene setting wins (true/false), otherwise the episode setting
-    if (sc.labels != null ? sc.labels : ep.labels !== false) V.drawLabels(g, z, px);
+    if (sc.labels != null ? sc.labels : ep.labels !== false) V.drawLabels(g, z, px, sc.solo, sc.labelY);
     if (ep.vignette) drawVignette(g, ep.vignette);
     if (ep.grain) drawGrain(g, ep.grain, i);
     // CONTROL meters above each character (screen space, follow the camera)

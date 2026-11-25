@@ -129,7 +129,7 @@
   };
 
   // ---- labels under the floor
-  V.drawLabels = function (g, z = 1, px = 0) {
+  V.drawLabels = function (g, z = 1, px = 0, only = null, yOverride = null) {
     const lx = (x) => 540 + (x - px - 540) * z;
     g.save();
     const fs = Math.round(38 * Math.min(1, 0.2 + z));
@@ -138,7 +138,8 @@
     g.textAlign = 'center'; g.textBaseline = 'alphabetic';
     g.shadowColor = 'rgba(0,0,0,0.9)'; g.shadowBlur = 12;
     // letterSpacing adds trailing space; nudge right by half of it to stay centered
-    const ly = (V.ep && V.ep.labelY) || 1452;
+    const ly = yOverride || (V.ep && V.ep.labelY) || 1452;
+    if (only) { g.fillStyle = only === 'reactive' ? V.COL.red : '#F4F5F7'; g.fillText(only.toUpperCase(), 540 + fs * 0.16, ly); g.restore(); return; }
     g.fillStyle = V.COL.red; g.fillText('REACTIVE', lx(V.POS.reactive) + fs * 0.16, ly);
     g.fillStyle = '#F4F5F7'; g.fillText('STEADY', lx(V.POS.steady) + fs * 0.16, ly);
     g.restore();
