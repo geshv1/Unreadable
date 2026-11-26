@@ -1,0 +1,11 @@
+reactive-vs-steady-seen-preview — scene transitions (12.4s @ 30fps)
+
+00:00.00  frame   0  hook
+00:04.60  frame 138  board
+00:07.30  frame 219  post
+00:09.50  frame 285  judges
+
+Cuts (whoosh starts ~0.16s before, bass hit on the cut):
+  00:04.60  (4.60s, frame 138)  -> board
+  00:07.30  (7.30s, frame 219)  -> post
+  00:09.50  (9.50s, frame 285)  -> judges

@@ -1,0 +1,52 @@
+{
+ "title": "reactive-vs-steady-seen-preview",
+ "duration": 12.4,
+ "fps": 30,
+ "cuts": [
+  {
+   "t": 4.6,
+   "scene": "board"
+  },
+  {
+   "t": 7.3,
+   "scene": "post"
+  },
+  {
+   "t": 9.5,
+   "scene": "judges"
+  }
+ ],
+ "sfx": [
+  {
+   "scene": "post",
+   "at": 1.75,
+   "id": "phone_down",
+   "gain": -11,
+   "pan": -0.2,
+   "note": "laptop closed",
+   "t": 9.05
+  }
+ ],
+ "scenes": [
+  {
+   "id": "hook",
+   "start": 0,
+   "end": 4.6
+  },
+  {
+   "id": "board",
+   "start": 4.6,
+   "end": 7.3
+  },
+  {
+   "id": "post",
+   "start": 7.3,
+   "end": 9.5
+  },
+  {
+   "id": "judges",
+   "start": 9.5,
+   "end": 12.4
+  }
+ ]
+}

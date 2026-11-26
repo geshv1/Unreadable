@@ -822,4 +822,60 @@
     g.beginPath(); g.moveTo(-15, -26); g.lineTo(15, -26); g.lineTo(12, 24); g.lineTo(-12, 24); g.closePath(); g.fill(); g.stroke();
     g.restore();
   };
+
+  // ───────── narrated-format props
+  // Glowing eyes in the dark (pairs that blink). n pairs spread over an area (world px)
+  V.eyes = function (g, t, n, x0, x1, y0, y1, seed = 4, alpha = 1, red = false) {
+    const r = V.rng(seed);
+    g.save(); g.globalAlpha = alpha;
+    for (let i = 0; i < n; i++) {
+      const x = x0 + r() * (x1 - x0), y = y0 + r() * (y1 - y0), s = 0.6 + r() * 0.9, ph = r() * 7, on = r();
+      const blink = ((t * 0.7 + ph) % 3.2) < 0.12 ? 0.1 : 1;
+      if (t < on * 1.2) continue;   // they open one by one
+      g.save(); g.translate(x, y); g.scale(s, s * blink);
+      g.fillStyle = red ? '#ff4660' : '#f4f5f7'; g.shadowColor = red ? '#ff2a44' : '#ffffff'; g.shadowBlur = 14;
+      for (const dx of [-11, 11]) { g.beginPath(); g.ellipse(dx, 0, 6.5, 3.6, 0, 0, 6.283); g.fill(); }
+      g.restore();
+    }
+    g.restore();
+  };
+  // Yellow sticky note with a word
+  V.sticky = function (g, x, y, text, rot = 0, k = 1, crossed = 0) {
+    g.save(); g.translate(x, y); g.rotate(rot); g.scale(k, k);
+    g.shadowColor = 'rgba(0,0,0,0.5)'; g.shadowBlur = 10; g.shadowOffsetY = 4;
+    g.fillStyle = '#F2D04E'; g.fillRect(-64, -48, 128, 96); g.shadowColor = 'transparent';
+    g.fillStyle = 'rgba(0,0,0,0.08)'; g.fillRect(-64, -48, 128, 14);
+    g.fillStyle = '#2a2208'; g.font = `800 26px ${V.FONT.sans}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.letterSpacing = '1px';
+    g.fillText(text, 0, 6);
+    if (crossed > 0) { g.strokeStyle = V.COL.red; g.lineWidth = 5; g.beginPath(); g.moveTo(-50, 26); g.lineTo(-50 + 100 * crossed, -14); g.stroke(); }
+    g.restore();
+  };
+  // Upload card with a POST button and a hovering cursor (world px). hover 0..1, closing 0..1
+  V.uploadCard = function (g, cx, cy, k, hover, closing = 0, t = 0) {
+    const w = 560, h = 300;
+    g.save(); g.translate(cx, cy); g.scale(k * (1 - 0.3 * closing), k * (1 - closing)); g.globalAlpha = 1 - closing * 0.6;
+    g.shadowColor = 'rgba(0,0,0,0.7)'; g.shadowBlur = 40;
+    g.fillStyle = '#f4f5f7'; V.roundRect(g, -w / 2, -h / 2, w, h, 28); g.fill(); g.shadowBlur = 0;
+    g.fillStyle = '#1b1d25'; V.roundRect(g, -w / 2 + 26, -h / 2 + 26, 160, 248, 16); g.fill();
+    g.fillStyle = V.COL.red; g.beginPath(); g.moveTo(-w / 2 + 90, -h / 2 + 130); g.lineTo(-w / 2 + 130, -h / 2 + 150); g.lineTo(-w / 2 + 90, -h / 2 + 170); g.closePath(); g.fill();
+    g.fillStyle = '#5b5e68'; g.font = `700 26px ${V.FONT.sans}`; g.textAlign = 'left'; g.letterSpacing = '3px'; g.fillText('NEW VIDEO', -w / 2 + 210, -h / 2 + 60);
+    g.fillStyle = '#c9cbd3'; g.fillRect(-w / 2 + 210, -h / 2 + 90, 280, 14); g.fillRect(-w / 2 + 210, -h / 2 + 116, 200, 14);
+    const bx = -w / 2 + 210, by = h / 2 - 100;
+    g.fillStyle = V.COL.red; V.roundRect(g, bx, by, 300, 66, 33); g.fill();
+    g.fillStyle = '#fff'; g.font = `800 34px ${V.FONT.sans}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.letterSpacing = '6px';
+    g.fillText('POST', bx + 154, by + 35);
+    // cursor creeping toward the button, hesitating
+    const cxp = bx + 150 + (1 - hover) * 160 + Math.sin(t * 9) * 6 * hover, cyp = by + 34 + (1 - hover) * 70;
+    g.fillStyle = '#0d0e12'; g.strokeStyle = '#fff'; g.lineWidth = 3;
+    g.beginPath(); g.moveTo(cxp, cyp); g.lineTo(cxp, cyp + 44); g.lineTo(cxp + 12, cyp + 32); g.lineTo(cxp + 22, cyp + 52); g.lineTo(cxp + 30, cyp + 48); g.lineTo(cxp + 20, cyp + 28); g.lineTo(cxp + 36, cyp + 28); g.closePath(); g.fill(); g.stroke();
+    g.restore();
+  };
+  // Small counter panel e.g. STARTED: 0
+  V.counterPanel = function (g, x, y, label, value, red = true) {
+    g.save(); g.fillStyle = 'rgba(10,11,16,0.95)'; g.strokeStyle = red ? V.COL.red : '#e8eaee'; g.lineWidth = 3;
+    V.roundRect(g, x - 120, y - 52, 240, 104, 12); g.fill(); g.stroke();
+    g.fillStyle = '#9a9da7'; g.font = `700 20px ${V.FONT.sans}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.letterSpacing = '4px'; g.fillText(label, x + 2, y - 26);
+    g.fillStyle = red ? '#ff4660' : '#fff'; g.font = `800 52px ${V.FONT.sans}`; g.letterSpacing = '0px'; g.fillText(String(value), x, y + 18);
+    g.restore();
+  };
 })();
