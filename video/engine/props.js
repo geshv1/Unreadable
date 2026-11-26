@@ -878,4 +878,49 @@
     g.fillStyle = red ? '#ff4660' : '#fff'; g.font = `800 52px ${V.FONT.sans}`; g.letterSpacing = '0px'; g.fillText(String(value), x, y + 18);
     g.restore();
   };
+
+  // ───────── Pt. 8 (underperforming) props
+  // Barbell seen from the side: a plate at the hands + the bar stub. wobble shakes it.
+  V.barbell = function (g, hand, wobble = 0, t = 0) {
+    const x = hand[0] + Math.sin(t * 40) * wobble * 4, y = hand[1] + Math.cos(t * 37) * wobble * 3;
+    g.save();
+    g.fillStyle = '#2b2d36'; g.strokeStyle = '#e8eaee'; g.lineWidth = 5;
+    g.beginPath(); g.arc(x, y, 58, 0, 6.283); g.fill(); g.stroke();
+    g.strokeStyle = '#4a4d5a'; g.lineWidth = 3; g.beginPath(); g.arc(x, y, 38, 0, 6.283); g.stroke();
+    g.fillStyle = '#c9cbd3'; g.beginPath(); g.arc(x, y, 9, 0, 6.283); g.fill();
+    g.restore();
+  };
+  // Judge's score card held up
+  V.scoreCard = function (g, hand, text, k = 1, red = false) {
+    g.save(); g.translate(hand[0], hand[1] - 46); g.scale(k, k);
+    g.shadowColor = 'rgba(0,0,0,0.6)'; g.shadowBlur = 14;
+    g.fillStyle = '#f4f5f7'; g.fillRect(-48, -40, 96, 80); g.shadowBlur = 0;
+    g.strokeStyle = '#16171c'; g.lineWidth = 4; g.strokeRect(-48, -40, 96, 80);
+    g.fillStyle = red ? V.COL.red : '#0d0e12'; g.font = `800 60px ${V.FONT.sans}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, 0, 4);
+    g.restore();
+  };
+  // Labelled horizontal meter with an optional target line (world px)
+  V.labelMeter = function (g, x, y, w, label, v, color, target = null, targetLabel = '') {
+    g.save();
+    g.fillStyle = '#9a9da7'; g.font = `700 24px ${V.FONT.sans}`; g.textAlign = 'left'; g.textBaseline = 'alphabetic'; g.letterSpacing = '4px';
+    g.fillText(label, x, y - 18);
+    g.fillStyle = 'rgba(255,255,255,0.12)'; V.roundRect(g, x, y, w, 22, 11); g.fill();
+    g.fillStyle = color; g.shadowColor = color; g.shadowBlur = 14; V.roundRect(g, x, y, Math.max(22, w * V.clamp(v)), 22, 11); g.fill(); g.shadowBlur = 0;
+    if (target != null) {
+      const tx = x + w * target;
+      g.strokeStyle = '#f4f5f7'; g.setLineDash([8, 6]); g.lineWidth = 3; g.beginPath(); g.moveTo(tx, y - 40); g.lineTo(tx, y + 50); g.stroke(); g.setLineDash([]);
+      g.fillStyle = '#f4f5f7'; g.textAlign = 'center'; g.fillText(targetLabel, tx, y + 80);
+    }
+    g.restore();
+  };
+  // Growth curve panel (world px): u = progress 0..1; returns the point on the curve at u
+  V.growthCurve = function (g, x0, y0, x1, y1, u, color = '#f4f5f7') {
+    const pt = (k) => [V.lerp(x0, x1, k), y0 - (y0 - y1) * (Math.exp(4 * k) - 1) / (Math.exp(4) - 1)];
+    g.save();
+    g.strokeStyle = 'rgba(255,255,255,0.25)'; g.lineWidth = 3; g.beginPath(); g.moveTo(x0, y1 - 20); g.lineTo(x0, y0); g.lineTo(x1 + 20, y0); g.stroke();
+    g.strokeStyle = color; g.lineWidth = 8; g.lineCap = 'round'; g.shadowColor = color; g.shadowBlur = 18;
+    g.beginPath(); for (let k = 0; k <= u; k += 0.01) { const p = pt(k); k ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]); } g.stroke();
+    g.restore();
+    return pt(u);
+  };
 })();
