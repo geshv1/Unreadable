@@ -1,0 +1,29 @@
+underperforming — scene transitions (42.5s @ 30fps)
+
+00:00.00  frame   0  hook
+00:04.40  frame 132  best
+00:08.00  frame 240  no-try
+00:11.00  frame 330  never-start
+00:14.60  frame 438  zeros
+00:19.20  frame 576  admired
+00:21.50  frame 645  first-video
+00:22.90  frame 687  first-fight
+00:24.30  frame 729  first-day
+00:25.60  frame 768  stayed
+00:30.40  frame 912  in-public
+00:36.00  frame 1080  start
+00:40.00  frame 1200  cta
+
+Cuts (whoosh starts ~0.16s before, bass hit on the cut):
+  00:04.40  (4.40s, frame 132)  -> best
+  00:08.00  (8.00s, frame 240)  -> no-try
+  00:11.00  (11.00s, frame 330)  -> never-start
+  00:14.60  (14.60s, frame 438)  -> zeros
+  00:19.20  (19.20s, frame 576)  -> admired
+  00:21.50  (21.50s, frame 645)  -> first-video
+  00:22.90  (22.90s, frame 687)  -> first-fight
+  00:24.30  (24.30s, frame 729)  -> first-day
+  00:25.60  (25.60s, frame 768)  -> stayed
+  00:30.40  (30.40s, frame 912)  -> in-public
+  00:36.00  (36.00s, frame 1080)  -> start
+  00:40.00  (40.00s, frame 1200)  -> cta

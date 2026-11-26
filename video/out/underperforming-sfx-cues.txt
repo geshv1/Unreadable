@@ -1,0 +1,6 @@
+underperforming — sound-effect cues (4)
+
+  8.32s  frame 250  bump         -7.0 dB  the bar dropped
+ 13.15s  frame 394  phone_down  -11.0 dB  laptop closed
+ 23.15s  frame 694  punch        -4.0 dB  first fight
+ 24.45s  frame 734  bump        -12.0 dB  
