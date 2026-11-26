@@ -343,7 +343,12 @@
     }
   }
 
-  V.figLocalToWorld = (f, pt) => [f.x + pt[0] * V.S * (f.s || 1) * (f.face || 1), (f.y == null ? V.FLOOR : f.y) + pt[1] * V.S * (f.s || 1)];
+  V.figLocalToWorld = (f, pt) => {   // matches drawFigure: translate -> rotate -> scale(face)
+    const k = V.S * (f.s || 1);
+    let x = pt[0] * k * (f.face || 1), y = pt[1] * k;
+    if (f.rot) { const c = Math.cos(f.rot), sn = Math.sin(f.rot); [x, y] = [x * c - y * sn, x * sn + y * c]; }
+    return [f.x + x, (f.y == null ? V.FLOOR : f.y) + y];
+  };
   V.figPoint = function (f, name) {
     const G = V.geom(f.pose);
     return V.figLocalToWorld(f, G[name]);

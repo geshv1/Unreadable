@@ -1,0 +1,45 @@
+{
+ "title": "reactive-vs-steady-one-year-preview",
+ "duration": 12,
+ "fps": 30,
+ "cuts": [
+  {
+   "t": 3.4,
+   "scene": "mirror"
+  },
+  {
+   "t": 6.4,
+   "scene": "bedroom"
+  }
+ ],
+ "sfx": [
+  {
+   "scene": "bedroom",
+   "at": 0.45,
+   "id": "notify",
+   "gain": -12,
+   "args": {
+    "chime": false
+   },
+   "note": "phone buzz",
+   "t": 6.85
+  }
+ ],
+ "scenes": [
+  {
+   "id": "hook",
+   "start": 0,
+   "end": 3.4
+  },
+  {
+   "id": "mirror",
+   "start": 3.4,
+   "end": 6.4
+  },
+  {
+   "id": "bedroom",
+   "start": 6.4,
+   "end": 12
+  }
+ ]
+}

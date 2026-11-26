@@ -83,7 +83,8 @@
     if (st.fg) st.fg(g);                       // foreground layer (screen space): blurred figures close to the lens
     if (sc.grade) drawGrade(g, sc.grade, tl, sc.dur);
     // labels: scene setting wins (true/false), otherwise the episode setting
-    if (sc.labels != null ? sc.labels : ep.labels !== false) V.drawLabels(g, z, px);
+    if (ep.panel) V.drawPanel(g, ep.panel);
+    if (sc.labels != null ? sc.labels : ep.labels !== false) V.drawLabels(g, z, px, sc.labels === 'reactive' || sc.labels === 'steady' ? sc.labels : null, ep.labelY, ep.labelNames);
     if (ep.vignette) drawVignette(g, ep.vignette);
     if (ep.grain) drawGrain(g, ep.grain, i);
     // CONTROL meters above each character (screen space, follow the camera)
@@ -97,7 +98,7 @@
       }
       g.restore();
     }
-    V.drawText(g, sc, tl, sc.start > 0);
+    if (ep.narration) V.drawNarration(g, t); else V.drawText(g, sc, tl, sc.start > 0);
     if (st.overlay) st.overlay(g);
     drawTransition(g, t);
     // opening fade from black (episode.fadeIn seconds) and closing fade to black (episode.fadeOut)

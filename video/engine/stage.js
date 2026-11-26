@@ -125,17 +125,17 @@
   };
 
   // ---- labels under the floor
-  V.drawLabels = function (g, z = 1, px = 0) {
+  V.drawLabels = function (g, z = 1, px = 0, only = null, y = 1452, names = null) {
     const lx = (x) => 540 + (x - px - 540) * z;
+    const fs = Math.round(38 * Math.min(1, 0.2 + z)) * (names ? 0.82 : 1);
     g.save();
-    const fs = Math.round(38 * Math.min(1, 0.2 + z));
     g.font = `700 ${fs}px ${V.FONT.sans}`;
     g.letterSpacing = `${Math.round(fs * 0.32)}px`;
     g.textAlign = 'center'; g.textBaseline = 'alphabetic';
     g.shadowColor = 'rgba(0,0,0,0.9)'; g.shadowBlur = 12;
-    // letterSpacing adds trailing space; nudge right by half of it to stay centered
-    g.fillStyle = V.COL.red; g.fillText('REACTIVE', lx(V.POS.reactive) + fs * 0.16, 1452);
-    g.fillStyle = '#F4F5F7'; g.fillText('STEADY', lx(V.POS.steady) + fs * 0.16, 1452);
+    const N = names || { reactive: 'REACTIVE', steady: 'STEADY' };
+    if (only !== 'steady') { g.fillStyle = V.COL.red; g.fillText(N.reactive, (only ? 540 : lx(V.POS.reactive)) + fs * 0.16, y); }
+    if (only !== 'reactive') { g.fillStyle = '#F4F5F7'; g.fillText(N.steady, (only ? 540 : lx(V.POS.steady)) + fs * 0.16, y); }
     g.restore();
   };
 })();

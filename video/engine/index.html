@@ -6,6 +6,7 @@
 <style>
 @font-face{font-family:"Instrument Serif";font-style:italic;font-weight:400;src:url(../fonts/InstrumentSerif-Italic.ttf) format("truetype")}
 @font-face{font-family:"Instrument Serif";font-style:normal;font-weight:400;src:url(../fonts/InstrumentSerif-Regular.ttf) format("truetype")}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:300 700;src:url(../fonts/CormorantGaramond-Italic-VF.ttf) format("truetype")}
 @font-face{font-family:"Archivo";font-weight:100 900;src:url(../fonts/Archivo-VF.ttf) format("truetype")}
 html,body{margin:0;background:#0B0B0F}
 canvas{display:block;width:540px;height:960px}
@@ -19,6 +20,7 @@ canvas{display:block;width:540px;height:960px}
 <script src="sets.js"></script>
 <script src="props.js"></script>
 <script src="text.js"></script>
+<script src="narration.js"></script>
 <script src="player.js"></script>
 <script src="actions-common.js"></script>
 <script>
@@ -36,6 +38,7 @@ canvas{display:block;width:540px;height:960px}
       document.fonts.load('italic 400 100px "Instrument Serif"'),
       document.fonts.load('400 30px "Archivo"'),
       document.fonts.load('700 30px "Archivo"'),
+      document.fonts.load('italic 500 80px "Cormorant Garamond"'),
     ]);
     await document.fonts.ready;
     V.load(V.EPISODE);

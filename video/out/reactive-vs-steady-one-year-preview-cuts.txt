@@ -1,0 +1,9 @@
+reactive-vs-steady-one-year-preview — scene transitions (12s @ 30fps)
+
+00:00.00  frame   0  hook
+00:03.40  frame 102  mirror
+00:06.40  frame 192  bedroom
+
+Cuts (whoosh starts ~0.16s before, bass hit on the cut):
+  00:03.40  (3.40s, frame 102)  -> mirror
+  00:06.40  (6.40s, frame 192)  -> bedroom

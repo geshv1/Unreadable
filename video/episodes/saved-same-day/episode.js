@@ -1,9 +1,9 @@
-/* EPISODE CONFIG — "Same age. Same city." Pt. 8 (planned) — "Same day. Different control."
+/* EPISODE CONFIG — "Same age. Same city." (saved, not scheduled) — "Same day. Different control."
    From the saved brief (video/briefs/next-same-day.md), adapted to the owner's later direction:
    clean minimal look, big headlines only (no top lines, sublines or labels), the message first.
    One continuous day, tracked by a live CONTROL meter. */
 V.EPISODE = {
-  id: 'ep08-same-day',
+  id: 'saved-same-day',
   series: 'Same age. Same city.',
   episode: 8,
   handle: '@GESHV1',
