@@ -94,6 +94,7 @@ In the episode file:
 ```
 - **Voice**: `bm_lewis` (deep British, default), `am_fenrir` (most energetic), `am_puck`, `am_michael` (warm US),
   `am_onyx` (deepest, calmest). British voices (`bm_…`) need `"lang": "en-gb"`, American (`am_…`) `"en-us"`.
+- **Length**: set `pacing.target_seconds` (e.g. `[40, 45]`).
 - **Pace**: `speed` 1.0 = normal, 1.1 = faster, 0.9 = slower. Shorter pauses: lower the `gap` values.
 - The length is kept inside 30–35 s automatically (`pacing.auto_fit`): if the script is too long it first
   shortens the pauses and then speeds up the voice slightly. Set `"auto_fit": false` to keep your exact values.

@@ -298,11 +298,12 @@ def loud_cuts(P, job):
     nframes = int(round(c.dur * 30))
     f = 0
     k = 0
+    every = every if every > 0 else c.dur + 1.0  # no cuts: one camera
     while f < nframes:
         mk = sc.timeline_markers.new(f"cut{k}", frame=f + 1)
         mk.camera = cams[variants[k % len(variants)]]
         k += 1
-        f = int(round(k * every * 30))
+        f = max(f + 1, int(round(k * every * 30)))
 
     def update(t):
         m = c.m(t)
@@ -566,11 +567,12 @@ def phone3d(P, job):
     sc = bpy.context.scene
     nframes = int(round(c.dur * 30))
     f, k = 0, 0
+    every = every if every > 0 else c.dur + 1.0  # no cuts: one camera
     while f < nframes:
         mk = sc.timeline_markers.new(f"cut{k}", frame=f + 1)
         mk.camera = cams[variants[k % len(variants)]]
         k += 1
-        f = int(round(k * every * 30))
+        f = max(f + 1, int(round(k * every * 30)))
 
     def update(t):
         m = c.m(t)

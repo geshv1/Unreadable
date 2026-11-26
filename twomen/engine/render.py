@@ -388,7 +388,7 @@ def _mp3(x, path):
 
 
 # ------------------------------------------------------------------ QC
-def qc(final, tl, specs, info, outdir, log=print):
+def qc(final, tl, specs, info, outdir, log=print, target=(30, 35)):
     qd = outdir / "qc"
     qd.mkdir(exist_ok=True)
     rep = []
@@ -397,7 +397,8 @@ def qc(final, tl, specs, info, outdir, log=print):
     aus = [s for s in pr["streams"] if s["codec_type"] == "audio"][0]
     dur = float(pr["format"]["duration"])
     fr = vs["r_frame_rate"]
-    rep.append(f"duration {dur:.2f}s  (target 30-35)  {'OK' if 30 <= dur <= 35 else 'FAIL'}")
+    lo, hi = target
+    rep.append(f"duration {dur:.2f}s  (target {lo:g}-{hi:g})  {'OK' if lo <= dur <= hi else 'FAIL'}")
     rep.append(f"video {vs['codec_name']} {vs['width']}x{vs['height']} @ {fr}  "
                f"{'OK' if (vs['width'], vs['height'], fr, vs['codec_name']) == (W, H, f'{FPS}/1', 'h264') else 'FAIL'}")
     rep.append(f"audio {aus['codec_name']} {aus['sample_rate']} Hz {aus.get('channels')} ch  "
@@ -593,7 +594,7 @@ def make(config_path, out_root=None, workers=4, log=print):
             continue
         params = dict(sc.get("params", {}))
         if params.get("messages"):
-            params["screens"] = chat_screens(params["messages"], ROOT / "cache" / "screens" / slug)
+            params["screens"] = chat_screens(params["messages"], ROOT / "cache" / "screens" / slug / f"shot{sh['index'] + 1:02d}")
         n = sh["f1"] - sh["f0"]
         job = {"scene": sc["scene"][3:], "params": params, "frames": n, "dur": n / FPS,
                "beats": [round(b["start"] - sh["f0"] / FPS, 4) for b in sh["beats"]],
@@ -635,6 +636,6 @@ def make(config_path, out_root=None, workers=4, log=print):
     write_cover(cfg, tl, outdir / "cover.jpg", frames_dirs)
     write_post(cfg, outdir / "post.txt")
     write_credits(cfg, outdir / "credits.txt")
-    rep = qc(final, tl, specs, info, outdir, log)
+    rep = qc(final, tl, specs, info, outdir, log, tuple(cfg.get("pacing", {}).get("target_seconds", (30, 35))))
     log(f"done in {time.time() - t_start:.0f}s -> {outdir}")
     return outdir, rep
