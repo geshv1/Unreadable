@@ -22,15 +22,25 @@ GRADES = {
     "man2": dict(gain=(0.80, 0.92, 1.10), sat=0.70, contrast=1.06, lift=(0.0, 0.006, 0.016), grain=3.5, vig=0.60),
     "black": None,
 }
+GRADES3D = {
+    "neutral": dict(gain=(1.02, 1.0, 0.97), sat=0.92, contrast=1.06, lift=(0.0, 0.0, 0.0), grain=3.0, vig=0.45),
+    "man1": dict(gain=(1.10, 0.92, 0.84), sat=1.05, contrast=1.12, lift=(0.006, 0.0, 0.0), grain=4.0, vig=0.55),
+    "man2": dict(gain=(0.90, 0.96, 1.08), sat=0.70, contrast=1.04, lift=(0.0, 0.003, 0.010), grain=3.0, vig=0.5),
+    "black": None,
+}
+B3D_RES = (576, 1024)
+B3D_SAMPLES = 8
 _VIG = {}
 
 
-def _vignette(strength):
-    if strength not in _VIG:
-        yy, xx = np.mgrid[0:SH, 0:SW].astype(np.float32)
-        d = (xx / SW - 0.5) ** 2 * 1.4 + (yy / SH - 0.5) ** 2
-        _VIG[strength] = np.clip(1 - d * strength * 1.9, 0.15, 1)[..., None]
-    return _VIG[strength]
+def _vignette(strength, shape=(SH, SW)):
+    key = (strength, shape)
+    if key not in _VIG:
+        h, w = shape
+        yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+        d = (xx / w - 0.5) ** 2 * 1.4 + (yy / h - 0.5) ** 2
+        _VIG[key] = np.clip(1 - d * strength * 1.9, 0.15, 1)[..., None]
+    return _VIG[key]
 
 
 def grade(img, g):
@@ -42,12 +52,13 @@ def grade(img, g):
     piv = 0.22
     img = piv + (img - piv) * g["contrast"]
     img = np.clip(img, 0, None) + np.array(g["lift"], np.float32)
-    img = img * _vignette(g["vig"])
+    img = img * _vignette(g["vig"], img.shape[:2])
     return np.clip(img, 0, 1)
 
 
 # ------------------------------------------------------------------ camera
-def camera_affine(cam, t, dur, rng_ph, cut_idx=0):
+def camera_affine(cam, t, dur, rng_ph, cut_idx=0, src=(SW, SH)):
+    sw_, sh_ = src
     z0, z1 = cam.get("zoom", [1.0, 1.0])
     p = t / max(dur, 1e-6)
     p = p * p * (3 - 2 * p) if cam.get("ease", True) else p
@@ -55,8 +66,8 @@ def camera_affine(cam, t, dur, rng_ph, cut_idx=0):
     if cam.get("punch"):
         z *= 1.0 + cam["punch"] * (cut_idx % 2)
     dx, dy = cam.get("drift", [0.0, 0.0])
-    ox, oy = dx * p * SW, dy * p * SH
-    A = cam.get("shake", 0.0) / 2.0  # full-res px -> scene px
+    ox, oy = dx * p * sw_, dy * p * sh_
+    A = cam.get("shake", 0.0) * sw_ / W  # full-res px -> source px
     rot = 0.0
     if A:
         f = (1.7, 3.9, 7.3)
@@ -65,12 +76,12 @@ def camera_affine(cam, t, dur, rng_ph, cut_idx=0):
         ox += A * sx / 1.3
         oy += A * sy / 1.3
         rot = math.radians(0.35) * math.sin(2 * math.pi * 2.3 * t + rng_ph[6])
-        z = max(z, 1.0 + 2.6 * A / SW * 2)
-    s = (SW / W) / z
+        z = max(z, 1.0 + 2.6 * A / sw_ * 2)
+    s = (sw_ / W) / z
     c, sn = math.cos(rot), math.sin(rot)
     a, b = s * c, -s * sn
     d, e = s * sn, s * c
-    cx, cy = SW / 2 + ox, SH / 2 + oy
+    cx, cy = sw_ / 2 + ox, sh_ / 2 + oy
     return (a, b, cx - a * W / 2 - b * H / 2, d, e, cy - d * W / 2 - e * H / 2)
 
 
@@ -132,10 +143,14 @@ def build_timeline(cfg, log=print):
             else:
                 speed = min(1.2, speed + 0.04)
         else:
-            if gs < 1.6:
-                gs = min(1.6, gs * 1.15)
+            if gs < 1.2:
+                gs = min(1.2, gs * 1.1)
+            elif speed > float(v.get("min_speed", 0.96)):
+                speed = max(float(v.get("min_speed", 0.96)), speed - 0.03)
+            elif gs < 1.8:
+                gs = min(1.8, gs * 1.1)
             else:
-                speed = max(0.7, speed - 0.04)
+                break
     # snap shot boundaries to frames
     for sh in shots:
         sh["f0"] = int(round(sh["start"] * FPS))
@@ -163,6 +178,7 @@ def card_specs(tl, cfg):
             specs.append({"text": b["cfg"]["text"], "size": b["cfg"].get("text_size", style.get("size", 112)),
                           "y": b["cfg"].get("text_y", sh["cfg"].get("text_y", style.get("y", 0.34))),
                           "font": style.get("font", "Montserrat-ExtraBold.ttf"),
+                          "box": sh["cfg"].get("text_box", False),
                           "on": on, "off": off, "first": first})
         out.append(specs)
     return out
@@ -170,18 +186,19 @@ def card_specs(tl, cfg):
 
 # ------------------------------------------------------------------ shot worker
 def _render_shot(job):
-    (idx, shot_cfg, nframes, beat_starts, specs, clean_path, final_path, anim, seed) = job
-    grade_cfg = GRADES.get(shot_cfg.get("grade", "neutral"))
+    (idx, shot_cfg, nframes, beat_starts, specs, clean_path, final_path, anim, seed, frames_dir) = job
     scene_name = shot_cfg.get("scene", "black")
+    is3d = scene_name.startswith("3d:")
+    grade_cfg = (GRADES3D if is3d else GRADES).get(shot_cfg.get("grade", "neutral"))
     dur = nframes / FPS
     params = dict(shot_cfg.get("params", {}))
     params["anim_speed"] = anim
     S = SceneState(params, {"dur": dur, "beats": beat_starts, "seed": seed})
-    fn = SCENES[scene_name]
+    fn = None if is3d else SCENES[scene_name]
     cam = shot_cfg.get("camera", {})
     rng = np.random.default_rng(seed + 100)
     ph = rng.uniform(0, 2 * np.pi, 8)
-    cards = [(textcards.Card(s["text"], s["font"], s["size"], s["y"]), s) for s in specs]
+    cards = [(textcards.Card(s["text"], s["font"], s["size"], s["y"], box=s.get("box", False)), s) for s in specs]
     cut_every = float(params.get("cut_every", 0) or 0)
     grain = None
     if grade_cfg:
@@ -195,11 +212,14 @@ def _render_shot(job):
         if grade_cfg is None:
             frame = np.zeros((H, W, 3), np.uint8)
         else:
-            img = fn(S, t)
+            if is3d:
+                img = np.asarray(Image.open(Path(frames_dir) / f"{i + 1:04d}.png").convert("RGB"), np.float32) / 255.0
+            else:
+                img = fn(S, t)
             img = grade(img, grade_cfg)
             small = np.clip(img * 255 + dither.uniform(-0.5, 0.5, img.shape), 0, 255).astype(np.uint8)
             cut_idx = int(t / cut_every) if cut_every else 0
-            aff = camera_affine(cam, t, dur, ph, cut_idx)
+            aff = camera_affine(cam, t, dur, ph, cut_idx, (small.shape[1], small.shape[0]))
             big = Image.fromarray(small).transform((W, H), Image.AFFINE, aff, resample=Image.BICUBIC)
             frame = np.asarray(big, np.int16) + grain[(i // 2) % 6][..., None]
             frame = np.clip(frame, 0, 255).astype(np.uint8)
@@ -290,12 +310,25 @@ def write_srts(tl, specs, kit):
     (kit / "narration.srt").write_text("\n".join(lines))
 
 
-def write_cover(cfg, tl, out):
+def write_cover(cfg, tl, out, frames_dirs=None):
     cv = cfg.get("cover", {})
     si = cv.get("shot", 0)
     sh = tl["shots"][si]
     sc = sh["cfg"]
     dur = (sh["f1"] - sh["f0"]) / FPS
+    if sc.get("scene", "").startswith("3d:") and frames_dirs and si in frames_dirs:
+        fi = min(int(cv.get("t", 1.0) * FPS) + 1, sh["f1"] - sh["f0"])
+        img = np.asarray(Image.open(Path(frames_dirs[si]["out"]) / f"{fi:04d}.png").convert("RGB"), np.float32) / 255
+        img = grade(img, GRADES3D[sc.get("grade", "neutral")])
+        small = Image.fromarray((img * 255).astype(np.uint8))
+        aff = camera_affine({"zoom": [cv.get("zoom", 1.0)] * 2}, 0, 1, np.zeros(8), 0, small.size)
+        frame = np.array(small.transform((W, H), Image.AFFINE, aff, resample=Image.BICUBIC))
+        for line in cv.get("text", []):
+            card = textcards.Card(line["text"], size=line.get("size", 150), y=line.get("y", 0.30),
+                                  max_lines=line.get("max_lines", 3))
+            textcards.draw(frame, card, 1.0, 1.0, "fade", True)
+        Image.fromarray(frame).save(out, quality=93)
+        return
     S = SceneState(dict(sc.get("params", {}), anim_speed=1.0),
                    {"dur": dur, "beats": [b["start"] - sh["start"] for b in sh["beats"]], "seed": 11})
     img = grade(SCENES[sc["scene"]](S, cv.get("t", 1.0)), GRADES[sc.get("grade", "neutral")])
@@ -321,8 +354,9 @@ def write_credits(cfg, out):
     v = cfg.get("voice", {})
     out.write_text(
         f"{cfg.get('title', '')} - credits\n\n"
-        "FOOTAGE\nNo stock footage and no movie/TV clips. Every image is generated by this pipeline\n"
-        "(procedural silhouettes, light and fog), so there is nothing to credit or license.\n\n"
+        "FOOTAGE\nNo stock footage and no movie/TV clips. Every image is generated by this pipeline:\n"
+        "3D scenes built and rendered in Blender (free, open source) from code - no downloaded models,\n"
+        "textures or clips - so there is nothing to credit or license.\n\n"
         f"VOICE\nKokoro-82M text-to-speech (open source, Apache-2.0), voice '{v.get('voice', 'am_onyx')}'.\n"
         "https://huggingface.co/hexgrad/Kokoro-82M  - free for commercial use.\n\n"
         "MUSIC / SOUND EFFECTS\nDrone, whoosh and bass hit are synthesised by this pipeline (no samples).\n\n"
@@ -440,6 +474,93 @@ def qc(final, tl, specs, info, outdir, log=print):
     return rep
 
 
+# ------------------------------------------------------------------ 3D (Blender)
+B3D_DIR = ROOT / "engine" / "b3d"
+
+
+def chat_screens(messages, out_dir):
+    """Phone screen images: 1, 2, 3... sent messages, no reply."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    f = ImageFont.truetype(str(FONTS / "Montserrat-ExtraBold.ttf"), 40)
+    sm = f.font_variant(size=26)
+    paths = []
+    for n in range(1, len(messages) + 1):
+        w, h = 540, 1140
+        im = Image.new("RGB", (w, h), (14, 14, 18))
+        d = ImageDraw.Draw(im)
+        d.rectangle([0, 0, w, 150], fill=(26, 26, 32))
+        d.ellipse([30, 60, 100, 130], fill=(70, 70, 80))
+        y = 220
+        for msg in messages[:n]:
+            tw = d.textlength(msg, font=f)
+            x1 = w - 30
+            x0 = x1 - tw - 56
+            d.rounded_rectangle([x0, y, x1, y + 76], radius=36, fill=(54, 118, 235))
+            d.text((x0 + 28, y + 16), msg, font=f, fill=(250, 250, 255))
+            y += 100
+        d.text((w - 30 - d.textlength("Delivered", font=sm), y - 14), "Delivered", font=sm, fill=(130, 130, 140))
+        p = out_dir / f"screen_{n}.png"
+        im.save(p)
+        paths.append(str(p))
+    return paths
+
+
+def _b3d_version(scene):
+    """Hash of the code that affects one 3D scene: lib + run + shared helpers + that scene's builder."""
+    import hashlib
+    import re
+    h = hashlib.sha1()
+    for f in ("lib.py", "run.py"):
+        h.update((B3D_DIR / f).read_bytes())
+    text = (B3D_DIR / "scenes3d.py").read_text()
+    builders = set(re.findall(r'"(\w+)": \w+,', text[text.index("BUILDERS = {"):]))
+    parts = re.split(r"\n(?=def \w+\()", text[:text.index("BUILDERS = {")])
+    for part in parts:
+        m = re.match(r"def (\w+)\(", part)
+        if not m or m.group(1) not in builders or m.group(1) == scene:
+            h.update(part.encode())
+    return h.hexdigest()[:10]
+
+
+def b3d_key(job):
+    import hashlib
+    j = {k: v for k, v in job.items() if k != "out"}
+    return hashlib.sha1((json.dumps(j, sort_keys=True) + _b3d_version(job["scene"])).encode()).hexdigest()[:16]
+
+
+def render_3d(jobs3d, log=print, parallel=2):
+    """Run Blender for every 3D shot whose frames are not cached yet."""
+    import concurrent.futures as cf
+    import hashlib
+    import os
+    todo = []
+    for job in jobs3d:
+        out = ROOT / "cache" / "frames" / b3d_key(job)
+        job["out"] = str(out)
+        if not (out / f"{job['frames']:04d}.png").exists():
+            todo.append(job)
+    if not todo:
+        log("      3D frames: all cached")
+        return
+    log(f"      3D: rendering {len(todo)} shots in Blender ({sum(j['frames'] for j in todo)} frames)")
+    env = dict(os.environ, LP_NUM_THREADS=str(max(1, (os.cpu_count() or 4) // parallel)))
+
+    def one(job):
+        jf = Path(job["out"] + ".json")
+        jf.parent.mkdir(parents=True, exist_ok=True)
+        jf.write_text(json.dumps(job))
+        t0 = time.time()
+        r = subprocess.run(["blender", "-b", "-noaudio", "-P", str(B3D_DIR / "run.py"), "--", str(jf)],
+                           capture_output=True, text=True, env=env)
+        if "B3D_DONE" not in r.stdout:
+            raise RuntimeError(f"Blender failed on {job['scene']}:\n" + (r.stdout + r.stderr)[-3000:])
+        return job["scene"], job["frames"], time.time() - t0
+
+    with cf.ThreadPoolExecutor(parallel) as ex:
+        for scene, n, dt in ex.map(one, sorted(todo, key=lambda j: -j["frames"])):
+            log(f"      3D {scene}: {n} frames in {dt:.0f}s")
+
+
 # ------------------------------------------------------------------ main
 def make(config_path, out_root=None, workers=4, log=print):
     t_start = time.time()
@@ -465,6 +586,21 @@ def make(config_path, out_root=None, workers=4, log=print):
     sf.write(work / "mix.wav", mix, SR, subtype="PCM_24")
 
     log(f"[3/5] rendering {len(tl['shots'])} shots on {workers} cores")
+    jobs3d, frames_dirs = [], {}
+    for sh in tl["shots"]:
+        sc = sh["cfg"]
+        if not sc.get("scene", "").startswith("3d:"):
+            continue
+        params = dict(sc.get("params", {}))
+        if params.get("messages"):
+            params["screens"] = chat_screens(params["messages"], ROOT / "cache" / "screens" / slug)
+        n = sh["f1"] - sh["f0"]
+        job = {"scene": sc["scene"][3:], "params": params, "frames": n, "dur": n / FPS,
+               "beats": [round(b["start"] - sh["f0"] / FPS, 4) for b in sh["beats"]],
+               "anim_speed": float(sc.get("slowmo", 1.0)), "res": list(B3D_RES), "samples": B3D_SAMPLES}
+        jobs3d.append(job)
+        frames_dirs[sh["index"]] = job
+    render_3d(jobs3d, log)
     jobs, clip_names = [], []
     for sh, sp in zip(tl["shots"], specs):
         sc = sh["cfg"]
@@ -473,7 +609,8 @@ def make(config_path, out_root=None, workers=4, log=print):
         n = sh["f1"] - sh["f0"]
         beat_starts = [b["start"] - sh["f0"] / FPS for b in sh["beats"]]
         jobs.append((sh["index"], sc, n, beat_starts, sp, kit / "clips" / name, work / f"seg_{sh['index']:02d}.mp4",
-                     float(sc.get("slowmo", 1.0)), 1000 + sh["index"] * 17))
+                     float(sc.get("slowmo", 1.0)), 1000 + sh["index"] * 17,
+                     frames_dirs[sh["index"]]["out"] if sh["index"] in frames_dirs else None))
     jobs.sort(key=lambda j: -j[2])
     with mp.get_context("fork").Pool(workers) as pool:
         for idx in pool.imap_unordered(_render_shot, jobs):
@@ -495,7 +632,7 @@ def make(config_path, out_root=None, workers=4, log=print):
     _mp3(stems["bass_hit"], kit / "sfx" / "bass_hit.mp3")
     write_srts(tl, specs, kit)
     write_timeline_txt(tl, specs, info, kit, clip_names)
-    write_cover(cfg, tl, outdir / "cover.jpg")
+    write_cover(cfg, tl, outdir / "cover.jpg", frames_dirs)
     write_post(cfg, outdir / "post.txt")
     write_credits(cfg, outdir / "credits.txt")
     rep = qc(final, tl, specs, info, outdir, log)

@@ -4,9 +4,15 @@ Turns one JSON file into a finished 1080x1920 TikTok video (30 fps, H.264 + AAC,
 plus a CapCut kit, cover, post text, credits and a quality report.
 
 Everything is free and needs **no API keys**:
-- **Visuals** are generated (backlit silhouettes, fog, light, phones). No stock footage, no movie clips.
-- **Voice** is Kokoro-82M, an open-source narrator that runs on the machine (default voice `am_onyx`, deep and calm).
+- **Visuals** are 3D scenes built and rendered in **Blender** from code: articulated wooden/obsidian mannequins,
+  geometric solids, shattering glass, a crowd of eyes, a realistic eye, phones, an hourglass, a slamming stone door,
+  pillars, a neon grid world. No stock footage, no movie clips, no downloaded models.
+  (Older 2D silhouette scenes still work: use a scene name without `3d:`.)
+- **Voice** is Kokoro-82M, an open-source narrator that runs on the machine (default voice `bm_lewis`: deep British, expressive).
 - **Sound** (dark drone, whoosh, bass hit) is synthesised.
+
+Rendering takes ~15–25 min per episode (3D on CPU). Frames are cached, so re-rendering after a text,
+voice or timing change that doesn't change a shot's length is quick.
 
 ## Make a new episode (3 steps)
 
@@ -18,7 +24,8 @@ Everything is free and needs **no API keys**:
 .venv/bin/python make.py episodes/ep03_betrayal.json
 ```
 
-First time on a new machine, run `./setup.sh` once (installs Python packages, downloads the voice model).
+First time on a new machine, run `./setup.sh` once (installs Python packages, downloads the voice model)
+and install Blender: `apt-get install -y blender libegl1 libegl-mesa0 libgl1-mesa-dri`.
 If you're on your iPhone, just ask Claude in a session: *"make episode 3: The Betrayal, here's the script…"*.
 
 The result lands in `output/<slug>/`:
@@ -54,23 +61,35 @@ separately and measured, so cuts and text land exactly on the words.
   `"text_size": 200` (bigger text).
 - Transition: `{"scene": "black", "grade": "black", "section": "transition", "duration": 0.5, "sfx": "whoosh"}`.
 - Principle shot: `"silence_before": 0.55` gives the hard cut to silence before the last line.
-- `footage_terms` is only a note (what stock footage would fit); it isn't used.
 
-### Scenes you can use
-`two_men`, `room_crowd` (`"laugh": true`), `room_watch`, `man1_fire`, `man1_cuts` (fast cuts: `variants`
-`shout_profile`, `point_close`, `gesture`; `cut_every` seconds), `man2_pause` (`nod_beat`), `faceoff` (`dim_beat`),
-`walk_away`, `alone`, `door_close`, `phone` (`messages`, variants `phone_close`, `hunched`), `shrink`,
-`phone_down`, `wondering`, `black`.
+### 3D scenes (`"scene": "3d:<name>"`)
+| Scene | What you see | Params |
+|---|---|---|
+| `hook_twins` | wooden + obsidian mannequins, giant glowing wireframe icosahedron, orbiting solids | – |
+| `eyes_room` | mannequin on a marble pedestal, a crowd of eyeballs on tiers staring at him | `laugh`, `watch` (push-in, narrowed eyes) |
+| `fire_back` | mannequin pointing and shouting, red glass wall shattering, sparks | – |
+| `loud_cuts` | fast cuts: sound-wave rings, a hand pointing at you, gesturing in front of a red wire cube | `variants`, `cut_every` |
+| `calm_monolith` | still obsidian mannequin, black monolith, rain frozen in slow motion | `nod_beat` |
+| `eye_close` | extreme close-up of a realistic eye; light dims | `dim_beat` |
+| `walk_grid` | mannequin walking away through glowing arches on a neon grid | `walk_speed` |
+| `insult_returns` | a red spiky orb flies back and circles the insulter's head | – |
+| `door_slam` | two huge stone doors closing on two mannequins, light through the gap | `close_from` |
+| `phone3d` | phone close-up with your messages appearing + man hunched over his phone | `messages`, `variants`, `cut_every` |
+| `shrink_pillars` | black pillars slam down around a mannequin as the camera rises | – |
+| `phone_down3d` | phone face-down on a marble table next to a glass of water | – |
+| `hourglass` | hourglass with falling sand, the other person waiting in the background | – |
+
+`"text_box": true` on a shot puts a dark plate behind the text (use it on bright/red scenes).
 
 ## Change the voice or pace
 
 In the episode file:
 ```json
-"voice": {"voice": "am_onyx", "speed": 0.9}
+"voice": {"voice": "bm_lewis", "speed": 1.05, "lang": "en-gb"}
 ```
-- **Voice**: other deep male voices to try: `bm_lewis` (deep British), `am_michael` (warmer US), `bm_george`
-  (British, lighter), `am_fenrir`. For a British voice also set `"lang": "en-gb"`.
-- **Pace**: `speed` 0.85 = slower, 1.0 = normal. Longer pauses: raise the `gap` values.
+- **Voice**: `bm_lewis` (deep British, default), `am_fenrir` (most energetic), `am_puck`, `am_michael` (warm US),
+  `am_onyx` (deepest, calmest). British voices (`bm_…`) need `"lang": "en-gb"`, American (`am_…`) `"en-us"`.
+- **Pace**: `speed` 1.0 = normal, 1.1 = faster, 0.9 = slower. Shorter pauses: lower the `gap` values.
 - The length is kept inside 30–35 s automatically (`pacing.auto_fit`): if the script is too long it first
   shortens the pauses and then speeds up the voice slightly. Set `"auto_fit": false` to keep your exact values.
 

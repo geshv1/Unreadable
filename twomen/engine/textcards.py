@@ -60,7 +60,7 @@ def _layout(words, font, max_w, space):
 class Card:
     """A pre-rendered text card (RGBA, full-res pixels) with its on-screen position."""
 
-    def __init__(self, text, font_file="Montserrat-ExtraBold.ttf", size=112, y=0.34, max_lines=2):
+    def __init__(self, text, font_file="Montserrat-ExtraBold.ttf", size=112, y=0.34, max_lines=2, box=False):
         words = parse(text)
         font_path = str(FONTS / font_file)
         while True:
@@ -99,6 +99,11 @@ class Card:
         shifted = Image.new("RGBA", (bw, bh), (0, 0, 0, 0))
         shifted.alpha_composite(shadow, (0, offset))
         img = Image.alpha_composite(img, shifted)
+        if box:  # solid dark plate for busy/red backgrounds
+            plate = Image.new("RGBA", (bw, bh), (0, 0, 0, 0))
+            ImageDraw.Draw(plate).rounded_rectangle([pad * 0.45, pad * 0.55, bw - pad * 0.45, bh - pad * 0.55],
+                                                    radius=int(size * 0.25), fill=(0, 0, 0, 165))
+            img = Image.alpha_composite(img, plate)
         img = Image.alpha_composite(img, txt)
         self.img = img
         self.text = text
