@@ -1,0 +1,164 @@
+{
+ "title": "underperforming",
+ "duration": 42.5,
+ "fps": 30,
+ "cuts": [
+  {
+   "t": 4.4,
+   "scene": "best"
+  },
+  {
+   "t": 8,
+   "scene": "no-try"
+  },
+  {
+   "t": 11,
+   "scene": "never-start"
+  },
+  {
+   "t": 14.6,
+   "scene": "zeros"
+  },
+  {
+   "t": 19.2,
+   "scene": "admired"
+  },
+  {
+   "t": 21.5,
+   "scene": "first-video"
+  },
+  {
+   "t": 22.9,
+   "scene": "first-fight"
+  },
+  {
+   "t": 24.3,
+   "scene": "first-day"
+  },
+  {
+   "t": 25.6,
+   "scene": "stayed"
+  },
+  {
+   "t": 30.4,
+   "scene": "in-public"
+  },
+  {
+   "t": 36,
+   "scene": "start"
+  },
+  {
+   "t": 40,
+   "scene": "cta"
+  }
+ ],
+ "sfx": [
+  {
+   "scene": "no-try",
+   "at": 0.32,
+   "id": "bump",
+   "gain": -7,
+   "args": {
+    "seed": 33,
+    "heavy": 1.1
+   },
+   "note": "the bar dropped",
+   "t": 8.32
+  },
+  {
+   "scene": "never-start",
+   "at": 2.15,
+   "id": "phone_down",
+   "gain": -11,
+   "pan": -0.2,
+   "note": "laptop closed",
+   "t": 13.15
+  },
+  {
+   "scene": "first-fight",
+   "at": 0.25,
+   "id": "punch",
+   "gain": -4,
+   "note": "first fight",
+   "t": 23.15
+  },
+  {
+   "scene": "first-day",
+   "at": 0.15,
+   "id": "bump",
+   "gain": -12,
+   "args": {
+    "seed": 34,
+    "heavy": 0.6
+   },
+   "t": 24.45
+  }
+ ],
+ "scenes": [
+  {
+   "id": "hook",
+   "start": 0,
+   "end": 4.4
+  },
+  {
+   "id": "best",
+   "start": 4.4,
+   "end": 8
+  },
+  {
+   "id": "no-try",
+   "start": 8,
+   "end": 11
+  },
+  {
+   "id": "never-start",
+   "start": 11,
+   "end": 14.6
+  },
+  {
+   "id": "zeros",
+   "start": 14.6,
+   "end": 19.2
+  },
+  {
+   "id": "admired",
+   "start": 19.2,
+   "end": 21.5
+  },
+  {
+   "id": "first-video",
+   "start": 21.5,
+   "end": 22.9
+  },
+  {
+   "id": "first-fight",
+   "start": 22.9,
+   "end": 24.299999999999997
+  },
+  {
+   "id": "first-day",
+   "start": 24.299999999999997,
+   "end": 25.599999999999998
+  },
+  {
+   "id": "stayed",
+   "start": 25.599999999999998,
+   "end": 30.4
+  },
+  {
+   "id": "in-public",
+   "start": 30.4,
+   "end": 36
+  },
+  {
+   "id": "start",
+   "start": 36,
+   "end": 40
+  },
+  {
+   "id": "cta",
+   "start": 40,
+   "end": 42.5
+  }
+ ]
+}
