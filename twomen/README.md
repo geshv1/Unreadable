@@ -4,14 +4,16 @@ Turns one JSON file into a finished 1080x1920 TikTok video (30 fps, H.264 + AAC,
 plus a CapCut kit, cover, post text, credits and a quality report.
 
 Everything is free and needs **no API keys**:
-- **Visuals** are 3D scenes built and rendered in **Blender** from code: articulated wooden/obsidian mannequins,
-  geometric solids, shattering glass, a crowd of eyes, a realistic eye, phones, an hourglass, a slamming stone door,
-  pillars, a neon grid world. No stock footage, no movie clips, no downloaded models.
+- **Visuals** are 3D scenes built and rendered in **Blender** from code: realistic 3D men (free CC0 MakeHuman
+  body, skeleton and expressions; skin, clothes, hair and eyes made in code) acting out each line, plus geometric
+  solids, shattering glass, a crowd of eyes, phones, an hourglass, a slamming stone door, pillars, a neon grid world.
+  No stock footage, no movie clips. The three men: **Man 1** (burgundy top, reacts), **Man 2** (black top, calm),
+  **the other one** (grey top, insulter / the one who says no).
   (Older 2D silhouette scenes still work: use a scene name without `3d:`.)
 - **Voice** is Kokoro-82M, an open-source narrator that runs on the machine (default voice `bm_lewis`: deep British, expressive).
 - **Sound** (dark drone, whoosh, bass hit) is synthesised.
 
-Rendering takes ~15–25 min per episode (3D on CPU). Frames are cached, so re-rendering after a text,
+Rendering takes ~45–60 min per 40 s episode (3D on CPU, no graphics card). Frames are cached, so re-rendering after a text,
 voice or timing change that doesn't change a shot's length is quick.
 
 ## Make a new episode (3 steps)
@@ -24,7 +26,8 @@ voice or timing change that doesn't change a shot's length is quick.
 .venv/bin/python make.py episodes/ep03_betrayal.json
 ```
 
-First time on a new machine, run `./setup.sh` once (installs Python packages, downloads the voice model)
+First time on a new machine, run `./setup.sh` once (installs Python packages, downloads the voice model and the
+free MakeHuman body data)
 and install Blender: `apt-get install -y blender libegl1 libegl-mesa0 libgl1-mesa-dri`.
 If you're on your iPhone, just ask Claude in a session: *"make episode 3: The Betrayal, here's the script…"*.
 
@@ -65,16 +68,18 @@ separately and measured, so cuts and text land exactly on the words.
 ### 3D scenes (`"scene": "3d:<name>"`)
 | Scene | What you see | Params |
 |---|---|---|
-| `hook_twins` | wooden + obsidian mannequins, giant glowing wireframe icosahedron, orbiting solids | – |
+| `hook_twins` | Man 1 + Man 2 under a giant glowing wireframe icosahedron, orbiting solids | – |
+| `face_close` | head-and-shoulders close-up: angry shouting (red) or calm stare (cold) | `who` (man1/man2), `mood` (red/cold), `dim_beat` |
+| `untouchable` | Man 2 stands still; red spiky orbs fly at him and dissolve before touching | – |
 | `eyes_room` | mannequin on a marble pedestal, a crowd of eyeballs on tiers staring at him | `laugh`, `watch` (push-in, narrowed eyes) |
 | `fire_back` | mannequin pointing and shouting, red glass wall shattering, sparks | – |
 | `loud_cuts` | fast cuts: sound-wave rings, a hand pointing at you, gesturing in front of a red wire cube | `variants`, `cut_every` |
 | `calm_monolith` | still obsidian mannequin, black monolith, rain frozen in slow motion | `nod_beat` |
-| `eye_close` | extreme close-up of a realistic eye; light dims | `dim_beat` |
+| `eye_close` | extreme close-up of a giant eye; light dims | `dim_beat` |
 | `walk_grid` | mannequin walking away through glowing arches on a neon grid | `walk_speed` |
 | `insult_returns` | a red spiky orb flies back and circles the insulter's head | – |
-| `door_slam` | two huge stone doors closing on two mannequins, light through the gap | `close_from` |
-| `phone3d` | phone close-up with your messages appearing + man hunched over his phone | `messages`, `variants`, `cut_every` |
+| `door_slam` | two huge stone doors closing on both men, light through the gap | `close_from`, `closed` (Man 2 alone in front of the shut door) |
+| `phone3d` | phone close-up with the messages appearing + Man 1 sitting hunched over his phone | `messages`, `variants` (`phone_close`, `hunched`), `cut_every` |
 | `shrink_pillars` | black pillars slam down around a mannequin as the camera rises | – |
 | `phone_down3d` | phone face-down on a marble table next to a glass of water | – |
 | `hourglass` | hourglass with falling sand, the other person waiting in the background | – |

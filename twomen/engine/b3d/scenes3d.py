@@ -6,6 +6,7 @@ import random
 import bpy
 from mathutils import Euler, Vector
 
+from . import human as Hm
 from . import lib as L
 
 
@@ -34,6 +35,33 @@ class Clock:
         return i
 
 
+def man1(name="Man1", loc=(0, 0, 0), yaw=0.0):
+    """The one who reacts: lighter skin, deep burgundy knit."""
+    return Hm.Human(name, loc, yaw, muscle=0.6, tone=(0.55, 0.37, 0.28), top=(0.11, 0.014, 0.016),
+                    bottom=(0.018, 0.018, 0.022), ethnic=(("caucasian", 0.8), ("asian", 0.2)),
+                    iris=((0.12, 0.07, 0.03), (0.38, 0.24, 0.10)))
+
+
+def man2(name="Man2", loc=(0, 0, 0), yaw=0.0):
+    """The calm one: darker skin, black knit."""
+    return Hm.Human(name, loc, yaw, muscle=0.68, tone=(0.13, 0.075, 0.045), top=(0.010, 0.010, 0.012),
+                    bottom=(0.014, 0.014, 0.017), ethnic=(("african", 0.75), ("caucasian", 0.25)),
+                    iris=((0.05, 0.03, 0.015), (0.2, 0.12, 0.05)))
+
+
+def other(name="Other", loc=(0, 0, 0), yaw=0.0):
+    """The insulter / the one who said no: grey knit."""
+    return Hm.Human(name, loc, yaw, muscle=0.45, weight=0.55, tone=(0.47, 0.34, 0.25), top=(0.10, 0.10, 0.11),
+                    bottom=(0.03, 0.03, 0.035), ethnic=(("asian", 0.5), ("caucasian", 0.5)),
+                    iris=((0.06, 0.04, 0.02), (0.25, 0.16, 0.07)))
+
+
+def place(h, x, y, z=0.0, yaw=None):
+    h.arm.location = Vector((x, y, h.base_z + z))
+    if yaw is not None:
+        h.arm.rotation_euler = (0, 0, yaw)
+
+
 def man_wood(name, loc=(0, 0, 0), yaw=0.0):
     return L.Mannequin(name, L.wood(name + "_wood"), L.mat(name + "_j", (0.10, 0.07, 0.05), rough=0.35),
                        loc=loc, yaw=yaw)
@@ -51,6 +79,10 @@ def man_clay(name, loc=(0, 0, 0), yaw=0.0):
 
 def mirror_floor(c=(0.012, 0.012, 0.015), rough=0.08):
     return L.plane((0, 0, 0), 300, L.mat("floor", c, rough=rough, coat=0.6))
+
+
+def nod(sp, deg, turn=0.0, tilt=0.0):
+    return Hm.nod(sp, deg, turn, tilt)
 
 
 def breathe(man, m, amt=1.0):
@@ -81,8 +113,8 @@ def hook_twins(P, job):
     c = Clock(job)
     L.setup_render(fog=0.02, fog_color=(0.9, 0.88, 0.85))
     mirror_floor()
-    a = man_wood("ManA", (-0.72, 0, 0), yaw=0.12)
-    b = man_obsidian("ManB", (0.72, 0, 0), yaw=-0.12)
+    a = man1("ManA", (-0.62, 0, 0), yaw=0.12)
+    b = man2("ManB", (0.62, 0, 0), yaw=-0.12)
     wire = L.emission("wire", (1.0, 0.95, 0.9), 4.0)
     ico = L.platonic("ico", (0, 3.6, 2.4), 1.7, wire, wire=0.025)
     core = L.platonic("octa", (0, 3.6, 2.4), 0.55, L.mat("chrome", (0.95, 0.95, 0.97), metal=1, rough=0.08))
@@ -114,13 +146,12 @@ def hook_twins(P, job):
             ang = ph + m * sp
             ob.location = Vector((R * math.cos(ang), 3.6 + R * math.sin(ang) * 0.6, 2.4 + z + 0.15 * math.sin(m + ph)))
             ob.rotation_euler = Euler(w * m * 1.5)
-        for man, k in ((a, 0), (b, 1)):
-            man.rest()
-            breathe(man, m + k)
         s = c.since(t, 2) if len(c.beats) > 2 else -1
-        if s >= 0:  # "one loses everything": the wooden one sags
-            k = ease(s / 0.8)
-            a.set(neck=(0.35 * k, 0, 0), chest=(0.12 * k, 0, 0), shoulderL=(0, 0.04, 0), shoulderR=(0, -0.04, 0))
+        k = ease(s / 0.8) if s >= 0 else 0.0  # "one loses everything": man 1 sags
+        b.apply(nod(Hm.stand(m * 1.6 + 1), -3, 0, 0))
+        a.apply(Hm.nod(Hm.lean(Hm.stand(m * 1.6), 6 * k), 22 * k))
+        a.face(sad=k)
+        b.face()
     return update
 
 
@@ -130,13 +161,13 @@ def eyes_room(P, job):
     L.setup_render(fog=0.025, fog_color=(1.0, 0.85, 0.7))
     L.plane((0, 0, 0), 200, L.concrete("conc", (0.05, 0.045, 0.04)))
     ped = L.cylinder((0, 0, 0.15), 0.85, 0.3, L.marble("ped", base=(0.5, 0.48, 0.46), scale=6.0))
-    man = man_wood("Mocked", (0, 0, 0.3))
+    man = man1("Mocked", (0, 0, 0.3))
     L.light("SPOT", (0, -0.5, 7), 4200, (1.0, 0.82, 0.6), look_at=(0, 0, 1), spot=26, blend=0.4, size=0.3)
     L.light("AREA", (0, -5, 4), 220, (1.0, 0.9, 0.8), size=6, look_at=(0, 2, 1.5))
     edge = L.emission("tier", (1.0, 0.6, 0.3), 1.6)
     eyes = []
     rnd = random.Random(7)
-    head_target = Vector((0, 0, 2.05))
+    head_target = Vector((0, 0, 1.95))
     for row, (R, z, r, n) in enumerate(((3.0, 1.0, 0.22, 9), (4.1, 1.9, 0.27, 11), (5.3, 2.9, 0.33, 13))):
         L.torus((0, 0, z - r - 0.15), R, 0.025, edge)
         mat_eye, pupil = L.eye_material(f"eye{row}", iris=(0.18, 0.10, 0.05), iris2=(0.5, 0.33, 0.12))
@@ -158,9 +189,8 @@ def eyes_room(P, job):
         else:
             cam.location = Vector((0.3 * math.sin(m * 0.5), -6.2 + 0.8 * p, 2.3))
             L.aim(cam, (0, 1.0, 1.6))
-        man.rest()
-        man.set(neck=(0.28, 0, 0), chest=(0.06, 0, 0))
-        breathe(man, m)
+        man.apply(Hm.nod(Hm.lean(Hm.stand(m * 1.6), 4), 16))
+        man.face(sad=0.5)
         for ob, pos, ph, fr, r, blink_at in eyes:
             tgt = head_target.copy()
             if not watch:
@@ -185,8 +215,7 @@ def fire_back(P, job):
     c = Clock(job)
     _red_world()
     L.plane((0, 0, 0), 200, L.mat("floor", (0.03, 0.005, 0.005), rough=0.15, coat=0.5))
-    man = man_wood("Fires", (0, 0, 0), yaw=0.35)
-    man.point(True)
+    man = man1("Fires", (0, 0, 0), yaw=0.35)
     glass = L.mat("redglass", (1.0, 0.25, 0.2), rough=0.02, transmission=0.9, ior=1.5, emit=(1, 0.1, 0.05), strength=0.4)
     pieces = L.shards(4.2, 3.4, 8, 7, 0.03, center=(0, 1.8, 1.75), material=glass, seed=5)
     rnd = random.Random(9)
@@ -209,11 +238,13 @@ def fire_back(P, job):
 
     def update(t):
         m = c.m(t)
-        man.rest()
-        man.point(True)
-        jab = math.sin(m * 18) * 0.10
-        man.set(shoulderR=(-1.45 + jab, 0, -0.55), elbowR=(-0.05, 0, 0), chest=(0.14, 0, -0.1),
-                neck=(-0.12, 0, 0.1), spine=(0.08, 0, 0), shoulderL=(-0.3, 0.2, 0), elbowL=(-1.3, 0, 0))
+        jab = math.sin(m * 18) * 0.12
+        sp = Hm.lean(Hm.stand(), 10)
+        Hm.point(sp, "R", (-0.55, -1.0, 0.12 + jab))
+        Hm._arm(sp, "L", (0.25, -0.2, -1), (0.1, -1.0, 0.2))
+        Hm.nod(sp, -6, 8)
+        man.apply(sp, {**Hm.fist_local("R", 1.0, keep_index=True), **Hm.fist_local("L", 1.0)})
+        man.face(angry=1.0, mouth_open=0.35 + 0.35 * abs(math.sin(m * 9)))
         dt = max(0.0, m - t0)
         for ob, cen, v, w in motion:
             ob.location = cen + v * dt + Vector((0, 0, -2.5 * dt * dt))
@@ -239,14 +270,13 @@ def loud_cuts(P, job):
     L.plane((0, 0, 0), 600, L.mat("floor", (0.03, 0.005, 0.005), rough=0.2))
     red = L.emission("redwire", (1.0, 0.15, 0.08), 6)
     # A: profile shouting with sound rings
-    A = man_wood("Shout", (0.5, 0, 0), yaw=-math.pi / 2)
+    A = man1("Shout", (0.5, 0, 0), yaw=-math.pi / 2)
     rings = [L.torus((0, 0, 1.85), 0.2, 0.012, red, rot=(0, math.pi / 2, 0)) for _ in range(6)]
     L.light("AREA", (-3, 1.5, 2.5), 1200, (1, 0.25, 0.12), size=2, look_at=(0, 0, 1.8))
     L.light("AREA", (1.6, -2.2, 2.2), 260, (1.0, 0.6, 0.4), size=1.2, look_at=(0, 0, 1.7))
-    camA = L.camera((0.12, -2.5, 1.72), (0.12, 0, 1.62), lens=32, name="camA")
+    camA = L.camera((0.0, -1.7, 1.62), (0.2, 0, 1.5), lens=34, name="camA")
     # B: pointing hand at the camera, red bokeh behind
-    B = man_wood("Point", (30, 0, 0))
-    B.point(True)
+    B = man1("Point", (30, 0, 0))
     bok = L.emission("bokeh", (1.0, 0.3, 0.12), 8)
     rnd = random.Random(2)
     for i in range(40):
@@ -256,7 +286,7 @@ def loud_cuts(P, job):
     L.light("AREA", (30, 3, 2), 900, (1, 0.2, 0.1), size=2, look_at=(30, 0, 1.4))
     camB = L.camera((30.5, -1.75, 1.62), (29.86, -0.55, 1.55), lens=34, dof_target=1.35, fstop=2.0, name="camB")
     # C: full figure gesturing in front of a spinning red wire cube
-    C = man_wood("Gesture", (60, 0, 0))
+    C = man1("Gesture", (60, 0, 0))
     cubew = L.platonic("cube", (60, 2.5, 2.0), 2.0, red, wire=0.03)
     L.light("AREA", (60, 4.5, 2.5), 1300, (1, 0.25, 0.12), size=3, look_at=(60, 0, 1.4))
     L.light("SPOT", (61.5, -2.5, 4), 900, (1, 0.5, 0.3), look_at=(60, 0, 1.3), spot=35)
@@ -276,22 +306,21 @@ def loud_cuts(P, job):
 
     def update(t):
         m = c.m(t)
-        A.rest()
-        lean = 0.15 + 0.08 * math.sin(m * 9)
-        A.set(chest=(lean, 0, 0), neck=(-0.25, 0, 0), shoulderL=(-0.5, 0.5, 0), shoulderR=(-0.5, -0.5, 0),
-              elbowL=(-1.2, 0, 0), elbowR=(-1.2, 0, 0))
+        lean = 8 + 5 * math.sin(m * 9)
+        A.apply(Hm.nod(Hm.gesture(Hm.lean(Hm.stand(), lean), m, 0.6), -12), {**Hm.fist_local("L"), **Hm.fist_local("R")})
+        A.face(angry=1.0, mouth_open=0.4 + 0.5 * abs(math.sin(m * 7)))
         for i, rg in enumerate(rings):
             ph = ((m * 2.2) + i / len(rings)) % 1.0
             rg.location = Vector((0.25 - ph * 2.6, 0, 1.84))
             s = 1 + ph * 7
             rg.scale = (s, s, max(0.05, 1 - ph))
-        B.rest()
-        B.point(True)
-        B.set(shoulderR=(-1.52 + 0.06 * math.sin(m * 14), 0, 0.05), elbowR=(0, 0, 0), chest=(0.05, 0, 0))
-        C.rest()
+        sp = Hm.lean(Hm.stand(), 5)
+        Hm.point(sp, "R", (-0.08, -1.0, 0.08 + 0.06 * math.sin(m * 14)))
+        B.apply(Hm.nod(sp, -4), Hm.fist_local("R", 1.0, keep_index=True))
+        B.face(angry=1.0, mouth_open=0.3)
         w = math.sin(m * 8)
-        C.set(shoulderL=(-0.6 - 0.3 * w, 0.6, 0), shoulderR=(-0.6 + 0.3 * w, -0.6, 0), elbowL=(-1.5, 0, 0),
-              elbowR=(-1.5, 0, 0), chest=(0.08, 0, 0.1 * w), neck=(-0.1, 0, -0.1 * w))
+        C.apply(Hm.nod(Hm.gesture(Hm.lean(Hm.stand(), 6), m * 1.2), -5, 8 * w))
+        C.face(angry=0.8, mouth_open=0.3 + 0.3 * abs(w))
         cubew.rotation_euler = (m * 0.9, m * 0.6, m * 1.1)
     return update
 
@@ -300,7 +329,7 @@ def calm_monolith(P, job):
     c = Clock(job)
     L.setup_render(fog=0.025, fog_color=(0.7, 0.8, 1.0), world=(0.001, 0.0015, 0.003))
     L.plane((0, 0, 0), 200, L.mat("wet", (0.01, 0.012, 0.016), rough=0.04, coat=1.0))
-    man = man_obsidian("Calm", (0, 0, 0))
+    man = man2("Calm", (0, 0, 0))
     mono = L.cube((0, 5.5, 2.4), (1.4, 0.35, 4.8), L.mat("mono", (0.006, 0.006, 0.008), rough=0.06, coat=1.0))
     halo = L.torus((0, 5.3, 2.6), 1.9, 0.02, L.emission("halo", (0.6, 0.8, 1.0), 5), rot=(math.pi / 2, 0, 0))
     drop_m = L.mat("drop", (0.8, 0.9, 1.0), rough=0.0, emit=(0.6, 0.75, 1.0), strength=0.6, transmission=0.6)
@@ -319,12 +348,13 @@ def calm_monolith(P, job):
         m = c.m(t)
         p = ease(t / c.dur)
         cam.location = Vector((0, -5.4 + 0.6 * p, 1.5))
-        man.rest()
-        breathe(man, m, 0.6)
+        nd = 0.0
         if nod_beat >= 0:
             s = c.since(t, nod_beat)
             if 0 <= s <= 1.0:
-                man.j["neck"].rotation_euler.x = 0.42 * math.sin(s / 1.0 * math.pi)
+                nd = 20 * math.sin(s / 1.0 * math.pi)
+        man.apply(Hm.nod(Hm.stand(m * 1.2), nd))
+        man.face()
         mono.rotation_euler = (0, 0, m * 0.12)
         halo.rotation_euler = (math.pi / 2, 0, m * 0.05)
         for ob, p0, spd in rain:
@@ -388,7 +418,7 @@ def walk_grid(P, job):
         L.cube((1.7, y, 2.0), (0.1, 0.1, 4.0), glow)
         L.cube((0, y, 4.0), (3.5, 0.1, 0.1), glow)
     L.sphere((0, 120, 22), 9, material=L.emission("moon", (0.75, 0.85, 1.0), 3), seg=48, rings=24)
-    man = man_obsidian("Walker", (0, 0, 0), yaw=math.pi)
+    man = man2("Walker", (0, 0, 0), yaw=math.pi)
     L.light("SUN", (0, 50, 10), 1.6, (0.7, 0.82, 1.0), look_at=(0, 0, 0))
     L.light("AREA", (0, 8, 3), 600, (0.6, 0.75, 1.0), size=4, look_at=(0, 0, 1.2))
     cam = L.camera((0, -3.4, 1.6), (0, 2, 1.3), lens=38)
@@ -397,9 +427,8 @@ def walk_grid(P, job):
     def update(t):
         m = c.m(t)
         y = 0.5 + m * speed
-        man.base.location = Vector((0, y, 0))
-        man.rest()
-        man.walk(m * 2 * math.pi * 0.85)
+        place(man, 0, y)
+        man.apply(Hm.walk(m * 2 * math.pi * 0.85))
         cam.location = Vector((0.25 * math.sin(m * 0.3), y - 3.4 - 0.8 * t / c.dur * 1.5, 1.6))
         L.aim(cam, (0, y + 2.0, 1.3))
     return update
@@ -409,22 +438,21 @@ def insult_returns(P, job):
     c = Clock(job)
     L.setup_render(fog=0.03, fog_color=(0.7, 0.75, 0.9), world=(0.0005, 0.0006, 0.001))
     L.plane((0, 0, 0), 200, L.concrete("conc", (0.05, 0.05, 0.055)))
-    man = man_clay("Insulter", (0, 1.0, 0))
+    man = other("Insulter", (0, 1.0, 0))
     orb = L.spiky_orb((0, 0, 0), 0.14, 0.9, L.emission("orb", (1.0, 0.06, 0.04), 9))
     ol = L.light("POINT", (0, 0, 0), 150, (1.0, 0.1, 0.05), size=0.1)
     L.light("SPOT", (0, 0.6, 6.5), 1400, (0.7, 0.8, 1.0), look_at=(0, 1.0, 0.8), spot=22, blend=0.5)
     L.light("AREA", (0, 4, 3), 300, (0.6, 0.7, 0.9), size=4, look_at=(0, 1, 1.2))
     cam = L.camera((0.3, -4.6, 1.7), (0, 1.0, 1.3), lens=36)
-    p0, p1, p2 = Vector((1.6, -3.0, 1.2)), Vector((1.2, -0.6, 2.8)), Vector((0, 1.0, 2.35))
+    p0, p1, p2 = Vector((1.6, -3.0, 1.2)), Vector((1.2, -0.6, 2.7)), Vector((0, 1.0, 2.15))
 
     def update(t):
         m = c.m(t)
         p = ease(t / c.dur)
         cam.location = Vector((0.3 - 0.3 * p, -4.6 + 1.3 * p, 1.7))
         L.aim(cam, (0, 1.0, 1.4))
-        man.rest()
-        man.set(neck=(0.5, 0, 0), chest=(0.15, 0, 0), shoulderL=(0.05, 0.05, 0), shoulderR=(0.05, -0.05, 0))
-        breathe(man, m, 0.5)
+        man.apply(Hm.nod(Hm.lean(Hm.stand(m), 8), 26))
+        man.face(sad=0.8)
         k = ease(min(1.0, t / (c.dur * 0.6)))
         pos = (1 - k) ** 2 * p0 + 2 * (1 - k) * k * p1 + k * k * p2
         if k >= 1:
@@ -450,8 +478,16 @@ def door_slam(P, job):
     right = L.cube((1.6, 3.0, 2.75), (2.2, 0.45, 5.5), stone, bevel=0.02)
     L.light("AREA", (0, 5.5, 2.6), 2200, (1.0, 0.92, 0.8), size=2.5, look_at=(0, 0, 1.2))
     L.light("AREA", (0, -4, 4), 60, (0.8, 0.85, 1.0), size=5, look_at=(0, 2, 1))
-    a = man_wood("NoA", (-0.55, 0.9, 0), yaw=math.pi)
-    b = man_obsidian("NoB", (0.55, 0.9, 0), yaw=math.pi)
+    closed = bool(P.get("closed", False))
+    if closed:
+        L.light("AREA", (1.2, -1.5, 2.4), 160, (0.7, 0.82, 1.0), size=1.5, look_at=(0, 1.6, 1.5))
+        L.light("SPOT", (0, 3.2, 3.5), 900, (0.7, 0.82, 1.0), look_at=(0, 1.6, 1.2), spot=30)
+    if closed:
+        a = None
+        b = man2("NoB", (0, 1.6, 0), yaw=0.0)
+    else:
+        a = man1("NoA", (-0.55, 0.9, 0), yaw=math.pi)
+        b = man2("NoB", (0.55, 0.9, 0), yaw=math.pi)
     motes = dust(60, ((-1.0, 1.0), (0.5, 3.0), (0.2, 4.0)), L.emission("mote", (1, 0.9, 0.75), 3), 0.008)
     cam = L.camera((0.0, -4.6, 1.6), (0, 3, 2.1), lens=32)
     close_from = float(P.get("close_from", 0.25))
@@ -460,13 +496,14 @@ def door_slam(P, job):
         m = c.m(t)
         u = min(max((t / c.dur - close_from) / (1 - close_from), 0), 1)
         k = u ** 2.2  # accelerating, slams at the end
-        gap = 1.2 * (1 - k)
+        gap = 0.0 if closed else 1.2 * (1 - k)
         left.location.x = -1.1 - gap
         right.location.x = 1.1 + gap
         cam.location = Vector((0, -4.6 + 0.6 * ease(t / c.dur), 1.6))
-        for man in (a, b):
-            man.rest()
-            breathe(man, m)
+        for i, man in enumerate((a, b)):
+            if man is not None:
+                man.apply(Hm.stand(m * 1.4 + i))
+                man.face()
         move_dust(motes, m)
     return update
 
@@ -506,14 +543,23 @@ def phone3d(P, job):
     scr_light = L.light("AREA", (0, -0.6, 1.5), 40, (0.8, 0.85, 1.0), size=0.6, look_at=(0, -2, 1.5))
     camA = L.camera((0.05, -1.75, 1.5), (0, 0, 1.47), lens=40, dof_target=1.75, fstop=1.8, name="camA")
     # B: man hunched over the phone, sitting on a block
-    L.cube((30, 0.15, 0.25), (0.6, 0.5, 0.5), L.concrete("block", (0.1, 0.09, 0.08)))
-    man = man_wood("Texter", (30, 0, 0))
-    man.sit()
-    man.j["pelvis"].location.z = 0.55
-    phB, scrB = make_phone((30, -0.42, 0.98), 0.22, (-0.9, 0, 0))
-    L.light("AREA", (30, -0.38, 1.05), 25, (0.85, 0.9, 1.0), size=0.15, look_at=(30, 0, 1.6))
+    L.cube((30, 0.2, 0.22), (0.6, 0.5, 0.44), L.concrete("block", (0.1, 0.09, 0.08)))
+    man = man1("Texter", (30, 0, 0))
+    place(man, 30, 0.05, -0.45)
+
+    def hunch_pose(m_=0.0):
+        sp = Hm.phone_hold(Hm.sit(Hm.stand()))
+        Hm.lean(sp, 26)
+        Hm.nod(sp, 30)
+        return sp
+    man.apply(hunch_pose())
+    bpy.context.view_layer.update()
+    pl, pr = man.arm.pose.bones["wrist.L"], man.arm.pose.bones["wrist.R"]
+    hand = man.arm.matrix_world @ ((pl.tail + pr.tail) / 2)
+    phB, scrB = make_phone(tuple(hand + Vector((0, -0.03, 0.02))), 0.2, (-0.7, 0, 0))
+    L.light("AREA", tuple(hand + Vector((0, -0.05, 0.05))), 18, (0.85, 0.9, 1.0), size=0.12, look_at=tuple(hand + Vector((0, 0.3, 0.5))))
     L.light("POINT", (32.5, 3, 3), 250, (1.0, 0.6, 0.3), size=0.3)
-    camB = L.camera((31.6, -1.6, 1.25), (30, -0.1, 1.0), lens=38, name="camB")
+    camB = L.camera((31.2, -1.5, 1.15), (30, -0.15, 0.95), lens=36, name="camB")
     cams = {"phone_close": camA, "hunched": camB}
     variants = P.get("variants", ["phone_close", "hunched"])
     every = float(P.get("cut_every", 0.6))
@@ -533,12 +579,8 @@ def phone3d(P, job):
             for i, pl in enumerate(planes):
                 pl.hide_render = i != min(n, len(planes) - 1)
         phA.rotation_euler = (0.12 + 0.02 * math.sin(m * 1.7), 0.02 * math.sin(m * 1.1), 0.18 + 0.03 * math.sin(m * 0.8))
-        man.rest()
-        man.sit()
-        man.set(spine=(0.35, 0, 0), chest=(0.3, 0, 0), neck=(0.55, 0, 0),
-                shoulderL=(-0.85, 0.25, 0), shoulderR=(-0.85, -0.25, 0), elbowL=(-1.05, 0, 0), elbowR=(-1.05, 0, 0),
-                hipL=(-1.5, 0.05, 0), hipR=(-1.5, -0.05, 0), kneeL=(1.45, 0, 0), kneeR=(1.45, 0, 0))
-        man.j["wristR"].rotation_euler.x = 0.25 * math.sin(m * 12) if n >= 0 else 0  # typing
+        man.apply(hunch_pose(m), {"finger1-2.R": (20 * abs(math.sin(m * 10)), 0, 0)})
+        man.face(sad=0.6)
     return update
 
 
@@ -546,7 +588,7 @@ def shrink_pillars(P, job):
     c = Clock(job)
     _red_world(0.03)
     L.plane((0, 0, 0), 300, L.mat("floor", (0.02, 0.005, 0.004), rough=0.12, coat=0.6))
-    man = man_wood("Small", (0, 0, 0))
+    man = man1("Small", (0, 0, 0))
     pm = L.mat("pillar", (0.01, 0.008, 0.008), rough=0.15, coat=1.0)
     edge = L.emission("pedge", (1.0, 0.15, 0.06), 6)
     rnd = random.Random(12)
@@ -572,8 +614,8 @@ def shrink_pillars(P, job):
         p = ease(t / c.dur)
         cam.location = Vector((0.4 * p, -3.2 - 4.5 * p, 1.6 + 6.5 * p))
         L.aim(cam, (0, 0.3, 0.9 - 0.2 * p))
-        man.rest()
-        man.set(neck=(0.15 + 0.4 * p, 0, 0), chest=(0.05 + 0.15 * p, 0, 0))
+        man.apply(Hm.nod(Hm.lean(Hm.stand(m), 3 + 10 * p), 8 + 22 * p))
+        man.face(sad=p)
         for ob, pos, h, start in pillars:
             u = (t / c.dur - start) / 0.12
             if u <= 0:
@@ -645,8 +687,9 @@ def hourglass(P, job):
     rnd = random.Random(3)
     gph = [rnd.random() for _ in grains]
     # the other person, blurred in the background, lit by a phone
-    other = man_clay("Other", (0.5, 2.4, 0), yaw=math.pi * 0.85)
-    L.cube((0.5, 2.5, 0.25), (0.5, 0.5, 0.5), L.mat("seat", (0.04, 0.04, 0.045), rough=0.6))
+    oth = other("Other", (0.5, 2.4, 0), yaw=math.pi * 0.85)
+    place(oth, 0.5, 2.4, -0.45, math.pi * 0.85)
+    L.cube((0.5, 2.55, 0.22), (0.5, 0.5, 0.44), L.mat("seat", (0.04, 0.04, 0.045), rough=0.6))
     L.light("POINT", (0.42, 2.1, 1.05), 15, (0.7, 0.8, 1.0), size=0.05)
     for i in range(3):
         L.cube((-1.0 + i * 0.9, 4.2, 2.0), (0.75, 0.05, 2.2), L.emission(f"win{i}", (0.6, 0.72, 1.0), 1.4))
@@ -669,16 +712,123 @@ def hourglass(P, job):
         for g, ph_ in zip(grains, gph):
             u = (m * 1.8 + ph_) % 1.0
             g.location = Vector((0.002 * math.sin(ph_ * 40), 0.002 * math.cos(ph_ * 40), z0 + 0.175 - u * 0.12))
-        other.rest()
-        other.sit()
-        other.set(spine=(0.25, 0, 0), chest=(0.2, 0, 0), neck=(0.45, 0, 0), shoulderL=(-0.8, 0.2, 0),
-                  shoulderR=(-0.8, -0.2, 0), elbowL=(-1.0, 0, 0), elbowR=(-1.0, 0, 0),
-                  hipL=(-1.5, 0.05, 0), hipR=(-1.5, -0.05, 0), kneeL=(1.45, 0, 0), kneeR=(1.45, 0, 0))
-        other.j["pelvis"].location.z = 0.55
+        oth.apply(Hm.nod(Hm.lean(Hm.phone_hold(Hm.sit(Hm.stand())), 18), 28))
+        oth.face(sad=0.7)
+    return update
+
+
+def face_close(P, job):
+    """Head-and-shoulders close-up. who: man1/man2; mood: red (angry, shouting) or cold (calm stare)."""
+    c = Clock(job)
+    red = P.get("mood", "cold") == "red"
+    if red:
+        _red_world(0.02)
+    else:
+        L.setup_render(fog=0.0, world=(0.0006, 0.0008, 0.0012))
+    h = (man1 if P.get("who", "man2") == "man1" else man2)("Face", (0, 0, 0))
+    L.plane((0, 0, 0), 50, L.mat("floor", (0.01, 0.01, 0.012), rough=0.5))
+    bpy.context.view_layer.update()
+    head = h.arm.matrix_world @ h.arm.pose.bones["head"].head
+    if red:
+        key = L.light("AREA", (0.9, -1.2, head.z + 0.3), 90, (1.0, 0.5, 0.35), size=0.6, look_at=head)
+        rim = L.light("AREA", (-0.8, 0.9, head.z + 0.4), 260, (1.0, 0.15, 0.06), size=0.8, look_at=head)
+        L.light("AREA", (0.0, 2.0, head.z), 400, (1.0, 0.12, 0.05), size=2.0, look_at=(0, 0, head.z))
+        bok = L.emission("emb", (1.0, 0.35, 0.1), 10)
+        rnd = random.Random(8)
+        embers = [(L.sphere((0, 0, -5), 0.006, material=bok, seg=8, rings=6),
+                   Vector((rnd.uniform(-0.8, 0.8), rnd.uniform(0.3, 1.5), head.z + rnd.uniform(-0.6, 0.4))),
+                   rnd.uniform(0.15, 0.5)) for _ in range(40)]
+    else:
+        key = L.light("AREA", (-0.9, -1.1, head.z + 0.35), 70, (0.75, 0.85, 1.0), size=0.7, look_at=head)
+        rim = L.light("AREA", (0.9, 0.8, head.z + 0.3), 140, (0.6, 0.75, 1.0), size=0.8, look_at=head)
+        embers = []
+    cam = L.camera((0.0, -0.95, head.z + 0.03), (0, 0, head.z + 0.0), lens=50, dof_target=0.9, fstop=2.8)
+    dim_beat = int(P.get("dim_beat", -1))
+    e_key, e_rim = key.data.energy, rim.data.energy
+
+    def update(t):
+        m = c.m(t)
+        p = ease(t / c.dur)
+        d = 0.95 - 0.25 * p
+        cam.location = Vector((0.0, -d, head.z + 0.03))
+        L.aim(cam, (0, 0, head.z + 0.01))
+        cam.data.dof.focus_distance = d - 0.06
+        dim = 1.0
+        if dim_beat >= 0 and c.since(t, dim_beat) >= 0:
+            dim = 1 - 0.55 * ease(c.since(t, dim_beat) / 1.0)
+        key.data.energy = e_key * dim
+        rim.data.energy = e_rim * dim
+        if red:
+            sp = Hm.nod(Hm.lean(Hm.stand(), 6 + 4 * math.sin(m * 8)), -10 + 6 * math.sin(m * 8), 5 * math.sin(m * 3))
+            h.apply(sp)
+            h.face(angry=1.0, mouth_open=0.25 + 0.6 * abs(math.sin(m * 6.5)))
+            for ob, p0, sp_ in embers:
+                ob.location = p0 + Vector((0.05 * math.sin(m + p0.x * 9), 0, (m * sp_) % 1.2 - 0.3))
+        else:
+            h.apply(Hm.nod(Hm.stand(m * 1.0), 1.5 * math.sin(m * 0.5)))
+            h.face()
+    return update
+
+
+def untouchable(P, job):
+    """The calm man stands still; red spiky orbs fly at him and dissolve before they touch him."""
+    c = Clock(job)
+    L.setup_render(fog=0.02, fog_color=(0.7, 0.8, 1.0), world=(0.0005, 0.0008, 0.0015))
+    L.plane((0, 0, 0), 200, L.mat("wet", (0.01, 0.012, 0.016), rough=0.05, coat=1.0))
+    man = man2("Still", (0, 0, 0))
+    ring = L.torus((0, 0, 0.01), 0.75, 0.008, L.emission("ring", (0.6, 0.8, 1.0), 4))
+    orb_m = L.emission("orbm", (1.0, 0.06, 0.04), 8)
+    spark_m = L.emission("sparkm", (1.0, 0.5, 0.3), 20)
+    rnd = random.Random(21)
+    orbs = []
+    n = 9
+    for i in range(n):
+        ang = rnd.uniform(0, 2 * math.pi)
+        start = Vector((3.5 * math.cos(ang), 3.5 * math.sin(ang) + 1.0, rnd.uniform(0.6, 2.4)))
+        end = Vector((0.55 * math.cos(ang), 0.55 * math.sin(ang), rnd.uniform(0.9, 1.7)))
+        t0 = (i / n) * c.dur * 0.85
+        o = L.spiky_orb((0, 0, -9), 0.09, 0.8, orb_m)
+        fl = L.sphere((0, 0, -9), 0.05, material=spark_m, seg=12, rings=8)
+        orbs.append((o, fl, start, end, t0))
+    L.light("SPOT", (0, -0.3, 6), 2200, (0.7, 0.82, 1.0), look_at=(0, 0, 0.9), spot=22, blend=0.5)
+    L.light("AREA", (0, 3, 3), 700, (0.6, 0.75, 1.0), size=3, look_at=(0, 0, 1.3))
+    L.light("AREA", (0, -4, 2), 40, (0.7, 0.8, 1.0), size=4, look_at=(0, 0, 1.2))
+    cam = L.camera((0, -4.2, 1.2), (0, 0, 1.2), lens=38)
+    fly = 0.9
+
+    def update(t):
+        m = c.m(t)
+        p = ease(t / c.dur)
+        a = -0.25 + 0.5 * p
+        cam.location = Vector((4.0 * math.sin(a), -4.0 * math.cos(a), 1.15))
+        L.aim(cam, (0, 0, 1.15))
+        man.apply(Hm.stand(m * 1.1))
+        man.face()
+        for o, fl, s0, e0, t0 in orbs:
+            u = (t - t0) / fly
+            if u < 0 or u > 1.35:
+                o.location = fl.location = (0, 0, -9)
+                continue
+            if u <= 1:
+                k = ease(u)
+                o.location = s0.lerp(e0, k)
+                sc_ = 1.0 if u < 0.85 else max(0.0, 1 - (u - 0.85) / 0.15)
+                o.scale = (sc_, sc_, sc_)
+                o.rotation_euler = (m * 3, m * 2, m * 4)
+                fl.location = (0, 0, -9)
+            else:
+                o.location = (0, 0, -9)
+                fl.location = e0
+                g = (u - 1) / 0.35
+                s = 0.3 + 2.5 * g
+                fl.scale = (s * (1 - g), s * (1 - g), s * (1 - g))
+        ring.scale = (1 + 0.03 * math.sin(m * 2),) * 3
     return update
 
 
 BUILDERS = {
+    "face_close": face_close,
+    "untouchable": untouchable,
     "hook_twins": hook_twins,
     "eyes_room": eyes_room,
     "fire_back": fire_back,

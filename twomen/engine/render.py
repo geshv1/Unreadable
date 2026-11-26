@@ -28,8 +28,8 @@ GRADES3D = {
     "man2": dict(gain=(0.90, 0.96, 1.08), sat=0.70, contrast=1.04, lift=(0.0, 0.003, 0.010), grain=3.0, vig=0.5),
     "black": None,
 }
-B3D_RES = (576, 1024)
-B3D_SAMPLES = 8
+B3D_RES = (540, 960)
+B3D_SAMPLES = 6
 _VIG = {}
 
 

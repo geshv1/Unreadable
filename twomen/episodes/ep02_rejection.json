@@ -11,8 +11,8 @@
   "lead_in": 0.1,
   "default_gap": 0.28,
   "target_seconds": [
-   30,
-   35
+   40,
+   45
   ],
   "auto_fit": true
  },
@@ -36,8 +36,8 @@
    "section": "hook",
    "camera": {
     "zoom": [
-     1.04,
-     1.16
+     1.0,
+     1.06
     ]
    },
    "beats": [
@@ -54,10 +54,9 @@
     {
      "vo": "Only one gets respected.",
      "text": "ONLY ONE GETS [RESPECTED]",
-     "gap": 0.32
+     "gap": 0.35
     }
-   ],
-   "params": {}
+   ]
   },
   {
    "name": "told_no",
@@ -69,19 +68,24 @@
    },
    "camera": {
     "zoom": [
-     1.02,
-     1.1
+     1.0,
+     1.06
     ]
    },
-   "tail": 0.5,
+   "text_y": 0.18,
+   "tail": 0.4,
    "beats": [
     {
      "vo": "Both get told no.",
      "text": "BOTH GET TOLD [NO].",
-     "gap": 0.28
+     "gap": 0.22
+    },
+    {
+     "vo": "The door closes on both of them.",
+     "text": "THE DOOR [CLOSES].",
+     "gap": 0.3
     }
-   ],
-   "text_y": 0.18
+   ]
   },
   {
    "name": "asks_why",
@@ -91,8 +95,7 @@
    "params": {
     "variants": [
      "phone_close",
-     "hunched",
-     "phone_close"
+     "hunched"
     ],
     "cut_every": 0.6,
     "messages": [
@@ -109,25 +112,68 @@
     "shake": 9,
     "punch": 0.06
    },
+   "text_box": true,
+   "text_y": 0.14,
    "beats": [
     {
      "vo": "The first one asks why.",
      "text": "HE ASKS [WHY]",
-     "gap": 0.22
+     "gap": 0.2
     },
     {
      "vo": "Tries again.",
      "text": "TRIES [AGAIN]",
-     "gap": 0.2
+     "gap": 0.18
     },
     {
      "vo": "Sends one more message.",
      "text": "ONE MORE [MESSAGE]",
-     "gap": 0.3
+     "gap": 0.25
     }
-   ],
+   ]
+  },
+  {
+   "name": "bargains",
+   "scene": "3d:phone3d",
+   "grade": "man1",
+   "section": "man1",
+   "params": {
+    "variants": [
+     "hunched"
+    ],
+    "cut_every": 0,
+    "messages": [
+     "please",
+     "i can change",
+     "are you there?"
+    ]
+   },
+   "camera": {
+    "zoom": [
+     1.02,
+     1.12
+    ],
+    "shake": 5
+   },
    "text_box": true,
-   "text_y": 0.14
+   "text_y": 0.14,
+   "beats": [
+    {
+     "vo": "He explains.",
+     "text": "HE [EXPLAINS].",
+     "gap": 0.18
+    },
+    {
+     "vo": "He bargains.",
+     "text": "HE [BARGAINS].",
+     "gap": 0.18
+    },
+    {
+     "vo": "He waits by the phone.",
+     "text": "HE [WAITS].",
+     "gap": 0.25
+    }
+   ]
   },
   {
    "name": "smaller",
@@ -141,16 +187,15 @@
     ],
     "shake": 6
    },
+   "text_box": true,
+   "text_y": 0.62,
    "beats": [
     {
      "vo": "Every word makes him smaller.",
      "text": "MAKES HIM [SMALLER]",
-     "gap": 0.3
+     "gap": 0.24
     }
-   ],
-   "params": {},
-   "text_box": true,
-   "text_y": 0.62
+   ]
   },
   {
    "name": "black",
@@ -171,8 +216,8 @@
    },
    "camera": {
     "zoom": [
-     1.04,
-     1.08
+     1.02,
+     1.06
     ]
    },
    "beats": [
@@ -188,7 +233,7 @@
     {
      "vo": "Says, all good.",
      "text": "\"ALL [GOOD].\"",
-     "gap": 0.3
+     "gap": 0.25
     }
    ]
   },
@@ -200,19 +245,23 @@
    "slowmo": 0.5,
    "camera": {
     "zoom": [
-     1.02,
-     1.04
+     1.0,
+     1.03
     ]
    },
+   "text_y": 0.22,
    "beats": [
     {
      "vo": "And leaves.",
      "text": "AND [LEAVES].",
-     "gap": 0.36
+     "gap": 0.25
+    },
+    {
+     "vo": "He doesn't look back.",
+     "text": "NO LOOKING [BACK].",
+     "gap": 0.32
     }
-   ],
-   "params": {},
-   "text_y": 0.22
+   ]
   },
   {
    "name": "no_message",
@@ -222,10 +271,11 @@
    "slowmo": 0.5,
    "camera": {
     "zoom": [
-     1.02,
-     1.08
+     1.0,
+     1.06
     ]
    },
+   "text_y": 0.22,
    "beats": [
     {
      "vo": "No message.",
@@ -235,12 +285,39 @@
     {
      "vo": "No second try.",
      "text": "NO SECOND [TRY].",
-     "drone": "low",
-     "gap": 0.36
+     "gap": 0.3,
+     "drone": "low"
     }
-   ],
-   "params": {},
-   "text_y": 0.22
+   ]
+  },
+  {
+   "name": "no_begging",
+   "scene": "3d:door_slam",
+   "grade": "man2",
+   "section": "man2",
+   "slowmo": 0.5,
+   "params": {
+    "closed": true
+   },
+   "camera": {
+    "zoom": [
+     1.0,
+     1.08
+    ]
+   },
+   "text_y": 0.2,
+   "beats": [
+    {
+     "vo": "No begging for a reason...",
+     "text": "NO [BEGGING].",
+     "gap": 0.22
+    },
+    {
+     "vo": "he doesn't need.",
+     "text": "NO REASON [NEEDED].",
+     "gap": 0.3
+    }
+   ]
   },
   {
    "name": "wondering",
@@ -251,18 +328,22 @@
    "camera": {
     "zoom": [
      1.0,
-     1.12
+     1.06
     ]
    },
+   "text_y": 0.13,
    "beats": [
     {
-     "vo": "Now they're the one wondering.",
+     "vo": "Now they're the one wondering...",
      "text": "NOW THEY'RE [WONDERING]",
-     "gap": 0.3
+     "gap": 0.2
+    },
+    {
+     "vo": "why he let go so easily.",
+     "text": "WHY HE LET [GO]",
+     "gap": 0.24
     }
-   ],
-   "params": {},
-   "text_y": 0.13
+   ]
   },
   {
    "name": "principle",
@@ -276,19 +357,19 @@
     {
      "vo": "The one who can walk away...",
      "text": "WHO CAN WALK [AWAY]",
-     "gap": 0.5
+     "gap": 0.42
     },
     {
      "vo": "is the one they",
      "text": "IS THE ONE THEY",
-     "gap": 0.4
+     "gap": 0.32
     },
     {
      "vo": "remember.",
      "text": "[REMEMBER.]",
+     "gap": 0.0,
      "text_size": 190,
-     "bass_hit": true,
-     "gap": 0.0
+     "bass_hit": true
     }
    ]
   }

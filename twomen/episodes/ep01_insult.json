@@ -11,8 +11,8 @@
   "lead_in": 0.1,
   "default_gap": 0.28,
   "target_seconds": [
-   30,
-   35
+   40,
+   45
   ],
   "auto_fit": true
  },
@@ -36,8 +36,8 @@
    "section": "hook",
    "camera": {
     "zoom": [
-     1.04,
-     1.16
+     1.0,
+     1.06
     ]
    },
    "beats": [
@@ -54,30 +54,34 @@
     {
      "vo": "One loses everything.",
      "text": "ONE LOSES [EVERYTHING]",
-     "gap": 0.32
+     "gap": 0.35
     }
-   ],
-   "params": {}
+   ]
   },
   {
    "name": "room",
    "scene": "3d:eyes_room",
    "grade": "neutral",
    "section": "neutral",
-   "camera": {
-    "zoom": [
-     1.02,
-     1.1
-    ]
-   },
    "params": {
     "laugh": true
+   },
+   "camera": {
+    "zoom": [
+     1.0,
+     1.05
+    ]
    },
    "beats": [
     {
      "vo": "Someone mocks them in front of the whole room.",
      "text": "IN FRONT OF [EVERYONE]",
-     "gap": 0.32
+     "gap": 0.22
+    },
+    {
+     "vo": "Everyone laughs.",
+     "text": "EVERYONE [LAUGHS].",
+     "gap": 0.3
     }
    ]
   },
@@ -88,21 +92,20 @@
    "section": "man1",
    "camera": {
     "zoom": [
-     1.06,
-     1.12
+     1.04,
+     1.1
     ],
     "shake": 12
    },
+   "text_box": true,
+   "text_y": 0.2,
    "beats": [
     {
      "vo": "The first one fires back.",
      "text": "HE [FIRES BACK]",
      "gap": 0.2
     }
-   ],
-   "params": {},
-   "text_box": true,
-   "text_y": 0.22
+   ]
   },
   {
    "name": "louder",
@@ -125,6 +128,8 @@
     "shake": 16,
     "punch": 0.07
    },
+   "text_box": true,
+   "text_y": 0.2,
    "beats": [
     {
      "vo": "Raises his voice.",
@@ -134,39 +139,64 @@
     {
      "vo": "Explains himself.",
      "text": "EXPLAINS.",
-     "gap": 0.3
+     "gap": 0.24
     }
-   ],
+   ]
+  },
+  {
+   "name": "proves_it",
+   "scene": "3d:face_close",
+   "grade": "man1",
+   "section": "man1",
+   "params": {
+    "who": "man1",
+    "mood": "red"
+   },
+   "camera": {
+    "zoom": [
+     1.02,
+     1.08
+    ],
+    "shake": 8
+   },
    "text_box": true,
-   "text_y": 0.22
+   "text_y": 0.74,
+   "beats": [
+    {
+     "vo": "Every word he adds...",
+     "text": "EVERY WORD",
+     "gap": 0.25
+    },
+    {
+     "vo": "proves the insult landed.",
+     "text": "PROVES IT [LANDED]",
+     "gap": 0.28
+    }
+   ]
   },
   {
    "name": "room_watches",
    "scene": "3d:eyes_room",
    "grade": "man1",
    "section": "man1",
+   "params": {
+    "watch": true
+   },
    "camera": {
     "zoom": [
      1.0,
-     1.3
-    ],
-    "drift": [
-     0.0,
-     -0.03
+     1.04
     ]
    },
+   "text_box": true,
+   "text_y": 0.18,
    "beats": [
     {
      "vo": "And the room watches him do exactly what they wanted.",
      "text": "EXACTLY WHAT THEY [WANTED]",
      "gap": 0.15
     }
-   ],
-   "params": {
-    "watch": true
-   },
-   "text_box": true,
-   "text_y": 0.18
+   ]
   },
   {
    "name": "black",
@@ -184,38 +214,40 @@
    "slowmo": 0.5,
    "camera": {
     "zoom": [
-     1.04,
-     1.07
+     1.02,
+     1.06
     ]
    },
    "beats": [
     {
      "vo": "The second one...",
-     "gap": 0.44
+     "gap": 0.45
     },
     {
      "vo": "pauses.",
      "text": "HE [PAUSES].",
-     "gap": 0.36
+     "gap": 0.35
     }
-   ],
-   "params": {}
+   ]
   },
   {
    "name": "eye_to_eye",
-   "scene": "3d:eye_close",
+   "scene": "3d:face_close",
    "grade": "man2",
    "section": "man2",
    "slowmo": 0.5,
    "params": {
+    "who": "man2",
+    "mood": "cold",
     "dim_beat": 1
    },
    "camera": {
     "zoom": [
-     1.03,
-     1.08
+     1.0,
+     1.04
     ]
    },
+   "text_y": 0.76,
    "beats": [
     {
      "vo": "Looks him in the eye.",
@@ -224,11 +256,10 @@
     {
      "vo": "Says nothing.",
      "text": "[NOTHING].",
-     "drone": "low",
-     "gap": 0.44
+     "gap": 0.45,
+     "drone": "low"
     }
-   ],
-   "text_y": 0.74
+   ]
   },
   {
    "name": "walks_on",
@@ -238,19 +269,49 @@
    "slowmo": 0.5,
    "camera": {
     "zoom": [
-     1.02,
-     1.04
+     1.0,
+     1.03
     ]
    },
+   "text_y": 0.22,
    "beats": [
     {
      "vo": "Then carries on, like it never happened.",
      "text": "LIKE IT NEVER [HAPPENED]",
-     "gap": 0.28
+     "gap": 0.3
     }
-   ],
-   "params": {},
-   "text_y": 0.22
+   ]
+  },
+  {
+   "name": "untouchable",
+   "scene": "3d:untouchable",
+   "grade": "man2",
+   "section": "man2",
+   "slowmo": 0.5,
+   "camera": {
+    "zoom": [
+     1.0,
+     1.04
+    ]
+   },
+   "text_y": 0.2,
+   "beats": [
+    {
+     "vo": "No anger.",
+     "text": "NO [ANGER].",
+     "gap": 0.2
+    },
+    {
+     "vo": "No defense.",
+     "text": "NO [DEFENSE].",
+     "gap": 0.2
+    },
+    {
+     "vo": "Nothing to grab.",
+     "text": "NOTHING TO [GRAB].",
+     "gap": 0.3
+    }
+   ]
   },
   {
    "name": "insult_is_his",
@@ -261,18 +322,22 @@
    "camera": {
     "zoom": [
      1.0,
-     1.18
+     1.06
     ]
    },
+   "text_y": 0.7,
    "beats": [
     {
      "vo": "Now the insult belongs to the one who said it.",
      "text": "THE INSULT IS [HIS] NOW",
-     "gap": 0.3
+     "gap": 0.25
+    },
+    {
+     "vo": "And he has to carry it.",
+     "text": "AND HE [CARRIES IT].",
+     "gap": 0.24
     }
-   ],
-   "params": {},
-   "text_y": 0.7
+   ]
   },
   {
    "name": "principle",
@@ -286,14 +351,14 @@
     {
      "vo": "Whoever needs the reaction...",
      "text": "WHOEVER NEEDS THE REACTION",
-     "gap": 0.6
+     "gap": 0.48
     },
     {
      "vo": "loses.",
      "text": "[LOSES.]",
+     "gap": 0.0,
      "text_size": 200,
-     "bass_hit": true,
-     "gap": 0.0
+     "bass_hit": true
     }
    ]
   }
