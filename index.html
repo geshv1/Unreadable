@@ -63,8 +63,26 @@ h2{font-size:clamp(38px,5.4vw,64px);margin:16px 0 16px}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
 .logo{font-weight:700;font-size:13px;letter-spacing:.34em;text-decoration:none}
 .logo b{color:var(--red-soft)}
-.top .quiz{font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:.02em}
-.top .quiz:hover{color:var(--ink)}
+.top .quiz{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);text-decoration:none;border:1px solid var(--red-soft);border-radius:999px;padding:8px 14px;box-shadow:0 0 22px -8px var(--glow);transition:background .2s}
+.top .quiz::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red-soft);box-shadow:0 0 0 0 var(--red-soft);animation:ping 2.2s ease-out infinite}
+.top .quiz:hover{background:rgba(196,50,63,.14)}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(196,50,63,.7)}70%,100%{box-shadow:0 0 0 7px rgba(196,50,63,0)}}
+/* quiz hook: the first thing on the page */
+.hook{position:relative;padding:76px 0 68px;text-align:center;overflow:hidden;border-bottom:1px solid var(--line)}
+.hook::before{content:"";position:absolute;left:50%;top:-160px;width:900px;height:760px;transform:translateX(-50%);pointer-events:none;background:radial-gradient(closest-side,rgba(140,19,34,.2),rgba(140,19,34,.05) 55%,transparent 75%)}
+.hook .wrap{position:relative}
+.hook .eyebrow{justify-content:center}
+.hook .eyebrow::before{content:"";flex:0 0 28px;height:1px;background:#26272c}
+.hook h2{font-size:clamp(44px,7.2vw,88px);line-height:1.02;max-width:900px;margin:18px auto 20px}
+.hook .lead{margin:0 auto;max-width:600px;font-size:18px}
+.types{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:30px auto 32px;max-width:560px}
+.types span{border:1px solid #26262c;border-radius:999px;padding:7px 15px;font-size:13.5px;color:var(--soft);animation:pick 8s infinite}
+.types span:nth-child(2){animation-delay:2s}.types span:nth-child(3){animation-delay:4s}.types span:nth-child(4){animation-delay:6s}
+@keyframes pick{0%,22%{border-color:var(--red-soft);color:var(--ink);box-shadow:0 0 22px -8px var(--glow)}25%,100%{border-color:#26262c;color:var(--soft);box-shadow:none}}
+.hook .btn{font-size:14px;padding:21px 40px}
+.hook .small{margin-top:16px;font-size:13px;color:var(--muted)}
+.hook .down{display:inline-block;margin-top:26px;font-size:13px;color:var(--soft);text-decoration:none;border-bottom:1px solid #2a2a30;padding-bottom:2px}
+.hook .down:hover{color:var(--ink)}
 .qbar{background:var(--surface);border-bottom:1px solid var(--line)}
 .qbar a{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 10px;padding:11px 22px;font-size:14px;line-height:1.4;text-decoration:none;color:var(--soft);text-align:center}
 .qbar a b{color:var(--ink);font-weight:600}
@@ -317,7 +335,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 <header class="top">
   <div class="wrap">
     <a class="logo" href="#top">GESHV<b>1</b></a>
-    <a class="quiz" href="quiz.html" data-umami-event="quiz-click" data-umami-event-spot="top">Free quiz →</a>
+    <a class="quiz" id="topquiz" href="quiz.html" data-umami-event="quiz-click" data-umami-event-spot="top">Take the quiz</a>
   </div>
 </header>
 
@@ -327,11 +345,24 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 
 <main id="top">
 
-<!-- 1 · HERO: the name and the book first -->
-<div class="hero">
+<!-- 0 · QUIZ HOOK: hit a nerve, send him to the quiz, the book comes after -->
+<section class="hook" id="hook">
+  <div class="wrap">
+    <div class="eyebrow"><b>Free quiz</b> · 2 minutes</div>
+    <h2>You think you're hard to read. <span class="r">You're not.</span></h2>
+    <p class="lead">The yes you didn't mean. The conversation you replay for hours. The bait you always take. Everyone gives something away. Find out what you give away, your real strength, and what people use against you.</p>
+    <div class="types" aria-label="The four types"><span>Nice Guy</span><span>Overthinker</span><span>Hothead</span><span>Dreamer</span></div>
+    <a class="btn" href="quiz.html" data-umami-event="quiz-click" data-umami-event-spot="hook">Which one are you? <span aria-hidden="true">→</span></a>
+    <p class="small">Free · No sign-up · Your result in 2 minutes</p>
+    <a class="down" href="#book">Or skip to the book ↓</a>
+  </div>
+</section>
+
+<!-- 1 · HERO: the book -->
+<div class="hero" id="book">
   <div class="wrap">
     <div class="hero-copy">
-      <div class="kick">A 12-week mind &amp; body program · @geshv1</div>
+      <div class="kick">A 12-week mind &amp; body program</div>
       <h1 aria-label="How to Become Unreadable"><span class="pre" aria-hidden="true">HOW TO BECOME</span><span class="wordmark" aria-hidden="true">UN<span class="o">READ</span>ABLE</span><span class="tagline">Read them. Stay unreadable.</span></h1>
       <p class="lede">For the guy who's done being read, pushed and underestimated. Train your mind to see what people are doing and stay calm under pressure, and train your body to back it up.</p>
       <div class="cta">
@@ -689,6 +720,8 @@ if (GUMROAD_URL) {
   const msg = document.querySelector('.msg[data-type="' + t + '"]');
   if (msg) msg.classList.add("you");
   document.getElementById("quizlink").textContent = "Want to retake the quiz? →";
+  document.getElementById("hook").hidden = true;
+  document.getElementById("topquiz").textContent = "Retake quiz";
 })();
 </script>
 </body>
