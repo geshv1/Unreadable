@@ -34,6 +34,8 @@ canvas{display:block;width:540px;height:960px}
   V.ready = (async () => {
     await load(`../episodes/${ep}/actions.js`);
     await load(`../episodes/${ep}/episode.js`);
+    V.img = {};
+    await Promise.all(Object.entries(V.EPISODE.assets || {}).map(([k, src]) => new Promise((res, rej) => { const im = new Image(); im.onload = () => { V.img[k] = im; res(); }; im.onerror = () => rej(new Error('asset ' + src)); im.src = '../' + src; })));
     await Promise.all([
       document.fonts.load('italic 400 100px "Instrument Serif"'),
       document.fonts.load('400 30px "Archivo"'),

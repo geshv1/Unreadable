@@ -1,0 +1,51 @@
+{
+ "title": "narrator-test",
+ "duration": 15,
+ "fps": 30,
+ "cuts": [
+  {
+   "t": 5.3,
+   "scene": "watched"
+  },
+  {
+   "t": 8.7,
+   "scene": "preparing"
+  },
+  {
+   "t": 11,
+   "scene": "confess"
+  },
+  {
+   "t": 13.2,
+   "scene": "cta"
+  }
+ ],
+ "sfx": [],
+ "scenes": [
+  {
+   "id": "studio",
+   "start": 0,
+   "end": 5.3
+  },
+  {
+   "id": "watched",
+   "start": 5.3,
+   "end": 8.7
+  },
+  {
+   "id": "preparing",
+   "start": 8.7,
+   "end": 11
+  },
+  {
+   "id": "confess",
+   "start": 11,
+   "end": 13.2
+  },
+  {
+   "id": "cta",
+   "start": 13.2,
+   "end": 15
+  }
+ ]
+}

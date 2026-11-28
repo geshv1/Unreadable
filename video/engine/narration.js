@@ -60,6 +60,13 @@
     g.restore();
   };
 
+  // is the narrator speaking at time t? returns mouth openness 0..1 (syllable-ish flap while a word is being said)
+  V.speaking = function (t) {
+    const ws = V.narrationWords(V.ep);
+    for (const w of ws) if (t >= w.t && t < w.t + Math.max(0.2, w.w.length * 0.045)) return 0.35 + 0.65 * Math.abs(Math.sin((t - w.t) * 22));
+    return 0;
+  };
+
   V.drawPanel = function (g, p) {
     const f = p.feather || 90;
     g.save();

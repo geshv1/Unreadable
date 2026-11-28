@@ -923,4 +923,58 @@
     g.restore();
     return pt(u);
   };
+
+  // ───────── narrator-format props (geometric storytelling)
+  // Outline geometric shape: 'circle' | 'square' | 'triangle' | 'ring'
+  V.geo = function (g, type, x, y, size, rot = 0, color = '#F4F5F7', alpha = 1, w = 6, fill = null) {
+    g.save(); g.translate(x, y); g.rotate(rot); g.globalAlpha = alpha;
+    g.strokeStyle = color; g.lineWidth = w; g.shadowColor = color; g.shadowBlur = 18; g.lineJoin = 'round';
+    g.beginPath();
+    if (type === 'circle' || type === 'ring') g.arc(0, 0, size, 0, 6.283);
+    else if (type === 'square') g.rect(-size, -size, size * 2, size * 2);
+    else if (type === 'triangle') { g.moveTo(0, -size); g.lineTo(size * 0.87, size * 0.5); g.lineTo(-size * 0.87, size * 0.5); g.closePath(); }
+    if (fill) { g.fillStyle = fill; g.fill(); }
+    g.stroke();
+    if (type === 'ring') { g.globalAlpha = alpha * 0.4; g.lineWidth = w * 0.5; g.beginPath(); g.arc(0, 0, size * 1.12, 0, 6.283); g.stroke(); }
+    g.restore();
+  };
+  // Big geometric eye: almond outline + pupil that looks at (lx, ly) world point
+  V.bigEye = function (g, x, y, s, look, blink = 1, color = '#F4F5F7') {
+    g.save(); g.translate(x, y); g.scale(s, s * blink);
+    g.strokeStyle = color; g.lineWidth = 5; g.shadowColor = color; g.shadowBlur = 16; g.fillStyle = 'rgba(10,10,14,0.85)';
+    g.beginPath(); g.moveTo(-60, 0); g.quadraticCurveTo(0, -46, 60, 0); g.quadraticCurveTo(0, 46, -60, 0); g.closePath(); g.fill(); g.stroke();
+    const dx = V.clamp((look[0] - x) / 400, -1, 1) * 22, dy = V.clamp((look[1] - y) / 400, -1, 1) * 10;
+    g.fillStyle = V.COL.red; g.shadowColor = V.COL.red; g.beginPath(); g.arc(dx, dy, 16, 0, 6.283); g.fill();
+    g.fillStyle = '#0b0b0f'; g.shadowBlur = 0; g.beginPath(); g.arc(dx, dy, 7, 0, 6.283); g.fill();
+    g.restore();
+  };
+  // A labelled block (crate) — stackable
+  V.labelBox = function (g, x, y, w, h, text, k = 1, color = '#e8eaee') {
+    g.save(); g.translate(x, y); g.scale(k, k);
+    g.fillStyle = '#23252e'; g.strokeStyle = color; g.lineWidth = 4;
+    V.roundRect(g, -w / 2, -h / 2, w, h, 6); g.fill(); g.stroke();
+    g.fillStyle = color; g.font = `800 ${Math.round(h * 0.36)}px ${V.FONT.sans}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.letterSpacing = '2px';
+    g.fillText(text, 1, 2);
+    g.restore();
+  };
+  // A flag on a pole (goal)
+  V.flag = function (g, x, baseY, h, t) {
+    g.save(); g.strokeStyle = '#e8eaee'; g.lineWidth = 6; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(x, baseY); g.lineTo(x, baseY - h); g.stroke();
+    g.fillStyle = V.COL.red; g.shadowColor = V.COL.red; g.shadowBlur = 20;
+    g.beginPath(); g.moveTo(x, baseY - h); g.quadraticCurveTo(x + 40, baseY - h + 10 + Math.sin(t * 6) * 6, x + 80, baseY - h + 20); g.lineTo(x, baseY - h + 52); g.closePath(); g.fill();
+    g.restore();
+  };
+  // Book cover (image asset) with glow, centred at x,y, height h
+  V.bookCover = function (g, img, x, y, h, k = 1, tilt = 0) {
+    if (!img) return;
+    const w = h * img.width / img.height;
+    g.save(); g.translate(x, y); g.rotate(tilt); g.scale(k, k);
+    g.shadowColor = 'rgba(224,52,74,0.55)'; g.shadowBlur = 60;
+    g.fillStyle = '#0d0e12'; g.fillRect(-w / 2, -h / 2, w, h);
+    g.shadowBlur = 0; g.drawImage(img, -w / 2, -h / 2, w, h);
+    g.strokeStyle = 'rgba(255,255,255,0.18)'; g.lineWidth = 3; g.strokeRect(-w / 2, -h / 2, w, h);
+    g.fillStyle = 'rgba(255,255,255,0.06)'; g.beginPath(); g.moveTo(-w / 2, -h / 2); g.lineTo(-w / 2 + w * 0.35, -h / 2); g.lineTo(-w / 2, -h / 2 + h * 0.3); g.closePath(); g.fill();
+    g.restore();
+  };
 })();
