@@ -228,7 +228,7 @@
     if (ol) { g.strokeStyle = ol; g.lineWidth = lw; g.stroke(); }
   }
   function fist(g, c, pal) {
-    circle(g, c, 5.7, pal.fist, pal.ol, pal.olW ? 0.8 : 1.6);
+    circle(g, c, 5.7 * (BW.arm > 1 ? 1.18 : 1), pal.fist, pal.ol, pal.olW ? 0.8 : 1.6);
     if (!pal.flat) g.globalAlpha = 0.55; else g.globalAlpha = 0; circle(g, [c[0] - 1.7, c[1] - 1.8], 2.1, '#fff'); g.globalAlpha = 1;
   }
   function foot(g, c, pal) {
@@ -237,11 +237,15 @@
     g.strokeStyle = pal.ol; g.lineWidth = pal.olW ? 0.8 : 1.6; g.stroke();
     g.globalAlpha = pal.flat ? 0 : 0.9; g.beginPath(); g.ellipse(x - 2.5, y - 1.6, 4.5, 1.4, 0, 0, Math.PI * 2); g.fillStyle = '#fff'; g.fill(); g.globalAlpha = 1;
   }
-  function arm(g, s, e, h, pal) { capsule(g, s, e, 8.5, pal.arm, pal.ol, pal.olW); capsule(g, e, h, 8.5, pal.arm, pal.ol, pal.olW); fist(g, h, pal); }
-  function leg(g, hip, k, f, pal) { capsule(g, hip, k, 12, pal.leg, pal.ol, pal.olW); capsule(g, k, f, 11.5, pal.leg, pal.ol, pal.olW); foot(g, f, pal); }
+  let BW = { arm: 1, fore: 1, leg: 1, torso: 1 };   // build widths (f.jacked = muscular)
+  function arm(g, s, e, h, pal) { capsule(g, s, e, 8.5 * BW.arm, pal.arm, pal.ol, pal.olW); capsule(g, e, h, 8.5 * BW.fore, pal.arm, pal.ol, pal.olW); fist(g, h, pal); }
+  function leg(g, hip, k, f, pal) { capsule(g, hip, k, 12 * BW.leg, pal.leg, pal.ol, pal.olW); capsule(g, k, f, 11.5 * BW.leg * 0.92, pal.leg, pal.ol, pal.olW); foot(g, f, pal); }
 
   function torso(g, G, f, pal) {
-    capsule(g, G.C, G.P, 24, pal.torso, pal.ol, pal.olW);
+    capsule(g, G.C, G.P, 24 * BW.torso, pal.torso, pal.ol, pal.olW);
+    if (BW.torso > 1) { // chest + delts
+      g.save(); g.globalAlpha = 0.9; capsule(g, [G.C[0] + 2, G.C[1] + 4], [G.C[0] + 6, G.C[1] + 14], 16, pal.torso, pal.ol, pal.olW); g.restore();
+      circle(g, [G.sF[0], G.sF[1] + 2], 7.5, pal.arm[0], pal.ol); }
     g.save(); g.translate(G.C[0], G.C[1]); g.rotate(G.a);
     if (pal.hoodie) {
       g.globalAlpha = 0.8; g.strokeStyle = '#5d6068'; g.lineWidth = 1.2;
@@ -381,6 +385,7 @@
   V.drawFigure = function (g, f) {
     if (f.front) return V.drawFront(g, f);           // front-facing narrator rig
     let pal = V.PAL[f.kind] || V.PAL.other;
+    BW = f.jacked ? { arm: 1.55, fore: 1.35, leg: 1.25, torso: 1.3 } : { arm: 1, fore: 1, leg: 1, torso: 1 };
     if (f.tint) pal = tinted(pal, Math.round(f.tint * 50) / 50);
     const G = V.geom(f.pose);
     g.save();

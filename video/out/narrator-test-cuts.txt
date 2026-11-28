@@ -1,13 +1,13 @@
-narrator-test — scene transitions (15s @ 30fps)
+narrator-test — scene transitions (14.399999999999999s @ 30fps)
 
 00:00.00  frame   0  studio
-00:05.30  frame 159  watched
-00:08.70  frame 261  preparing
-00:11.00  frame 330  confess
-00:13.20  frame 396  cta
+00:04.70  frame 141  watched
+00:08.10  frame 243  preparing
+00:10.40  frame 312  confess
+00:12.60  frame 378  cta
 
 Cuts (whoosh starts ~0.16s before, bass hit on the cut):
-  00:05.30  (5.30s, frame 159)  -> watched
-  00:08.70  (8.70s, frame 261)  -> preparing
-  00:11.00  (11.00s, frame 330)  -> confess
-  00:13.20  (13.20s, frame 396)  -> cta
+  00:04.70  (4.70s, frame 141)  -> watched
+  00:08.10  (8.10s, frame 243)  -> preparing
+  00:10.40  (10.40s, frame 312)  -> confess
+  00:12.60  (12.60s, frame 378)  -> cta

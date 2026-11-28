@@ -7,14 +7,29 @@
   const bg = (g, top, bottom) => { const gr = g.createLinearGradient(0, 520, 0, V.FLOOR); gr.addColorStop(0, top); gr.addColorStop(1, bottom); g.fillStyle = gr; g.fillRect(-400, 480, 1900, V.FLOOR - 480); };
   const pool = (g, x, color, r = 420) => { g.save(); g.translate(x, V.FLOOR + 10); g.scale(1, 0.18); const p = g.createRadialGradient(0, 0, 0, 0, 0, r); p.addColorStop(0, color); p.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = p; g.beginPath(); g.arc(0, 0, r, 0, 6.283); g.fill(); g.restore(); };
   // front-facing narrator: looks into the lens; life (mouth, blinks, nods, brows) comes from the narration timing
-  const narrator = (tl, sc, o) => Object.assign({ kind: 'steady', front: true, x: 540, s: 1.2 }, V.narratorLife(tl + sc.start), o);
+  const narrator = (tl, sc, o) => Object.assign({ kind: 'steady', front: true, jacked: true, x: 540, s: 1.2 }, V.narratorLife(tl + sc.start), o);
 
   // ─────────────────────────────── STUDIO — the narrator talks to you
+  // push-ups (side view), spring up, turn to the lens with a serious face, then talk
+  const DEG = Math.PI / 180, UP = 1.0, TURN = 1.45;
+  function pushup(t) {
+    const down = 0.5 - 0.5 * Math.cos(2 * Math.PI * (t / 0.5));
+    const hx = V.lerp(54, 35, down);
+    const p = Object.assign({}, PO.stand, { hB: [hx - 2, -86], hF: [hx, -87], fB: [0, -4], fF: [3, -4], hd: [2, -1], eB: [0.4, 1], eF: [0.4, 1] });
+    return [p, (58 + 10 * down) * DEG];
+  }
   V.actions.n_studio = function (tl, sc) {
-    const gesture = V.frontGesture(tl, [[0, 'idle'], [0.25, 'wave'], [0.8, 'point'], [1.4, 'explain'], [2.5, 'palms'], [3.15, 'point'], [5.3, 'point']]);
-    const point = kf(tl, [[0, 0], [0.75, 0], [0.95, 1], [1.3, 1], [1.5, 0], [3.1, 0], [3.35, 1], [5.3, 1]], ease.inOut);
-    const s = kf(tl, [[0, 1.12], [0.8, 1.3], [1.4, 1.24], [3.1, 1.24], [4.4, 1.44]], ease.inOut);
-    const n = narrator(tl, sc, { gesture, point, s, beamW: 1.15 });
+    let n;
+    if (tl < UP) { const [p, rot] = pushup(tl); n = V.St({ x: 300, face: 1, jacked: true, s: 1.1, rot, pose: p, expr: 'strain', noReflect: true }); }
+    else if (tl < TURN) {
+      const u = ease.out(seg(tl, UP, TURN - 0.05)), [p0, r0] = pushup(UP);
+      n = V.St({ x: V.lerp(300, 540, u), face: 1, jacked: true, s: V.lerp(1.1, 1.2, u), rot: V.lerp(r0, 0, u), pose: V.lerpPose(p0, PO.stand, u), expr: 'focus', noReflect: u < 0.8 });
+    } else {
+      const gesture = V.frontGesture(tl, [[TURN, 'idle'], [2.0, 'explain'], [2.75, 'palms'], [3.3, 'point'], [4.7, 'point']]);
+      const point = kf(tl, [[TURN, 0], [3.3, 0], [3.5, 1], [4.7, 1]], ease.inOut);
+      const s = kf(tl, [[TURN, 1.2], [3.3, 1.22], [4.5, 1.42]], ease.inOut);
+      n = narrator(tl, sc, { gesture, point, s, serious: true, turn: V.lerp(0.35, 1, ease.out(seg(tl, TURN, TURN + 0.15))), beamW: 1.15 });
+    }
     return {
       figs: [n],
       back(g) {

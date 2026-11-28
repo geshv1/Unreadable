@@ -53,7 +53,8 @@
     const gs = f.gesture || V.FRONT.idle, up = gs.up || 0, sw = f.sway || 0, br = f.breath || 0;
     const C = [sw * 0.6, -88 - br - up * 0.4], P = [sw, -54];
     const G = { C, P };
-    G.sL = [C[0] - 14, C[1] + 2 - up]; G.sR = [C[0] + 14, C[1] + 2 - up];
+    const sh = f.jacked ? 20 : 14;
+    G.sL = [C[0] - sh, C[1] + 2 - up]; G.sR = [C[0] + sh, C[1] + 2 - up];
     G.hipL = [P[0] - 8, P[1] + 4]; G.hipR = [P[0] + 8, P[1] + 4];
     G.H = [C[0] + (f.headX || 0), C[1] - 23 + (f.nod || 0) - up * 0.3];
     [G.kL, G.fL] = ik(G.hipL, [-12, -4], 24, 22.7, [-1, 0]);
@@ -76,22 +77,40 @@
     g.save();
     g.translate(f.x, f.y == null ? V.FLOOR : f.y);
     const k = V.S * (f.s || 1);
-    g.scale(k, k);
+    g.scale(k * (f.turn == null ? 1 : f.turn), k);   // turn < 1: quick turn toward the camera
+    const J = f.jacked ? 1 : 0, aw = 8.5 + J * 5, lw = 12 + J * 3;
     // legs
     for (const [hip, kn, ft, side] of [[G.hipL, G.kL, G.fL, -1], [G.hipR, G.kR, G.fR, 1]]) {
-      capsule(g, hip, kn, 12, pal.leg); capsule(g, kn, ft, 11.5, pal.leg);
+      capsule(g, hip, kn, lw, pal.leg); capsule(g, kn, ft, lw - 1, pal.leg);
       g.beginPath(); g.ellipse(ft[0] + side * 3, ft[1] + 3, 8.5, 4.4, 0, 0, 6.283); g.fillStyle = pal.foot; g.fill(); g.strokeStyle = OL; g.lineWidth = 1.6; g.stroke();
     }
-    // torso (front: slightly wider), hoodie seam for Reactive
-    capsule(g, G.C, G.P, 27, pal.torso);
+    // torso: V-taper when jacked (wide chest, narrow waist), with traps, pecs and abs
+    if (J) {
+      const C = G.C, P = G.P;
+      g.beginPath();
+      g.moveTo(C[0] - 23, C[1] + 1); g.quadraticCurveTo(C[0] - 25, C[1] + 16, P[0] - 12, P[1] - 2); g.lineTo(P[0] - 10, P[1] + 6);
+      g.lineTo(P[0] + 10, P[1] + 6); g.lineTo(P[0] + 12, P[1] - 2); g.quadraticCurveTo(C[0] + 25, C[1] + 16, C[0] + 23, C[1] + 1);
+      g.quadraticCurveTo(C[0], C[1] - 9, C[0] - 23, C[1] + 1); g.closePath();
+      g.fillStyle = pal.torso[0]; g.fill(); g.strokeStyle = OL; g.lineWidth = 1.8; g.stroke();
+      g.strokeStyle = pal.torso[1]; g.lineWidth = 1.2; g.globalAlpha = 0.8;
+      g.beginPath(); g.moveTo(C[0] - 16, C[1] + 12); g.quadraticCurveTo(C[0] - 7, C[1] + 16, C[0], C[1] + 12); g.quadraticCurveTo(C[0] + 7, C[1] + 16, C[0] + 16, C[1] + 12); g.stroke();
+      g.beginPath(); g.moveTo(C[0], C[1] + 13); g.lineTo(P[0], P[1] + 2); g.stroke();
+      for (const y of [C[1] + 21, C[1] + 27, C[1] + 33]) { g.beginPath(); g.moveTo(C[0] - 5, y); g.lineTo(C[0] + 5, y); g.stroke(); }
+      g.globalAlpha = 1;
+      // traps / neck
+      g.beginPath(); g.moveTo(C[0] - 18, C[1] + 1); g.quadraticCurveTo(C[0] - 8, C[1] - 7, C[0] - 5, C[1] - 12); g.lineTo(C[0] + 5, C[1] - 12); g.quadraticCurveTo(C[0] + 8, C[1] - 7, C[0] + 18, C[1] + 1); g.closePath();
+      g.fillStyle = pal.torso[0]; g.fill(); g.strokeStyle = OL; g.lineWidth = 1.4; g.stroke();
+    } else capsule(g, G.C, G.P, 27, pal.torso);
     const p = f.point || 0;
     // left arm (always behind nothing)
-    capsule(g, G.sL, G.eL, 8.5, pal.arm); capsule(g, G.eL, G.hL, 8.5, pal.arm); circle(g, G.hL, 5.8, pal.fist);
+    if (J) circle(g, G.sL, 8.5, pal.arm[0]);
+    capsule(g, G.sL, G.eL, aw, pal.arm); capsule(g, G.eL, G.hL, aw - J * 1.5, pal.arm); circle(g, G.hL, 5.8 + J, pal.fist);
     // head
     drawHead(g, G, f, pal);
     // right arm: when pointing, the hand comes toward the lens (bigger, finger out)
-    capsule(g, G.sR, G.eR, 8.5 + p * 2, pal.arm);
-    capsule(g, G.eR, G.hR, 8.5 + p * 4, pal.arm);
+    if (J) circle(g, G.sR, 8.5, pal.arm[0]);
+    capsule(g, G.sR, G.eR, aw + p * 2, pal.arm);
+    capsule(g, G.eR, G.hR, aw - J * 1.5 + p * 4, pal.arm);
     if (p > 0.05) {
       const r = 5.8 + p * 6.5;
       circle(g, G.hR, r, pal.fist);
@@ -100,7 +119,7 @@
       circle(g, tip, 2.6 + p * 3.6, '#ffffff');
       g.globalAlpha = 0.35; circle(g, [tip[0], tip[1] + 0.8], 1.3 + p * 1.6, '#c9cbd3', null); g.globalAlpha = 1;
       g.strokeStyle = OL; g.lineWidth = 1.1; g.beginPath(); g.arc(G.hR[0] + r * 0.25, G.hR[1] + r * 0.15, r * 0.55, 0.3, 2.2); g.stroke();   // curled fingers
-    } else circle(g, G.hR, 5.8, pal.fist);
+    } else circle(g, G.hR, 5.8 + J, pal.fist);
     g.restore();
   };
 
@@ -128,7 +147,7 @@
       g.fillStyle = '#fff'; g.beginPath(); g.arc(-0.6, -0.8, 0.6, 0, 6.283); g.fill();
       g.restore(); g.fillStyle = ink;
       // brows: raise with emphasis, slight inner tilt when serious
-      g.lineWidth = 1.5; g.beginPath(); g.moveTo(sx * 2.8, -2.6 - br * 2 + (f.serious ? 0.8 : 0)); g.lineTo(sx * 7.6, -3.3 - br * 1.6); g.stroke();
+      g.lineWidth = f.serious ? 1.9 : 1.5; g.beginPath(); g.moveTo(sx * 2.6, -2.6 - br * 1.2 + (f.serious ? 1.6 : 0)); g.lineTo(sx * 7.8, -3.6 - br * 1.6 - (f.serious ? 0.6 : 0)); g.stroke();
     }
     const m = f.mouth || 0;
     if (m > 0.05) { g.beginPath(); g.ellipse(0, 8.6, 3 + m * 0.8, 0.8 + m * 2.8, 0, 0, 6.283); g.fillStyle = '#3a0d14'; g.fill(); g.lineWidth = 1.1; g.stroke(); }
