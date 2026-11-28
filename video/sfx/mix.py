@@ -44,11 +44,25 @@ def main(tl_path):
         n = min(len(s), len(mix) - i)
         mix[i:i + n] += s[:n]
         lines.append(f"{c['t']:6.2f}s  frame {round(c['t'] * tl['fps']):3d}  {c['id']:<11} {c.get('gain', 0):+5.1f} dB  {c.get('note', '')}")
+    # voiceover track (episode.voiceover = {file, at, gain}) — sfx are ducked under it
+    vo = tl.get('voiceover')
+    if vo:
+        vpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', vo['file'])
+        raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', vpath, '-f', 'f32le', '-ac', '2', '-ar', str(SR), '-'], check=True, capture_output=True).stdout
+        v = np.frombuffer(raw, dtype='<f4').reshape(-1, 2).astype(np.float64) * (10 ** (vo.get('gain', 0) / 20))
+        mix *= 10 ** (-6 / 20)                      # sfx sit under the voice
+        i = int(round(vo.get('at', 0) * SR)); n = min(len(v), len(mix) - i)
+        mix[i:i + n] += v[:n]
+        lines.append(f"{vo.get('at', 0):6.2f}s  voiceover  {vo['file']}")
     mix = mix[: int(round(dur * SR))]
     # soft limiter -> peak about -1 dBFS
     peak = np.abs(mix).max() + 1e-9
-    mix = mix / peak * 1.25
-    mix = np.tanh(mix) / np.tanh(1.25) * 0.71  # peak about -3 dBFS: restrained
+    if vo:   # keep the voice natural: gentle limiter, louder master (-1 dBFS)
+        mix = mix / peak * 1.05
+        mix = np.tanh(mix) / np.tanh(1.05) * 0.89
+    else:
+        mix = mix / peak * 1.25
+        mix = np.tanh(mix) / np.tanh(1.25) * 0.71  # peak about -3 dBFS: restrained
     # tail fade on the last 0.25 s so the video ends cleanly
     k = int(0.25 * SR)
     mix[-k:] *= np.linspace(1, 0, k)[:, None]

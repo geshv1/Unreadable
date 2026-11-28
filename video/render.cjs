@@ -82,7 +82,7 @@ fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(path.join(outDir, `${name}-cuts.txt`), lines.join('\n') + '\n');
   console.log(lines.join('\n'));
   console.log('wrote', mp4);
-  if (!opt('nosfx') && (info.sfx || []).length) {
+  if (!opt('nosfx') && ((info.sfx || []).length || info.voiceover)) {
     const r = require('child_process').spawnSync('python3', [path.join(__dirname, 'sfx/mix.py'), path.join(outDir, `${name}-timeline.json`)], { stdio: 'inherit' });
     if (r.status) throw new Error('sfx mix failed');
   }

@@ -16,7 +16,8 @@
       let t = p.at;
       const end = p.end != null ? p.end : k + 1 < ep.narration.length ? ep.narration[k + 1].at : Infinity;
       words.forEach((w, i) => {
-        const wt = p.times ? p.at + p.times[i] : t;
+        const tot = words.reduce((a, x) => a + x.length + 2, 0), before = words.slice(0, i).reduce((a, x) => a + x.length + 2, 0);
+        const wt = p.times ? p.at + p.times[i] : p.span ? p.at + p.span * before / tot : t;
         out.push({ phrase: k, w, t: wt, end, red: reds.includes(w.toLowerCase()) || reds.includes(w.toLowerCase().replace(/[.,!?;:…]+$/, '')) });
         t += (p.wps || 0.3) + (/[,]$/.test(w) ? 0.12 : /[.!?…]$/.test(w) ? 0.22 : 0);
       });

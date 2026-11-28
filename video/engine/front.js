@@ -18,6 +18,8 @@
     point: { L: [-18, -39], R: [12, -80] },         // with f.point = 1: finger at the lens (chest height, face stays clear)
     wave: { L: [-18, -39], R: [34, -120] },
     count: { L: [-14, -84], R: [16, -86] },
+    cuff: { L: [-6, -70], R: [-2, -72] },          // adjusting a sleeve: composed, unhurried
+    steeple: { L: [-5, -78], R: [5, -78] },         // fingertips together at the chest
   };
   V.frontGesture = function (t, keys) { // keys = [[t, name], ...]: at each key time blend (0.35 s) from the previous gesture
     const get = (k) => V.FRONT[k];
@@ -147,10 +149,12 @@
       g.fillStyle = '#fff'; g.beginPath(); g.arc(-0.6, -0.8, 0.6, 0, 6.283); g.fill();
       g.restore(); g.fillStyle = ink;
       // brows: raise with emphasis, slight inner tilt when serious
-      g.lineWidth = f.serious ? 1.9 : 1.5; g.beginPath(); g.moveTo(sx * 2.6, -2.6 - br * 1.2 + (f.serious ? 1.6 : 0)); g.lineTo(sx * 7.8, -3.6 - br * 1.6 - (f.serious ? 0.6 : 0)); g.stroke();
+      if (f.calm) { // composed: level brows, inner ends slightly raised (open, confident, not hostile)
+        g.lineWidth = 1.6; g.beginPath(); g.moveTo(sx * 2.6, -3.7 - br * 1.5); g.quadraticCurveTo(sx * 5.2, -4.4 - br * 1.5, sx * 7.8, -3.4 - br * 1.1); g.stroke();
+      } else { g.lineWidth = f.serious ? 1.9 : 1.5; g.beginPath(); g.moveTo(sx * 2.6, -2.6 - br * 1.2 + (f.serious ? 1.6 : 0)); g.lineTo(sx * 7.8, -3.6 - br * 1.6 - (f.serious ? 0.6 : 0)); g.stroke(); }
     }
     const m = f.mouth || 0;
-    if (m > 0.05) { g.beginPath(); g.ellipse(0, 8.6, 3 + m * 0.8, 0.8 + m * 2.8, 0, 0, 6.283); g.fillStyle = '#3a0d14'; g.fill(); g.lineWidth = 1.1; g.stroke(); }
+    if (m > 0.05) { g.beginPath(); g.ellipse(0, 8.6, 3 + m * 0.6, 0.7 + m * (f.calm ? 1.8 : 2.8), 0, 0, 6.283); g.fillStyle = '#3a0d14'; g.fill(); g.lineWidth = 1.1; g.stroke(); }
     else if (f.smile) { g.lineWidth = 1.4; g.beginPath(); g.moveTo(-3.6, 7.6); g.quadraticCurveTo(0, 10.2, 3.6, 7.6); g.stroke(); }
     else { g.lineWidth = 1.4; g.beginPath(); g.moveTo(-3, 8.4); g.lineTo(3, 8.4); g.stroke(); }
     g.restore();
@@ -164,8 +168,8 @@
     for (const w of ws) if (w.red && t >= w.t - 0.05 && t < w.t + 0.6) emph = Math.max(emph, Math.sin(V.clamp((t - w.t + 0.05) / 0.65) * Math.PI));
     const blink = ((t + 0.7) % 3.1) < 0.11 ? 0.12 : 1;
     return {
-      mouth, blink, brow: 0.25 + 0.75 * emph,
-      nod: mouth * 0.7 + emph * 1.6 + Math.sin(t * 2.1) * 0.3,
+      mouth, blink, brow: 0.2 + 0.55 * emph, calm: true, smile: mouth === 0,
+      nod: mouth * 0.5 + emph * 1.1 + Math.sin(t * 2.1) * 0.3,
       breath: 0.8 + 0.8 * Math.sin(t * 2.4),
       sway: Math.sin(t * 0.9) * 1.6,
       headTilt: Math.sin(t * 1.3) * 0.035 + emph * 0.05,
