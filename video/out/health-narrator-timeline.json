@@ -1,0 +1,237 @@
+{
+ "title": "health-narrator",
+ "duration": 46.545,
+ "fps": 30,
+ "cuts": [
+  {
+   "t": 3.314,
+   "scene": "sick"
+  },
+  {
+   "t": 5.571,
+   "scene": "money"
+  },
+  {
+   "t": 7.879,
+   "scene": "followers"
+  },
+  {
+   "t": 9.07,
+   "scene": "car"
+  },
+  {
+   "t": 10.368,
+   "scene": "sick-week"
+  },
+  {
+   "t": 12.421,
+   "scene": "list"
+  },
+  {
+   "t": 14.325,
+   "scene": "trade"
+  },
+  {
+   "t": 16.447,
+   "scene": "breathe"
+  },
+  {
+   "t": 17.922,
+   "scene": "sleep"
+  },
+  {
+   "t": 19.58,
+   "scene": "walk"
+  },
+  {
+   "t": 21.348,
+   "scene": "one"
+  },
+  {
+   "t": 22.889,
+   "scene": "zeros"
+  },
+  {
+   "t": 25.233,
+   "scene": "lose"
+  },
+  {
+   "t": 28.168,
+   "scene": "miracle"
+  },
+  {
+   "t": 29.688,
+   "scene": "basics"
+  },
+  {
+   "t": 31.397,
+   "scene": "four"
+  },
+  {
+   "t": 35.24,
+   "scene": "daily"
+  },
+  {
+   "t": 36.811,
+   "scene": "notice"
+  },
+  {
+   "t": 40.059,
+   "scene": "protect"
+  },
+  {
+   "t": 42.076,
+   "scene": "cta"
+  }
+ ],
+ "sfx": [
+  {
+   "scene": "trade",
+   "at": 0.95,
+   "id": "bump",
+   "gain": -9,
+   "args": {
+    "seed": 21,
+    "heavy": 1
+   },
+   "note": "the heart lands on the scale",
+   "t": 15.275
+  },
+  {
+   "scene": "lose",
+   "at": 0.86,
+   "id": "bump",
+   "gain": -9,
+   "args": {
+    "seed": 22,
+    "heavy": 0.8
+   },
+   "note": "the one falls",
+   "t": 26.093
+  },
+  {
+   "scene": "lose",
+   "at": 2.2,
+   "id": "bump",
+   "gain": -6,
+   "args": {
+    "seed": 40,
+    "heavy": 1.3
+   },
+   "note": "zero lands",
+   "t": 27.433
+  }
+ ],
+ "voiceover": {
+  "file": "assets/vo/health-brian1.mp3",
+  "at": 0.55,
+  "gain": 0
+ },
+ "scenes": [
+  {
+   "id": "healthy",
+   "start": 0,
+   "end": 3.314
+  },
+  {
+   "id": "sick",
+   "start": 3.314,
+   "end": 5.571
+  },
+  {
+   "id": "money",
+   "start": 5.571,
+   "end": 7.879
+  },
+  {
+   "id": "followers",
+   "start": 7.879,
+   "end": 9.07
+  },
+  {
+   "id": "car",
+   "start": 9.07,
+   "end": 10.368
+  },
+  {
+   "id": "sick-week",
+   "start": 10.368,
+   "end": 12.421
+  },
+  {
+   "id": "list",
+   "start": 12.421,
+   "end": 14.325
+  },
+  {
+   "id": "trade",
+   "start": 14.325,
+   "end": 16.447
+  },
+  {
+   "id": "breathe",
+   "start": 16.447,
+   "end": 17.922
+  },
+  {
+   "id": "sleep",
+   "start": 17.922,
+   "end": 19.580000000000002
+  },
+  {
+   "id": "walk",
+   "start": 19.580000000000002,
+   "end": 21.348000000000003
+  },
+  {
+   "id": "one",
+   "start": 21.348000000000003,
+   "end": 22.889000000000003
+  },
+  {
+   "id": "zeros",
+   "start": 22.889000000000003,
+   "end": 25.233000000000004
+  },
+  {
+   "id": "lose",
+   "start": 25.233000000000004,
+   "end": 28.168000000000003
+  },
+  {
+   "id": "miracle",
+   "start": 28.168000000000003,
+   "end": 29.688000000000002
+  },
+  {
+   "id": "basics",
+   "start": 29.688000000000002,
+   "end": 31.397000000000002
+  },
+  {
+   "id": "four",
+   "start": 31.397000000000002,
+   "end": 35.24
+  },
+  {
+   "id": "daily",
+   "start": 35.24,
+   "end": 36.811
+  },
+  {
+   "id": "notice",
+   "start": 36.811,
+   "end": 40.059
+  },
+  {
+   "id": "protect",
+   "start": 40.059,
+   "end": 42.076
+  },
+  {
+   "id": "cta",
+   "start": 42.076,
+   "end": 46.545
+  }
+ ]
+}
