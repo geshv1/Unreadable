@@ -1,7 +1,7 @@
 underperforming-narrator — sound-effect cues (5)
 
-  7.83s  frame 235  bump        -10.0 dB  bar drops
- 12.21s  frame 366  phone_down  -12.0 dB  laptop shut
- 18.24s  frame 547  bump         -6.0 dB  the zero lands
- 25.23s  frame 757  punch        -6.0 dB  first fight
-  0.90s  voiceover  assets/vo/underperforming-vo.mp3
+  8.41s  frame 252  bump        -10.0 dB  bar drops
+ 12.87s  frame 386  phone_down  -12.0 dB  laptop shut
+ 20.31s  frame 609  bump         -6.0 dB  the zero lands
+ 26.39s  frame 792  punch        -6.0 dB  first fight
+  1.05s  voiceover  assets/vo/underperforming-vo-brian.mp3

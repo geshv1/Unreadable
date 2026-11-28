@@ -1,33 +1,33 @@
-underperforming-narrator — scene transitions (38s @ 30fps)
+underperforming-narrator — scene transitions (39s @ 30fps)
 
 00:00.00  frame   0  opener
-00:02.84  frame  85  judges
-00:04.73  frame 142  barbell
-00:08.48  frame 254  preparing
-00:10.31  frame 309  post
-00:13.23  frame 397  confess
-00:15.66  frame 470  spotlight
-00:18.19  frame 546  zero
-00:20.36  frame 611  admire
-00:22.94  frame 688  first-video
-00:24.88  frame 746  first-fight
-00:26.68  frame 800  first-day
-00:28.62  frame 859  stayed
-00:31.00  frame 930  public
-00:33.75  frame 1013  cta
+00:03.01  frame  90  judges
+00:04.96  frame 149  barbell
+00:08.84  frame 265  preparing
+00:10.97  frame 329  post
+00:14.05  frame 422  confess
+00:16.64  frame 499  spotlight
+00:19.01  frame 570  zero
+00:21.15  frame 635  admire
+00:23.78  frame 713  first-video
+00:26.04  frame 781  first-fight
+00:28.11  frame 843  first-day
+00:30.22  frame 907  stayed
+00:32.34  frame 970  public
+00:35.22  frame 1057  cta
 
 Cuts (whoosh starts ~0.16s before, bass hit on the cut):
-  00:02.84  (2.84s, frame 85)  -> judges
-  00:04.73  (4.73s, frame 142)  -> barbell
-  00:08.48  (8.48s, frame 254)  -> preparing
-  00:10.31  (10.31s, frame 309)  -> post
-  00:13.23  (13.23s, frame 397)  -> confess
-  00:15.66  (15.66s, frame 470)  -> spotlight
-  00:18.19  (18.19s, frame 546)  -> zero
-  00:20.36  (20.36s, frame 611)  -> admire
-  00:22.94  (22.94s, frame 688)  -> first-video
-  00:24.88  (24.88s, frame 746)  -> first-fight
-  00:26.68  (26.68s, frame 800)  -> first-day
-  00:28.62  (28.62s, frame 859)  -> stayed
-  00:31.00  (31.00s, frame 930)  -> public
-  00:33.75  (33.75s, frame 1013)  -> cta
+  00:03.01  (3.01s, frame 90)  -> judges
+  00:04.96  (4.96s, frame 149)  -> barbell
+  00:08.84  (8.84s, frame 265)  -> preparing
+  00:10.97  (10.97s, frame 329)  -> post
+  00:14.05  (14.05s, frame 422)  -> confess
+  00:16.64  (16.64s, frame 499)  -> spotlight
+  00:19.01  (19.01s, frame 570)  -> zero
+  00:21.15  (21.15s, frame 635)  -> admire
+  00:23.78  (23.78s, frame 713)  -> first-video
+  00:26.04  (26.04s, frame 781)  -> first-fight
+  00:28.11  (28.11s, frame 843)  -> first-day
+  00:30.22  (30.22s, frame 907)  -> stayed
+  00:32.34  (32.34s, frame 970)  -> public
+  00:35.22  (35.22s, frame 1057)  -> cta
