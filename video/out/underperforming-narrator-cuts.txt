@@ -1,0 +1,33 @@
+underperforming-narrator — scene transitions (38s @ 30fps)
+
+00:00.00  frame   0  opener
+00:02.84  frame  85  judges
+00:04.73  frame 142  barbell
+00:08.48  frame 254  preparing
+00:10.31  frame 309  post
+00:13.23  frame 397  confess
+00:15.66  frame 470  spotlight
+00:18.19  frame 546  zero
+00:20.36  frame 611  admire
+00:22.94  frame 688  first-video
+00:24.88  frame 746  first-fight
+00:26.68  frame 800  first-day
+00:28.62  frame 859  stayed
+00:31.00  frame 930  public
+00:33.75  frame 1013  cta
+
+Cuts (whoosh starts ~0.16s before, bass hit on the cut):
+  00:02.84  (2.84s, frame 85)  -> judges
+  00:04.73  (4.73s, frame 142)  -> barbell
+  00:08.48  (8.48s, frame 254)  -> preparing
+  00:10.31  (10.31s, frame 309)  -> post
+  00:13.23  (13.23s, frame 397)  -> confess
+  00:15.66  (15.66s, frame 470)  -> spotlight
+  00:18.19  (18.19s, frame 546)  -> zero
+  00:20.36  (20.36s, frame 611)  -> admire
+  00:22.94  (22.94s, frame 688)  -> first-video
+  00:24.88  (24.88s, frame 746)  -> first-fight
+  00:26.68  (26.68s, frame 800)  -> first-day
+  00:28.62  (28.62s, frame 859)  -> stayed
+  00:31.00  (31.00s, frame 930)  -> public
+  00:33.75  (33.75s, frame 1013)  -> cta
