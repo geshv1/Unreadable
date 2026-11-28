@@ -379,6 +379,7 @@
     tintCache.set(key, o); return o;
   }
   V.drawFigure = function (g, f) {
+    if (f.front) return V.drawFront(g, f);           // front-facing narrator rig
     let pal = V.PAL[f.kind] || V.PAL.other;
     if (f.tint) pal = tinted(pal, Math.round(f.tint * 50) / 50);
     const G = V.geom(f.pose);

@@ -6,15 +6,15 @@
   const C = (o) => V.X(Object.assign({ kind: 'crowd', pose: PO.stand }, o));
   const bg = (g, top, bottom) => { const gr = g.createLinearGradient(0, 520, 0, V.FLOOR); gr.addColorStop(0, top); gr.addColorStop(1, bottom); g.fillStyle = gr; g.fillRect(-400, 480, 1900, V.FLOOR - 480); };
   const pool = (g, x, color, r = 420) => { g.save(); g.translate(x, V.FLOOR + 10); g.scale(1, 0.18); const p = g.createRadialGradient(0, 0, 0, 0, 0, r); p.addColorStop(0, color); p.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = p; g.beginPath(); g.arc(0, 0, r, 0, 6.283); g.fill(); g.restore(); };
-  const narrator = (tl, sc, o) => V.St(Object.assign({ x: 540, face: 1, expr: 'talk', mouth: V.speaking(tl + sc.start) }, o));
+  // front-facing narrator: looks into the lens; life (mouth, blinks, nods, brows) comes from the narration timing
+  const narrator = (tl, sc, o) => Object.assign({ kind: 'steady', front: true, x: 540, s: 1.2 }, V.narratorLife(tl + sc.start), o);
 
   // ─────────────────────────────── STUDIO — the narrator talks to you
   V.actions.n_studio = function (tl, sc) {
-    let pose;
-    if (tl < 1.2) pose = V.lerpPose(PO.stand, PO.wave, Math.sin(V.clamp(tl / 1.2) * Math.PI) * 0.9 + 0.1 * Math.sin(tl * 12));
-    else if (tl < 3.1) pose = poseAt(tl, [[1.2, PO.stand], [1.45, PO.pointYou], [3.1, PO.pointYou]]);
-    else pose = V.lerpPose(PO.explain, PO.present, 0.5 + 0.5 * Math.sin(tl * 4));
-    const n = narrator(tl, sc, { pose: V.breathe(pose, tl, 0.8, 3), headTilt: tl > 3.2 ? 0.08 * Math.sin(tl * 2) : 0 });
+    const gesture = V.frontGesture(tl, [[0, 'idle'], [0.25, 'wave'], [0.8, 'point'], [1.4, 'explain'], [2.5, 'palms'], [3.15, 'point'], [5.3, 'point']]);
+    const point = kf(tl, [[0, 0], [0.75, 0], [0.95, 1], [1.3, 1], [1.5, 0], [3.1, 0], [3.35, 1], [5.3, 1]], ease.inOut);
+    const s = kf(tl, [[0, 1.12], [0.8, 1.3], [1.4, 1.24], [3.1, 1.24], [4.4, 1.44]], ease.inOut);
+    const n = narrator(tl, sc, { gesture, point, s, beamW: 1.15 });
     return {
       figs: [n],
       back(g) {
@@ -82,8 +82,9 @@
 
   // ─────────────────────────────── CONFESS — "I know. I did it too."
   V.actions.n_confess = function (tl, sc) {
-    const n = narrator(tl, sc, { x: 600, pose: V.breathe(PO.sitBox, tl, 0.8, 2), expr: tl < 1.0 ? 'talk' : 'talk', headTilt: -0.05 });
-    if (V.speaking(tl + sc.start) === 0) n.expr = 'smile';
+    const life = V.narratorLife(tl + sc.start);
+    const gesture = V.frontGesture(tl, [[0, 'chest'], [1.1, 'chest'], [1.4, 'shrug'], [2.2, 'shrug']]);
+    const n = narrator(tl, sc, { x: 600, s: 1.3, gesture, smile: life.mouth === 0, headTilt: -0.08 + life.headTilt });
     return {
       figs: [n],
       back(g) {
@@ -97,7 +98,7 @@
 
   // ─────────────────────────────── CTA — learn to be unreadable
   V.actions.n_cta = function (tl, sc) {
-    const n = narrator(tl, sc, { x: 190, pose: V.breathe(PO.present, tl, 0.8, 3), beam: 0.9 });
+    const n = narrator(tl, sc, { x: 230, s: 1.1, gesture: V.frontGesture(tl, [[0, 'present']]), look: [0.4, 0], beam: 0.9 });
     return {
       figs: [n],
       back(g) {
