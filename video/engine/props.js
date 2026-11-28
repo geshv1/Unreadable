@@ -977,4 +977,150 @@
     g.fillStyle = 'rgba(255,255,255,0.06)'; g.beginPath(); g.moveTo(-w / 2, -h / 2); g.lineTo(-w / 2 + w * 0.35, -h / 2); g.lineTo(-w / 2, -h / 2 + h * 0.3); g.closePath(); g.fill();
     g.restore();
   };
+
+  // ───────── health episode props
+  // Wish icons (world px): 'car' | 'money' | 'followers' | 'trophy' | 'plane' | 'watch' | 'heart'
+  V.icon = function (g, kind, x, y, s = 1, alpha = 1) {
+    g.save(); g.translate(x, y); g.scale(s, s); g.globalAlpha = alpha;
+    g.lineJoin = 'round'; g.lineCap = 'round'; g.strokeStyle = '#16171c'; g.lineWidth = 4;
+    const gold = '#F2C14E', white = '#f4f5f7';
+    if (kind === 'car') {
+      g.fillStyle = V.COL.red; g.beginPath(); g.moveTo(-60, 10); g.lineTo(-52, -12); g.lineTo(-24, -14); g.lineTo(-8, -32); g.lineTo(30, -32); g.lineTo(48, -12); g.lineTo(62, -8); g.lineTo(62, 10); g.closePath(); g.fill(); g.stroke();
+      g.fillStyle = '#9fc3ff'; g.fillRect(-2, -28, 28, 14); g.strokeRect(-2, -28, 28, 14);
+      for (const wx of [-34, 36]) { g.fillStyle = '#16171c'; g.beginPath(); g.arc(wx, 12, 13, 0, 6.283); g.fill(); g.fillStyle = '#c9cbd3'; g.beginPath(); g.arc(wx, 12, 5, 0, 6.283); g.fill(); }
+    } else if (kind === 'money') {
+      for (let i = 0; i < 4; i++) { g.fillStyle = i % 2 ? '#7fcf8f' : '#9fe0a8'; V.roundRect(g, -50, 14 - i * 12, 100, 22, 4); g.fill(); g.stroke(); }
+      g.fillStyle = '#16171c'; g.font = `800 26px ${V.FONT.sans}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('$', 0, -20);
+    } else if (kind === 'followers') {
+      g.fillStyle = white; g.beginPath(); g.arc(-22, -16, 14, 0, 6.283); g.fill(); g.stroke();
+      g.beginPath(); g.moveTo(-46, 22); g.quadraticCurveTo(-22, -10, 2, 22); g.closePath(); g.fill(); g.stroke();
+      g.fillStyle = V.COL.red; V.roundRect(g, 8, -18, 64, 34, 17); g.fill(); g.stroke();
+      g.fillStyle = '#fff'; g.font = `800 22px ${V.FONT.sans}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('+1K', 40, 0);
+    } else if (kind === 'trophy') {
+      g.fillStyle = gold; g.beginPath(); g.moveTo(-30, -36); g.lineTo(30, -36); g.quadraticCurveTo(30, 6, 0, 10); g.quadraticCurveTo(-30, 6, -30, -36); g.closePath(); g.fill(); g.stroke();
+      g.fillRect(-6, 10, 12, 16); g.strokeRect(-6, 10, 12, 16); V.roundRect(g, -24, 26, 48, 12, 3); g.fill(); g.stroke();
+      g.beginPath(); g.arc(-34, -20, 12, Math.PI * 0.5, Math.PI * 1.5); g.stroke(); g.beginPath(); g.arc(34, -20, 12, -Math.PI * 0.5, Math.PI * 0.5); g.stroke();
+    } else if (kind === 'plane') {
+      g.fillStyle = white; g.beginPath(); g.moveTo(-60, 0); g.quadraticCurveTo(-50, -10, 50, -6); g.quadraticCurveTo(64, 0, 50, 6); g.quadraticCurveTo(-50, 10, -60, 0); g.fill(); g.stroke();
+      g.beginPath(); g.moveTo(-6, -4); g.lineTo(-26, -36); g.lineTo(-10, -36); g.lineTo(18, -4); g.closePath(); g.fill(); g.stroke();
+      g.beginPath(); g.moveTo(-6, 4); g.lineTo(-26, 36); g.lineTo(-10, 36); g.lineTo(18, 4); g.closePath(); g.fill(); g.stroke();
+    } else if (kind === 'watch') {
+      g.fillStyle = '#3a3c46'; g.fillRect(-14, -44, 28, 88); g.strokeRect(-14, -44, 28, 88);
+      g.fillStyle = gold; g.beginPath(); g.arc(0, 0, 26, 0, 6.283); g.fill(); g.stroke();
+      g.fillStyle = '#0d0e12'; g.beginPath(); g.arc(0, 0, 19, 0, 6.283); g.fill();
+      g.strokeStyle = '#fff'; g.lineWidth = 3; g.beginPath(); g.moveTo(0, 0); g.lineTo(0, -13); g.moveTo(0, 0); g.lineTo(9, 4); g.stroke();
+    } else if (kind === 'heart') {
+      V.heart(g, 0, 0, 2.6, 1);
+    }
+    g.restore();
+  };
+  // Thought/wish bubble holding an icon
+  V.wish = function (g, kind, x, y, k = 1, alpha = 1) {
+    if (k <= 0) return;
+    g.save(); g.globalAlpha = alpha; g.translate(x, y); g.scale(k, k);
+    g.fillStyle = 'rgba(18,19,26,0.92)'; g.strokeStyle = 'rgba(255,255,255,0.7)'; g.lineWidth = 3;
+    g.beginPath(); g.arc(0, 0, 70, 0, 6.283); g.fill(); g.stroke();
+    g.restore();
+    V.icon(g, kind, x, y, 0.85 * k, alpha);
+  };
+  // IV stand + drip
+  V.ivStand = function (g, x, t) {
+    g.save(); g.strokeStyle = '#c9cbd3'; g.lineWidth = 7; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(x, V.FLOOR - 4); g.lineTo(x, 760); g.moveTo(x - 40, 760); g.lineTo(x + 40, 760); g.moveTo(x - 46, V.FLOOR - 4); g.lineTo(x + 46, V.FLOOR - 4); g.stroke();
+    g.fillStyle = 'rgba(200,230,255,0.75)'; g.strokeStyle = '#e8eaee'; g.lineWidth = 3; V.roundRect(g, x + 14, 770, 46, 80, 10); g.fill(); g.stroke();
+    g.strokeStyle = 'rgba(200,230,255,0.6)'; g.lineWidth = 3; g.beginPath(); g.moveTo(x + 37, 850); g.quadraticCurveTo(x + 40, 1000, x - 60, 1150); g.stroke();
+    const ph = (t * 1.4) % 1; g.fillStyle = 'rgba(200,230,255,0.9)'; g.beginPath(); g.arc(x + 37, 860 + ph * 40, 4, 0, 6.283); g.fill();
+    g.restore();
+  };
+  // Heart monitor with a live ECG trace; flat = 0..1 (1 = flatline), bpm
+  V.heartMonitor = function (g, x, y, t, bpm = 70, color = '#7fe0a0', flat = 0) {
+    const w = 230, h = 150;
+    g.save(); g.fillStyle = '#0a0f12'; g.strokeStyle = '#c9cbd3'; g.lineWidth = 5; V.roundRect(g, x - w / 2, y - h / 2, w, h, 14); g.fill(); g.stroke();
+    g.beginPath(); g.rect(x - w / 2 + 8, y - h / 2 + 8, w - 16, h - 16); g.clip();
+    g.strokeStyle = color; g.lineWidth = 4; g.shadowColor = color; g.shadowBlur = 12;
+    g.beginPath();
+    const per = 60 / bpm;
+    for (let i = 0; i <= 200; i++) {
+      const px = x - w / 2 + 8 + i * (w - 16) / 200, tt = t - (200 - i) * 0.012, ph = ((tt % per) + per) % per / per;
+      let v = 0; if (ph > 0.45 && ph < 0.5) v = -40; else if (ph >= 0.5 && ph < 0.55) v = 30; else if (ph > 0.65 && ph < 0.75) v = -10 * Math.sin((ph - 0.65) / 0.1 * Math.PI);
+      v *= 1 - flat;
+      const py = y + 10 + v; i ? g.lineTo(px, py) : g.moveTo(px, py);
+    }
+    g.stroke(); g.restore();
+  };
+  // Thermometer; level 0..1
+  V.thermometer = function (g, x, y, level) {
+    g.save(); g.fillStyle = '#f4f5f7'; g.strokeStyle = '#16171c'; g.lineWidth = 4;
+    V.roundRect(g, x - 18, y - 150, 36, 170, 18); g.fill(); g.stroke(); g.beginPath(); g.arc(x, y + 34, 30, 0, 6.283); g.fill(); g.stroke();
+    g.fillStyle = V.COL.red; g.shadowColor = V.COL.red; g.shadowBlur = 16 * level; g.beginPath(); g.arc(x, y + 34, 22, 0, 6.283); g.fill();
+    const top = y + 20 - 160 * level; g.fillRect(x - 8, top, 16, y + 30 - top);
+    g.shadowBlur = 0; g.strokeStyle = '#9a9da7'; g.lineWidth = 3;
+    for (let i = 0; i < 6; i++) { g.beginPath(); g.moveTo(x + 18, y - 120 + i * 26); g.lineTo(x + 30, y - 120 + i * 26); g.stroke(); }
+    g.restore();
+  };
+  // Balance scale; tilt -1..1 (positive = right pan down)
+  V.scale = function (g, x, y, tilt, leftDraw, rightDraw) {
+    const a = tilt * 0.32, L = 300;
+    g.save(); g.strokeStyle = '#e8eaee'; g.lineWidth = 9; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(x, V.FLOOR - 4); g.lineTo(x, y); g.moveTo(x - 80, V.FLOOR - 4); g.lineTo(x + 80, V.FLOOR - 4); g.stroke();
+    const lx = x - Math.cos(a) * L, ly = y - Math.sin(a) * L, rx = x + Math.cos(a) * L, ry = y + Math.sin(a) * L;
+    g.beginPath(); g.moveTo(lx, ly); g.lineTo(rx, ry); g.stroke();
+    g.fillStyle = '#F2C14E'; g.beginPath(); g.arc(x, y, 14, 0, 6.283); g.fill();
+    for (const [px, py, draw] of [[lx, ly, leftDraw], [rx, ry, rightDraw]]) {
+      g.lineWidth = 3; g.beginPath(); g.moveTo(px, py); g.lineTo(px - 70, py + 120); g.moveTo(px, py); g.lineTo(px + 70, py + 120); g.stroke();
+      g.lineWidth = 7; g.beginPath(); g.moveTo(px - 90, py + 120); g.quadraticCurveTo(px, py + 160, px + 90, py + 120); g.stroke();
+      if (draw) draw(px, py + 112);
+    }
+    g.restore();
+  };
+  // Lungs that breathe (k 0..1 inflation)
+  V.lungs = function (g, x, y, k, s = 1) {
+    g.save(); g.translate(x, y); g.scale(s * (0.9 + 0.12 * k), s * (0.9 + 0.12 * k));
+    g.fillStyle = '#f08a96'; g.strokeStyle = '#16171c'; g.lineWidth = 4; g.shadowColor = 'rgba(240,138,150,0.6)'; g.shadowBlur = 20 * k;
+    for (const sx of [-1, 1]) { g.beginPath(); g.moveTo(sx * 10, -40); g.quadraticCurveTo(sx * 70, -50, sx * 64, 30); g.quadraticCurveTo(sx * 50, 70, sx * 12, 50); g.closePath(); g.fill(); g.stroke(); }
+    g.shadowBlur = 0; g.strokeStyle = '#e8eaee'; g.lineWidth = 8; g.beginPath(); g.moveTo(0, -80); g.lineTo(0, -30); g.moveTo(0, -30); g.lineTo(-14, -16); g.moveTo(0, -30); g.lineTo(14, -16); g.stroke();
+    g.restore();
+  };
+  // Big glowing digit (serif), used for 1 / 0 equation
+  V.bigDigit = function (g, ch, x, y, size, color = '#F4F5F7', alpha = 1, rot = 0) {
+    g.save(); g.translate(x, y); g.rotate(rot); g.globalAlpha = alpha;
+    g.font = `italic 500 ${size}px "Cormorant Garamond", serif`; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+    g.shadowColor = color; g.shadowBlur = 30; g.fillStyle = color; g.fillText(ch, 0, 0);
+    g.restore();
+  };
+  // Habit streak calendar (7 columns); n checked
+  V.streak = function (g, x, y, n, labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S']) {
+    const cw = 96;
+    g.save(); g.fillStyle = 'rgba(14,15,20,0.94)'; g.strokeStyle = 'rgba(255,255,255,0.3)'; g.lineWidth = 3;
+    V.roundRect(g, x - cw * 3.5 - 16, y - 70, cw * 7 + 32, 150, 18); g.fill(); g.stroke();
+    labels.forEach((d, i) => {
+      const cx = x - cw * 3 + i * cw;
+      g.fillStyle = '#9a9da7'; g.font = `700 24px ${V.FONT.sans}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(d, cx, y - 40);
+      g.strokeStyle = 'rgba(255,255,255,0.25)'; g.lineWidth = 3; g.beginPath(); g.arc(cx, y + 18, 30, 0, 6.283); g.stroke();
+      if (i < n) { g.fillStyle = '#7fe0a0'; g.shadowColor = '#7fe0a0'; g.shadowBlur = 14; g.beginPath(); g.arc(cx, y + 18, 30, 0, 6.283); g.fill(); g.shadowBlur = 0;
+        g.strokeStyle = '#0d0e12'; g.lineWidth = 6; g.beginPath(); g.moveTo(cx - 13, y + 18); g.lineTo(cx - 3, y + 28); g.lineTo(cx + 15, y + 6); g.stroke(); }
+    });
+    g.restore();
+  };
+  // Battery (world px); level 0..1, colour follows level
+  V.battery = function (g, x, y, level, k = 1) {
+    const w = 300, h = 140;
+    g.save(); g.translate(x, y); g.scale(k, k);
+    g.strokeStyle = '#e8eaee'; g.lineWidth = 8; V.roundRect(g, -w / 2, -h / 2, w, h, 22); g.stroke();
+    g.fillStyle = '#e8eaee'; V.roundRect(g, w / 2 + 6, -26, 20, 52, 6); g.fill();
+    const col = level > 0.5 ? '#7fe0a0' : level > 0.2 ? '#F2C14E' : V.COL.red;
+    g.fillStyle = col; g.shadowColor = col; g.shadowBlur = 20; V.roundRect(g, -w / 2 + 14, -h / 2 + 14, Math.max(8, (w - 28) * level), h - 28, 12); g.fill();
+    g.restore();
+  };
+  // Sunrise over a horizon line; u 0..1
+  V.sunrise = function (g, x, horizon, u) {
+    g.save();
+    const sy = horizon + 120 - 260 * u;
+    const gl = g.createRadialGradient(x, sy, 10, x, sy, 380); gl.addColorStop(0, `rgba(255,190,110,${0.55 * u})`); gl.addColorStop(1, 'rgba(255,190,110,0)');
+    g.fillStyle = gl; g.fillRect(x - 500, horizon - 600, 1000, 700);
+    g.beginPath(); g.rect(-400, 400, 1900, horizon - 400); g.clip();
+    g.fillStyle = '#FFC46B'; g.shadowColor = '#FFB347'; g.shadowBlur = 40; g.beginPath(); g.arc(x, sy, 90, 0, 6.283); g.fill();
+    g.restore();
+    g.save(); g.strokeStyle = 'rgba(255,255,255,0.4)'; g.lineWidth = 3; g.beginPath(); g.moveTo(-400, horizon); g.lineTo(1500, horizon); g.stroke(); g.restore();
+  };
 })();
