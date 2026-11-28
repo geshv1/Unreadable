@@ -1,69 +1,69 @@
 {
  "title": "underperforming-narrator",
- "duration": 38,
+ "duration": 39,
  "fps": 30,
  "cuts": [
   {
-   "t": 2.84,
+   "t": 3.014,
    "scene": "judges"
   },
   {
-   "t": 4.73,
+   "t": 4.958,
    "scene": "barbell"
   },
   {
-   "t": 8.48,
+   "t": 8.842,
    "scene": "preparing"
   },
   {
-   "t": 10.31,
+   "t": 10.974,
    "scene": "post"
   },
   {
-   "t": 13.23,
+   "t": 14.055,
    "scene": "confess"
   },
   {
-   "t": 15.66,
+   "t": 16.642,
    "scene": "spotlight"
   },
   {
-   "t": 18.19,
+   "t": 19.012,
    "scene": "zero"
   },
   {
-   "t": 20.36,
+   "t": 21.15,
    "scene": "admire"
   },
   {
-   "t": 22.94,
+   "t": 23.783,
    "scene": "first-video"
   },
   {
-   "t": 24.88,
+   "t": 26.042,
    "scene": "first-fight"
   },
   {
-   "t": 26.68,
+   "t": 28.107,
    "scene": "first-day"
   },
   {
-   "t": 28.62,
+   "t": 30.221,
    "scene": "stayed"
   },
   {
-   "t": 31,
+   "t": 32.345,
    "scene": "public"
   },
   {
-   "t": 33.75,
+   "t": 35.219,
    "scene": "cta"
   }
  ],
  "sfx": [
   {
    "scene": "barbell",
-   "at": 3.1,
+   "at": 3.45,
    "id": "bump",
    "gain": -10,
    "args": {
@@ -71,7 +71,7 @@
     "heavy": 0.9
    },
    "note": "bar drops",
-   "t": 7.83
+   "t": 8.408
   },
   {
    "scene": "post",
@@ -80,11 +80,11 @@
    "gain": -12,
    "pan": -0.2,
    "note": "laptop shut",
-   "t": 12.21
+   "t": 12.874
   },
   {
    "scene": "zero",
-   "at": 0.05,
+   "at": 1.3,
    "id": "bump",
    "gain": -6,
    "args": {
@@ -92,7 +92,7 @@
     "heavy": 1.3
    },
    "note": "the zero lands",
-   "t": 18.24
+   "t": 20.312
   },
   {
    "scene": "first-fight",
@@ -100,89 +100,89 @@
    "id": "punch",
    "gain": -6,
    "note": "first fight",
-   "t": 25.23
+   "t": 26.392
   }
  ],
  "voiceover": {
-  "file": "assets/vo/underperforming-vo.mp3",
-  "at": 0.9,
+  "file": "assets/vo/underperforming-vo-brian.mp3",
+  "at": 1.05,
   "gain": 0
  },
  "scenes": [
   {
    "id": "opener",
    "start": 0,
-   "end": 2.84
+   "end": 3.014
   },
   {
    "id": "judges",
-   "start": 2.84,
-   "end": 4.7299999999999995
+   "start": 3.014,
+   "end": 4.958
   },
   {
    "id": "barbell",
-   "start": 4.7299999999999995,
-   "end": 8.48
+   "start": 4.958,
+   "end": 8.842
   },
   {
    "id": "preparing",
-   "start": 8.48,
-   "end": 10.31
+   "start": 8.842,
+   "end": 10.974
   },
   {
    "id": "post",
-   "start": 10.31,
-   "end": 13.23
+   "start": 10.974,
+   "end": 14.055
   },
   {
    "id": "confess",
-   "start": 13.23,
-   "end": 15.66
+   "start": 14.055,
+   "end": 16.642
   },
   {
    "id": "spotlight",
-   "start": 15.66,
-   "end": 18.19
+   "start": 16.642,
+   "end": 19.012
   },
   {
    "id": "zero",
-   "start": 18.19,
-   "end": 20.36
+   "start": 19.012,
+   "end": 21.15
   },
   {
    "id": "admire",
-   "start": 20.36,
-   "end": 22.939999999999998
+   "start": 21.15,
+   "end": 23.782999999999998
   },
   {
    "id": "first-video",
-   "start": 22.939999999999998,
-   "end": 24.88
+   "start": 23.782999999999998,
+   "end": 26.041999999999998
   },
   {
    "id": "first-fight",
-   "start": 24.88,
-   "end": 26.68
+   "start": 26.041999999999998,
+   "end": 28.107
   },
   {
    "id": "first-day",
-   "start": 26.68,
-   "end": 28.62
+   "start": 28.107,
+   "end": 30.221
   },
   {
    "id": "stayed",
-   "start": 28.62,
-   "end": 31
+   "start": 30.221,
+   "end": 32.345
   },
   {
    "id": "public",
-   "start": 31,
-   "end": 33.75
+   "start": 32.345,
+   "end": 35.219
   },
   {
    "id": "cta",
-   "start": 33.75,
-   "end": 38
+   "start": 35.219,
+   "end": 39
   }
  ]
 }
