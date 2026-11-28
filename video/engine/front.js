@@ -21,13 +21,19 @@
     cuff: { L: [-6, -70], R: [-2, -72] },          // adjusting a sleeve: composed, unhurried
     steeple: { L: [-5, -78], R: [5, -78] },         // fingertips together at the chest
   };
-  V.frontGesture = function (t, keys) { // keys = [[t, name], ...]: at each key time blend (0.35 s) from the previous gesture
+  // keys = [[t, name], ...]. Human timing: each change eases in with a small overshoot and settles (0.42 s);
+  // the screen-left hand follows a beat later (secondary motion) instead of moving in lockstep.
+  const settle = (u) => { u = V.clamp(u); return 1 - Math.pow(1 - u, 3) + 0.07 * Math.sin(u * Math.PI) * (1 - u); };
+  V.frontGesture = function (t, keys) {
     const get = (k) => V.FRONT[k];
-    let j = 0;
-    for (let i = 0; i < keys.length; i++) if (t >= keys[i][0]) j = i;
-    const a = get(keys[Math.max(0, j - 1)][1]), b = get(keys[j][1]);
-    const u = j === 0 ? 1 : V.ease.inOut(V.clamp((t - keys[j][0]) / 0.35));
-    return { L: [V.lerp(a.L[0], b.L[0], u), V.lerp(a.L[1], b.L[1], u)], R: [V.lerp(a.R[0], b.R[0], u), V.lerp(a.R[1], b.R[1], u)], up: V.lerp(a.up || 0, b.up || 0, u) };
+    const at = (tt) => { let j = 0; for (let i = 0; i < keys.length; i++) if (tt >= keys[i][0]) j = i; return j; };
+    const blend = (tt, side) => {
+      const j = at(tt), a = get(keys[Math.max(0, j - 1)][1]), b = get(keys[j][1]);
+      const u = j === 0 ? 1 : settle((tt - keys[j][0]) / 0.42);
+      return [V.lerp(a[side][0], b[side][0], u), V.lerp(a[side][1], b[side][1], u), V.lerp(a.up || 0, b.up || 0, u)];
+    };
+    const R = blend(t, 'R'), L = blend(t - 0.08, 'L');
+    return { L: [L[0], L[1]], R: [R[0], R[1]], up: (R[2] + L[2]) / 2 };
   };
 
   function ik(A, T, l1, l2, pref) {
@@ -52,19 +58,25 @@
   const circle = (g, c, r, fill, ol = OL, lw = 1.6) => { g.beginPath(); g.arc(c[0], c[1], r, 0, 6.283); g.fillStyle = fill; g.fill(); if (ol) { g.strokeStyle = ol; g.lineWidth = lw; g.stroke(); } };
 
   V.frontGeom = function (f) {
-    const gs = f.gesture || V.FRONT.idle, up = gs.up || 0, sw = f.sway || 0, br = f.breath || 0;
-    const C = [sw * 0.6, -88 - br - up * 0.4], P = [sw, -54];
-    const G = { C, P };
-    const sh = f.jacked ? 20 : 14;
-    G.sL = [C[0] - sh, C[1] + 2 - up]; G.sR = [C[0] + sh, C[1] + 2 - up];
-    G.hipL = [P[0] - 8, P[1] + 4]; G.hipR = [P[0] + 8, P[1] + 4];
-    G.H = [C[0] + (f.headX || 0), C[1] - 23 + (f.nod || 0) - up * 0.3];
-    [G.kL, G.fL] = ik(G.hipL, [-12, -4], 24, 22.7, [-1, 0]);
-    [G.kR, G.fR] = ik(G.hipR, [12, -4], 24, 22.7, [1, 0]);
-    let R = gs.R.slice();
+    const gs = f.gesture || V.FRONT.idle, up = gs.up || 0, sw = f.sway || 0, br = f.breath || 0, t = f.t || 0;
     const p = f.point || 0;
-    if (p > 0) R = [V.lerp(R[0], 12, p), V.lerp(R[1], -80, p)];
-    [G.eL, G.hL] = ik(G.sL, gs.L, 20.5, 28, [-1, 0.6]);
+    // weight shift: pelvis over the standing leg, chest counter-shifts, hip line tilts, head trails the chest
+    const P = [sw, -54 + Math.abs(sw) * 0.12], C = [-sw * 0.35 + p * 1.2, -88 - br * 0.8 - up * 0.4];
+    const G = { C, P };
+    const sh = f.jacked ? 20 : 14, shUp = br * 0.35 + up;
+    G.sL = [C[0] - sh, C[1] + 2 - shUp + sw * 0.08]; G.sR = [C[0] + sh, C[1] + 2 - shUp - sw * 0.08 - p * 1.2];
+    G.hipL = [P[0] - 8, P[1] + 4 - sw * 0.15]; G.hipR = [P[0] + 8, P[1] + 4 + sw * 0.15];
+    G.H = [C[0] * 0.8 + (f.headX || 0) + Math.sin(t * 0.9 - 0.6) * 0.5, C[1] - 23 + (f.nod || 0) - up * 0.3 + p * 0.6];
+    // the free leg's knee softens as weight moves off it
+    [G.kL, G.fL] = ik(G.hipL, [-12, -4], 24, 22.7, [-1, Math.max(0, -sw) * 0.4]);
+    [G.kR, G.fR] = ik(G.hipR, [12, -4], 24, 22.7, [1, Math.max(0, sw) * 0.4]);
+    // hands never freeze: small drift
+    const drift = (k) => [Math.sin(t * 1.25 + k) * 0.7, Math.cos(t * 1.6 + k * 2) * 0.6];
+    const dL = drift(0), dR = drift(1.7);
+    let R = [gs.R[0] + dR[0] * (1 - p), gs.R[1] + dR[1] * (1 - p)];
+    if (p > 0) R = [V.lerp(R[0], 12, p) + Math.sin(t * 7) * 0.15 * p, V.lerp(R[1], -80, p)];
+    const L = [gs.L[0] + dL[0], gs.L[1] + dL[1]];
+    [G.eL, G.hL] = ik(G.sL, L, 20.5, 28, [-1, 0.6]);
     [G.eR, G.hR] = ik(G.sR, R, 20.5 - p * 6, 28 - p * 16, [1, 0.6]);   // forearm foreshortens toward the lens
     return G;
   };
@@ -149,7 +161,9 @@
       g.fillStyle = '#fff'; g.beginPath(); g.arc(-0.6, -0.8, 0.6, 0, 6.283); g.fill();
       g.restore(); g.fillStyle = ink;
       // brows: raise with emphasis, slight inner tilt when serious
-      if (f.calm) { // composed: level brows, inner ends slightly raised (open, confident, not hostile)
+      if (f.firm) { // serious but composed: straight, slightly lowered brows
+        g.lineWidth = 1.8; g.beginPath(); g.moveTo(sx * 2.4, -2.9 - br * 0.8); g.lineTo(sx * 7.8, -3.3 - br * 0.8); g.stroke();
+      } else if (f.calm) { // composed: level brows, inner ends slightly raised (open, confident, not hostile)
         g.lineWidth = 1.6; g.beginPath(); g.moveTo(sx * 2.6, -3.7 - br * 1.5); g.quadraticCurveTo(sx * 5.2, -4.4 - br * 1.5, sx * 7.8, -3.4 - br * 1.1); g.stroke();
       } else { g.lineWidth = f.serious ? 1.9 : 1.5; g.beginPath(); g.moveTo(sx * 2.6, -2.6 - br * 1.2 + (f.serious ? 1.6 : 0)); g.lineTo(sx * 7.8, -3.6 - br * 1.6 - (f.serious ? 0.6 : 0)); g.stroke(); }
     }
@@ -168,7 +182,7 @@
     for (const w of ws) if (w.red && t >= w.t - 0.05 && t < w.t + 0.6) emph = Math.max(emph, Math.sin(V.clamp((t - w.t + 0.05) / 0.65) * Math.PI));
     const blink = ((t + 0.7) % 3.1) < 0.11 ? 0.12 : 1;
     return {
-      mouth, blink, brow: 0.2 + 0.55 * emph, calm: true, smile: mouth === 0,
+      t, mouth, blink, brow: 0.2 + 0.55 * emph, calm: true, smile: mouth === 0,
       nod: mouth * 0.5 + emph * 1.1 + Math.sin(t * 2.1) * 0.3,
       breath: 0.8 + 0.8 * Math.sin(t * 2.4),
       sway: Math.sin(t * 0.9) * 1.6,

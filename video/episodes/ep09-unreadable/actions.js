@@ -22,22 +22,27 @@
   const judges = (tl, raiseAt) => JUDGES.map(([x, face], i) => C({ depth: 'back', x, y: 1300, s: 0.7, face,
     pose: V.lerpPose(V.breathe(PO.stand, tl, 1, 2, i), PO.cardUp, ease.out(seg(tl, raiseAt + i * 0.1, raiseAt + i * 0.1 + 0.2))) }));
 
-  // ─────────────────────────────── OPENER — one rep, up, a cuff adjust, then he talks to you
+  // ─────────────────────────────── OPENER — one rep, hop the feet in, rise, turn and point at you (firm, composed)
   const DEG = Math.PI / 180;
+  const CROUCH = Object.assign({}, PO.stand, { C: [18, -58], P: [-6, -34], hB: [28, -6], hF: [32, -6], fB: [-10, -5], fF: [12, -5], hd: [5, 4], eB: [0.2, 1], eF: [0.2, 1] });
   function pushup(t) {
-    const down = 0.5 - 0.5 * Math.cos(2 * Math.PI * (t / 0.55));
+    const down = 0.5 - 0.5 * Math.cos(2 * Math.PI * (t / 0.5));
     const hx = V.lerp(54, 35, down);
     return [Object.assign({}, PO.stand, { hB: [hx - 2, -86], hF: [hx, -87], fB: [0, -4], fF: [3, -4], hd: [2, -1], eB: [0.4, 1], eF: [0.4, 1] }), (58 + 10 * down) * DEG];
   }
   V.actions.v_opener = function (tl, sc) {
     let n;
-    if (tl < 0.55) { const [p, rot] = pushup(tl); n = V.St({ x: 300, face: 1, jacked: true, s: 1.1, rot, pose: p, expr: 'focus', noReflect: true }); }
-    else if (tl < 0.88) {
-      const u = ease.out(seg(tl, 0.55, 0.85)), [p0, r0] = pushup(0.55);
-      n = V.St({ x: V.lerp(300, 540, u), face: 1, jacked: true, s: V.lerp(1.1, 1.2, u), rot: V.lerp(r0, 0, u), pose: V.lerpPose(p0, PO.stand, u), expr: 'neutral', noReflect: u < 0.8 });
-    } else {
-      const gesture = V.frontGesture(tl, [[0.88, 'cuff'], [1.25, 'explain'], [2.0, 'palms']]);
-      n = host(tl, sc, { gesture, turn: V.lerp(0.35, 1, ease.out(seg(tl, 0.88, 1.02))), s: kf(tl, [[0.88, 1.2], [2.84, 1.3]], ease.inOut) });
+    if (tl < 0.5) { const [p, rot] = pushup(tl); n = V.St({ x: 150, face: 1, jacked: true, s: 1.1, rot, pose: p, expr: 'focus', noReflect: true }); }
+    else if (tl < 0.72) {         // hop the feet in under the hands
+      const u = ease.inOut(seg(tl, 0.5, 0.72)), [p0, r0] = pushup(0.5);
+      n = V.St({ x: V.lerp(150, 500, u), y: V.FLOOR - Math.sin(u * Math.PI) * 18, face: 1, jacked: true, s: 1.1, rot: V.lerp(r0, 0, u), pose: V.lerpPose(p0, CROUCH, u), expr: 'focus', noReflect: true });
+    } else if (tl < 1.0) {        // rise: hips lead, chest follows, head last
+      const u = ease.out(seg(tl, 0.72, 1.0));
+      n = V.St({ x: V.lerp(500, 540, u), face: 1, jacked: true, s: V.lerp(1.1, 1.22, u), pose: V.lerpPose(CROUCH, PO.stand, u), expr: 'neutral' });
+    } else {                      // turn to the lens and point at the viewer
+      const gesture = V.frontGesture(tl, [[1.0, 'idle'], [1.02, 'point'], [2.6, 'steeple']]);
+      const point = kf(tl, [[1.0, 0], [1.28, 1], [2.55, 1], [2.85, 0]], ease.inOut);
+      n = host(tl, sc, { gesture, point, firm: true, smile: false, turn: V.lerp(0.35, 1, ease.out(seg(tl, 1.0, 1.14))), s: kf(tl, [[1.0, 1.22], [2.4, 1.34]], ease.inOut) });
     }
     return { figs: [n], back(g) { studio(g, tl); } };
   };
@@ -55,15 +60,15 @@
 
   // ─────────────────────────────── YOUR BEST… NOT ENOUGH — the bar won't go past the knees
   V.actions.v_barbell = function (tl) {
-    const drop = tl > 3.1;
-    const pose = drop ? poseAt(tl, [[3.1, PO.liftKnee], [3.3, PO.stand]]) : tl < 0.3 ? PO.liftLow : V.lerpPose(PO.liftLow, PO.liftKnee, ease.inOut(seg(tl, 0.3, 1.8)));
-    const me = ME({ x: 440, pose: V.shift(pose, drop ? 0 : Math.sin(tl * 38) * 0.6 * seg(tl, 0.6, 3.1), 0), expr: drop ? 'shame' : 'strain' });
-    const flash = tl > 2.0 && tl < 2.9 ? 0.5 + 0.5 * Math.sin(tl * 20) : 0;
+    const drop = tl > 3.45;
+    const pose = drop ? poseAt(tl, [[3.45, PO.liftKnee], [3.65, PO.stand]]) : tl < 0.3 ? PO.liftLow : V.lerpPose(PO.liftLow, PO.liftKnee, ease.inOut(seg(tl, 0.3, 1.8)));
+    const me = ME({ x: 440, pose: V.shift(pose, drop ? 0 : Math.sin(tl * 38) * 0.6 * seg(tl, 0.6, 3.45), 0), expr: drop ? 'shame' : 'strain' });
+    const flash = tl > 2.6 && tl < 3.45 ? 0.5 + 0.5 * Math.sin(tl * 20) : 0;
     return {
       figs: [me],
       back(g) { bg(g, '#1a0d12', '#0a0a0e'); },
       front(g) {
-        V.barbell(g, drop ? [500, V.FLOOR - 58] : V.figPoint(me, 'hF'), drop ? 0 : seg(tl, 0.9, 3.1), tl);
+        V.barbell(g, drop ? [500, V.FLOOR - 58] : V.figPoint(me, 'hF'), drop ? 0 : seg(tl, 0.9, 3.45), tl);
         V.labelMeter(g, 650, 820, 330, 'YOUR BEST', 0.62 * ease.out(seg(tl, 0.2, 1.8)), V.COL.red, 0.88, 'ENOUGH');
         if (flash) { g.save(); g.globalAlpha = flash; g.strokeStyle = V.COL.red; g.lineWidth = 6; g.setLineDash([10, 8]); g.beginPath(); g.moveTo(650 + 330 * 0.88, 780); g.lineTo(650 + 330 * 0.88, 870); g.stroke(); g.restore(); }
       },
@@ -129,19 +134,20 @@
 
   // ─────────────────────────────── ALWAYS SCORES ZERO — a giant zero lands
   V.actions.v_zero = function (tl) {
-    const k = tl < 0.12 ? V.lerp(2.4, 1, ease.in(tl / 0.12)) : 1 + 0.04 * Math.sin(tl * 6);
+    const SLAM = 1.3, z = tl - SLAM;     // the zero lands on the word 'zero'
+    const k = z < 0 ? 0 : z < 0.12 ? V.lerp(2.4, 1, ease.in(z / 0.12)) : 1 + 0.04 * Math.sin(tl * 6);
     const me = ME({ x: 250, pose: V.breathe(PO.sit, tl, 1, 1.6), expr: 'shame', tint: 0.3, beam: 0.35 });
     return {
       figs: [me],
-      shake: tl < 0.2 ? 12 : 0,
+      shake: z > 0 && z < 0.2 ? 12 : 0,
       back(g) { bg(g, '#14080c', '#08080a'); },
       front(g) {
-        g.save(); g.translate(620, 930); g.scale(k, k);
+        if (k > 0) { g.save(); g.translate(620, 930); g.scale(k, k);
         g.strokeStyle = V.COL.red; g.lineWidth = 46; g.shadowColor = V.COL.red; g.shadowBlur = 50;
         g.beginPath(); g.ellipse(0, 0, 150, 210, 0, 0, 6.283); g.stroke();
         g.shadowBlur = 0; g.strokeStyle = '#ffd0d5'; g.lineWidth = 8; g.stroke();
-        g.restore();
-        if (tl < 0.4) { g.save(); g.globalAlpha = 1 - tl / 0.4; g.fillStyle = '#fff'; g.fillRect(-400, 400, 1900, 1200); g.restore(); }
+        g.restore(); }
+        if (z > 0 && z < 0.4) { g.save(); g.globalAlpha = 1 - z / 0.4; g.fillStyle = '#fff'; g.fillRect(-400, 400, 1900, 1200); g.restore(); }
       },
     };
   };
@@ -170,11 +176,11 @@
 
   // ─────────────────────────────── FIRST VIDEO / FIRST FIGHT / FIRST DAY — fast cuts
   V.actions.v_firstVideo = function (tl) {
-    const go = V.St({ x: 430, face: 1, pose: poseAt(tl, [[0, PO.phone], [0.9, PO.phone], [1.2, PO.shrug]]), expr: tl > 1.1 ? 'smile' : 'neutral' });
+    const go = V.St({ x: 430, face: 1, pose: poseAt(tl, [[0, PO.phone], [1.1, PO.phone], [1.4, PO.shrug]]), expr: tl > 1.3 ? 'smile' : 'neutral' });
     return {
       figs: [go],
       back(g) { bg(g, '#0f1626', '#08080c'); },
-      front(g) { if (tl < 1.15) { const h = V.figPoint(go, 'hF'); V.phone(g, h[0] + 6, h[1] - 30, 0.15, 96, 'on'); } V.counterPanel(g, 790, 860, 'VIEWS', tl > 0.9 ? 3 : 0, false); },
+      front(g) { if (tl < 1.35) { const h = V.figPoint(go, 'hF'); V.phone(g, h[0] + 6, h[1] - 30, 0.15, 96, 'on'); } V.counterPanel(g, 790, 860, 'VIEWS', tl > 1.1 ? 3 : 0, false); },
     };
   };
   V.actions.v_firstFight = function (tl) {
@@ -212,9 +218,9 @@
 
   // ─────────────────────────────── BE BAD IN PUBLIC. START TODAY. — he steps in and points at you
   V.actions.v_public = function (tl, sc) {
-    const gesture = V.frontGesture(tl, [[0, 'palms'], [1.15, 'point']]);
-    const point = kf(tl, [[0, 0], [1.15, 0], [1.4, 1], [2.75, 1]], ease.inOut);
-    const n = host(tl, sc, { gesture, point, s: kf(tl, [[0, 1.2], [1.15, 1.22], [2.4, 1.45]], ease.inOut) });
+    const gesture = V.frontGesture(tl, [[0, 'palms'], [1.55, 'point']]);
+    const point = kf(tl, [[0, 0], [1.55, 0], [1.8, 1], [2.87, 1]], ease.inOut);
+    const n = host(tl, sc, { gesture, point, s: kf(tl, [[0, 1.2], [1.55, 1.22], [2.6, 1.45]], ease.inOut) });
     return { figs: [n], back(g) { studio(g, tl); } };
   };
 
