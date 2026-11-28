@@ -131,6 +131,24 @@ section{padding:104px 0;border-top:1px solid var(--line);position:relative}
 .fc .m{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:7px 0 8px}
 .fc p{font-size:15px;line-height:1.5;color:var(--soft)}
 .tagnew{display:inline-block;font-family:var(--body);font-style:normal;font-size:9.5px;font-weight:700;letter-spacing:.2em;color:#fff;background:var(--red);padding:3px 7px;border-radius:3px;margin-left:10px;vertical-align:6px}
+/* how it works: the chain that connects mind and body */
+.chain{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,#0a0a0d,#070709)}
+.step{position:relative;padding:30px 28px 28px;border-right:1px solid var(--line)}
+.step:last-child{border-right:0}
+.step .k{font-size:10.5px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--red-soft)}
+.step h3{font-family:var(--brand);font-style:normal;text-transform:uppercase;font-size:clamp(30px,3.2vw,38px);letter-spacing:.01em;line-height:1;margin:10px 0 12px}
+.step p{font-size:15px;line-height:1.5;color:var(--soft)}
+.step .pt{display:block;margin-top:16px;font-size:12px;letter-spacing:.08em;color:var(--muted)}
+.step:not(:last-child)::after{content:"\2192";position:absolute;right:-14px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:var(--bg);border:1px solid #24242a;display:grid;place-items:center;font-size:13px;color:var(--red-soft);z-index:2}
+.links{font-family:var(--serif);font-style:italic;font-size:clamp(24px,2.8vw,32px);line-height:1.25;color:#dcd8d0;max-width:780px;margin:40px 0 72px}
+.sub{font-size:11px;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.sub + h3{font-size:clamp(28px,3.4vw,40px);margin-bottom:22px}
+.fc .m b{color:var(--red-soft);font-weight:600}
+/* part 2: pressure */
+.calm{display:grid;grid-template-columns:repeat(4,1fr);gap:0 32px;border-top:1px solid var(--line)}
+.calm div{padding:24px 0;border-bottom:1px solid var(--line)}
+.calm h3{font-size:30px;line-height:1.05;margin-bottom:8px}
+.calm p{font-size:15px;line-height:1.5;color:var(--soft)}
 .slim{display:grid;grid-template-columns:repeat(4,1fr);margin-top:36px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .slim div{padding:20px 10px;text-align:center;border-right:1px solid var(--line)}
 .slim div:last-child{border-right:0}
@@ -254,6 +272,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
   .hero .cta .btn{width:100%;max-width:420px}
   .stage3d{order:0;margin-top:-6px}
   .card{grid-template-columns:1fr}
+  .chain{grid-template-columns:1fr}
+  .step{border-right:0;border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:0}
+  .step:not(:last-child)::after{content:"\2193";right:auto;left:50%;top:auto;bottom:-14px;transform:translateX(-50%)}
+  .calm{grid-template-columns:1fr 1fr}
   .dms{grid-template-columns:1fr}
   .proof .compare{max-width:520px}
 }
@@ -308,13 +331,13 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 <div class="hero">
   <div class="wrap">
     <div class="hero-copy">
-      <div class="kick">A book by Georgi · @geshv1</div>
+      <div class="kick">A 12-week mind &amp; body program · @geshv1</div>
       <h1 aria-label="How to Become Unreadable"><span class="pre" aria-hidden="true">HOW TO BECOME</span><span class="wordmark" aria-hidden="true">UN<span class="o">READ</span>ABLE</span><span class="tagline">Read them. Stay unreadable.</span></h1>
-      <p class="lede">For the guy who's done being read, used and underestimated. How people steer you, how to stay calm under pressure, and a 12-week body plan that proves it.</p>
+      <p class="lede">For the guy who's done being read, pushed and underestimated. Train your mind to see what people are doing and stay calm under pressure, and train your body to back it up.</p>
       <div class="cta">
-        <a class="btn" href="#pages" data-umami-event="look-inside" data-umami-event-spot="hero">Look inside <span aria-hidden="true">↓</span></a>
+        <a class="btn" href="#how" data-umami-event="how-it-works" data-umami-event-spot="hero">How it works <span aria-hidden="true">↓</span></a>
       </div>
-      <div class="trust"><span>Instant PDF</span><span>58 pages</span><span>14-day refund</span></div>
+      <div class="trust"><span>Mind</span><span>Pressure</span><span>Body</span><span>14-day refund</span></div>
     </div>
     <div class="stage3d" aria-hidden="true">
       <div class="book3d"><img src="cover.jpg" alt="" width="643" height="1040"></div>
@@ -322,11 +345,44 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
   </div>
 </div>
 
-<!-- 2 · SOUND FAMILIAR: the four types, in their own words -->
+<!-- 2 · HOW IT WORKS: what the book is and how mind and body connect -->
+<section id="how">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow"><b>Round 01</b> · How it works</div>
+      <h2>Not a mental health book. Not just a workout plan.</h2>
+      <p class="lead">It's one 12-week program, because being unreadable takes both: a mind that sees what people are doing, and a body that stays steady when they push.</p>
+    </div>
+    <div class="chain">
+      <div class="step"><div class="k">01 · Mind</div><h3>Read them</h3><p>Spot the moves people use to steer you, like the guilt trip, the bait and gaslighting. Learn to read people and say no.</p><span class="pt">Part 1 · The Mind Game</span></div>
+      <div class="step"><div class="k">02 · Pressure</div><h3>Stay calm</h3><p>Lessons from the ring on fear, ego and pain, so you don't give people the reaction they want.</p><span class="pt">Part 2 · The Fighter's Mind</span></div>
+      <div class="step"><div class="k">03 · Body</div><h3>Back it up</h3><p>A 12-week bodyweight plan. Calm is easier to keep in a body you've built and trust.</p><span class="pt">Part 3 · The Blueprint</span></div>
+    </div>
+    <p class="links">Each one feeds the next. Training gives you the calm. Calm lets you see the move. Seeing it lets you answer instead of react.</p>
+    <div id="inside">
+      <div class="sub">Your 12 weeks, in order</div>
+      <h3>Read a part, do the drill, train three times a week.</h3>
+      <div class="card">
+      <div class="fc"><div class="num">00</div><div><h3>The Code<span class="tagnew">NEW</span></h3><div class="m">Week 1 · <b>Start</b> · 5 rules</div><p>Five rules I live by, each with the real story behind it. Read one a day, then sign your own.</p></div></div>
+      <div class="fc"><div class="num">01</div><div><h3>The Mind Game<span class="tagnew">NEW</span></h3><div class="m">Weeks 2–5 · <b>Mind</b> · 11 rounds</div><p>Dark psychology, what gets used on your type, reading people, frame and saying no.</p></div></div>
+      <div class="fc"><div class="num">02</div><div><h3>The Fighter's Mind</h3><div class="m">Weeks 6–9 · <b>Pressure</b> · 10 rounds</div><p>How sport builds a "nothing's impossible" mindset. Fear, composure, ego and pain, from the ring.</p></div></div>
+      <div class="fc"><div class="num">03</div><div><h3>The Blueprint</h3><div class="m">All 12 weeks · <b>Body</b> · 36 workouts</div><p>A level test, easier and harder versions of every move, three phases and a final test. No gym.</p></div></div>
+    </div>
+    <div class="slim">
+      <div><b>58</b><span>pages</span></div>
+      <div><b>283</b><span>boxes</span></div>
+      <div><b>36</b><span>workouts</span></div>
+      <div><b>12</b><span>weeks</span></div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · WHO IT IS FOR: the four types, in their own words -->
 <section class="familiar" id="who">
   <div class="wrap">
     <div>
-      <div class="eyebrow"><b>Round 01</b> · Sound familiar</div>
+      <div class="eyebrow"><b>Round 02</b> · Who it's for</div>
       <h2>You've sent at least one of these.</h2>
       <p class="lead">Every guy who picks this up is mostly one of four types. Each one has a habit that keeps him stuck, and something people use against him.</p>
       <p class="closer">None of these make you weak. They make you <span class="r">readable.</span></p>
@@ -345,13 +401,13 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
   </div>
 </section>
 
-<!-- 3 · THE PLAYBOOK, REDACTED -->
+<!-- 4 · PART 1: MIND, the playbook redacted -->
 <section id="playbook">
   <div class="wrap">
     <div class="head">
-      <div class="eyebrow"><b>Round 02</b> · The playbook</div>
+      <div class="eyebrow"><b>Round 03</b> · Part 1 · Mind</div>
       <h2>They've used these on you. Now they have <span class="r">names.</span></h2>
-      <p class="lead">Dark psychology is the set of moves people use to steer you without you noticing. Here are three of the eleven in the book.</p>
+      <p class="lead">Step one is seeing it. Dark psychology is the set of moves people use to steer you without you noticing. Here are three of the eleven in the book.</p>
     </div>
     <div class="play">
       <div class="row"><div class="mv">The guilt trip</div><q>"After everything I've done for you..."</q>
@@ -366,52 +422,29 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
   </div>
 </section>
 
-<!-- 4 · INSIDE: the fight card -->
-<section id="inside">
+<!-- 5 · PART 2: PRESSURE -->
+<section id="pressure">
   <div class="wrap">
     <div class="head">
-      <div class="eyebrow"><b>Round 03</b> · Inside</div>
-      <h2>Four parts. One fight card.</h2>
-      <p class="lead">Most guides tell you what to think. This one gives you something to do every day, and a place to write it down.</p>
+      <div class="eyebrow"><b>Round 04</b> · Part 2 · Pressure</div>
+      <h2>When they push, you don't <span class="r">move.</span></h2>
+      <p class="lead">Seeing the move is half of it. The other half is not reacting. Part 2 is ten rounds from the ring, because boxing is where I learned to stay calm while someone tries to get a reaction out of me.</p>
     </div>
-    <div class="card">
-      <div class="fc"><div class="num">00</div><div><h3>The Code<span class="tagnew">NEW</span></h3><div class="m">Week 1 · 5 rules</div><p>Five rules I live by, each with the real story behind it. Read one a day, then sign your own.</p></div></div>
-      <div class="fc"><div class="num">01</div><div><h3>The Mind Game<span class="tagnew">NEW</span></h3><div class="m">Weeks 2–5 · 11 rounds</div><p>Dark psychology, what gets used on your type, reading people, frame and saying no.</p></div></div>
-      <div class="fc"><div class="num">02</div><div><h3>The Fighter's Mind</h3><div class="m">Weeks 6–9 · 10 rounds</div><p>How sport builds a "nothing's impossible" mindset. Fear, composure, ego and pain, from the ring.</p></div></div>
-      <div class="fc"><div class="num">03</div><div><h3>The Blueprint</h3><div class="m">All 12 weeks · 36 workouts</div><p>A level test, easier and harder versions of every move, three phases and a final test. No gym.</p></div></div>
+    <div class="calm">
+      <div><h3>Fear</h3><p>Feel it and still move forward.</p></div>
+      <div><h3>Composure</h3><p>Keep your face and your voice steady.</p></div>
+      <div><h3>Ego</h3><p>Let the bait go past you.</p></div>
+      <div><h3>Pain</h3><p>Hard rounds end. Learn to stay in them.</p></div>
     </div>
-    <div class="slim">
-      <div><b>58</b><span>pages</span></div>
-      <div><b>283</b><span>boxes</span></div>
-      <div><b>36</b><span>workouts</span></div>
-      <div><b>12</b><span>weeks</span></div>
-    </div>
+    <p class="honest">Every round ends with a drill. You don't need to box to use it: the same pressure shows up at school, at work and in training.</p>
   </div>
 </section>
 
-<!-- 5 · LOOK INSIDE: swipe through real pages -->
-<section id="pages">
-  <div class="wrap">
-    <div class="head">
-      <div class="eyebrow"><b>Round 04</b> · Look inside</div>
-      <h2>Made to be used, not just read.</h2>
-      <p class="lead">Every tracker, question and checklist works right inside the PDF. Tap a box to tick it. Tap a line to write.</p>
-    </div>
-    <div class="strip" id="strip">
-      <figure class="pg"><img src="cover.jpg" alt="The How to Become Unreadable book cover" loading="lazy" width="643" height="1040"><figcaption>The cover</figcaption></figure>
-      <figure class="pg"><img src="page-playbook.jpg" alt="The playbook page: the moves people use to steer you, what they sound like and your counter" loading="lazy" width="643" height="1040"><figcaption>The playbook</figcaption></figure>
-      <figure class="pg"><img src="page-round.jpg" alt="Rule 01: You're a human, I'm a human, with a story and a daily drill" loading="lazy" width="643" height="1040"><figcaption>A rule with a daily drill</figcaption></figure>
-      <figure class="pg"><img src="page-tracker.jpg" alt="The 12-week progress tracker" loading="lazy" width="643" height="1040"><figcaption>Your 12-week tracker</figcaption></figure>
-    </div>
-    <div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
-  </div>
-</section>
-
-<!-- 6 · THE PROOF: drag from 2022 to now, then the 12-week path -->
+<!-- 6 · PART 3: BODY, drag from 2022 to now, then the 12-week path -->
 <section class="proof" id="body">
   <div class="wrap">
     <div>
-      <div class="eyebrow"><b>Round 05</b> · The proof</div>
+      <div class="eyebrow"><b>Round 05</b> · Part 3 · Body</div>
       <h2>One messy pull&#8209;up. Now clean <span class="r">sets.</span></h2>
       <div class="compare" id="compare">
         <video class="before" src="before.mp4" poster="before-poster.jpg" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="2022: struggling through one pull-up on a bar between two trees"></video>
@@ -425,7 +458,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
       <p class="hint">Drag across the picture</p>
     </div>
     <div>
-      <p class="lead" style="margin-bottom:28px">The 12-week bodyweight plan I followed from one shaky rep on a bar between two trees to strict pull-ups from a full hang. You test on day one and again at the end, so the numbers tell you it's working.</p>
+      <p class="lead" style="margin-bottom:28px">The last piece is the body. It runs alongside the reading for all 12 weeks: the bodyweight plan I followed from one shaky rep on a bar between two trees to strict pull-ups from a full hang. You test on day one and again at the end, so the numbers tell you it's working.</p>
       <ol class="timeline">
         <li><b>Day 1</b><h3>The level test</h3><p>20 minutes. It sets your starting point for every exercise, even if that's zero pull-ups.</p></li>
         <li><b>Weeks 1–4</b><h3>Foundation</h3><p>Rows, negatives and the easier version of every movement.</p></li>
@@ -439,10 +472,28 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
   </div>
 </section>
 
+<!-- 7 · LOOK INSIDE: swipe through real pages -->
+<section id="pages">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow"><b>Round 06</b> · Look inside</div>
+      <h2>Made to be used, not just read.</h2>
+      <p class="lead">Every tracker, question and checklist works right inside the PDF. Tap a box to tick it. Tap a line to write.</p>
+    </div>
+    <div class="strip" id="strip">
+      <figure class="pg"><img src="cover.jpg" alt="The How to Become Unreadable book cover" loading="lazy" width="643" height="1040"><figcaption>The cover</figcaption></figure>
+      <figure class="pg"><img src="page-playbook.jpg" alt="The playbook page: the moves people use to steer you, what they sound like and your counter" loading="lazy" width="643" height="1040"><figcaption>The playbook</figcaption></figure>
+      <figure class="pg"><img src="page-round.jpg" alt="Rule 01: You're a human, I'm a human, with a story and a daily drill" loading="lazy" width="643" height="1040"><figcaption>A rule with a daily drill</figcaption></figure>
+      <figure class="pg"><img src="page-tracker.jpg" alt="The 12-week progress tracker" loading="lazy" width="643" height="1040"><figcaption>Your 12-week tracker</figcaption></figure>
+    </div>
+    <div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+  </div>
+</section>
+
 <!-- STORY -->
 <section class="story" id="story">
   <div class="wrap">
-    <div class="eyebrow"><b>Round 06</b> · Who's behind this</div>
+    <div class="eyebrow"><b>Round 07</b> · Who's behind this</div>
     <h2 style="margin-bottom:28px">I wasn't born disciplined.</h2>
     <p>I'm Georgi. As a young teenager I was distant from my family. My grades dropped, I did nothing with myself and I spent my time with the wrong people.</p>
     <p>I walked into a boxing gym because I wanted to believe in myself. The first sessions were humbling. But somewhere in those rounds, my head went quiet. Outside the gym, everything felt loud. Inside the ring, I was the calmest I'd ever been.</p>
@@ -452,11 +503,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
   </div>
 </section>
 
-<!-- 7 · SHOUTOUTS as real DMs -->
+<!-- 8 · SHOUTOUTS as real DMs -->
 <section id="community">
   <div class="wrap">
     <div class="head">
-      <div class="eyebrow"><b>Round 07</b> · The guys</div>
+      <div class="eyebrow"><b>Round 08</b> · The guys</div>
       <h2>Shoutout to the guys.</h2>
       <p class="lead">Real messages and comments from people who follow the page. Respect to everyone who's been here from the start.</p>
     </div>
@@ -469,13 +520,13 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
   </div>
 </section>
 
-<!-- 8 · OFFER as a ticket -->
+<!-- 9 · OFFER as a ticket -->
 <section class="offer" id="offer">
   <div class="wrap">
     <div>
-      <div class="eyebrow"><b>Round 08</b> · Your corner</div>
+      <div class="eyebrow"><b>Round 09</b> · Your corner</div>
       <h2>Everything you get.</h2>
-      <p class="lead">One book, four parts, 12 weeks. It works on your phone, so the plan is always in your pocket.</p>
+      <p class="lead">One book, mind and body, 12 weeks. It works on your phone, so the plan is always in your pocket.</p>
       <p class="guarantee"><b>14-day refund.</b> If the book doesn't help you, message me within 14 days and I'll give you your money back.</p>
     </div>
     <div class="ticket">
@@ -485,10 +536,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
       <div class="bt">
         <div class="price"><strong>€4.99</strong><div class="seal" aria-label="14-day refund"><b>14</b>day<br>refund</div></div>
         <ul class="checks">
-          <li>The Code: five rules, and your own to sign</li>
-          <li>The Mind Game: dark psychology, reading people, saying no</li>
-          <li>The Fighter's Mind: 10 rounds from the ring</li>
-          <li>The Blueprint: 12 weeks, 36 workouts, no gym</li>
+          <li><b>Start</b> · The Code: five rules, and your own to sign</li>
+          <li><b>Mind</b> · The Mind Game: dark psychology, reading people, saying no</li>
+          <li><b>Pressure</b> · The Fighter's Mind: 10 rounds from the ring</li>
+          <li><b>Body</b> · The Blueprint: 12 weeks, 36 workouts, no gym</li>
           <li>Works on iPhone, Android and computer</li>
         </ul>
         <a class="btn buy" href="#offer" data-umami-event="buy-click" data-umami-event-spot="offer">Get instant access <span aria-hidden="true">→</span></a>
@@ -502,10 +553,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 <section id="faq">
   <div class="wrap">
     <div class="head">
-      <div class="eyebrow"><b>Round 09</b> · Questions</div>
+      <div class="eyebrow"><b>Round 10</b> · Questions</div>
       <h2>Before you buy</h2>
     </div>
     <div class="faq">
+      <details><summary>Is this a mental health book or a fitness book?<span class="pm"></span></summary><p>Both, as one program. Parts 1 and 2 train how you read people and handle pressure. Part 3 trains your body, and it runs alongside the reading for all 12 weeks. It's self-improvement, not therapy: if you're struggling with your mental health, talk to a professional.</p></details>
       <details><summary>How do I get the book?<span class="pm"></span></summary><p>Right after checkout you get a download link by email. It's a PDF, so you can open it on your phone, tablet or computer straight away.</p></details>
       <details><summary>Do the fill-in boxes really work on a phone?<span class="pm"></span></summary><p>Yes. On iPhone, open it in Files or Books. On Android or a computer, open it in Adobe Acrobat Reader (free). Tap a box to tick it and tap a line to write. Save the file to keep your answers.</p></details>
       <details><summary>Is the dark psychology part about manipulating people?<span class="pm"></span></summary><p>No. It teaches you to spot the moves people use on you and to answer them calmly. It's for defence and presence, never for hurting someone.</p></details>
